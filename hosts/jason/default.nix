@@ -13,6 +13,10 @@
       ./refind.nix
     ];
 
+  nixpkgs.config.permittedInsecurePackages = [
+                "electron-25.9.0" # TODO remove when culprit found
+              ];
+
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # Bootloader
@@ -26,11 +30,11 @@
      '';
   };
 
-  nixpkgs.config.packageOverrides = pkgs: {
-    nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
-      inherit pkgs;
-    };
-  };
+  # nixpkgs.config.packageOverrides = pkgs: {
+  #   nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
+  #     inherit pkgs;
+  #   };
+  # };
 
   # Nix settings
   nix.settings.experimental-features = [ "nix-command" "flakes" ];

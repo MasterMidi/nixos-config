@@ -14,20 +14,20 @@
     ];
 
   nixpkgs.config.permittedInsecurePackages = [
-                "electron-25.9.0" # TODO remove when culprit found
-              ];
+    "electron-25.9.0" # TODO remove when culprit found
+  ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # Bootloader
   boot.loader.refind = {
-   enable = true;
-   extraConfig = ''
-     include themes/rEFInd-minimal/theme.conf
-     resolution 3440 1440
-     big_icon_size 128
-     small_icon_size 48
-     '';
+    enable = true;
+    extraConfig = ''
+      include themes/rEFInd-minimal/theme.conf
+      resolution 3440 1440
+      big_icon_size 128
+      small_icon_size 48
+    '';
   };
 
   # nixpkgs.config.packageOverrides = pkgs: {
@@ -165,11 +165,11 @@
           owner = "ebkr";
           repo = "r2modmanPlus";
           rev = "v${version}";
-          hash = "sha256-6o6iPDKKqCzt7H0a64HGTvEvwO6hjRh1Drl8o4x+4ew=";  # Replace with the actual hash
+          hash = "sha256-6o6iPDKKqCzt7H0a64HGTvEvwO6hjRh1Drl8o4x+4ew="; # Replace with the actual hash
         };
         # Update the offlineCache hash only if the dependencies have changed
         offlineCache = oldAttrs.offlineCache.overrideAttrs {
-          hash = "sha256-CXitb/b2tvTfrkFrFv4KP4WdmMg+1sDtC/s2u5ezDfI=";  # Update if necessary
+          hash = "sha256-CXitb/b2tvTfrkFrFv4KP4WdmMg+1sDtC/s2u5ezDfI="; # Update if necessary
         };
       });
     })
@@ -181,7 +181,7 @@
     isNormalUser = true;
     description = "Michael Andreas Graversen";
     extraGroups = [ "networkmanager" "wheel" "libvirtd" "input" ];
-    packages = with pkgs; [];
+    packages = with pkgs; [ ];
   };
 
   programs.virt-manager.enable = true;
@@ -275,7 +275,7 @@
         mtxr.sqltools
         vscodevim.vim
       ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
-        
+
       ];
     })
   ];
@@ -290,7 +290,7 @@
     remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
     dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
   };
-  programs.gamemode.enable = true; 
+  programs.gamemode.enable = true;
 
   # Polkit for hyprland to get sudo password prompts
   security.polkit.enable = true;

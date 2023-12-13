@@ -37,6 +37,12 @@ in {
       description = "Whether to enable the refind EFI boot manager";
     };
 
+    # TODO: add limit to number of entries
+
+    # TODO: add option to download theme from github
+
+    # TODO: add setting option to set variables, like icon sizes
+
     extraConfig = mkOption {
       type = types.lines;
       default = "";

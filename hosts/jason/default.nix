@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, inputs, ... }:
+{ config, pkgs, inputs, outputs, ... }:
 
 {
   imports =
@@ -13,9 +13,34 @@
       ./refind.nix
     ];
 
-  nixpkgs.config.permittedInsecurePackages = [
-    "electron-25.9.0" # TODO remove when culprit found
-  ];
+  nixpkgs = {
+    # You can add overlays here
+    overlays = [
+      # outputs.overlays.nur-packages
+
+      # You can also add overlays exported from other flakes:
+      # neovim-nightly-overlay.overlays.default
+
+      # Or define it inline, for example:
+      # (final: prev: {
+      #   hi = final.hello.overrideAttrs (oldAttrs: {
+      #     patches = [ ./change-hello-to-hi.patch ];
+      #   });
+      # })
+    ];
+
+    # Configure nixpkgs instance
+    config = {
+      allowUnfree = true;
+      permittedInsecurePackages = [
+        "electron-25.9.0" # TODO remove when culprit found
+      ];
+    };
+
+  };
+
+  # inputs.home-manager.useGlobalPkgs = true;
+  #       inputs.home-manager.useUserPackages = true;
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
@@ -29,12 +54,6 @@
       small_icon_size 48
     '';
   };
-
-  # nixpkgs.config.packageOverrides = pkgs: {
-  #   nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
-  #     inherit pkgs;
-  #   };
-  # };
 
   # Nix settings
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -157,23 +176,23 @@
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
-  nixpkgs.overlays = [
-    (self: super: {
-      r2modman = super.r2modman.overrideAttrs (oldAttrs: rec {
-        version = "3.1.45";
-        src = super.fetchFromGitHub {
-          owner = "ebkr";
-          repo = "r2modmanPlus";
-          rev = "v${version}";
-          hash = "sha256-6o6iPDKKqCzt7H0a64HGTvEvwO6hjRh1Drl8o4x+4ew="; # Replace with the actual hash
-        };
-        # Update the offlineCache hash only if the dependencies have changed
-        offlineCache = oldAttrs.offlineCache.overrideAttrs {
-          hash = "sha256-CXitb/b2tvTfrkFrFv4KP4WdmMg+1sDtC/s2u5ezDfI="; # Update if necessary
-        };
-      });
-    })
-  ];
+  # nixpkgs.overlays = [
+  #   (self: super: {
+  #     r2modman = super.r2modman.overrideAttrs (oldAttrs: rec {
+  #       version = "3.1.45";
+  #       src = super.fetchFromGitHub {
+  #         owner = "ebkr";
+  #         repo = "r2modmanPlus";
+  #         rev = "v${version}";
+  #         hash = "sha256-6o6iPDKKqCzt7H0a64HGTvEvwO6hjRh1Drl8o4x+4ew="; # Replace with the actual hash
+  #       };
+  #       # Update the offlineCache hash only if the dependencies have changed
+  #       offlineCache = oldAttrs.offlineCache.overrideAttrs {
+  #         hash = "sha256-CXitb/b2tvTfrkFrFv4KP4WdmMg+1sDtC/s2u5ezDfI="; # Update if necessary
+  #       };
+  #     });
+  #   })
+  # ];
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.mutableUsers = true;
@@ -186,9 +205,6 @@
 
   programs.virt-manager.enable = true;
 
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-
   # Enable flatpaks
   # services.flatpak.enable = true;
   xdg.portal = {
@@ -196,7 +212,7 @@
     wlr.enable = true;
     extraPortals = with pkgs; [
       xdg-desktop-portal-gtk
-      # xdg-desktop-portal-wlr
+      xdg-desktop-portal-wlr
       # xdg-desktop-portal-hyprland
     ];
   };
@@ -204,6 +220,7 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    inputs.home-manager.packages.x86_64-linux.default
     (with dotnetCorePackages; combinePackages [
       sdk_6_0
       sdk_7_0

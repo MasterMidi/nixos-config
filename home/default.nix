@@ -1,19 +1,20 @@
 { config, pkgs, ... }:
 
 {
-  # imports = [
-  #   ./shell/default.nix
-  #   ./programs/hyprland.nix
-  #   ./programs/waybar.nix
-  #   ./programs/starship.nix
-  #   ./programs/kitty.nix
-  # ];
+  imports = [
+    ./shell
+    ./programs/hyprland.nix
+    ./programs/waybar.nix
+    ./programs/starship.nix
+    ./programs/kitty.nix
+  ];
 
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home.username = "michael";
   home.homeDirectory = "/home/michael";
   home.stateVersion = "23.05"; # Please read the docs before changing.
+  programs.home-manager.enable = true; # Let Home Manager install and manage itself.
 
   fonts.fontconfig.enable = true;
   home.pointerCursor =
@@ -41,6 +42,7 @@
   home.packages = with pkgs; [
     # System
     wezterm
+    xwaylandvideobridge
     wl-clipboard
     cliphist
     wdisplays
@@ -58,6 +60,7 @@
     handbrake
     dupeguru
     gdu
+    duf
     killall
     inotify-tools
     swww
@@ -185,7 +188,6 @@
 
   services.mpris-proxy.enable = true;
 
-  # Let Home Manager install and manage itself.
-  programs.home-manager.enable = true;
+  
   # TODO setup nix autocomplete
 }

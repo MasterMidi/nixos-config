@@ -6,14 +6,15 @@
     settings = {
       exec-once = [
         "waybar"
+        "swww init"
         "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
-        "swww"
         "wl-paste --watch cliphist store"
+        "xwaylandvideobridge"
       ];
 
       monitor = [
         ",highrr,auto,auto" # Default
-        # "HDMI-A-2, 1920x1080@60, 0x230, 0.43" # matches the dpi, but creates a gap around apps and poor font rendering
+        # "HDMI-A-2, 1920x1080@60, 0x230, 0.93" # matches the dpi, but creates a gap around apps and poor font rendering
         "HDMI-A-2, 1920x1080@60, 0x270, 1"
         "DP-1, 3440x1440@144, 1920x0, 1"
       ];
@@ -111,8 +112,6 @@
         ", Print, exec, grimblast --freeze copy area" # Screenshots
         "$mainMod SHIFT, W, exec, killall .waybar-wrapped 2>/dev/null && waybar" # Restart waybar
         "$mainMod ALT, W, exec, waybar" # Restart waybar
-        "$mainMod, H, exec, $HOME/.config/hypr/show_desktop.sh h"
-        "$mainMod, I, exec, $HOME/.config/hypr/show_desktop.sh s"
         "$mainMod, Q, exec, kitty"
         "$mainMod, B, exec, firefox"
         "$mainMod, G, exec, $HOME/.config/rofi/gamelauncher.sh"
@@ -129,7 +128,7 @@
         "$mainMod, right, movefocus, r"
         "$mainMod, up, movefocus, u"
         "$mainMod, down, movefocus, d"
-        # keybind to activate gamemode (+ add gamemode start from rofi gamelauncher)
+        # TODO keybind to activate gamemode (+ add gamemode start from rofi gamelauncher)
 
         # Example special workspace (scratchpad)
         # bind = $mainMod, S, togglespecialworkspace, magic

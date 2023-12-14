@@ -211,90 +211,29 @@
     enable = true;
     wlr.enable = true;
     extraPortals = with pkgs; [
-      xdg-desktop-portal-gtk
-      xdg-desktop-portal-wlr
+      xdg-desktop-portal-gtk # For file menu etc.
+      # xdg-desktop-portal-wlr # inferior to xdg-desktop-portal-hyprland
       # xdg-desktop-portal-hyprland
     ];
   };
 
+  environment.sessionVariables = { };
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    inputs.home-manager.packages.x86_64-linux.default
-    (with dotnetCorePackages; combinePackages [
-      sdk_6_0
-      sdk_7_0
-    ])
+    # inputs.home-manager.packages.x86_64-linux.default # Nessesary for home-manager when not as a module
     direnv
-    gnome3.gnome-tweaks
     docker-compose
     polkit_gnome
     pulseaudio
     tree
     lm_sensors
     nixd
-    mullvad
     nixpkgs-fmt
     libsecret
     (git.override { withLibsecret = true; })
     # git-credential-manager
-    (vscode-with-extensions.override {
-      vscode = vscodium;
-      vscodeExtensions = with inputs.nix-vscode-extensions.extensions.x86_64-linux.vscode-marketplace; [
-        aaron-bond.better-comments
-        jeff-hykin.better-dockerfile-syntax
-        naumovs.color-highlight
-        mcu-debug.debug-tracker-vscode
-        ms-vscode-remote.remote-containers
-        mkhl.direnv
-        ms-azuretools.vscode-docker
-        p1c2u.docker-compose
-        mikestead.dotenv
-        editorconfig.editorconfig
-        usernamehw.errorlens
-        github.copilot
-        bierner.markdown-preview-github-styles
-        bierner.markdown-mermaid
-        github.remotehub
-        eamodio.gitlens
-        kisstkondoros.vscode-gutter-preview
-        visualstudioexptteam.vscodeintellicode
-        visualstudioexptteam.intellicode-api-usage-examples
-        yzhang.markdown-all-in-one
-        davidanson.vscode-markdownlint
-        pkief.material-icon-theme
-        arrterian.nix-env-selector
-        jnoortheen.nix-ide
-        zhuangtongfa.material-theme
-        christian-kohler.path-intellisense
-        ms-vscode-remote.remote-ssh
-        ms-vscode-remote.remote-ssh-edit
-        semanticdiff.semanticdiff
-        sidp.strict-whitespace
-        albert.tabout
-        actboy168.tasks
-        ms-vscode.test-adapter-converter
-        hbenl.vscode-test-explorer
-        gruntfuggly.todo-tree
-        panicbit.cargo
-        vadimcn.vscode-lldb
-        marus25.cortex-debug
-        serayuzgur.crates
-        tamasfe.even-better-toml
-        github.vscode-github-actions
-        github.copilot-chat
-        github.vscode-pull-request-github
-        mcu-debug.memory-view
-        dustypomerleau.rust-syntax
-        swellaby.vscode-rust-test-adapter
-        rust-lang.rust-analyzer
-        belfz.search-crates-io
-        mtxr.sqltools
-        vscodevim.vim
-      ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
-
-      ];
-    })
   ];
 
 

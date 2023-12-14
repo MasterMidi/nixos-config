@@ -1,12 +1,9 @@
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
   imports = [
     ./shell
-    ./programs/hyprland.nix
-    ./programs/waybar.nix
-    ./programs/starship.nix
-    ./programs/kitty.nix
+    ./programs
   ];
 
   # Home Manager needs a bit of information about you and the paths it should
@@ -52,6 +49,7 @@
     # Productivity
     firefox
     thunderbird
+    distrobox
 
     # Privacy
     mullvad-vpn
@@ -89,12 +87,6 @@
 
     # Development
     jetbrains.rider
-    # (jetbrains.rider.overrideAttrs (old: {
-    #   postPatch = old.postPatch + ''
-    #     interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
-    #     patchelf --set-interpreter $interp plugins/dotCommon/DotFiles/linux-x64/JetBrains.Profiler.PdbServer
-    #   '';
-    # }))
 
     # Fonts
     (nerdfonts.override { fonts = [ "Meslo" "FiraCode" ]; })
@@ -124,7 +116,7 @@
 
     EDITOR = "nano";
     BROWSER = "firefox";
-    DOTNET_ROOT = "${pkgs.dotnet-sdk_7}";
+    # DOTNET_ROOT = "${pkgs.dotnet-sdk_7}";
   };
 
   programs.git = {
@@ -142,6 +134,10 @@
   };
 
   programs.yt-dlp = {
+    enable = true;
+  };
+
+  programs.ripgrep = {
     enable = true;
   };
 

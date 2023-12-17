@@ -29,7 +29,7 @@
     in
     {
       # Custom packages and modifications, exported as overlays
-      overlays = import ./overlays { inherit inputs nixpkgs; };
+      overlays = import ./overlays { inherit inputs; };
 
       nixosConfigurations = {
         jason = nixpkgs.lib.nixosSystem {
@@ -38,7 +38,8 @@
           specialArgs = { inherit inputs outputs; }; # this is the important part
           modules = [
             ./hosts/jason
-            { nixpkgs.overlays = [ nur.overlay ]; }
+            ./scripts
+            # { nixpkgs.overlays = [ nur.overlay ]; }
 
             # make home-manager as a module of nixos
             # so that home-manager configuration will be deployed automatically when executing `nixos-rebuild switch`
@@ -57,18 +58,18 @@
       };
 
       # Standalone home-manager configuration entrypoint
-    # Available through 'home-manager --flake .#your-username@your-hostname'
-    # homeConfigurations = {
-    #   "michael@jason" = home-manager.lib.homeManagerConfiguration {
-    #     pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
-    #     # home-manager.useGlobalPkgs = true;
-    #     # home-manager.useUserPackages = true;
-    #     extraSpecialArgs = {inherit inputs outputs;};
-    #     modules = [
-    #       # > Our main home-manager configuration file <
-    #       ./home
-    #     ];
-    #   };
-    # };
+      # Available through 'home-manager --flake .#your-username@your-hostname'
+      # homeConfigurations = {
+      #   "michael@jason" = home-manager.lib.homeManagerConfiguration {
+      #     pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
+      #     # home-manager.useGlobalPkgs = true;
+      #     # home-manager.useUserPackages = true;
+      #     extraSpecialArgs = {inherit inputs outputs;};
+      #     modules = [
+      #       # > Our main home-manager configuration file <
+      #       ./home
+      #     ];
+      #   };
+      # };
     };
 }

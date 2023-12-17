@@ -1,4 +1,4 @@
-{pkgs, ...}:
+{ pkgs, ... }:
 
 {
   wayland.windowManager.hyprland = {
@@ -19,7 +19,10 @@
         "DP-1, 3440x1440@144, 1920x0, 1"
       ];
 
-      env = "XCURSOR_SIZE=24";
+      env = ["XCURSOR_SIZE,24"]; # this works at least
+      # env = {
+      #   XCURSOR_SIZE = 24;
+      # };
 
       input = {
         kb_layout = "dk";
@@ -47,7 +50,6 @@
         # };
         "col.active_border" = "rgba(33ccffee) rgba(00ff99ee) 45deg";
         "col.inactive_border" = "rgba(595959aa)";
-
         layout = "dwindle";
 
         # Please see https://wiki.hyprland.org/Configuring/Tearing/ before you turn this on
@@ -115,7 +117,7 @@
         "$mainMod, Q, exec, kitty"
         "$mainMod, B, exec, firefox"
         "$mainMod, G, exec, $HOME/.config/rofi/gamelauncher.sh"
-        "$mainMod, Space, exec, rofi -show drun"
+        "$mainMod, Space, exec, pkill rofi || rofi -show drun"
         "$mainMod ALT, Space, exec, rofi -show run"
         "$mainMod, C, killactive,"
         "$mainMod SHIFT, Q, exit,"

@@ -2,8 +2,11 @@
 
 {
   imports = [
+    ./wm
+    ./theme
     ./shell
     ./programs
+    ./services
   ];
 
   # Home Manager needs a bit of information about you and the paths it should
@@ -11,30 +14,7 @@
   home.username = "michael";
   home.homeDirectory = "/home/michael";
   home.stateVersion = "23.05"; # Please read the docs before changing.
-  programs.home-manager.enable = true; # Let Home Manager install and manage itself.
-
-  fonts.fontconfig.enable = true;
-  home.pointerCursor =
-    let
-      getFrom = url: hash: name: {
-        gtk.enable = true;
-        x11.enable = true;
-        name = name;
-        size = 24;
-        package =
-          pkgs.runCommand "moveUp" { } ''
-            mkdir -p $out/share/icons
-            ln -s ${pkgs.fetchzip {
-              url = url;
-              hash = hash;
-            }}/dist-light $out/share/icons/${name}
-          '';
-      };
-    in
-    getFrom
-      "https://github.com/vinceliuice/Graphite-cursors/archive/refs/heads/main.zip"
-      "sha256-abnCIoPTbhyeWVBLiNjBI2+/6IIQ6I6lS/rvoVrselY="
-      "Graphite-cursors-light";
+  programs.home-manager.enable = false; # Let Home Manager install and manage itself.
 
   home.packages = with pkgs; [
     # System
@@ -45,9 +25,9 @@
     wdisplays
     pavucontrol
     neofetch
+    haskellPackages.kmonad
 
     # Productivity
-    firefox
     thunderbird
     distrobox
 
@@ -66,7 +46,6 @@
     hyprpicker
     libnotify
     magic-wormhole
-    # textpieces
 
     # Media
     jellyfin-media-player
@@ -119,71 +98,5 @@
     # DOTNET_ROOT = "${pkgs.dotnet-sdk_7}";
   };
 
-  programs.git = {
-    enable = true;
-    userName = "Michael Andreas Graversen";
-    userEmail = "home@michael-graversen.dk";
-    lfs.enable = true;
-    extraConfig = {
-      credential = {
-        credentialStore = "secretservice";
-        # helper = "${pkgs.git-credential-manager}/lib/git-credential-manager/git-credential-manager";
-        helper = "${pkgs.nur.repos.utybo.git-credential-manager}/bin/git-credential-manager"; # TODO: don't use nur repo
-      };
-    };
-  };
-
-  programs.yt-dlp = {
-    enable = true;
-  };
-
-  programs.ripgrep = {
-    enable = true;
-  };
-
-  programs.rofi = {
-    enable = true;
-    package = pkgs.rofi-wayland;
-    theme = "/launchers/type-1/style-8.rasi";
-    # extraConfig = '''';
-  };
-
-  programs.yazi = {
-    enable = true;
-    enableBashIntegration = true;
-  };
-
-  programs.eza = {
-    enable = true;
-    enableAliases = true;
-    git = true;
-    icons = true;
-  };
-
-  services.mako = {
-    enable = true;
-    defaultTimeout = 2000;
-  };
-
-  programs.bat = {
-    enable = true;
-  };
-
-  programs.tmux = {
-    enable = true;
-  };
-
-  programs.btop = {
-    enable = true;
-
-  };
-
-  services.syncthing = {
-    enable = true;
-  };
-
-  services.mpris-proxy.enable = true;
-
-  
   # TODO setup nix autocomplete
 }

@@ -16,6 +16,9 @@
   nixpkgs = {
     # You can add overlays here
     overlays = [
+      inputs.nur.overlay
+			outputs.overlays.vscode-extensions
+      # outputs.overlays.nur-packages.nur
       # outputs.overlays.nur-packages
 
       # You can also add overlays exported from other flakes:
@@ -98,7 +101,10 @@
   services.xserver.enable = true;
 
   # Enable the GNOME Desktop Environment.
-  services.xserver.displayManager.gdm.enable = true;
+  services.xserver.displayManager.gdm = {
+    enable = true;
+    autoSuspend = false;
+  };
   # services.xserver.desktopManager.gnome.enable = true;
 
   # Configure keymap in X11
@@ -153,6 +159,14 @@
   };
 
   boot.extraModprobeConfig = "options kvm_amd nested=1";
+
+  # Disable the GNOME3/GDM auto-suspend feature that cannot be disabled in GUI!
+  # If no user is logged in, the machine will power down after 20 minutes.
+  systemd.targets.sleep.enable = false;
+  systemd.targets.suspend.enable = false;
+  systemd.targets.hibernate.enable = false;
+  systemd.targets.hybrid-sleep.enable = false;
+
   virtualisation.libvirtd.enable = true;
   virtualisation.docker = {
     enable = true;
@@ -163,6 +177,58 @@
     enableOnBoot = true;
     storageDriver = "btrfs";
   };
+  virtualisation.podman = {
+    enable = true;
+    defaultNetwork.settings.dns_enabled = true; # Required for containers under podman-compose to be able to talk to each other.
+  };
+  virtualisation.oci-containers.backend = "podman";
+  virtualisation.oci-containers.containers = {
+    homarr = {
+      image = "ghcr.io/ajnart/homarr:latest";
+      user = "1000:100";
+      autoStart = false;
+      ports = [ "9000:7575" ];
+      volumes = [
+        "/services/media/homarr/configs:/app/data/configs"
+        "/services/media/homarr/data:/data"
+        "/services/media/homarr/icons:/app/public/icons"
+        "/var/run/docker.sock:/var/run/docker.sock"
+      ];
+    };
+    jellyfin = {
+      image = "lscr.io/linuxserver/jellyfin:latest";
+      autoStart = false;
+      ports = [ "9010:8096" "8920:8920" ];
+      environment = {
+        PUID = "1000";
+        PGID = "100";
+        TZ = "${config.time.timeZone}";
+      };
+      volumes = [
+        "/services/media/jellyfin/config:/config"
+        "/services/media/jellyfin/web:/jellyfin/jellyfin-web:ro"
+        "/services/media/jellyfin/certs:/certs:ro"
+        "/services/media/jellyfin/transcodes:/transcodes"
+        "/home/michael/.temp/data/media:/storage/media"
+      ];
+    };
+    jellyseer = {
+      image = "ghcr.io/hotio/jellyseerr";
+      autoStart = false;
+      ports = [ "9020:5055" ];
+      environment = {
+        PUID = "1000";
+        PGID = "100";
+        UMASK = "002";
+        TZ = "${config.time.timeZone}";
+      };
+      volumes = [
+        "/services/media/jellyseerr/config:/config"
+      ];
+      extraOptions = [ "--network=host" ];
+    };
+  };
+
 
   # Enable OpenGL
   hardware.opengl = {
@@ -173,33 +239,12 @@
     extraPackages32 = with pkgs; [ driversi686Linux.amdvlk ];
   };
 
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
-
-  # nixpkgs.overlays = [
-  #   (self: super: {
-  #     r2modman = super.r2modman.overrideAttrs (oldAttrs: rec {
-  #       version = "3.1.45";
-  #       src = super.fetchFromGitHub {
-  #         owner = "ebkr";
-  #         repo = "r2modmanPlus";
-  #         rev = "v${version}";
-  #         hash = "sha256-6o6iPDKKqCzt7H0a64HGTvEvwO6hjRh1Drl8o4x+4ew="; # Replace with the actual hash
-  #       };
-  #       # Update the offlineCache hash only if the dependencies have changed
-  #       offlineCache = oldAttrs.offlineCache.overrideAttrs {
-  #         hash = "sha256-CXitb/b2tvTfrkFrFv4KP4WdmMg+1sDtC/s2u5ezDfI="; # Update if necessary
-  #       };
-  #     });
-  #   })
-  # ];
-
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.mutableUsers = true;
   users.users.michael = {
     isNormalUser = true;
     description = "Michael Andreas Graversen";
-    extraGroups = [ "networkmanager" "wheel" "libvirtd" "input" ];
+    extraGroups = [ "networkmanager" "wheel" "libvirtd" "input" "podman" "docker" ];
     packages = with pkgs; [ ];
   };
 
@@ -225,6 +270,7 @@
     # inputs.home-manager.packages.x86_64-linux.default # Nessesary for home-manager when not as a module
     direnv
     docker-compose
+    podman-compose
     polkit_gnome
     pulseaudio
     tree
@@ -240,6 +286,8 @@
   services.tailscale.enable = true;
 
   services.mullvad-vpn.enable = true;
+
+  programs.nix-ld.enable = true;
 
   programs.steam = {
     enable = true;
@@ -260,10 +308,8 @@
   #   enableSSHSupport = true;
   # };
 
-  # List services that you want to enable:
-
   # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
+  services.openssh.enable = true;
 
   # Open ports in the firewall.
   networking.firewall.allowedTCPPorts = [

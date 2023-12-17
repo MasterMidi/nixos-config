@@ -19,7 +19,7 @@
         "DP-1, 3440x1440@144, 1920x0, 1"
       ];
 
-      env = ["XCURSOR_SIZE,24"]; # this works at least
+      env = ["XCURSOR_SIZE,36"]; # this works at least
       # env = {
       #   XCURSOR_SIZE = 24;
       # };

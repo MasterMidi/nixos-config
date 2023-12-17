@@ -7,6 +7,7 @@
     ./shell
     ./programs
     ./services
+		./keyboard
   ];
 
   # Home Manager needs a bit of information about you and the paths it should
@@ -18,7 +19,6 @@
 
   home.packages = with pkgs; [
     # System
-    wezterm
     xwaylandvideobridge
     wl-clipboard
     cliphist

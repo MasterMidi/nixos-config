@@ -6,7 +6,7 @@
     let
       getFrom = url: hash: name: {
         gtk.enable = true;
-        x11.enable = true;
+        x11.enable = false;
         name = name;
         size = 24;
         package =

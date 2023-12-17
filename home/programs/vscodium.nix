@@ -6,7 +6,7 @@
 		enableUpdateCheck = false;
 		userSettings = {
 			"editor.wordWrap" = "on";
-			"editor.fontFamily" = "MesloLGS";
+			"editor.fontFamily" = "MesloLGM";
 			"editor.fontLigatures" = true;
 			"files.autoSave" = "afterDelay";
 			"git.autofetch" = true;

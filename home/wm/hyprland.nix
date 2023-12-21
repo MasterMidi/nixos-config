@@ -104,14 +104,16 @@
         force_default_wallpaper = -1; # Set to 0 to disable the anime mascot wallpapers
       };
 
-			windowrulev2 = [
-				"monitor 1, class:(discord)"
-			];
+      windowrulev2 = [
+        "monitor 1, class:(discord)"
+        "stayfocused, title:^()$,class:^(steam)$" # fix steam menues
+        "minsize 1 1, title:^()$,class:^(steam)$" # Fix steam friends list
+      ];
 
       "$mainMod" = "SUPER";
       bind = [
         ", Print, exec, grimblast --freeze copy area" # Screenshots
-				"$mainMod, L, exec, swaylock"
+        "$mainMod, L, exec, swaylock"
         "$mainMod SHIFT, W, exec, killall .waybar-wrapped 2>/dev/null && waybar" # Restart waybar
         "$mainMod ALT, W, exec, waybar" # Restart waybar
         "$mainMod, Q, exec, kitty"

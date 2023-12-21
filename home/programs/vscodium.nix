@@ -58,6 +58,9 @@
       "[css]" = {
         "editor.defaultFormatter" = "stylelint.vscode-stylelint";
       };
+      "files.associations" = {
+        "*.rasi" = "css";
+      };
     };
     keybindings = [
       {

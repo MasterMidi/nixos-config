@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ./wm
+    ./wm/hyprland.nix
     ./theme
     ./shell
     ./programs
@@ -79,7 +79,8 @@
   # plain files is through 'home.file'.
   home.file = {
     "Pictures/wallpapers" = {
-      source = ./wallpapers;
+      # source = ./wallpapers;
+      source = config.lib.file.mkOutOfStoreSymlink "/etc/nixos/wallpapers";
     };
   };
 

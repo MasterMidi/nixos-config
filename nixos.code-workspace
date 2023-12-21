@@ -2,10 +2,9 @@
 	"folders": [
 		{
 			"path": "."
-		},
-		{
-			"path": "../../home/michael/.config/rofi"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"nixEnvSelector.nixFile": "${workspaceRoot}/shell.nix"
+	}
 }

@@ -7,7 +7,7 @@
     ./shell
     ./programs
     ./services
-		./keyboard
+    ./keyboard
   ];
 
   # Home Manager needs a bit of information about you and the paths it should
@@ -26,6 +26,7 @@
     pavucontrol
     neofetch
     haskellPackages.kmonad
+    gnome3.gnome-tweaks
 
     # Productivity
     thunderbird
@@ -56,8 +57,11 @@
     spotify-player
     playerctl
 
-    # Gaming
+    # Communication
     discord
+    signal-desktop
+
+    # Gaming
     r2modman
     heroic
     lutris
@@ -73,7 +77,11 @@
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
-  home.file = { };
+  home.file = {
+    "Pictures/wallpapers" = {
+      source = ./wallpapers;
+    };
+  };
 
 
   # You can also manage environment variables but you will have to manually
@@ -93,7 +101,8 @@
     XDG_STATE_HOME = "$HOME/.local/state";
     XDG_BIN_HOME = "$HOME/.local/bin";
 
-    EDITOR = "nano";
+    EDITOR = "vscodium";
+    TERM_PROGRAM = "kitty";
     BROWSER = "firefox";
     # DOTNET_ROOT = "${pkgs.dotnet-sdk_7}";
   };

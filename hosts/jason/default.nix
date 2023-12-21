@@ -9,7 +9,6 @@
     [
       # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ./hardware-configuration-overrides.nix
       ./refind.nix
     ];
 
@@ -17,7 +16,7 @@
     # You can add overlays here
     overlays = [
       inputs.nur.overlay
-			outputs.overlays.vscode-extensions
+      outputs.overlays.vscode-extensions
       # outputs.overlays.nur-packages.nur
       # outputs.overlays.nur-packages
 
@@ -258,7 +257,7 @@
     extraPortals = with pkgs; [
       xdg-desktop-portal-gtk # For file menu etc.
       # xdg-desktop-portal-wlr # inferior to xdg-desktop-portal-hyprland
-      # xdg-desktop-portal-hyprland
+      # xdg-desktop-portal-hyprland # already installed by hyprland flake
     ];
   };
 

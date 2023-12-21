@@ -9,12 +9,13 @@
     ./git.nix
     ./kitty.nix
     ./ripgrep.nix
-    ./rofi.nix
+    ./rofi
     ./starship.nix
     ./tmux.nix
     ./vscodium.nix
-    ./waybar.nix
+    ./waybar
     ./yazi.nix
     ./yt-dlp.nix
+		./swaylock.nix
   ];
 }

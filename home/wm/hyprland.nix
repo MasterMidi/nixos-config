@@ -9,7 +9,6 @@
         "swww init"
         "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
         "wl-paste --watch cliphist store"
-        "xwaylandvideobridge"
       ];
 
       monitor = [
@@ -19,7 +18,7 @@
         "DP-1, 3440x1440@144, 1920x0, 1"
       ];
 
-      env = ["XCURSOR_SIZE,36"]; # this works at least
+      # env = ["XCURSOR_SIZE,24"]; # this works at least
       # env = {
       #   XCURSOR_SIZE = 24;
       # };
@@ -44,10 +43,6 @@
         gaps_in = 5;
         gaps_out = 20;
         border_size = 2;
-        # col = {
-        #   active_border = "rgba(33ccffee) rgba(00ff99ee) 45deg";
-        #   inactive_border = "rgba(595959aa)";
-        # };
         "col.active_border" = "rgba(33ccffee) rgba(00ff99ee) 45deg";
         "col.inactive_border" = "rgba(595959aa)";
         layout = "dwindle";
@@ -109,13 +104,19 @@
         force_default_wallpaper = -1; # Set to 0 to disable the anime mascot wallpapers
       };
 
+			windowrulev2 = [
+				"monitor 1, class:(discord)"
+			];
+
       "$mainMod" = "SUPER";
       bind = [
         ", Print, exec, grimblast --freeze copy area" # Screenshots
+				"$mainMod, L, exec, swaylock"
         "$mainMod SHIFT, W, exec, killall .waybar-wrapped 2>/dev/null && waybar" # Restart waybar
         "$mainMod ALT, W, exec, waybar" # Restart waybar
         "$mainMod, Q, exec, kitty"
         "$mainMod, B, exec, firefox"
+        "$mainMod SHIFT, B, exec, firefox --private-window"
         "$mainMod, G, exec, $HOME/.config/rofi/gamelauncher.sh"
         "$mainMod, Space, exec, pkill rofi || rofi -show drun"
         "$mainMod ALT, Space, exec, rofi -show run"

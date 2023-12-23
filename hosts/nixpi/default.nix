@@ -83,6 +83,7 @@
   services.openssh.enable = true;
 
   programs.nix-ld.enable = true;
+  services.openvscode-server.enable = true;
 
   # services.mosquitto = {
   #   enable = true;

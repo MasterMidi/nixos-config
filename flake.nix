@@ -3,6 +3,8 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-23.11";
+    nixpkgs-legacy.url = "github:nixos/nixpkgs/nixos-23.05";
     nur.url = "github:nix-community/NUR";
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
@@ -55,12 +57,13 @@
             }
           ];
         };
-        raspi = nixpkgs.lib.nixosSystem {
+
+        nixpi = nixpkgs.lib.nixosSystem {
           system = "aarch64-linux";
 
           specialArgs = { inherit inputs outputs; }; # this is the important part
           modules = [
-            ./hosts/raspi
+            ./hosts/nixpi
           ];
         };
       };

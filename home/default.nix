@@ -68,6 +68,7 @@
     wineWowPackages.waylandFull
 
     # Development
+    dotnet-sdk_7
     jetbrains.rider
 
     # Fonts

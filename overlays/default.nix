@@ -21,8 +21,21 @@
   #     config.allowUnfree = true;
   #   };
   # };
+  stable-packages = final: _prev: {
+    stable = import inputs.nixpkgs-stable {
+      system = final.system;
+      config.allowUnfree = true;
+    };
+  };
 
-	vscode-extensions = final: _prev: {
-		vscode-extensions = import inputs.nix-vscode-extensions;
-	};
+  legacy-packages = final: _prev: {
+    legacy = import inputs.nixpkgs-legacy {
+      system = final.system;
+      config.allowUnfree = true;
+    };
+  };
+
+  vscode-extensions = final: _prev: {
+    vscode-extensions = import inputs.nix-vscode-extensions;
+  };
 }

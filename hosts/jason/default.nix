@@ -264,7 +264,9 @@
     ];
   };
 
-  environment.sessionVariables = { };
+  environment.variables = {
+    NIXOS_OZONE_WL = "1";
+  };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget

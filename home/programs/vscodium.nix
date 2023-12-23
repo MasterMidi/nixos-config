@@ -103,6 +103,7 @@
       zhuangtongfa.material-theme
       ms-vscode-remote.remote-ssh
       ms-vscode-remote.remote-ssh-edit
+      ms-vscode.remote-server
       semanticdiff.semanticdiff
       sidp.strict-whitespace
       albert.tabout

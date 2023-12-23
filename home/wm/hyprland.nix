@@ -9,12 +9,13 @@
         "swww init"
         "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
         "wl-paste --watch cliphist store"
+        # "waypaper --restore"
       ];
 
       monitor = [
         ",highrr,auto,auto" # Default
         # "HDMI-A-2, 1920x1080@60, 0x230, 0.93" # matches the dpi, but creates a gap around apps and poor font rendering
-        "HDMI-A-2, 1920x1080@60, 0x270, 1"
+        "HDMI-A-2, 1920x1080@60, 0x275, 1"
         "DP-1, 3440x1440@144, 1920x0, 1"
       ];
 
@@ -120,6 +121,8 @@
         "$mainMod, B, exec, firefox"
         "$mainMod SHIFT, B, exec, firefox --private-window"
         "$mainMod, G, exec, $HOME/.config/rofi/gamelauncher.sh"
+        "$mainMod, W, exec, $HOME/.config/rofi/wallpaper-switcher.sh"
+        # "$mainMod, W, exec, waypaper"
         "$mainMod, Space, exec, pkill rofi || rofi -show drun"
         "$mainMod ALT, Space, exec, rofi -show run"
         "$mainMod, C, killactive,"

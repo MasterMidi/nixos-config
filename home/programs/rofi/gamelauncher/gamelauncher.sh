@@ -10,7 +10,7 @@ SteamLib="${XDG_DATA_HOME:-$HOME/.local/share}/Steam/config/libraryfolders.vdf"
 SteamThumb="${XDG_DATA_HOME:-$HOME/.local/share}/Steam/appcache/librarycache"
 
 if [ ! -f $SteamLib ] || [ ! -d $SteamThumb ] || [ ! -f $RofiConf ] ; then
-    dunstify "t1" -a "Steam library not found!" -r 91190 -t 2200
+    notify-send "t1" -a "Steam library not found!" -r 91190 -t 2200
     exit 1
 fi
 

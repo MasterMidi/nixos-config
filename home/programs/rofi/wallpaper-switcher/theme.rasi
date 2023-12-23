@@ -94,7 +94,7 @@ element selected.normal {
     text-color:                  @select-fg;
 }
 element-icon {
-    size:                        22%;
+    size:                        29%;
     spacing:                     0px;
     padding:                     0px;
     cursor:                      inherit;

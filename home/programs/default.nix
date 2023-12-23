@@ -1,7 +1,8 @@
 { ... }:
 {
   imports = [
-		./wezterm.nix
+    ./broot.nix
+    ./wezterm.nix
     ./bat.nix
     ./btop.nix
     ./eza.nix
@@ -16,6 +17,6 @@
     ./waybar
     ./yazi.nix
     ./yt-dlp.nix
-		./swaylock.nix
+    ./swaylock.nix
   ];
 }

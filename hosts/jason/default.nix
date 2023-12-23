@@ -147,6 +147,7 @@
 
   # Configure wireplumber
   environment.etc = {
+    # wireplumber settings
     "wireplumber/bluetooth.lua.d/51-bluez-config.lua".text = ''
       bluez_monitor.properties = {
         ["bluez5.enable-sbc-xq"] = true,
@@ -234,9 +235,11 @@
     enable = true;
     driSupport = true;
     driSupport32Bit = true; # Enables support for 32bit libs that steam uses
-    extraPackages = with pkgs; [ amdvlk ];
-    extraPackages32 = with pkgs; [ driversi686Linux.amdvlk ];
+    # extraPackages = with pkgs; [ amdvlk ];
+    # extraPackages32 = with pkgs; [ driversi686Linux.amdvlk ];
   };
+
+  hardware.cpu.amd.updateMicrocode = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.mutableUsers = true;
@@ -298,6 +301,8 @@
   # Polkit for hyprland to get sudo password prompts
   security.polkit.enable = true;
 
+  services.fstrim.enable = true;
+
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -309,6 +314,8 @@
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
+
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" ]; # Allow compiling for ARM on x86_64
 
   # Open ports in the firewall.
   networking.firewall.allowedTCPPorts = [

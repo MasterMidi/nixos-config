@@ -13,6 +13,9 @@ in
 
   home.file = {
     "${config}/theme.rasi".source = ./applauncher/theme.rasi;
+
+    "${config}/wallpaper-switcher.sh".source = ./wallpaper-switcher/wallpaper-switcher.sh;
+
     "${config}/gamelauncher.sh".source = ./gamelauncher/gamelauncher.sh;
     "${config}/gamelauncher.rasi".source = ./gamelauncher/gamelauncher.rasi;
   };

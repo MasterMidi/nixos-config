@@ -10,18 +10,16 @@
     ./keyboard
   ];
 
-  # Home Manager needs a bit of information about you and the paths it should
-  # manage.
   home.username = "michael";
   home.homeDirectory = "/home/michael";
-  home.stateVersion = "23.05"; # Please read the docs before changing.
-  programs.home-manager.enable = false; # Let Home Manager install and manage itself.
+  home.stateVersion = "23.05";
+  programs.home-manager.enable = false;
 
   home.packages = with pkgs; [
     # System
     xwaylandvideobridge
     wl-clipboard
-    cliphist
+    waypaper
     wdisplays
     pavucontrol
     neofetch
@@ -47,6 +45,7 @@
     hyprpicker
     libnotify
     magic-wormhole
+    trash-cli
 
     # Media
     jellyfin-media-player
@@ -55,7 +54,7 @@
     vlc
     spotify
     spotify-player
-    playerctl
+    # playerctl
 
     # Communication
     discord
@@ -75,15 +74,12 @@
     (nerdfonts.override { fonts = [ "Meslo" "FiraCode" ]; })
   ];
 
-  # Home Manager is pretty good at managing dotfiles. The primary way to manage
-  # plain files is through 'home.file'.
   home.file = {
     "Pictures/wallpapers" = {
       # source = ./wallpapers;
       source = config.lib.file.mkOutOfStoreSymlink "/etc/nixos/wallpapers";
     };
   };
-
 
   # You can also manage environment variables but you will have to manually
   # source
@@ -101,6 +97,14 @@
     XDG_DATA_HOME = "$HOME/.local/share";
     XDG_STATE_HOME = "$HOME/.local/state";
     XDG_BIN_HOME = "$HOME/.local/bin";
+    XDG_DESKTOP_DIR = "$HOME/Desktop";
+    XDG_DOWNLOAD_DIR = "$HOME/Downloads";
+    XDG_TEMPLATES_DIR = "$HOME/Templates";
+    XDG_PUBLICSHARE_DIR = "$HOME/Public";
+    XDG_DOCUMENTS_DIR = "$HOME/Documents";
+    XDG_MUSIC_DIR = "$HOME/Music";
+    XDG_PICTURES_DIR = "$HOME/Pictures";
+    XDG_VIDEOS_DIR = "$HOME/Videos";
 
     EDITOR = "vscodium";
     TERM_PROGRAM = "kitty";

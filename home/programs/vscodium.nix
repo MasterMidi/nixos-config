@@ -101,9 +101,9 @@
       jnoortheen.nix-ide
       carlocardella.vscode-filesystemtoolbox
       zhuangtongfa.material-theme
-      ms-vscode-remote.remote-ssh
-      ms-vscode-remote.remote-ssh-edit
-      ms-vscode.remote-server
+      # ms-vscode-remote.remote-ssh
+      # ms-vscode-remote.remote-ssh-edit
+      # ms-vscode.remote-server
       semanticdiff.semanticdiff
       sidp.strict-whitespace
       albert.tabout
@@ -126,7 +126,9 @@
       belfz.search-crates-io
       mtxr.sqltools
       # vscodevim.vim
-    ];
+    ] ++ (with pkgs.vscode-extensions.extensions.x86_64-linux.open-vsx; [
+      jeanp413.open-remote-ssh
+    ]);
   };
 
   home.packages = with pkgs; [

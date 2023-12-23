@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, outputs, ... }:
 
 {
   imports =
@@ -16,6 +16,12 @@
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   networking.networkmanager.enable = true; # Easiest to use and most distros use this by default.
+
+  nixpkgs = {
+    overlays = [
+      outputs.overlays.vscode-extensions
+    ];
+  };
 
   # Set your time zone.
   time.timeZone = "Europe/Copenhagen";
@@ -54,10 +60,14 @@
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  # environment.systemPackages = with pkgs; [
-  #   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  #   wget
-  # ];
+  environment.systemPackages = with pkgs; [
+    (vscode-with-extensions.override {
+      vscode = vscodium;
+      vscodeExtensions = with pkgs.vscode-extensions.extensions.x86_64-linux.open-vsx; [
+        jeanp413.open-remote-ssh
+      ];
+    })
+  ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

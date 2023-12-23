@@ -55,6 +55,14 @@
             }
           ];
         };
+        raspi = nixpkgs.lib.nixosSystem {
+          system = "aarch64-linux";
+
+          specialArgs = { inherit inputs outputs; }; # this is the important part
+          modules = [
+            ./hosts/raspi
+          ];
+        };
       };
 
       # Standalone home-manager configuration entrypoint

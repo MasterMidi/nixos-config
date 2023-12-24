@@ -1,16 +1,18 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-
-{ config, pkgs, inputs, outputs, ... }:
-
 {
-  imports =
-    [
-      # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      ./refind.nix
-    ];
+  config,
+  pkgs,
+  inputs,
+  outputs,
+  ...
+}: {
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+    ./refind.nix
+  ];
 
   nixpkgs = {
     # You can add overlays here
@@ -38,7 +40,6 @@
         "electron-25.9.0" # TODO remove when culprit found
       ];
     };
-
   };
 
   # inputs.home-manager.useGlobalPkgs = true;
@@ -58,7 +59,7 @@
   };
 
   # Nix settings
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = ["nix-command" "flakes"];
   nix.settings = {
     substituters = [
       "https://hyprland.cachix.org" # Hyprland cachix repo
@@ -187,7 +188,7 @@
       image = "ghcr.io/ajnart/homarr:latest";
       user = "1000:100";
       autoStart = false;
-      ports = [ "9000:7575" ];
+      ports = ["9000:7575"];
       volumes = [
         "/services/media/homarr/configs:/app/data/configs"
         "/services/media/homarr/data:/data"
@@ -198,7 +199,7 @@
     jellyfin = {
       image = "lscr.io/linuxserver/jellyfin:latest";
       autoStart = false;
-      ports = [ "9010:8096" "8920:8920" ];
+      ports = ["9010:8096" "8920:8920"];
       environment = {
         PUID = "1000";
         PGID = "100";
@@ -215,7 +216,7 @@
     jellyseer = {
       image = "ghcr.io/hotio/jellyseerr";
       autoStart = false;
-      ports = [ "9020:5055" ];
+      ports = ["9020:5055"];
       environment = {
         PUID = "1000";
         PGID = "100";
@@ -225,10 +226,9 @@
       volumes = [
         "/services/media/jellyseerr/config:/config"
       ];
-      extraOptions = [ "--network=host" ];
+      extraOptions = ["--network=host"];
     };
   };
-
 
   # Enable OpenGL
   hardware.opengl = {
@@ -246,8 +246,8 @@
   users.users.michael = {
     isNormalUser = true;
     description = "Michael Andreas Graversen";
-    extraGroups = [ "networkmanager" "wheel" "libvirtd" "input" "podman" "docker" ];
-    packages = with pkgs; [ ];
+    extraGroups = ["networkmanager" "wheel" "libvirtd" "input" "podman" "docker"];
+    packages = with pkgs; [];
   };
 
   programs.virt-manager.enable = true;
@@ -279,13 +279,10 @@
     pulseaudio
     tree
     lm_sensors
-    nixd
-    nixpkgs-fmt
     libsecret
-    (git.override { withLibsecret = true; })
+    (git.override {withLibsecret = true;})
     # git-credential-manager
   ];
-
 
   services.tailscale.enable = true;
 
@@ -305,7 +302,6 @@
 
   services.fstrim.enable = true;
 
-
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
@@ -317,7 +313,7 @@
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
-  boot.binfmt.emulatedSystems = [ "aarch64-linux" ]; # Allow compiling for ARM on x86_64
+  boot.binfmt.emulatedSystems = ["aarch64-linux"]; # Allow compiling for ARM on x86_64
 
   # Open ports in the firewall.
   networking.firewall.allowedTCPPorts = [
@@ -334,5 +330,4 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.05"; # Did you read the comment?
-
 }

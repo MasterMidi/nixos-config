@@ -1,6 +1,4 @@
-{ pkgs, ... }:
-
-{
+{...}: {
   programs.starship = {
     enable = true;
     enableBashIntegration = true;
@@ -194,7 +192,7 @@
       kubernetes = {
         format = "[$symbol ($user on )($cluster in )$context \($namespace\) ]($style)";
         symbol = " 󰠳";
-        detect_files = [ "k8s" ];
+        detect_files = ["k8s"];
         style = "fg:light-color-text bg:code-module";
         disabled = false;
         context_aliases = {

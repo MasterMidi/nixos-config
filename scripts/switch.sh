@@ -12,7 +12,7 @@ esac
 if [ $? -eq 0 ]; then
 	echo "🔨 Rebuilding Configuration…"
 	case "$OSTYPE" in
-	  linux*)   sudo nixos-rebuild switch --max-jobs 12 ;;
+	  linux*)   sudo nixos-rebuild switch ;;
 	  *)        echo "unknown: $OSTYPE" ;;
 	esac
 	if [ $? -eq 0 ]; then

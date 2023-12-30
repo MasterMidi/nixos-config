@@ -1,0 +1,3 @@
+{...}: {
+  programs.direnv.enbable = true;
+}

@@ -45,7 +45,7 @@ do
     appid=`echo $acf | cut -d '|' -f 2`
     game=`echo $acf | cut -d '|' -f 1`
     echo -en "$game\x00icon\x1f${SteamThumb}/${appid}_library_600x900.jpg\n"
-done | rofi -dmenu -i -theme-str "${r_override}" -config $RofiConf)
+done | rofi -dmenu -i  -config $RofiConf)
 
 
 # launch game

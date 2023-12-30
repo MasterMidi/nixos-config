@@ -5,7 +5,7 @@
 }: {
   # TODO setup nixd autocomplete
   imports = [
-    ./wm/hyprland.nix
+    ./wm/hyprland
     ./theme
     ./shell
     ./programs
@@ -33,9 +33,10 @@
     XDG_PICTURES_DIR = "$HOME/Pictures";
     XDG_VIDEOS_DIR = "$HOME/Videos";
 
-    EDITOR = "vscodium";
+    EDITOR = "nano";
     TERM_PROGRAM = "kitty";
     BROWSER = "firefox";
+    FILE_BROWSER = "yazi";
   };
 
   home.file = {
@@ -45,8 +46,11 @@
     };
   };
 
+  programs.thefuck.enable = true;
+
   home.packages = with pkgs; [
     # System
+    base16-schemes
     xwaylandvideobridge
     wl-clipboard
     waypaper
@@ -56,12 +60,21 @@
     haskellPackages.kmonad
     gnome3.gnome-tweaks
 
+    #rofi
+    rofi-vpn
+    rofi-systemd
+    rofi-rbw-wayland
+    rofi-bluetooth
+    rofi-power-menu
+
     # Productivity
     thunderbird
     distrobox
 
     # Privacy
     mullvad-vpn
+    bitwarden-cli
+    rbw
 
     # Tools
     handbrake
@@ -76,6 +89,7 @@
     libnotify
     magic-wormhole
     trash-cli
+    imagemagick
 
     # Media
     jellyfin-media-player
@@ -84,11 +98,12 @@
     vlc
     spotify
     spotify-player
-    # playerctl
+    sunshine
 
     # Communication
     discord
     signal-desktop
+    element-desktop
 
     # Gaming
     r2modman

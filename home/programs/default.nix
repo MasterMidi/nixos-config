@@ -1,5 +1,4 @@
-{ ... }:
-{
+{...}: {
   imports = [
     ./broot.nix
     ./wezterm.nix
@@ -18,5 +17,6 @@
     ./yazi.nix
     ./yt-dlp.nix
     ./swaylock.nix
+    ./wlogout
   ];
 }

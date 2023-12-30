@@ -12,6 +12,7 @@
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ./refind.nix
+    ./containers
   ];
 
   nixpkgs = {
@@ -19,8 +20,6 @@
     overlays = [
       inputs.nur.overlay
       outputs.overlays.vscode-extensions
-      # outputs.overlays.nur-packages.nur
-      # outputs.overlays.nur-packages
 
       # You can also add overlays exported from other flakes:
       # neovim-nightly-overlay.overlays.default
@@ -42,10 +41,13 @@
     };
   };
 
+  # stylix.image = ../../ahri.jpg;
+
   # inputs.home-manager.useGlobalPkgs = true;
   #       inputs.home-manager.useUserPackages = true;
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelModules = ["coretemp"];
 
   # Bootloader
   boot.loader.refind = {
@@ -169,66 +171,6 @@
   systemd.targets.hybrid-sleep.enable = false;
 
   virtualisation.libvirtd.enable = true;
-  virtualisation.docker = {
-    enable = true;
-    rootless = {
-      enable = true;
-      setSocketVariable = true;
-    };
-    enableOnBoot = true;
-    storageDriver = "btrfs";
-  };
-  virtualisation.podman = {
-    enable = true;
-    defaultNetwork.settings.dns_enabled = true; # Required for containers under podman-compose to be able to talk to each other.
-  };
-  virtualisation.oci-containers.backend = "podman";
-  virtualisation.oci-containers.containers = {
-    homarr = {
-      image = "ghcr.io/ajnart/homarr:latest";
-      user = "1000:100";
-      autoStart = false;
-      ports = ["9000:7575"];
-      volumes = [
-        "/services/media/homarr/configs:/app/data/configs"
-        "/services/media/homarr/data:/data"
-        "/services/media/homarr/icons:/app/public/icons"
-        "/var/run/docker.sock:/var/run/docker.sock"
-      ];
-    };
-    jellyfin = {
-      image = "lscr.io/linuxserver/jellyfin:latest";
-      autoStart = false;
-      ports = ["9010:8096" "8920:8920"];
-      environment = {
-        PUID = "1000";
-        PGID = "100";
-        TZ = "${config.time.timeZone}";
-      };
-      volumes = [
-        "/services/media/jellyfin/config:/config"
-        "/services/media/jellyfin/web:/jellyfin/jellyfin-web:ro"
-        "/services/media/jellyfin/certs:/certs:ro"
-        "/services/media/jellyfin/transcodes:/transcodes"
-        "/home/michael/.temp/data/media:/storage/media"
-      ];
-    };
-    jellyseer = {
-      image = "ghcr.io/hotio/jellyseerr";
-      autoStart = false;
-      ports = ["9020:5055"];
-      environment = {
-        PUID = "1000";
-        PGID = "100";
-        UMASK = "002";
-        TZ = "${config.time.timeZone}";
-      };
-      volumes = [
-        "/services/media/jellyseerr/config:/config"
-      ];
-      extraOptions = ["--network=host"];
-    };
-  };
 
   # Enable OpenGL
   hardware.opengl = {
@@ -240,14 +182,25 @@
   };
 
   hardware.cpu.amd.updateMicrocode = true;
+  hardware.enableAllFirmware = true;
+
+  # powerManagement.powertop.enable = true;
+  # powerManagement.cpuFreqGovernor = "performance";
+  # services.thermald.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.mutableUsers = true;
   users.users.michael = {
     isNormalUser = true;
     description = "Michael Andreas Graversen";
-    extraGroups = ["networkmanager" "wheel" "libvirtd" "input" "podman" "docker"];
-    packages = with pkgs; [];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "libvirtd"
+      "input"
+      "podman"
+      "docker"
+    ];
   };
 
   programs.virt-manager.enable = true;
@@ -322,6 +275,10 @@
   networking.firewall.allowedUDPPorts = [
     5353 # Spotfify discover Connect devices
   ];
+  networking.firewall.interfaces."podman+" = {
+    allowedUDPPorts = [53];
+    allowedTCPPorts = [53];
+  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

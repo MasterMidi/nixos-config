@@ -92,7 +92,7 @@ entry {
 
 listview {
 	enabled: true;
-	columns: 7;
+	columns: 10;
 	lines: 1;
 	spacing: 50px;
 	padding: 20px 30px;
@@ -101,7 +101,7 @@ listview {
 	scrollbar: false;
 	/* TODO: make it vertical scroll */
 	layout: vertical;
-	reverse: true;
+	reverse: false;
 	fixed-height: true;
 	fixed-columns: true;
 	cursor: "default";

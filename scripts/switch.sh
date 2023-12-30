@@ -1,18 +1,23 @@
-#!/usr/bin/env bash
+#!/usr/bin/env nix-shell
+#!nix-shell -i bash -p nix-output-monitor
 bold=$(tput bold)
 normal=$(tput sgr0)
 
-echo "${bold}⚗️ Testing Configuration ${normal}"
-#hyperfine --export-markdown /etc/nixos/measure.md --runs 3 "nixos-rebuild dry-activate"
+if [ "$EUID" -ne 0 ]
+  then echo "󰣮 Please run as root"
+  exit
+fi
+
+echo "${bold}⚗️  Testing Configuration ${normal}"
 case "$OSTYPE" in
-  linux*)   nixos-rebuild dry-build ;;
+  linux*)   sudo nixos-rebuild dry-build;;
   *)        echo "unknown: $OSTYPE" ;;
 esac
 
 if [ $? -eq 0 ]; then
 	echo "🔨 Rebuilding Configuration…"
 	case "$OSTYPE" in
-	  linux*)   sudo nixos-rebuild switch ;;
+	  linux*)   sudo nixos-rebuild switch;;
 	  *)        echo "unknown: $OSTYPE" ;;
 	esac
 	if [ $? -eq 0 ]; then

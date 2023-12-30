@@ -1,12 +1,13 @@
 let
-  pkgs = import <nixpkgs> { };
+  pkgs = import <nixpkgs> {};
 in
-pkgs.mkShell {
-  buildInputs = with pkgs; [
-    nerdfix
-    nurl
-    nix-prefetch
-    nix-tree
-    nix-output-monitor
-  ];
-}
+  pkgs.mkShell {
+    buildInputs = with pkgs; [
+      nerdfix
+      nurl
+      nix-prefetch
+      nix-tree
+      nix-output-monitor
+      nix-index
+    ];
+  }

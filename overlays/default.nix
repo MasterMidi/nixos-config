@@ -34,6 +34,13 @@
     };
   };
 
+  chaotic-packages = final: _prev: {
+    chaotic = import inputs.nixpkgs-chaotic.nixosModules.default {
+      system = final.system;
+      config.allowUnfree = true;
+    };
+  };
+
   vscode-extensions = final: _prev: {
     vscode-extensions = import inputs.nix-vscode-extensions;
   };

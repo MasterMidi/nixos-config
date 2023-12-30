@@ -1,12 +1,16 @@
-{ pkgs, ... }:
+{pkgs, ...}: let
+  config = ".config/hypr";
+in {
+  home.file = {
+    "${config}/scripts".source = ./scripts;
+  };
 
-{
   wayland.windowManager.hyprland = {
     enable = true;
     settings = {
       exec-once = [
         "waybar"
-        "swww init"
+        "sleep 5 && swww init"
         "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
         "wl-paste --watch cliphist store"
         # "waypaper --restore"
@@ -16,7 +20,7 @@
         ",highrr,auto,auto" # Default
         # "HDMI-A-2, 1920x1080@60, 0x230, 0.93" # matches the dpi, but creates a gap around apps and poor font rendering
         "HDMI-A-2, 1920x1080@60, 0x275, 1"
-        "DP-1, 3440x1440@144, 1920x0, 1"
+        "DP-1, 3440x1440@144, 1920x0, 1, vrr, 1"
       ];
 
       # env = ["XCURSOR_SIZE,24"]; # this works at least
@@ -42,7 +46,7 @@
 
       general = {
         gaps_in = 5;
-        gaps_out = 20;
+        gaps_out = 10;
         border_size = 2;
         "col.active_border" = "rgba(33ccffee) rgba(00ff99ee) 45deg";
         "col.inactive_border" = "rgba(595959aa)";
@@ -111,6 +115,19 @@
         "minsize 1 1, title:^()$,class:^(steam)$" # Fix steam friends list
       ];
 
+      workspace = [
+        "1, monitor:DP-1"
+        "2, monitor:HMDI-A-2"
+        "3, monitor:DP-1"
+        "4, monitor:HMDI-A-2"
+        "5, monitor:DP-1"
+        "6, monitor:HMDI-A-2"
+        "7, monitor:DP-1"
+        "8, monitor:HMDI-A-2"
+        "9, monitor:DP-1"
+        "10, monitor:HMDI-A-2"
+      ];
+
       "$mainMod" = "SUPER";
       bind = [
         ", Print, exec, grimblast --freeze copy area" # Screenshots
@@ -123,12 +140,14 @@
         "$mainMod, G, exec, $HOME/.config/rofi/gamelauncher.sh"
         "$mainMod, W, exec, $HOME/.config/rofi/wallpaper-switcher.sh"
         # "$mainMod, W, exec, waypaper"
-        "$mainMod, Space, exec, pkill rofi || rofi -show drun"
-        "$mainMod ALT, Space, exec, rofi -show run"
+        "$mainMod, SPACE, exec, pkill rofi || rofi -show drun"
+        "$mainMod ALT, SPACE, exec, rofi -show run"
+        "$mainMod CTRL, SPACE, exec, rofi -show calc"
+        "$mainMod, V, exec, "
         "$mainMod, C, killactive,"
         "$mainMod SHIFT, Q, exit,"
         "$mainMod, E, exec, nautilus"
-        "$mainMod, V, togglefloating,"
+        "$mainMod, F, togglefloating,"
         "$mainMod, R, exec, wofi --show drun"
         "$mainMod, P, pseudo," # dwindle
         "$mainMod, J, togglesplit," # dwindle
@@ -145,7 +164,6 @@
         # Scroll through existing workspaces with mainMod + scroll
         "$mainMod, mouse_down, workspace, e+1"
         "$mainMod, mouse_up, workspace, e-1"
-
 
         "${builtins.concatStringsSep "\n" (builtins.genList (
             x: let

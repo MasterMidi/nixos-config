@@ -7,5 +7,8 @@
       . ~/.profile
       bind -s 'set completion-ignore-case on'
     '';
+    bashrcExtra = ''
+      ${builtins.readFile ./nix-direnv.sh}
+    '';
   };
 }

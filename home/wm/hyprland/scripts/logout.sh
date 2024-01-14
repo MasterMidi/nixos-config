@@ -9,9 +9,8 @@ fi
 
 # set file variables
 ScrDir=`dirname "$(realpath "$0")"`
-source $ScrDir/globalcontrol.sh
-wLayout="${XDG_CONFIG_HOME:-$HOME/.config}/wlogout/layout_$1"
-wlTmplt="${XDG_CONFIG_HOME:-$HOME/.config}/wlogout/style_$1.css"
+wLayout="${XDG_CONFIG_HOME:-$HOME/.config}/wlogout/layout"
+wlTmplt="${XDG_CONFIG_HOME:-$HOME/.config}/wlogout/style.css"
 
 if [ ! -f $wLayout ] || [ ! -f $wlTmplt ] ; then
     echo "ERROR: Config $1 not found..."
@@ -22,7 +21,9 @@ fi
 x_mon=$(hyprctl -j monitors | jq '.[] | select(.focused==true) | .width')
 y_mon=$(hyprctl -j monitors | jq '.[] | select(.focused==true) | .height')
 hypr_scale=$(hyprctl -j monitors | jq '.[] | select (.focused == true) | .scale' | sed 's/\.//')
-
+hypr_border=`hyprctl -j getoption decoration:rounding | jq '.int'`
+hypr_width=`hyprctl -j getoption general:border_size | jq '.int'`
+hypr_scale=1
 
 # scale config layout and style
 case $1 in
@@ -43,12 +44,6 @@ export fntSize=$(( y_mon * 2 / 100 ))
 export BtnCol=`[ "$gtkMode" == "dark" ] && ( echo "white" ) || ( echo "black" )`
 export WindBg=`[ "$gtkMode" == "dark" ] && ( echo "rgba(0,0,0,0.5)" ) || ( echo "rgba(255,255,255,0.5)" )`
 
-if [ "$EnableWallDcol" -eq 1 ] ; then
-    export wbarTheme="Wall-Dcol"
-else
-    export wbarTheme="${gtkTheme}"
-fi
-
 # eval hypr border radius
 export active_rad=$(( hypr_border * 5 ))
 export button_rad=$(( hypr_border * 8 ))
@@ -57,4 +52,5 @@ export button_rad=$(( hypr_border * 8 ))
 wlStyle=`envsubst < $wlTmplt`
 
 # launch wlogout
-wlogout -b $wlColms -c 0 -r 0 -m 0 --layout $wLayout --css <(echo "$wlStyle") --protocol layer-shell
+echo $wlColms
+wlogout -b 6 -c 0 -r 0 -m 0 -T 300 -B 300 -R 800 -L 800 --layout $wLayout --css <(echo "$wlStyle") --protocol xdg

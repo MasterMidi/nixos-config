@@ -32,10 +32,10 @@
     # gtk3.extraConfig.gtk-decoration-layout = "menu:";
     # cursorTheme.name = "Qogir";
     enable = true;
-    theme.name = "Colloid";
-    theme.package = pkgs.colloid-gtk-theme;
-    # iconTheme.name = "Colloid";
-    # iconTheme.package = pkgs.colloid-icon-theme;
+    # theme.name = "Colloid";
+    # theme.package = pkgs.colloid-gtk-theme;
+    iconTheme.name = "Adwaita";
+    iconTheme.package = pkgs.gnome3.adwaita-icon-theme;
 
     gtk3.extraConfig = {
       gtk-application-prefer-dark-theme = 1;

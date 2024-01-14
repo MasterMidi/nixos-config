@@ -8,14 +8,14 @@ sudo nix flake update
 echo "${bold}⚗️ Testing Configuration ${normal}"
 #hyperfine --export-markdown /etc/nixos/measure.md --runs 3 "nixos-rebuild dry-activate"
 case "$OSTYPE" in
-  linux*)   nixos-rebuild dry-build ;;
+  linux*)   nixos-rebuild dry-build;;
   *)        echo "unknown: $OSTYPE" ;;
 esac
 
 if [ $? -eq 0 ]; then
 	echo "🔨 Rebuilding Configuration…"
 	case "$OSTYPE" in
-	  linux*)   sudo nixos-rebuild switch --upgrade ;;
+	  linux*)   sudo nixos-rebuild switch;;
 	  *)        echo "unknown: $OSTYPE" ;;
 	esac
 	if [ $? -eq 0 ]; then

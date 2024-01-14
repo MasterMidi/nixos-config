@@ -13,6 +13,7 @@
     ./hardware-configuration.nix
     ./refind.nix
     ./containers
+    ./nix.nix
   ];
 
   nixpkgs = {
@@ -20,16 +21,6 @@
     overlays = [
       inputs.nur.overlay
       outputs.overlays.vscode-extensions
-
-      # You can also add overlays exported from other flakes:
-      # neovim-nightly-overlay.overlays.default
-
-      # Or define it inline, for example:
-      # (final: prev: {
-      #   hi = final.hello.overrideAttrs (oldAttrs: {
-      #     patches = [ ./change-hello-to-hi.patch ];
-      #   });
-      # })
     ];
 
     # Configure nixpkgs instance
@@ -41,12 +32,8 @@
     };
   };
 
-  # stylix.image = ../../ahri.jpg;
-
-  # inputs.home-manager.useGlobalPkgs = true;
-  #       inputs.home-manager.useUserPackages = true;
-
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  # boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages_xanmod_latest;
   boot.kernelModules = ["coretemp"];
 
   # Bootloader
@@ -60,17 +47,18 @@
     '';
   };
 
-  # Nix settings
-  nix.settings.experimental-features = ["nix-command" "flakes"];
-  nix.settings = {
-    substituters = [
-      "https://hyprland.cachix.org" # Hyprland cachix repo
-    ];
-    trusted-public-keys = [
-      "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc=" # Hyprland cachix key
-    ];
+  boot.plymouth = {
+    enable = true;
+    logo = pkgs.fetchurl {
+      url = "https://nixos.org/logo/nixos-hires.png";
+      sha256 = "1ivzgd7iz0i06y36p8m5w48fd8pjqwxhdaavc0pxs7w1g7mcy5si";
+    };
+    theme = "breeze";
+    # theme = "angular_alt";
+    # themePackages = [(pkgs.adi1090x-plymouth-themes.override {selected_themes = ["angular_alt"];})];
   };
 
+  networking.networkmanager.insertNameservers = ["1.1.1.1" "1.0.0.1"];
   networking.hostName = "jason"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -109,6 +97,18 @@
   };
   # services.xserver.desktopManager.gnome.enable = true;
 
+  # systemd.tmpfiles.rules = [
+  #   "L+ /run/gdm/.config/monitors.xml - - - - ${pkgs.writeText "gdm-monitors.xml" ''
+
+  #   ''}"
+  # ];
+
+  systemd.tmpfiles.rules = [
+    "L+ /run/gdm/.config/monitors.xml - - - - ${./monitors.xml}"
+    "L+ /opt/rocm/hip - - - - ${pkgs.rocmPackages.clr}"
+    "L+ /etc/udev/rules/50-usb-power-always-on.rules - - - - ${./usb-power-always-on.rules}"
+  ];
+
   # Configure keymap in X11
   services.xserver = {
     layout = "dk";
@@ -136,13 +136,15 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
+    jack.enable = true;
 
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
+    lowLatency = {
+      enable = true;
+      # quantum = 64;
+      # rate = 48000;
+    };
   };
+  hardware.pulseaudio.extraConfig = "unload-module module-role-cork"; # Disable mute of audio streams when using phone stream (e.g. teamspeak)
 
   hardware.bluetooth.enable = true; # enables support for Bluetooth
   hardware.bluetooth.powerOnBoot = true; # powers up the default Bluetooth controller on boot
@@ -165,10 +167,10 @@
 
   # Disable the GNOME3/GDM auto-suspend feature that cannot be disabled in GUI!
   # If no user is logged in, the machine will power down after 20 minutes.
-  systemd.targets.sleep.enable = false;
-  systemd.targets.suspend.enable = false;
-  systemd.targets.hibernate.enable = false;
-  systemd.targets.hybrid-sleep.enable = false;
+  # systemd.targets.sleep.enable = false;
+  # systemd.targets.suspend.enable = false;
+  # systemd.targets.hibernate.enable = false;
+  # systemd.targets.hybrid-sleep.enable = false;
 
   virtualisation.libvirtd.enable = true;
 
@@ -177,16 +179,15 @@
     enable = true;
     driSupport = true;
     driSupport32Bit = true; # Enables support for 32bit libs that steam uses
-    # extraPackages = with pkgs; [ amdvlk ];
-    # extraPackages32 = with pkgs; [ driversi686Linux.amdvlk ];
+    extraPackages = with pkgs; [amdvlk rocm-opencl-icd];
+    extraPackages32 = with pkgs; [driversi686Linux.amdvlk];
   };
 
   hardware.cpu.amd.updateMicrocode = true;
   hardware.enableAllFirmware = true;
 
-  # powerManagement.powertop.enable = true;
-  # powerManagement.cpuFreqGovernor = "performance";
-  # services.thermald.enable = true;
+  powerManagement.powertop.enable = false;
+  powerManagement.cpuFreqGovernor = "schedutil";
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.mutableUsers = true;
@@ -218,14 +219,19 @@
   };
 
   environment.variables = {
-    NIXOS_OZONE_WL = "1";
+    NIXOS_OZONE_WL = "1"; # Force electron to use wayland
   };
+
+  fonts.packages = with pkgs; [
+    corefonts
+  ];
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     # inputs.home-manager.packages.x86_64-linux.default # Nessesary for home-manager when not as a module
-    direnv
+    bottles
+    onlyoffice-bin
     docker-compose
     podman-compose
     polkit_gnome
@@ -233,6 +239,17 @@
     tree
     lm_sensors
     libsecret
+    # winetricks
+    # wineWowPackages.staging
+    wineWowPackages.waylandFull
+    lutris
+    (lutris.override {
+      extraPkgs = pkgs: [
+        libnghttp2
+        winetricks
+        inputs.nix-gaming.packages.${pkgs.system}.wine-ge
+      ];
+    })
     (git.override {withLibsecret = true;})
     # git-credential-manager
   ];
@@ -247,8 +264,13 @@
     enable = true;
     remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
     dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
+
+    extraCompatPackages = [
+      inputs.nix-gaming.packages.${pkgs.system}.proton-ge
+    ];
   };
   programs.gamemode.enable = true;
+  programs.gamescope.enable = true;
 
   # Polkit for hyprland to get sudo password prompts
   security.polkit.enable = true;
@@ -257,11 +279,11 @@
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
+  programs.mtr.enable = true;
+  programs.gnupg.agent = {
+    enable = true;
+    enableSSHSupport = true;
+  };
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;

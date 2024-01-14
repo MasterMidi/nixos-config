@@ -1,4 +1,10 @@
-{pkgs, ...}: let
+{
+  pkgs,
+  config,
+  lib,
+  self,
+  ...
+}: let
   config = ".config/rofi";
 in {
   programs.rofi = {
@@ -10,6 +16,16 @@ in {
     ];
     terminal = "$BROWSER";
     theme = "/theme.rasi";
+    # theme = {
+    #   "*" = {
+    #     background = "#292c3c";
+    #     background-alt = "#292c3c";
+    #     foreground = "#c6d0f5";
+    #     selected = "#303446";
+    #     active = "#8caaee";
+    #     urgent = "#303446";
+    #   };
+    # };
     extraConfig = {};
   };
 

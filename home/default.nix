@@ -1,6 +1,7 @@
 {
   config,
   pkgs,
+  inputs,
   ...
 }: {
   # TODO setup nixd autocomplete
@@ -11,6 +12,7 @@
     ./programs
     ./services
     ./keyboard
+    ./defaultApps.nix
   ];
 
   home.username = "michael";
@@ -46,6 +48,13 @@
     };
   };
 
+  nixpkgs.overlays = [(import ./programs/discord/electron-overlay.nix)];
+
+  # Manage keyboard layouts
+  # home.keyboard = {
+
+  # };
+
   programs.thefuck.enable = true;
 
   home.packages = with pkgs; [
@@ -53,7 +62,6 @@
     base16-schemes
     xwaylandvideobridge
     wl-clipboard
-    waypaper
     wdisplays
     pavucontrol
     neofetch
@@ -77,6 +85,8 @@
     rbw
 
     # Tools
+    envsubst
+    jq
     handbrake
     dupeguru
     gdu
@@ -99,18 +109,21 @@
     spotify
     spotify-player
     sunshine
+    g4music
+
+    # Image viewer
+    geeqie
+    cinnamon.pix
+    # loupe
 
     # Communication
-    discord
+    vesktop # Discord but with vencord pre-installed
     signal-desktop
     element-desktop
 
     # Gaming
     r2modman
     heroic
-    lutris
-    winetricks
-    wineWowPackages.waylandFull
 
     # Development
     dotnet-sdk_7

@@ -9,7 +9,7 @@
 
 /*****----- Configuration -----*****/
 configuration {
-	modi: "drun,run,filebrowser,ssh,window";
+	modi: "drun,run,filebrowser,ssh,window,calc,emoji";
 	show-icons: true;
 	icon-theme: "Papirus";
 	display-drun: " Apps";

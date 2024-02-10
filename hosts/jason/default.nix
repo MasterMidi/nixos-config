@@ -9,9 +9,8 @@
   ...
 }: {
   imports = [
-    # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    ./refind.nix
+    # ./refind.nix
     ./containers
     ./nix.nix
   ];
@@ -19,8 +18,9 @@
   nixpkgs = {
     # You can add overlays here
     overlays = [
-      inputs.nur.overlay
-      outputs.overlays.vscode-extensions
+      # inputs.nur.overlay
+      # outputs.overlays.vscode-extensions
+      # outputs.overlays.additions
     ];
 
     # Configure nixpkgs instance
@@ -28,6 +28,7 @@
       allowUnfree = true;
       permittedInsecurePackages = [
         "electron-25.9.0" # TODO remove when culprit found
+        "electron-19.1.9" # TODO remove when culprit found
       ];
     };
   };
@@ -39,12 +40,15 @@
   # Bootloader
   boot.loader.refind = {
     enable = true;
-    extraConfig = ''
-      include themes/rEFInd-minimal/theme.conf
-      resolution 3440 1440
-      big_icon_size 128
-      small_icon_size 48
-    '';
+    # include = [
+    #   "themes/rEFInd-minimal/theme.conf"
+    # ];
+    theme = pkgs.refindTheme.refind-minimal;
+    settings = {
+      resolution = "3440 1440";
+      big_icon_size = 128;
+      small_icon_size = 48;
+    };
   };
 
   boot.plymouth = {
@@ -144,9 +148,14 @@
       # rate = 48000;
     };
   };
-  hardware.pulseaudio.extraConfig = "unload-module module-role-cork"; # Disable mute of audio streams when using phone stream (e.g. teamspeak)
+  # hardware.pulseaudio.extraConfig = "unload-module module-role-cork"; # Disable mute of audio streams when using phone stream (e.g. teamspeak)
 
   hardware.bluetooth.enable = true; # enables support for Bluetooth
+  hardware.bluetooth.settings = {
+    General = {
+      Experimental = true;
+    };
+  };
   hardware.bluetooth.powerOnBoot = true; # powers up the default Bluetooth controller on boot
   services.blueman.enable = true;
 
@@ -222,14 +231,31 @@
     NIXOS_OZONE_WL = "1"; # Force electron to use wayland
   };
 
-  fonts.packages = with pkgs; [
-    corefonts
-  ];
+  fonts = {
+    enableDefaultPackages = true;
+
+    packages = with pkgs; [
+      corefonts
+      noto-fonts
+      noto-fonts-cjk-sans # To fix weird font rendering for cjk characters
+      unifont
+    ];
+
+    fontconfig = {
+      antialias = true;
+      # defaultFonts = {
+      #   serif = ["Ubuntu"];
+      #   sansSerif = ["Ubuntu"];
+      #   monospace = ["Ubuntu Source"];
+      # };
+    };
+  };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     # inputs.home-manager.packages.x86_64-linux.default # Nessesary for home-manager when not as a module
+    bitmagnet
     bottles
     onlyoffice-bin
     docker-compose

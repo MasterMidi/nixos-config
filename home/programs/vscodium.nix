@@ -8,6 +8,7 @@
     package = pkgs.vscodium;
     enableUpdateCheck = false;
     userSettings = {
+      "cargo.automaticCheck" = false;
       "files.autoSave" = "afterDelay";
       "editor.wordWrap" = "on";
       "editor.fontFamily" = "'MesloLGS Nerd Font'";

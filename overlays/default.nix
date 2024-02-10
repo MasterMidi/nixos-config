@@ -1,7 +1,10 @@
 # This file defines overlays
 {inputs, ...}: {
   # This one brings our custom packages from the 'pkgs' directory
-  additions = final: _prev: import ../pkgs {pkgs = final;};
+  # TODO: find out why the import parts makes callPackage disappear
+  # additions = final: _prev: import ../pkgs {inherit final;};
+  # additions = final: _prev: import ../pkgs {pkgs = final;};
+  additions = final: _prev: {refindTheme.refind-minimal = final.callPackage ../pkgs/refind-minimal {};};
 
   # This one contains whatever you want to overlay
   # You can change versions, add patches, set compilation flags, anything really.

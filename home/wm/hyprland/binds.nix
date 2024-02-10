@@ -16,6 +16,7 @@ in {
     "${mainMod}, SPACE, exec, pkill rofi || rofi -show drun"
     "${mainMod} ALT, SPACE, exec, rofi -show run"
     "${mainMod} CTRL, SPACE, exec, rofi -show calc"
+    "${mainMod}, ., exec, rofi -show emoji"
     "${mainMod}, V, exec, "
     "${mainMod}, C, killactive,"
     "${mainMod} SHIFT, Q, exec, ${./scripts/logout.sh},"

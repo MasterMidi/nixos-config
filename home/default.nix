@@ -97,9 +97,12 @@
     grimblast
     hyprpicker
     libnotify
-    magic-wormhole
+    magic-wormhole-rs
     trash-cli
     imagemagick
+    lazygit
+    lazydocker
+    etcher
 
     # Media
     jellyfin-media-player
@@ -118,6 +121,7 @@
 
     # Communication
     vesktop # Discord but with vencord pre-installed
+    discord
     signal-desktop
     element-desktop
 

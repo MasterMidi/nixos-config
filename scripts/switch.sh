@@ -1,5 +1,4 @@
-#!/usr/bin/env nix-shell
-#!nix-shell -i bash -p nix-output-monitor
+#!/usr/bin/env sh
 bold=$(tput bold)
 normal=$(tput sgr0)
 

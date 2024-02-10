@@ -1,11 +1,14 @@
-{ config, lib, pkgs, outputs, ... }:
-
 {
-  imports =
-    [
-      # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
+  config,
+  lib,
+  pkgs,
+  outputs,
+  ...
+}: {
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+  ];
 
   # Use the extlinux boot loader. (NixOS wants to enable GRUB by default)
   boot.loader.grub.enable = false;
@@ -26,7 +29,7 @@
   # Set your time zone.
   time.timeZone = "Europe/Copenhagen";
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = ["nix-command" "flakes"];
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_DK.UTF-8";
@@ -48,7 +51,7 @@
   users.users.raspi = {
     isNormalUser = true;
     description = "Raspberry Pi 3B v1.2";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = ["networkmanager" "wheel"];
     hashedPassword = "$y$j9T$gGYH3.06eDEcKfalPhHPb.$ioKMb3Nw3jtFPvlrYpwkaH7HR4V2.o5mHgq.b9lmx30";
   };
   users.users.root = {
@@ -80,7 +83,10 @@
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
+  services.openssh = {
+    enable = true;
+    settings.PermitRootLogin = "yes";
+  };
 
   programs.nix-ld.enable = true;
   services.openvscode-server.enable = true;
@@ -101,4 +107,21 @@
   # system.copySystemConfiguration = true;
 
   system.stateVersion = "23.11"; # Did you read the comment?
+
+  lollypops.deployment = {
+    local-evaluation = true;
+    # Where on the remote the configuration (system flake) is placed
+    config-dir = "/etc/nixos";
+
+    # SSH connection parameters
+    ssh.host = "192.168.50.47";
+    ssh.user = "raspi";
+    ssh.command = "ssh";
+    ssh.opts = [];
+
+    # sudo options
+    sudo.enable = false;
+    sudo.command = "sudo";
+    sudo.opts = [];
+  };
 }

@@ -9,6 +9,7 @@
     ./git.nix
     ./kitty.nix
     ./mangohud.nix
+    ./mpv.nix
     ./ripgrep.nix
     ./rofi
     ./starship.nix
@@ -20,5 +21,6 @@
     ./wlogout
     ./yazi.nix
     ./yt-dlp.nix
+    ./zoxide.nix
   ];
 }

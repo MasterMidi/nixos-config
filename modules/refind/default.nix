@@ -13,7 +13,7 @@ with lib; let
 
   theme = cfg.theme;
 
-  installPath = "${efi.efiSysMountPoint}/EFI/refind";
+  installPath = "${efi.efiSysMountPoint}/efi/refind";
 
   # Function to convert structured settings into extraConfig strings
   settingsToConfig = settings: concatStringsSep "\n" (mapAttrsToList (name: value: "${name} ${toString value}") settings);
@@ -24,7 +24,7 @@ with lib; let
   # Assuming theme provides a 'theme.conf' at its root
   defaultThemeInclude =
     if theme != null
-    then ["${installPath}/themes/${theme.pname}/theme.conf"]
+    then ["themes/${theme.pname}/theme.conf"]
     else [];
 
   # Function to assemble extraConfig with newlines between sections
@@ -34,20 +34,20 @@ with lib; let
     concatStringsSep "\n" filteredParts;
 
   copyThemeScript = pkgs.writeScriptBin "copy-refind-theme" ''
-    #!${pkgs.stdenv.shell}
-    set -euo pipefail
-    themeSource=${theme}
-    themeDestination=${installPath}/themes/${theme.pname}
+      #!${pkgs.stdenv.shell}
+      set -euo pipefail
+      themeSource=${theme}
+      themeDestination=${installPath}/themes/${theme.pname}
 
-		if [ -d "$themeDestination" ]; then
-      rm -rf "$themeDestination"
-    fi
+    if [ -d "$themeDestination" ]; then
+        rm -rf "$themeDestination"
+      fi
 
-    # Ensure the destination directory exists
-    mkdir -p $themeDestination
+      # Ensure the destination directory exists
+      mkdir -p $themeDestination
 
-    # Copy the theme files
-    cp -r $themeSource/* $themeDestination/
+      # Copy the theme files
+      cp -r $themeSource/* $themeDestination/
   '';
 
   refindBuilder = pkgs.substituteAll {

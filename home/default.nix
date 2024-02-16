@@ -2,6 +2,7 @@
   config,
   pkgs,
   inputs,
+  theme,
   ...
 }: {
   # TODO setup nixd autocomplete
@@ -18,6 +19,7 @@
   home.username = "michael";
   home.homeDirectory = "/home/michael";
   home.stateVersion = "23.05";
+
   programs.home-manager.enable = false;
 
   home.sessionVariables = {
@@ -56,6 +58,8 @@
   # };
 
   programs.thefuck.enable = true;
+
+  xdg.configFile."Vencord/settings/quickCss.css".text = theme.discordCss;
 
   home.packages = with pkgs; [
     # System
@@ -120,8 +124,10 @@
     # loupe
 
     # Communication
-    vesktop # Discord but with vencord pre-installed
-    discord
+    # vesktop # Discord but with vencord pre-installed
+    (discord.override {
+      withVencord = true;
+    })
     signal-desktop
     element-desktop
 

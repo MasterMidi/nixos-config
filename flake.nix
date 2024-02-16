@@ -19,18 +19,20 @@
     nix-gaming.url = "github:fufexan/nix-gaming";
 
     nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
+    themes.url = "github:RGBCube/ThemeNix";
     # stylix.url = "github:danth/stylix";
   };
 
-  outputs = inputs @ {
+  outputs = {
     self,
     nixpkgs,
     nur,
     home-manager,
     lollypops,
     agenix,
+    themes,
     ...
-  }: let
+  } @ inputs: let
     inherit (self) outputs;
 
     systems = [
@@ -71,7 +73,9 @@
             home-manager.users.michael = import ./home;
 
             # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix
-            home-manager.extraSpecialArgs = {inherit inputs outputs;};
+            home-manager.extraSpecialArgs = let
+              theme = themes.gruvbox-dark-medium;
+            in {inherit inputs outputs theme;};
           }
           {
             nixpkgs.overlays = [

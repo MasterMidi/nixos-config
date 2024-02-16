@@ -1,6 +1,7 @@
 {
   configs,
   pkgs,
+  theme,
   ...
 }: {
   # imports = [
@@ -37,10 +38,12 @@
     iconTheme.name = "Adwaita";
     iconTheme.package = pkgs.gnome3.adwaita-icon-theme;
 
+    gtk3.extraCss = theme.adwaitaGtkCss;
     gtk3.extraConfig = {
       gtk-application-prefer-dark-theme = 1;
     };
 
+    gtk4.extraCss = theme.adwaitaGtkCss;
     gtk4.extraConfig = {
       gtk-application-prefer-dark-theme = 1;
     };

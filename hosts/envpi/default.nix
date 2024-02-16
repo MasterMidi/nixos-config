@@ -27,14 +27,14 @@
       };
     };
   };
-  systemd.services.my-wifi-connection = {
-    after = ["network.target"];
-    wantedBy = ["multi-user.target"];
-    script = ''
-      wpa_passphrase "Asus RT-AX86U" ${config.age.secrets.wifi-secret.path} | tee /etc/wpa_supplicant.conf > /dev/null
-      systemctl restart networkmanager
-    '';
-  };
+  # systemd.services.my-wifi-connection = {
+  #   after = ["network.target"];
+  #   wantedBy = ["multi-user.target"];
+  #   script = ''
+  #     wpa_passphrase "Asus RT-AX86U" ${config.age.secrets.wifi-secret.path} | tee /etc/wpa_supplicant.conf > /dev/null
+  #     systemctl restart networkmanager
+  #   '';
+  # };
   # environment.etc."wpa_supplicant.conf".text = lib.readFile "${pkgs.runCommand "wifi setup" {
   #   buildInputs = [pkgs.wpa_supplicant];
   # } "wpa_passphrase \"Asus RT-AX86U\" $(cat ${config.age.secrets.wifi-secret.path}) > $out"}";

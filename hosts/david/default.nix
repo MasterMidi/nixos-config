@@ -215,6 +215,7 @@ in {
   services.bitmagnet = {
     enable = true;
     environment = {
+      TMDB_API_KEY = "";
       POSTGRES_USER = "postgres";
       POSTGRES_PASSWORD = "postgres";
     };

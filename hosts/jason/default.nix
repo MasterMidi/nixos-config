@@ -16,13 +16,6 @@
   ];
 
   nixpkgs = {
-    # You can add overlays here
-    overlays = [
-      # inputs.nur.overlay
-      # outputs.overlays.vscode-extensions
-      # outputs.overlays.additions
-    ];
-
     # Configure nixpkgs instance
     config = {
       allowUnfree = true;
@@ -40,19 +33,18 @@
   # Bootloader
   boot.loader.refind = {
     enable = true;
-    # include = [
-    #   "themes/rEFInd-minimal/theme.conf"
-    # ];
     theme = pkgs.refindTheme.refind-minimal;
     settings = {
       resolution = "3440 1440";
       big_icon_size = 128;
       small_icon_size = 48;
+      dont_scan_dirs = "EFI/nixos,EFI/systemd,EFI/BOOT";
+      # dont_scan_dirs = ["EFI/nixos" "EFI/systemd" "EFI/BOOT"];
     };
   };
 
   boot.plymouth = {
-    enable = true;
+    enable = false;
     logo = pkgs.fetchurl {
       url = "https://nixos.org/logo/nixos-hires.png";
       sha256 = "1ivzgd7iz0i06y36p8m5w48fd8pjqwxhdaavc0pxs7w1g7mcy5si";

@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  theme,
+  ...
+}: {
   programs.btop = {
     enable = true;
     package = pkgs.btop.overrideAttrs (
@@ -13,8 +17,10 @@
     );
     settings = {
       color-theme = "gruvbox_dark_v2";
+      # color_theme = "base16";
       shown_boxes = "proc cpu gpu0 mem net";
       update_ms = 500;
     };
   };
+  # xdg.configFile."btop/themes/base16.theme".text = theme.btopTheme;
 }

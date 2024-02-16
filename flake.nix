@@ -7,6 +7,8 @@
     # nixpkgs-legacy.url = "github:nixos/nixpkgs/nixos-23.05";
     nur.url = "github:nix-community/NUR";
 
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -28,6 +30,7 @@
     nixpkgs,
     nur,
     home-manager,
+    nixos-hardware,
     lollypops,
     agenix,
     themes,
@@ -64,6 +67,9 @@
           outputs.nixosModules.refind
           agenix.nixosModules.default
           lollypops.nixosModules.lollypops
+
+          nixos-hardware.nixosModules.lenovo-ideapad-slim-5
+          nixos-hardware.nixosModules.common-cpu-amd-pstate
 
           home-manager.nixosModules.home-manager
           {

@@ -49,5 +49,4 @@
     "rofi/gamelauncher.rasi".source = ./gamelauncher/theme.rasi;
   };
 }
-#TODO: create windows + v copy history rofi menu
 

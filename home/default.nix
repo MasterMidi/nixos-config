@@ -73,11 +73,13 @@
     gnome3.gnome-tweaks
 
     #rofi
-    rofi-vpn
+    # rofi-vpn
     rofi-systemd
     rofi-rbw-wayland
     rofi-bluetooth
-    rofi-power-menu
+    # pinentry-rofi
+    # pinentry-gnome
+    # pinentry
 
     # Productivity
     thunderbird
@@ -85,14 +87,13 @@
 
     # Privacy
     mullvad-vpn
-    bitwarden-cli
-    rbw
+    # bitwarden-cli
 
     # Tools
     envsubst
     jq
     handbrake
-    dupeguru
+    # dupeguru
     gdu
     duf
     killall

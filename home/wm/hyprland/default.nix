@@ -20,13 +20,22 @@ in {
         ];
 
         monitor = [
-          ",highrr,auto,auto" # Default
+          ",highrr,auto,1" # Default
           # "HDMI-A-2, 1920x1080@60, 0x230, 0.93" # matches the dpi, but creates a gap around apps and poor font rendering
           "HDMI-A-2, 1920x1080@60, 0x275, 1"
           "DP-1, 3440x1440@144, 1920x0, 1"
+          # "eDP-1, 2240x1400@60, 0x0, 1"
         ];
 
-        # env = ["XCURSOR_SIZE,24"];
+        xwayland = {
+          use_nearest_neighbor = false;
+          force_zero_scaling = true;
+        };
+
+        env = [
+          # "XCURSOR_SIZE,24"
+          # "GDK_SCALE,2"
+        ];
 
         input = {
           kb_layout = "dk";
@@ -38,7 +47,7 @@ in {
           follow_mouse = 1;
 
           touchpad = {
-            natural_scroll = "no";
+            natural_scroll = "yes";
           };
 
           sensitivity = 0; # -1.0 - 1.0, 0 means no modification.
@@ -113,6 +122,12 @@ in {
           "monitor 1, class:(discord|VencordDesktop)"
           "stayfocused, title:^()$,class:^(steam)$" # fix steam menues
           "minsize 1 1, title:^()$,class:^(steam)$" # Fix steam friends list
+
+          "opacity 0.0 override 0.0 override,class:^(xwaylandvideobridge)$"
+          "noanim,class:^(xwaylandvideobridge)$"
+          "noinitialfocus,class:^(xwaylandvideobridge)$"
+          "maxsize 1 1,class:^(xwaylandvideobridge)$"
+          "noblur,class:^(xwaylandvideobridge)$"
         ];
 
         # workspace = [

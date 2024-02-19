@@ -25,12 +25,29 @@
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
+  programs.hyprland = {
+    enable = true;
+    package = inputs.hyprland.packages.${pkgs.system}.hyprland;
+  };
+
+  xdg.portal = {
+    enable = true;
+    wlr.enable = true;
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-gtk
+    ];
+  };
+
   # Enable networking
   networking.networkmanager.enable = true;
 
   nixpkgs.overlays = [
     inputs.nur.overlay
     outputs.overlays.vscode-extensions
+  ];
+
+  nixpkgs.config.permittedInsecurePackages = [
+    "electron-19.1.9"
   ];
 
   environment.binsh = "${pkgs.dash}/bin/dash";
@@ -61,7 +78,7 @@
 
   # Enable the GNOME Desktop Environment.
   services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
+  services.xserver.desktopManager.gnome.enable = false;
 
   # Configure keymap in X11
   services.xserver = {
@@ -126,6 +143,29 @@
     #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     #  wget
   ];
+
+  services.tailscale.enable = true;
+
+  services.mullvad-vpn.enable = true;
+
+  # programs.gnupg.agent.enable = true;
+  # programs.gnupg.agent.settings = {
+  #   # pinentry-program = "${pkgs.pinentry-rofi}/bin/pinentry-rofi";
+  # };
+  # # programs.gnupg.agent.pinentryFlavor = "pinentry-rofi";
+  # programs.gnupg.agent.pinentryFlavor = "tty";
+
+  services.dbus.packages = [pkgs.gcr];
+
+  virtualisation.docker = {
+    enable = true;
+    rootless = {
+      enable = true;
+      setSocketVariable = true;
+    };
+    enableOnBoot = true;
+    storageDriver = "btrfs";
+  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

@@ -1,7 +1,6 @@
 let
   mainMod = "SUPER";
 in {
-  # "$mainMod" = "SUPER";
   bind = [
     ", Print, exec, grimblast --freeze copy area" # Screenshots
     "${mainMod}, L, exec, swaylock"
@@ -12,12 +11,12 @@ in {
     "${mainMod} SHIFT, B, exec, firefox --private-window"
     "${mainMod}, G, exec, $HOME/.config/rofi/gamelauncher.sh"
     "${mainMod}, W, exec, $HOME/.config/rofi/wallpaper-switcher.sh"
-    # "${mainMod}, W, exec, waypaper"
     "${mainMod}, SPACE, exec, pkill rofi || rofi -show drun"
     "${mainMod} ALT, SPACE, exec, rofi -show run"
-    "${mainMod} CTRL, SPACE, exec, rofi -show calc"
-    "${mainMod}, ., exec, rofi -show emoji"
-    "${mainMod}, V, exec, "
+    "${mainMod} SHIFT, SPACE, exec, rofi-rbw"
+    "${mainMod} CTRL, SPACE, exec, rofi -show calc -modi calc"
+    "${mainMod}, PERIOD, exec, rofi -show emoji -modi emoji"
+    "${mainMod}, V, exec, cliphist list | rofi -dmenu | cliphist decode | wl-copy"
     "${mainMod}, C, killactive,"
     "${mainMod} SHIFT, Q, exec, ${./scripts/logout.sh},"
     "${mainMod}, E, exec, nautilus"

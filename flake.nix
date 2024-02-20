@@ -7,6 +7,8 @@
     # nixpkgs-legacy.url = "github:nixos/nixpkgs/nixos-23.05";
     nur.url = "github:nix-community/NUR";
 
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -28,6 +30,7 @@
     nixpkgs,
     nur,
     home-manager,
+    nixos-hardware,
     lollypops,
     agenix,
     themes,
@@ -87,27 +90,31 @@
         ];
       };
 
-      # daniel = nixpkgs.lib.nixosSystem {
-      #   system = "x86_64-linux";
+      daniel = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
 
-      #   specialArgs = {inherit inputs outputs;}; # this is the important part
-      #   modules = [
-      #     ./hosts/daniel
-      #     ./scripts
-      #     lollypops.nixosModules.lollypops
+        specialArgs = {inherit inputs outputs;}; # this is the important part
+        modules = [
+          ./hosts/daniel
+          ./scripts
+          nixos-hardware.nixosModules.lenovo-ideapad-slim-5
+          nixos-hardware.nixosModules.common-cpu-amd-pstate
+          lollypops.nixosModules.lollypops
 
-      #     home-manager.nixosModules.home-manager
-      #     {
-      #       home-manager.useGlobalPkgs = true;
-      #       home-manager.useUserPackages = true;
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
 
-      #       home-manager.users.michael = import ./home;
+            home-manager.users.michael = import ./home;
 
-      #       # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix
-      #       home-manager.extraSpecialArgs = {inherit inputs outputs;};
-      #     }
-      #   ];
-      # };
+            # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix
+            home-manager.extraSpecialArgs = let
+              theme = themes.gruvbox-dark-medium;
+            in {inherit inputs outputs theme;};
+          }
+        ];
+      };
 
       nixpi = nixpkgs.lib.nixosSystem {
         system = "aarch64-linux";

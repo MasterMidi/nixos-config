@@ -12,7 +12,7 @@ in {
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    # ./bitmagnet.nix
+    ./recyclarr.nix
   ];
 
   boot.kernelModules = ["coretemp"];
@@ -24,11 +24,6 @@ in {
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = "david"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Set your time zone.
   time.timeZone = "Europe/Copenhagen";
@@ -74,34 +69,12 @@ in {
     btop
   ];
 
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
-
-  # List services that you want to enable:
-
   # Enable the OpenSSH daemon.
   services.openssh = {
     enable = true;
     settings.PermitRootLogin = "yes";
   };
 
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
-
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.05"; # Did you read the comment?
 
   # Enable networking
@@ -174,29 +147,6 @@ in {
   #   };
   # };
 
-  # containers.prowlarr = {
-  #   autoStart = true;
-  #   privateNetwork = false;
-  #   config = {
-  #     config,
-  #     pkgs,
-  #     lib,
-  #     ...
-  #   }: {
-  #     services.prowlarr = {
-  #       enable = true;
-  #       # openFirewall = true;
-  #       # port = 8020;
-  #     };
-
-  #     networking.useHostResolvConf = lib.mkForce false;
-
-  #     services.resolved.enable = true;
-
-  #     system.stateVersion = "23.11";
-  #   };
-  # };
-
   virtualisation.libvirtd.enable = true;
 
   hardware.opengl = {
@@ -206,16 +156,25 @@ in {
   };
 
   # Doesn't work?????
-  # services.jellyseerr = {
-  #   enable = false;
-  #   openFirewall = true;
-  #   # port = 9020;
-  # };
+  services.jellyseerr = {
+    enable = false;
+  };
+
+  services.jellyseerr2 = {
+    enable = false;
+    openFirewall = true;
+  };
+
+  services.prowlarr = {
+    enable = true;
+    openFirewall = true;
+    # port = 8020;
+  };
 
   services.bitmagnet = {
     enable = true;
     environment = {
-      TMDB_API_KEY = "";
+      TMDB_API_KEY = "12492bfcbf6f881563487630c079ba96";
       POSTGRES_USER = "postgres";
       POSTGRES_PASSWORD = "postgres";
     };
@@ -237,85 +196,20 @@ in {
   virtualisation.oci-containers = {
     backend = "podman";
     containers = {
-      jellyseerr = {
-        image = "ghcr.io/hotio/jellyseerr";
-        autoStart = true;
-        ports = ["5055:5055"];
-        environment = {
-          PUID = "1000";
-          PGID = "100";
-          UMASK = "002";
-          TZ = "${config.time.timeZone}";
-        };
-        volumes = [
-          "${mediaPath}/config/jellyseerr:/config"
-        ];
-      };
-      prowlarr = {
-        image = "lscr.io/linuxserver/prowlarr:latest";
-        autoStart = true;
-        ports = ["9696:9696"];
-        environment = {
-          PUID = "1000";
-          PGID = "100";
-          TZ = "${config.time.timeZone}";
-        };
-        volumes = [
-          "${mediaPath}/config/prowlarr:/config"
-        ];
-      };
-      # bitmagnet = {
-      #   image = "ghcr.io/bitmagnet-io/bitmagnet:latest";
-      #   hostname = "bitmagnet";
+      # jellyseerr = {
+      #   image = "ghcr.io/hotio/jellyseerr";
       #   autoStart = true;
-      #   # entrypoint = "bitmagnet";
-      #   cmd = [
-      #     "worker"
-      #     "run"
-      #     "--keys=http_server"
-      #     "--keys=queue_server"
-      #     "--keys=dht_crawler"
-      #   ];
+      #   ports = ["5055:5055"];
       #   environment = {
-      #     POSTGRES_PASSWORD = "postgres";
-      #     POSTGRES_DB = "bitmagnet";
-      #     PGUSER = "postgres";
-      #     REDIS_ADDR = "0.0.0.0:6379"; # needs to be in a pod together for this to work
-      #     TMDB_API_KEY = "12492bfcbf6f881563487630c079ba96";
+      #     PUID = "1000";
+      #     PGID = "100";
+      #     UMASK = "002";
+      #     TZ = "${config.time.timeZone}";
       #   };
-      #   ports = ["3334:3333"];
-      #   dependsOn = ["postgres" "redis"];
+      #   volumes = [
+      #     "${mediaPath}/config/jellyseerr:/config"
+      #   ];
       # };
-      postgres = {
-        image = "postgres:16-alpine";
-        hostname = "bitmagnet-postgres";
-        autoStart = true;
-        volumes = [
-          "${mediaPath}/data/postgres:/var/lib/postgresql/data"
-        ];
-        environment = {
-          POSTGRES_PASSWORD = "postgres";
-          POSTGRES_DB = "bitmagnet";
-          PGUSER = "postgres";
-        };
-        ports = ["5432:5432"];
-      };
-      redis = {
-        image = "redis:7-alpine";
-        hostname = "bitmagnet-redis";
-        autoStart = true;
-        entrypoint = "redis-server";
-        cmd = ["--save 60 1"];
-        volumes = [
-          "${mediaPath}/data/redis:/data"
-        ];
-        environment = {
-          POSTGRES_PASSWORD = "postgres";
-          POSTGRES_DB = "bitmagnet";
-          PGUSER = "postgres";
-        };
-        ports = ["6379:6379"];
-      };
     };
   };
 

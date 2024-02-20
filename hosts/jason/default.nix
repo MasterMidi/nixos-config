@@ -27,7 +27,8 @@
   };
 
   # boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.kernelPackages = pkgs.linuxPackages_xanmod_latest;
+  # boot.kernelPackages = pkgs.linuxPackages_xanmod_latest;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.kernelModules = ["coretemp"];
 
   # Bootloader
@@ -309,15 +310,13 @@
   boot.binfmt.emulatedSystems = ["aarch64-linux"]; # Allow compiling for ARM on x86_64
 
   # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [
-    57621 # Spotify sync local devices
-  ];
-  networking.firewall.allowedUDPPorts = [
-    5353 # Spotfify discover Connect devices
-  ];
-  networking.firewall.interfaces."podman+" = {
-    allowedUDPPorts = [53];
-    allowedTCPPorts = [53];
+  networking.firewall = {
+    allowedTCPPorts = [
+      57621 # Spotify sync local devices
+    ];
+    allowedUDPPorts = [
+      5353 # Spotfify discover Connect devices
+    ];
   };
 
   # This value determines the NixOS release from which the default

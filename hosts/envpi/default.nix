@@ -24,6 +24,7 @@
     enable = true;
     networks = {
       "Asus RT-AX86U" = {
+        psk = "3zyn2dY&Gp";
       };
     };
   };

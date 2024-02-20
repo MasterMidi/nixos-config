@@ -138,6 +138,8 @@
         modules = [
           ./hosts/david
           outputs.nixosModules.bitmagnet
+          outputs.nixosModules.recyclarr
+          outputs.nixosModules.jellyseerr
           agenix.nixosModules.default
           lollypops.nixosModules.lollypops
         ];

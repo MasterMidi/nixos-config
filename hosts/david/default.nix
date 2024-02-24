@@ -13,6 +13,7 @@ in {
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ./recyclarr.nix
+    ../core
   ];
 
   boot.kernelModules = ["coretemp"];
@@ -173,6 +174,22 @@ in {
 
   services.bitmagnet = {
     enable = true;
+    package = let
+      version = "0.7.5";
+      src = pkgs.fetchFromGitHub {
+        owner = "bitmagnet-io";
+        repo = "bitmagnet";
+        rev = "v${version}";
+        sha256 = "sha256-hyF0SwhMXpM7imjVmxFaX+Z6h9tiZvZszVTEdhUGvFY=";
+      };
+    in (pkgs.bitmagnet.override rec {
+      buildGoModule = args:
+        pkgs.buildGo122Module (args
+          // {
+            inherit src version;
+            vendorHash = "sha256-y9RfaAx9AQS117J3+p/Yy8Mn5In1jmZmW4IxKjeV8T8=";
+          });
+    });
     environment = {
       TMDB_API_KEY = "12492bfcbf6f881563487630c079ba96";
       POSTGRES_USER = "postgres";

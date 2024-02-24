@@ -125,7 +125,7 @@ in {
       };
 
       directory = {
-        style = "fg:${light-text} bg:${path}";
+        style = "fg:${dark-text} bg:${path}";
         format = "[ $path ]($style)";
         truncation_length = 3;
         truncation_symbol = "…/";

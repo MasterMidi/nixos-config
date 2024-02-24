@@ -11,7 +11,7 @@
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    ../jason/nix.nix
+    ../core
   ];
 
   # Bootloader.
@@ -24,6 +24,16 @@
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+
+  nix.settings = {
+    substituters = [
+      "https://hyprland.cachix.org"
+    ];
+
+    trusted-public-keys = [
+      "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
+    ];
+  };
 
   programs.hyprland = {
     enable = true;

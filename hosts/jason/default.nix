@@ -12,7 +12,7 @@
     ./hardware-configuration.nix
     # ./refind.nix
     ./containers
-    ./nix.nix
+    ../core
   ];
 
   nixpkgs = {
@@ -26,9 +26,25 @@
     };
   };
 
+  nix = {
+    settings = {
+      substituters = [
+        "https://hyprland.cachix.org"
+        "https://nix-gaming.cachix.org" # Nix gaming cachix repo
+      ];
+
+      trusted-public-keys = [
+        "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
+        "nix-gaming.cachix.org-1:nbjlureqMbRAxR1gJ/f3hxemL9svXaZF/Ees8vCUUs4=" # Nix gaming cachix key
+      ];
+    };
+  };
+
+  environment.binsh = "${pkgs.dash}/bin/dash";
+
   # boot.kernelPackages = pkgs.linuxPackages_latest;
   # boot.kernelPackages = pkgs.linuxPackages_xanmod_latest;
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxKernel.packages.linux_lqx;
   boot.kernelModules = ["coretemp"];
 
   # Bootloader
@@ -94,22 +110,15 @@
   };
   # services.xserver.desktopManager.gnome.enable = true;
 
-  # systemd.tmpfiles.rules = [
-  #   "L+ /run/gdm/.config/monitors.xml - - - - ${pkgs.writeText "gdm-monitors.xml" ''
-
-  #   ''}"
-  # ];
-
   systemd.tmpfiles.rules = [
     "L+ /run/gdm/.config/monitors.xml - - - - ${./monitors.xml}"
     "L+ /opt/rocm/hip - - - - ${pkgs.rocmPackages.clr}"
-    "L+ /etc/udev/rules/50-usb-power-always-on.rules - - - - ${./usb-power-always-on.rules}"
   ];
 
   # Configure keymap in X11
-  services.xserver = {
+  services.xserver.xkb = {
     layout = "dk";
-    xkbVariant = "nodeadkeys";
+    variant = "nodeadkeys";
   };
 
   # services.wlr.enable = true;
@@ -248,7 +257,6 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     # inputs.home-manager.packages.x86_64-linux.default # Nessesary for home-manager when not as a module
-    bitmagnet
     bottles
     onlyoffice-bin
     docker-compose
@@ -283,8 +291,10 @@
     enable = true;
     remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
     dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
+    gamescopeSession.enable = true;
 
     extraCompatPackages = [
+      # pkgs.luxtorpeda
       inputs.nix-gaming.packages.${pkgs.system}.proton-ge
     ];
   };
@@ -319,11 +329,5 @@
     ];
   };
 
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.05"; # Did you read the comment?
 }

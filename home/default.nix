@@ -45,7 +45,6 @@
 
   home.file = {
     "Pictures/wallpapers" = {
-      # source = ./wallpapers;
       source = config.lib.file.mkOutOfStoreSymlink "/etc/nixos/wallpapers";
     };
   };
@@ -84,6 +83,7 @@
     # Productivity
     thunderbird
     distrobox
+    obsidian
 
     # Privacy
     mullvad-vpn
@@ -92,6 +92,7 @@
     # Tools
     envsubst
     jq
+    fzf
     handbrake
     # dupeguru
     gdu

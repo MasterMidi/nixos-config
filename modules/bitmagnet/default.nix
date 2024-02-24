@@ -6,7 +6,6 @@
 }:
 with lib; let
   cfg = config.services.bitmagnet;
-  bitmagnetPackage = pkgs.bitmagnet; # Ensure this is your packaged application
   configFile = pkgs.writeTextFile {
     name = "config.yml";
     text = builtins.toJSON cfg.settings;
@@ -56,7 +55,7 @@ in {
         hostname = "bitmagnet-postgres";
         autoStart = true;
         volumes = [
-          "${mediaPath}/data/postgres:/var/lib/postgresql/data"
+          "/root/data/postgres:/var/lib/postgresql/data"
         ];
         environment = {
           POSTGRES_PASSWORD = "postgres";
@@ -72,7 +71,7 @@ in {
         entrypoint = "redis-server";
         cmd = ["--save 60 1"];
         volumes = [
-          "${mediaPath}/data/redis:/data"
+          "/root/data/redis:/data"
         ];
         environment = {
           POSTGRES_PASSWORD = "postgres";

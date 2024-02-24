@@ -8,6 +8,7 @@
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
+    ../core
   ];
 
   # boot.kernelPackages = pkgs.linuxPackages_rpi3;

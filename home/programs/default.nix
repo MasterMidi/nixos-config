@@ -1,5 +1,7 @@
 {...}: {
   imports = [
+    ./atuin.nix
+    ./ags
     ./bat.nix
     ./broot.nix
     ./btop.nix
@@ -21,6 +23,7 @@
     ./wlogout
     ./yazi.nix
     ./yt-dlp.nix
+    ./zathura.nix
     ./zoxide.nix
   ];
 }

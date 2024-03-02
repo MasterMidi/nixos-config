@@ -23,14 +23,6 @@ configuration {
 
 /*****----- Global Properties -----*****/
 @import "colors.rasi"
-/* {
-	background: #282828FF;
-	background-alt: #353535FF;
-	foreground: #EBDBB2FF;
-	selected: #83A598FF;
-	active: #B8BB26FF;
-	urgent: #FB4934FF;
-} */
 
 * {
 	border-colour: var(selected);

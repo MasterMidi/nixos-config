@@ -3,4 +3,5 @@ pkgs: {
   # refindTheme.refind-minimal = pkgs.callPackage ./refind-minimal {};
   refindTheme.refind-minimal = pkgs.callPackage ./refind-minimal {};
   rofi-nerdy = pkgs.callPackage ./rofi-nerdy {};
+  qbitmanage = pkgs.callPackage ./qbitmanage {};
 }

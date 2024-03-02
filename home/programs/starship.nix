@@ -37,13 +37,20 @@ in {
     settings = {
       add_newline = true;
 
-      format = "($shlvl$nix_shell[](fg:${shell} bg:${pc-info}))$os$username$hostname$localip[](fg:${pc-info} bg:${path})$directory[](fg:${path} bg:${git-module})$git_branch$git_commit$git_state$git_status[](fg:${git-module} bg:${package-module})$package[](fg:${package-module} bg:${code-module})$container$kubernetes$docker_context$nodejs$rust$golang$php[](fg:${code-module})$cmd_duration\n$character";
+      format = "($nix_shell$shlvl[](fg:${shell} bg:${pc-info}))$os$username$hostname$localip$sudo[](fg:${pc-info} bg:${path})$directory[](fg:${path} bg:${git-module})$git_branch$git_commit$git_state$git_status[](fg:${git-module} bg:${package-module})$package[](fg:${package-module} bg:${code-module})$container$kubernetes$docker_context$nodejs$rust$golang$php[](fg:${code-module})$cmd_duration\n$character";
+
+      sudo = {
+        format = "[$symbol]($style)";
+        style = "fg:${dark-text} bg:${pc-info}";
+        symbol = "󱑷 ";
+        disabled = false;
+      };
 
       shlvl = {
         disabled = false;
         format = "[$symbol$shlvl]($style)";
         symbol = "󰜮";
-        style = "${shell}";
+        style = "bg:${shell} fg:${dark-text}";
       };
 
       shell = {
@@ -128,7 +135,7 @@ in {
         style = "fg:${dark-text} bg:${path}";
         format = "[ $path ]($style)";
         truncation_length = 3;
-        truncation_symbol = "…/";
+        truncation_symbol = "../";
         read_only = "󰌾";
         substitutions = {
           "Documents" = "󰈙";

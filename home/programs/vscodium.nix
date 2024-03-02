@@ -83,6 +83,7 @@
       [
         kamadorueda.alejandra
         mads-hartmann.bash-ide-vscode
+        mkhl.shfmt
         timonwong.shellcheck
         jeff-hykin.better-shellscript-syntax
         jeff-hykin.better-nix-syntax
@@ -155,6 +156,7 @@
 
     ## Shell tools
     shellcheck
+    shfmt
     nodePackages.bash-language-server
   ];
 }

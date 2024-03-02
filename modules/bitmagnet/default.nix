@@ -36,7 +36,8 @@ in {
     # TODO: make it wait for the containers, or else it will fail on startup
     systemd.services.bitmagnet = {
       description = "Bitmagnet Service";
-      after = ["network.target"];
+      after = ["network.target" "${config.virtualisation.oci-containers.backend}-postgres.service"];
+      requires = ["${config.virtualisation.oci-containers.backend}-postgres.service"];
       wantedBy = ["multi-user.target"];
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/bitmagnet worker run --keys=http_server --keys=queue_server --keys=dht_crawler";

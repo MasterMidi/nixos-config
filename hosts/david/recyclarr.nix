@@ -183,7 +183,7 @@
               # Codecs
               trash_ids = [
                 "15a05bc7c1a36e2b57fd628f8977e2fc" # AV1
-                "9b64dff695c2115facf1b6ea59c9bd07" # x265 (no HDR/DV)
+                # "9b64dff695c2115facf1b6ea59c9bd07" # x265 (no HDR/DV)
               ];
               quality_profiles = [{name = "Anime";} {name = "WEB-DL (1080p)";}];
             }

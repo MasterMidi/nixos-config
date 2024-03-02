@@ -18,6 +18,7 @@
     agenix.url = "github:ryantm/agenix";
 
     hyprland.url = "github:hyprwm/Hyprland";
+    ags.url = "github:Aylur/ags";
     nix-gaming.url = "github:fufexan/nix-gaming";
 
     nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
@@ -65,6 +66,7 @@
           inputs.nix-gaming.nixosModules.pipewireLowLatency
           inputs.nix-gaming.nixosModules.steamCompat
           outputs.nixosModules.refind
+          # outputs.nixosModules.qbitmanage
           agenix.nixosModules.default
           lollypops.nixosModules.lollypops
 

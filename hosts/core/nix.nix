@@ -56,7 +56,7 @@
     '';
 
     settings = {
-      experimental-features = ["nix-command" "flakes" "auto-allocate-uids" "configurable-impure-env"];
+      experimental-features = ["nix-command" "flakes" "auto-allocate-uids"];
       # auto-optimise-store = true;
       builders-use-substitutes = true;
       # trusted-users = ["root" "@wheel"];

@@ -7,6 +7,7 @@
   additions = final: _prev: {
     refindTheme.refind-minimal = final.callPackage ../pkgs/refind-minimal {};
     rofi-nerdy = final.callPackage ../pkgs/rofi-nerdy {};
+    qbitmanage = final.callPackage ../pkgs/qbitmanage {};
   };
 
   # This one contains whatever you want to overlay

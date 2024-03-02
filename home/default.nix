@@ -71,15 +71,6 @@
     haskellPackages.kmonad
     gnome3.gnome-tweaks
 
-    #rofi
-    # rofi-vpn
-    rofi-systemd
-    rofi-rbw-wayland
-    rofi-bluetooth
-    # pinentry-rofi
-    # pinentry-gnome
-    # pinentry
-
     # Productivity
     thunderbird
     distrobox
@@ -93,6 +84,7 @@
     envsubst
     jq
     fzf
+    tldr
     handbrake
     # dupeguru
     gdu
@@ -109,6 +101,10 @@
     lazygit
     lazydocker
     etcher
+    ydotool
+    parabolic
+    motrix
+    qrscan
 
     # Media
     jellyfin-media-player

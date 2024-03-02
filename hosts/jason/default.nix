@@ -42,9 +42,10 @@
 
   environment.binsh = "${pkgs.dash}/bin/dash";
 
-  # boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
   # boot.kernelPackages = pkgs.linuxPackages_xanmod_latest;
-  boot.kernelPackages = pkgs.linuxKernel.packages.linux_lqx;
+  # boot.kernelPackages = pkgs.linuxKernel.packages.linux_lqx;
+  # boot.kernelPackages = pkgs.linuxKernel.packages.linux_zen;
   boot.kernelModules = ["coretemp"];
 
   # Bootloader
@@ -70,8 +71,8 @@
     # theme = "angular_alt";
     # themePackages = [(pkgs.adi1090x-plymouth-themes.override {selected_themes = ["angular_alt"];})];
   };
-
-  networking.networkmanager.insertNameservers = ["1.1.1.1" "1.0.0.1"];
+  services.resolved.enable = true;
+  # networking.networkmanager.insertNameservers = ["1.1.1.1" "1.0.0.1"];
   networking.hostName = "jason"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -112,7 +113,7 @@
 
   systemd.tmpfiles.rules = [
     "L+ /run/gdm/.config/monitors.xml - - - - ${./monitors.xml}"
-    "L+ /opt/rocm/hip - - - - ${pkgs.rocmPackages.clr}"
+    # "L+ /opt/rocm/hip - - - - ${pkgs.rocmPackages.clr}" # Find out if this is useful
   ];
 
   # Configure keymap in X11
@@ -136,7 +137,6 @@
   # Enable sound with pipewire.
   sound.enable = false;
   hardware.pulseaudio.enable = false;
-  security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
     alsa.enable = true;
@@ -152,13 +152,16 @@
   };
   # hardware.pulseaudio.extraConfig = "unload-module module-role-cork"; # Disable mute of audio streams when using phone stream (e.g. teamspeak)
 
-  hardware.bluetooth.enable = true; # enables support for Bluetooth
-  hardware.bluetooth.settings = {
-    General = {
-      Experimental = true;
+  hardware.bluetooth = {
+    enable = true; # enables support for Bluetooth
+    powerOnBoot = true; # powers up the default Bluetooth controller on boot
+
+    settings = {
+      General = {
+        Experimental = true;
+      };
     };
   };
-  hardware.bluetooth.powerOnBoot = true; # powers up the default Bluetooth controller on boot
   services.blueman.enable = true;
 
   # Configure wireplumber
@@ -190,10 +193,9 @@
     enable = true;
     driSupport = true;
     driSupport32Bit = true; # Enables support for 32bit libs that steam uses
-    extraPackages = with pkgs; [amdvlk rocm-opencl-icd];
+    extraPackages = with pkgs; [amdvlk];
     extraPackages32 = with pkgs; [driversi686Linux.amdvlk];
   };
-
   hardware.cpu.amd.updateMicrocode = true;
   hardware.enableAllFirmware = true;
 
@@ -212,6 +214,7 @@
       "input"
       "podman"
       "docker"
+      "uinput" # for ydotool
     ];
   };
 
@@ -256,7 +259,7 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    # inputs.home-manager.packages.x86_64-linux.default # Nessesary for home-manager when not as a module
+    qbitmanage
     bottles
     onlyoffice-bin
     docker-compose
@@ -266,8 +269,8 @@
     tree
     lm_sensors
     libsecret
-    # winetricks
-    # wineWowPackages.staging
+    protontricks
+    winetricks
     wineWowPackages.waylandFull
     lutris
     (lutris.override {
@@ -291,7 +294,6 @@
     enable = true;
     remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
     dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
-    gamescopeSession.enable = true;
 
     extraCompatPackages = [
       # pkgs.luxtorpeda
@@ -299,10 +301,14 @@
     ];
   };
   programs.gamemode.enable = true;
-  programs.gamescope.enable = true;
 
-  # Polkit for hyprland to get sudo password prompts
-  security.polkit.enable = true;
+  security = {
+    rtkit.enable = true;
+    # Polkit for hyprland to get sudo password prompts
+    polkit.enable = true;
+    pam.services.swaylock = {};
+    # pam.services.swaylock-effects = {};
+  };
 
   services.fstrim.enable = true;
 

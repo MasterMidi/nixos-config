@@ -2,32 +2,31 @@
   configs,
   pkgs,
   theme,
+  inputs,
   ...
-}: {
+}: let
+  moreWaita = pkgs.morewaita-icon-theme.overrideAttrs (oldAttrs: rec {
+    version = "80574a9c0e1242efd764368b1ec7dc77cd0ec67d";
+    src = pkgs.fetchFromGitHub {
+      owner = "somepaulo";
+      repo = "MoreWaita";
+      rev = "${version}";
+      hash = "sha256-+xvRSsGc7ERFxiTj1HT7G29OCQkR0nUZ6+WN03D3AEQ=";
+    };
+  });
+in {
   # imports = [
   #   ./steam.nix
   # ];
 
   fonts.fontconfig.enable = true;
-  home.pointerCursor = let
-    getFrom = url: hash: name: {
-      gtk.enable = true;
-      x11.enable = false;
-      name = name;
-      size = 24;
-      package = pkgs.runCommand "moveUp" {} ''
-        mkdir -p $out/share/icons
-        ln -s ${pkgs.fetchzip {
-          url = url;
-          hash = hash;
-        }}/dist-light $out/share/icons/${name}
-      '';
-    };
-  in
-    getFrom
-    "https://github.com/vinceliuice/Graphite-cursors/archive/refs/heads/main.zip"
-    "sha256-abnCIoPTbhyeWVBLiNjBI2+/6IIQ6I6lS/rvoVrselY="
-    "Graphite-cursors-light";
+  home.pointerCursor = {
+    gtk.enable = true;
+    x11.enable = true;
+    name = "graphite-light";
+    size = 24;
+    package = pkgs.graphite-cursors;
+  };
 
   gtk = {
     # gtk3.extraConfig.gtk-decoration-layout = "menu:";
@@ -35,8 +34,8 @@
     enable = true;
     # theme.name = "Colloid";
     # theme.package = pkgs.colloid-gtk-theme;
-    iconTheme.name = "Adwaita";
-    iconTheme.package = pkgs.gnome3.adwaita-icon-theme;
+    iconTheme.name = "MoreWaita";
+    iconTheme.package = moreWaita;
 
     gtk3.extraCss = theme.adwaitaGtkCss;
     gtk3.extraConfig = {

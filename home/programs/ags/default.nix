@@ -22,6 +22,6 @@
   };
 
   xdg.configFile = {
-    ags.source = config.lib.file.mkOutOfStoreSymlink "/etc/nixos/wallpapers";
+    ags.source = config.lib.file.mkOutOfStoreSymlink "/etc/nixos/home/programs/ags/config";
   };
 }

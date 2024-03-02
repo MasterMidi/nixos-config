@@ -19,6 +19,7 @@ in {
     "${mainMod} CTRL, SPACE, exec, rofi -show calc -modi calc"
     "${mainMod}, PERIOD, exec, rofi-emoji"
     "${mainMod}, V, exec, rofi-clipboard"
+    "${mainMod} SHIFT, C, exec, hyprpicker | wl-copy"
     "${mainMod}, C, killactive,"
     "${mainMod} SHIFT, Q, exec, ${./scripts/logout.sh},"
     "${mainMod}, E, exec, nautilus"

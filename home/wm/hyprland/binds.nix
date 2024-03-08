@@ -3,7 +3,7 @@ let
 in {
   bind = [
     ", Print, exec, grimblast --freeze copy area" # Screenshots
-    "${mainMod}, L, exec, swaylock"
+    "${mainMod}, L, exec, hyprlock"
     "${mainMod} SHIFT, W, exec, killall .waybar-wrapped 2>/dev/null && waybar" # Restart waybar
     "${mainMod} ALT, W, exec, waybar" # Restart waybar
     "${mainMod}, Q, exec, kitty"
@@ -19,7 +19,7 @@ in {
     "${mainMod} CTRL, SPACE, exec, rofi -show calc -modi calc"
     "${mainMod}, PERIOD, exec, rofi-emoji"
     "${mainMod}, V, exec, rofi-clipboard"
-    "${mainMod} SHIFT, C, exec, hyprpicker | wl-copy"
+    "${mainMod} SHIFT, C, exec, hyprpicker -a"
     "${mainMod}, C, killactive,"
     "${mainMod} SHIFT, Q, exec, ${./scripts/logout.sh},"
     "${mainMod}, E, exec, nautilus"

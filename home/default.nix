@@ -4,10 +4,13 @@
   inputs,
   theme,
   lib,
+  nix-colors,
   ...
 }: {
   # TODO setup nixd autocomplete
   imports = [
+    nix-colors.homeManagerModules.default
+
     ./wm/hyprland
     ./theme
     ./shell
@@ -22,6 +25,8 @@
   home.stateVersion = "23.05";
 
   programs.home-manager.enable = false;
+
+  colorScheme = nix-colors.colorSchemes.gruvbox-material-dark-medium;
 
   home.sessionVariables = {
     XDG_CACHE_HOME = "$HOME/.cache";
@@ -139,6 +144,7 @@
     spotify-player
     sunshine # https://docs.lizardbyte.dev/projects/sunshine/en/latest/about/usage.html#setup
     g4music
+    termusic
 
     # Image viewer
     geeqie

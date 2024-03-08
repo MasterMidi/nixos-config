@@ -196,7 +196,7 @@
     extraPackages = with pkgs; [amdvlk];
     extraPackages32 = with pkgs; [driversi686Linux.amdvlk];
   };
-  hardware.cpu.amd.updateMicrocode = true;
+  hardware.enableRedistributableFirmware = true;
   hardware.enableAllFirmware = true;
 
   powerManagement.powertop.enable = false;
@@ -225,10 +225,14 @@
   xdg.portal = {
     enable = true;
     wlr.enable = true;
-    extraPortals = with pkgs; [
-      xdg-desktop-portal-gtk # For file menu etc.
-      # xdg-desktop-portal-wlr # inferior to xdg-desktop-portal-hyprland
-      # xdg-desktop-portal-hyprland # already installed by hyprland flake
+    xdgOpenUsePortal = true;
+    config = {
+      common.default = ["gtk"];
+      hyprland.default = ["gtk" "hyprland"];
+    };
+
+    extraPortals = [
+      pkgs.xdg-desktop-portal-gtk
     ];
   };
 
@@ -307,7 +311,7 @@
     # Polkit for hyprland to get sudo password prompts
     polkit.enable = true;
     pam.services.swaylock = {};
-    # pam.services.swaylock-effects = {};
+    pam.services.hyprlock.text = "auth include login";
   };
 
   services.fstrim.enable = true;

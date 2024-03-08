@@ -1,7 +1,7 @@
 {...}: {
   imports = [
-    ./atuin.nix
     ./ags
+    ./atuin.nix
     ./bat.nix
     ./broot.nix
     ./btop.nix
@@ -9,6 +9,7 @@
     ./eza.nix
     ./firefox.nix
     ./git.nix
+    ./hyprlock.nix
     ./kitty.nix
     ./mangohud.nix
     ./mpv.nix

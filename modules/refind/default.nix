@@ -1,3 +1,4 @@
+# https://gist.github.com/betaboon/97abed457de8be43f89e7ca49d33d58d
 # TODO: resize background image to resolution (if provided)
 # TODO: add limit to number of entries
 {

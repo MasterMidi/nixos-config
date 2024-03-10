@@ -94,19 +94,19 @@ in {
         show_always = true;
       };
 
-      localip = {
-        format = "@[$localipv4]($style) ";
-        style = "bright-green bold";
-        disabled = false;
-        ssh_only = true;
-      };
-
       hostname = {
         ssh_only = false;
         format = "[@[$hostname]($style)[$ssh_symbol]($style) ]($style)";
         style = "italic bg:${pc-info} fg:${dark-text}";
         ssh_symbol = " 󰌘"; #\uf817
         disabled = false;
+      };
+
+      localip = {
+        format = "[$localipv4]($style)";
+        style = "fg:${dark-text} bg:${pc-info}";
+        disabled = false;
+        ssh_only = true;
       };
 
       git_branch = {

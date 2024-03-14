@@ -67,7 +67,6 @@
           ./hosts/jason
           ./scripts
           inputs.nix-gaming.nixosModules.pipewireLowLatency
-          inputs.nix-gaming.nixosModules.steamCompat
           outputs.nixosModules.refind
           # outputs.nixosModules.qbitmanage
           agenix.nixosModules.default

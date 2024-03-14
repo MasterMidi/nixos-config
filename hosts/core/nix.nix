@@ -57,7 +57,7 @@
 
     settings = {
       experimental-features = ["nix-command" "flakes" "auto-allocate-uids"];
-      # auto-optimise-store = true;
+      auto-optimise-store = true;
       builders-use-substitutes = true;
       # trusted-users = ["root" "@wheel"];
       max-jobs = "auto";

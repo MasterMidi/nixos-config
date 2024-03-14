@@ -22,6 +22,7 @@
       permittedInsecurePackages = [
         "electron-25.9.0" # TODO remove when culprit found
         "electron-19.1.9" # TODO remove when culprit found
+        "nix-2.16.2"
       ];
     };
   };
@@ -49,6 +50,11 @@
   boot.kernelModules = ["coretemp"];
 
   # Bootloader
+  boot.loader.systemd-boot = {
+    enable = false;
+    editor = false;
+    configurationLimit = 5;
+  };
   boot.loader.refind = {
     enable = true;
     theme = pkgs.refindTheme.refind-minimal;
@@ -152,6 +158,32 @@
   };
   # hardware.pulseaudio.extraConfig = "unload-module module-role-cork"; # Disable mute of audio streams when using phone stream (e.g. teamspeak)
 
+  # Configure wireplumber
+  services.pipewire.wireplumber = {
+    enable = true;
+    configPackages = [
+      (pkgs.writeTextDir "share/wireplumber/bluetooth.lua.d/51-bluez-config.lua" ''
+        bluez_monitor.properties = {
+        	["bluez5.enable-sbc-xq"] = true,
+        	["bluez5.enable-msbc"] = true,
+        	["bluez5.enable-hw-volume"] = true,
+        	["bluez5.headset-roles"] = "[ hsp_hs hsp_ag hfp_hf hfp_ag ]"
+        }
+      '')
+    ];
+  };
+  # environment.etc = {
+  #   # wireplumber settings
+  #   "wireplumber/bluetooth.lua.d/51-bluez-config.lua".text = ''
+  #     bluez_monitor.properties = {
+  #       ["bluez5.enable-sbc-xq"] = true,
+  #       ["bluez5.enable-msbc"] = true,
+  #       ["bluez5.enable-hw-volume"] = true,
+  #       ["bluez5.headset-roles"] = "[ hsp_hs hsp_ag hfp_hf hfp_ag ]"
+  #     }
+  #   '';
+  # };
+
   hardware.bluetooth = {
     enable = true; # enables support for Bluetooth
     powerOnBoot = true; # powers up the default Bluetooth controller on boot
@@ -163,19 +195,6 @@
     };
   };
   services.blueman.enable = true;
-
-  # Configure wireplumber
-  environment.etc = {
-    # wireplumber settings
-    "wireplumber/bluetooth.lua.d/51-bluez-config.lua".text = ''
-      bluez_monitor.properties = {
-        ["bluez5.enable-sbc-xq"] = true,
-        ["bluez5.enable-msbc"] = true,
-        ["bluez5.enable-hw-volume"] = true,
-        ["bluez5.headset-roles"] = "[ hsp_hs hsp_ag hfp_hf hfp_ag ]"
-      }
-    '';
-  };
 
   boot.extraModprobeConfig = "options kvm_amd nested=1";
 

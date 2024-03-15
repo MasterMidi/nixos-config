@@ -118,6 +118,13 @@
               theme = themes.gruvbox-dark-medium;
             in {inherit inputs outputs theme;};
           }
+          {
+            nixpkgs.overlays = [
+              nur.overlay
+              overlays.vscode-extensions
+              overlays.additions
+            ];
+          }
         ];
       };
 

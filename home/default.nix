@@ -90,6 +90,11 @@
   };
 
   home.packages = with pkgs; [
+    # gnome
+    nautilus-open-any-terminal
+    gnome.nautilus-python
+    gnome.nautilus
+
     # System
     base16-schemes
     xwaylandvideobridge

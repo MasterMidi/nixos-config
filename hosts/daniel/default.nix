@@ -127,10 +127,7 @@
     isNormalUser = true;
     description = "michael";
     extraGroups = ["networkmanager" "wheel"];
-    packages = with pkgs; [
-      firefox
-      #  thunderbird
-    ];
+    packages = with pkgs; [];
   };
 
   boot.plymouth = {

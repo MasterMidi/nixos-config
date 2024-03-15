@@ -1,8 +1,7 @@
-{ ... }:
-{
+{...}: {
   programs.eza = {
     enable = true;
-    enableAliases = true;
+    enableBashIntegration = true;
     git = true;
     icons = true;
   };

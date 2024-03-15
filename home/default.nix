@@ -150,6 +150,7 @@
     sunshine # https://docs.lizardbyte.dev/projects/sunshine/en/latest/about/usage.html#setup
     g4music
     termusic
+    ncmpcpp
 
     # Image viewer
     geeqie

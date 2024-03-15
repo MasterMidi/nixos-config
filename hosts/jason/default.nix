@@ -22,6 +22,7 @@
       permittedInsecurePackages = [
         "electron-25.9.0" # TODO remove when culprit found
         "electron-19.1.9" # TODO remove when culprit found
+        "nix-2.16.2"
       ];
     };
   };
@@ -49,6 +50,11 @@
   boot.kernelModules = ["coretemp"];
 
   # Bootloader
+  boot.loader.systemd-boot = {
+    enable = false;
+    editor = false;
+    configurationLimit = 5;
+  };
   boot.loader.refind = {
     enable = true;
     theme = pkgs.refindTheme.refind-minimal;
@@ -144,10 +150,31 @@
     pulse.enable = true;
     jack.enable = true;
 
-    lowLatency = {
+    extraConfig.pipewire."92-low-latency" = {
+      context.properties = {
+        default.clock.rate = 48000;
+        default.clock.quantum = 32;
+        default.clock.min-quantum = 32;
+        default.clock.max-quantum = 32;
+      };
+    };
+
+    # Configure wireplumber
+    wireplumber = {
       enable = true;
-      # quantum = 64;
-      # rate = 48000;
+
+      # https://github.com/NixOS/nixpkgs/pull/292115
+      # https://nixos.wiki/wiki/PipeWire#Bluetooth_Configuration
+      configPackages = [
+        (pkgs.writeTextDir "share/wireplumber/bluetooth.lua.d/51-bluez-config.lua" ''
+          bluez_monitor.properties = {
+          	["bluez5.enable-sbc-xq"] = true,
+          	["bluez5.enable-msbc"] = true,
+          	["bluez5.enable-hw-volume"] = true,
+          	["bluez5.headset-roles"] = "[ hsp_hs hsp_ag hfp_hf hfp_ag ]"
+          }
+        '')
+      ];
     };
   };
   # hardware.pulseaudio.extraConfig = "unload-module module-role-cork"; # Disable mute of audio streams when using phone stream (e.g. teamspeak)
@@ -163,19 +190,6 @@
     };
   };
   services.blueman.enable = true;
-
-  # Configure wireplumber
-  environment.etc = {
-    # wireplumber settings
-    "wireplumber/bluetooth.lua.d/51-bluez-config.lua".text = ''
-      bluez_monitor.properties = {
-        ["bluez5.enable-sbc-xq"] = true,
-        ["bluez5.enable-msbc"] = true,
-        ["bluez5.enable-hw-volume"] = true,
-        ["bluez5.headset-roles"] = "[ hsp_hs hsp_ag hfp_hf hfp_ag ]"
-      }
-    '';
-  };
 
   boot.extraModprobeConfig = "options kvm_amd nested=1";
 

@@ -18,11 +18,13 @@
     agenix.url = "github:ryantm/agenix";
 
     hyprland.url = "github:hyprwm/Hyprland";
+    hyprlock.url = "github:hyprwm/hyprlock";
     ags.url = "github:Aylur/ags";
     nix-gaming.url = "github:fufexan/nix-gaming";
 
     nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
     themes.url = "github:RGBCube/ThemeNix";
+    nix-colors.url = "github:misterio77/nix-colors"; # better nix theming?
     # stylix.url = "github:danth/stylix";
   };
 
@@ -35,6 +37,7 @@
     lollypops,
     agenix,
     themes,
+    nix-colors,
     ...
   } @ inputs: let
     inherit (self) outputs;
@@ -59,7 +62,7 @@
       jason = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
 
-        specialArgs = {inherit inputs outputs;}; # this is the important part
+        specialArgs = {inherit inputs outputs nix-colors;}; # this is the important part
         modules = [
           ./hosts/jason
           ./scripts
@@ -80,7 +83,7 @@
             # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix
             home-manager.extraSpecialArgs = let
               theme = themes.gruvbox-dark-medium;
-            in {inherit inputs outputs theme;};
+            in {inherit inputs outputs nix-colors theme;};
           }
           {
             nixpkgs.overlays = [

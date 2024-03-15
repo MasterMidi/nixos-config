@@ -1,3 +1,4 @@
+# based on https://github.com/zDyanTB/HyprNova/blob/master/.config/hypr/hyprlock.conf
 # base00: "#292828"
 # base01: "#32302f"
 # base02: "#504945"

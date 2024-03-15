@@ -28,6 +28,7 @@ in {
     package = pkgs.graphite-cursors;
   };
 
+  # https://github.com/Misterio77/nix-colors/blob/main/lib/contrib/gtk-theme.nix
   gtk = {
     # gtk3.extraConfig.gtk-decoration-layout = "menu:";
     # cursorTheme.name = "Qogir";

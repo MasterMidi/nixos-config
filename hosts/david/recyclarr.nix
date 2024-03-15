@@ -10,6 +10,42 @@
           api_key = "c5783cdc82d244e6b138be2988397813";
           delete_old_custom_formats = true;
           replace_existing_custom_formats = true;
+          quality_profiles = [
+            {
+              name = "Anime";
+              reset_unmatched_scores = {
+                enabled = true;
+                except = [];
+              };
+              upgrade = {
+                allowed = true;
+                until_quality = "Bluray 1080p";
+                until_score = 10000;
+              };
+              min_format_score = 10;
+              score_set = "sqp-1-1080p"; # https://recyclarr.dev/wiki/yaml/config-reference/quality-profiles/#score-set
+              quality_sort = "top";
+              qualities = [
+                {
+                  name = "Bluray 1080p";
+                  enabled = false;
+                  qualities = [
+                    "Bluray-1080p"
+                    "Bluray-1080p Remux"
+                  ];
+                }
+                {
+                  name = "WEB 1080p";
+                  enabled = false;
+                  qualities = [
+                    "WEBDL-1080p"
+                    "WEBRip-1080p"
+                    "HDTV-1080p"
+                  ];
+                }
+              ];
+            }
+          ];
           custom_formats = [
             {
               # Anime Release Groups

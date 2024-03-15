@@ -48,6 +48,7 @@ in {
 
           touchpad = {
             natural_scroll = "yes";
+            middle_button_emulation = true;
           };
 
           sensitivity = 0; # -1.0 - 1.0, 0 means no modification.
@@ -110,12 +111,13 @@ in {
 
         gestures = {
           # See https://wiki.hyprland.org/Configuring/Variables/ for more
-          workspace_swipe = "off";
+          workspace_swipe = "on";
         };
 
         misc = {
           # See https://wiki.hyprland.org/Configuring/Variables/ for more
           force_default_wallpaper = 0; # Set to 0 to disable the anime mascot wallpapers
+          vfr = true;
         };
 
         windowrulev2 = [

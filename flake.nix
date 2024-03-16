@@ -23,7 +23,6 @@
     nix-gaming.url = "github:fufexan/nix-gaming";
 
     nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
-    themes.url = "github:RGBCube/ThemeNix";
     nix-colors.url = "github:misterio77/nix-colors"; # better nix theming?
     # stylix.url = "github:danth/stylix";
   };
@@ -36,7 +35,6 @@
     nixos-hardware,
     lollypops,
     agenix,
-    themes,
     nix-colors,
     ...
   } @ inputs: let
@@ -80,9 +78,7 @@
             home-manager.users.michael = import ./home;
 
             # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix
-            home-manager.extraSpecialArgs = let
-              # theme = themes.gruvbox-dark-medium;
-            in {inherit inputs outputs nix-colors;};
+            home-manager.extraSpecialArgs = {inherit inputs outputs nix-colors;};
           }
           {
             nixpkgs.overlays = [
@@ -113,9 +109,7 @@
             home-manager.users.michael = import ./home;
 
             # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix
-            home-manager.extraSpecialArgs = let
-              theme = themes.gruvbox-dark-medium;
-            in {inherit inputs outputs nix-colors theme;};
+            home-manager.extraSpecialArgs = {inherit inputs outputs nix-colors;};
           }
         ];
       };

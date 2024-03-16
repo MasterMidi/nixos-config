@@ -2,7 +2,6 @@
   pkgs,
   config,
   lib,
-  theme,
   ...
 }: {
   programs.rofi = {
@@ -56,14 +55,14 @@
 
   xdg.configFile = {
     # "rofi/colors.rasi".source = ./colors.rasi;
-    "rofi/colors.rasi".text = with theme.withHashtag; ''
+    "rofi/colors.rasi".text = with config.colorScheme.palette; ''
       * {
-          background: ${base00};
-          background-alt: ${base01};
-          foreground: ${base07};
-          selected: ${base07};
-          active: ${base07};
-          urgent: ${base08};
+          background: #${base00};
+          background-alt: #${base01};
+          foreground: #${base07};
+          selected: #${base07};
+          active: #${base07};
+          urgent: #${base08};
       }'';
     "rofi/theme.rasi".source = ./applauncher/theme.rasi;
     "rofi/wallpaper-switcher.rasi".source = ./wallpaper-switcher/theme.rasi;

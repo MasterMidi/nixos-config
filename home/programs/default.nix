@@ -2,9 +2,9 @@
   imports = [
     ./ags
     ./atuin.nix
-    ./bat.nix
+    ./bat
     ./broot.nix
-    ./btop.nix
+    ./btop
     ./direnv.nix
     ./discord
     ./eza.nix

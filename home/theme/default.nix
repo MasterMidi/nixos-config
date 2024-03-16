@@ -1,8 +1,6 @@
 {
-  configs,
+  config,
   pkgs,
-  theme,
-  inputs,
   ...
 }: let
   moreWaita = pkgs.morewaita-icon-theme.overrideAttrs (oldAttrs: rec {
@@ -38,12 +36,12 @@ in {
     iconTheme.name = "MoreWaita";
     iconTheme.package = moreWaita;
 
-    gtk3.extraCss = theme.adwaitaGtkCss;
+    gtk3.extraCss = import ./adwaitaGtkCss.nix config.colorScheme;
     gtk3.extraConfig = {
       gtk-application-prefer-dark-theme = 1;
     };
 
-    gtk4.extraCss = theme.adwaitaGtkCss;
+    gtk4.extraCss = import ./adwaitaGtkCss.nix config.colorScheme;
     gtk4.extraConfig = {
       gtk-application-prefer-dark-theme = 1;
     };

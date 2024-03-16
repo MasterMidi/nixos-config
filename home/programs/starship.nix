@@ -16,19 +16,19 @@
 # base0F = "#D65D0E";
 #9EB5D5
 #1D2021
-{theme, ...}:
-with theme.withHashtag; let
-  dark-text = base00;
-  light-text = base07;
-  error = base08;
-  succes = base0B;
+{config, ...}:
+with config.colorScheme.palette; let
+  dark-text = "#${base00}";
+  light-text = "#${base07}";
+  error = "#${base08}";
+  succes = "#${base0B}";
 
-  shell = base0D;
-  pc-info = base07;
-  path = base04;
-  git-module = base03;
-  package-module = base0C;
-  code-module = base0A;
+  shell = "#${base0D}";
+  pc-info = "#${base07}";
+  path = "#${base04}";
+  git-module = "#${base03}";
+  package-module = "#${base0C}";
+  code-module = "#${base0A}";
 
   section = elems: sep: fg: bg: "${builtins.concatStringsSep "" elems}[${sep}](fg:${fg} bg:${bg})";
   ifSection = elems: sep: fg: bg: "(${builtins.concatStringsSep "" elems}[${sep}](fg:${fg} bg:${bg}))";

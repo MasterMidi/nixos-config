@@ -33,6 +33,9 @@
       webkitgtk
       webp-pixbuf-loader
       ydotool
+      bun
+      fd
+      brightnessctl
     ];
   };
 

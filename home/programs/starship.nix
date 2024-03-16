@@ -29,6 +29,9 @@ with theme.withHashtag; let
   git-module = base03;
   package-module = base0C;
   code-module = base0A;
+
+  section = elems: sep: fg: bg: "${builtins.concatStringsSep "" elems}[${sep}](fg:${fg} bg:${bg})";
+  ifSection = elems: sep: fg: bg: "(${builtins.concatStringsSep "" elems}[${sep}](fg:${fg} bg:${bg}))";
 in {
   programs.starship = {
     enable = true;
@@ -37,12 +40,27 @@ in {
     settings = {
       add_newline = true;
 
-      format = "($nix_shell$shlvl[](fg:${shell} bg:${pc-info}))$os$username$hostname$localip$sudo[](fg:${pc-info} bg:${path})$directory[](fg:${path} bg:${git-module})$git_branch$git_commit$git_state$git_status[](fg:${git-module} bg:${package-module})$package[](fg:${package-module} bg:${code-module})$container$kubernetes$docker_context$nodejs$rust$golang$php[](fg:${code-module})$cmd_duration\n$character";
+      # format = "($nix_shell$shlvl[](fg:${shell} bg:${pc-info}))$os$username$hostname$localip$sudo[](fg:${pc-info} bg:${path})$directory[](fg:${path} bg:${git-module})$git_branch$git_commit$git_state$git_status[](fg:${git-module} bg:${package-module})$package[](fg:${package-module} bg:${code-module})$container$kubernetes$docker_context$nodejs$rust$golang$php[](fg:${code-module})$cmd_duration\n$character";
+      format = builtins.concatStringsSep "" [
+        (ifSection ["$nix_shell" "$direnv" "$shlvl"] "" shell pc-info)
+        (section ["$os" "$username" "$hostname" "$localip" "$sudo"] "" pc-info path)
+        (section ["$directory"] "" path git-module)
+        (section ["$git_branch" "$git_commit" "$git_state$" "git_status"] "" git-module package-module)
+        (section ["$package" "$container" "$kubernetes" "$docker_context"] "" package-module code-module)
+        (section ["$lua" "$nodejs" "$rust" "$golang" "$php"] "" code-module "")
+        "$cmd_duration\n$character"
+      ];
 
       sudo = {
         format = "[$symbol]($style)";
         style = "fg:${dark-text} bg:${pc-info}";
         symbol = "󱑷 ";
+        disabled = false;
+      };
+
+      direnv = {
+        format = "[$symbol$loaded/$allowed]($style) ";
+        style = "fg:${dark-text} bg:${pc-info}";
         disabled = false;
       };
 
@@ -79,9 +97,14 @@ in {
           Linux = "";
           Mint = "";
           Arch = "";
-          Ubuntu = "";
+          Fedora = "";
           Raspbian = "";
           NixOS = "";
+          openSUSE = "";
+          SUSE = "";
+          Ubuntu = "";
+          EndeavourOS = "";
+          Debian = "";
           Unknown = "❓";
         };
       };
@@ -182,7 +205,7 @@ in {
       nodejs = {
         symbol = "󰎙";
         style = "${dark-text} bg:${code-module}";
-        format = "[[ $symbol ($version) ](fg:${light-text} bg:${code-module})]($style)";
+        format = "[[ $symbol ($version) ](fg:${dark-text} bg:${code-module})]($style)";
       };
 
       rust = {
@@ -194,19 +217,37 @@ in {
       c = {
         symbol = "";
         style = "bg:${code-module}";
-        format = "[[ $symbol ($toolchain::$version) ](fg:${light-text} bg:${code-module})]($style)";
+        format = "[[ $symbol ($toolchain::$version) ](fg:${dark-text} bg:${code-module})]($style)";
       };
 
       golang = {
         symbol = "󰟓";
         style = "bg:${code-module}";
-        format = "[[ $symbol ($version) ](fg:${light-text} bg:${code-module})]($style)";
+        format = "[[ $symbol ($version) ](fg:${dark-text} bg:${code-module})]($style)";
       };
 
       php = {
-        format = "[[ $symbol ($version) ](fg:${light-text} bg:${code-module})]($style)";
+        format = "[[ $symbol ($version) ](fg:${dark-text} bg:${code-module})]($style)";
         symbol = "";
         style = "bg:${code-module}";
+      };
+
+      lua = {
+        format = "[ $symbol ($version) ]($style)";
+        symbol = "󰢱";
+        style = "fg:${dark-text} bg:${code-module}";
+      };
+
+      dotnet = {
+        format = "[ $symbol ($version) ($tfm) ]($style)";
+        symbol = "";
+        style = "fg:${dark-text} bg:${code-module}";
+      };
+
+      python = {
+        format = "[ $symbol$pyenv_prefix($version )(\($virtualenv\) )]($style)";
+        symbol = "";
+        style = "fg:${light-text} bg:${code-module}";
       };
 
       kubernetes = {

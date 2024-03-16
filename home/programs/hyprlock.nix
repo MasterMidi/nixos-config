@@ -18,10 +18,9 @@
 {
   inputs,
   config,
-  theme,
   ...
 }: let
-  c = config.colorScheme.palette;
+  theme = config.colorScheme.palette;
   font_family = "MesloLGS NF";
 in {
   imports = [inputs.hyprlock.homeManagerModules.default];
@@ -50,12 +49,12 @@ in {
 
         outline_thickness = 2;
 
-        outer_color = "rgb(${c.base04})";
-        inner_color = "rgb(${c.base00})";
-        font_color = "rgb(${c.base0D})";
+        outer_color = "rgb(${theme.base04})";
+        inner_color = "rgb(${theme.base00})";
+        font_color = "rgb(${theme.base0D})";
 
         fade_on_empty = false;
-        placeholder_text = ''<span font_family="${font_family}" foreground="##${c.base0D}">Password...</span>'';
+        placeholder_text = ''<span font_family="${font_family}" foreground="##${theme.base0D}">Password...</span>'';
 
         dots_spacing = 0.3;
         dots_center = true;
@@ -67,7 +66,7 @@ in {
         text = "$TIME";
         inherit font_family;
         font_size = 50;
-        color = "rgb(${c.base00})";
+        color = "rgb(${theme.base00})";
 
         position = {
           x = 0;

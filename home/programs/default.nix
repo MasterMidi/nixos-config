@@ -6,6 +6,7 @@
     ./broot.nix
     ./btop.nix
     ./direnv.nix
+    ./discord
     ./eza.nix
     ./firefox.nix
     ./git.nix

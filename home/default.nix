@@ -1,9 +1,7 @@
 {
   config,
   pkgs,
-  inputs,
   lib,
-  theme,
   nix-colors,
   ...
 }: {
@@ -63,8 +61,6 @@
   # };
 
   programs.thefuck.enable = true;
-
-  # xdg.configFile."Vencord/settings/quickCss.css".text = theme.discordCss;
 
   # https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/applications/video/netflix/default.nix#L17
   # https://github.com/mathix420/free-the-web-apps/blob/master/apps/youtube-music/youtube-music.desktop
@@ -159,9 +155,6 @@
 
     # Communication
     # vesktop # Discord but with vencord pre-installed
-    (discord.override {
-      withVencord = true;
-    })
     signal-desktop
     element-desktop
 

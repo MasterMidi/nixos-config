@@ -12,7 +12,7 @@
     ./hyprlock.nix
     ./kitty.nix
     ./mangohud.nix
-    ./mpv.nix
+    ./mpv
     ./ripgrep.nix
     ./rofi
     ./starship.nix

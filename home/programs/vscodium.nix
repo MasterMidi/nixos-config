@@ -41,7 +41,7 @@
       "workbench.settings.editor" = "json";
       "workbench.tree.indent" = 20;
       "nix.enableLanguageServer" = true;
-      "nix.serverPath" = "nixd";
+      "nix.serverPath" = "nil";
       "nix.serverSettings" = {
         nixd = {
           formatting = {
@@ -81,6 +81,7 @@
     ];
     extensions = with pkgs.vscode-extensions.extensions.x86_64-linux.vscode-marketplace;
       [
+        sndst00m.vscode-native-svg-preview
         kamadorueda.alejandra
         mads-hartmann.bash-ide-vscode
         mkhl.shfmt

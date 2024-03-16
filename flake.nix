@@ -81,8 +81,8 @@
 
             # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix
             home-manager.extraSpecialArgs = let
-              theme = themes.gruvbox-dark-medium;
-            in {inherit inputs outputs nix-colors theme;};
+              # theme = themes.gruvbox-dark-medium;
+            in {inherit inputs outputs nix-colors;};
           }
           {
             nixpkgs.overlays = [
@@ -97,7 +97,7 @@
       daniel = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
 
-        specialArgs = {inherit inputs outputs;}; # this is the important part
+        specialArgs = {inherit inputs outputs nix-colors;}; # this is the important part
         modules = [
           ./hosts/daniel
           ./scripts
@@ -115,14 +115,7 @@
             # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix
             home-manager.extraSpecialArgs = let
               theme = themes.gruvbox-dark-medium;
-            in {inherit inputs outputs theme;};
-          }
-          {
-            nixpkgs.overlays = [
-              nur.overlay
-              overlays.vscode-extensions
-              overlays.additions
-            ];
+            in {inherit inputs outputs nix-colors theme;};
           }
         ];
       };

@@ -58,6 +58,7 @@
 
   nixpkgs.config.permittedInsecurePackages = [
     "electron-19.1.9"
+    "nix-2.16.2"
   ];
 
   environment.binsh = "${pkgs.dash}/bin/dash";

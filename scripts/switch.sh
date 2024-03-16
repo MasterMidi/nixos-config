@@ -9,18 +9,18 @@ fi
 
 echo "${bold}⚗️  Testing Configuration ${normal}"
 case "$OSTYPE" in
-linux*) sudo nixos-rebuild dry-build ;;
+linux*) nixos-rebuild dry-build ;;
 *) echo "unknown: $OSTYPE" ;;
 esac
 
 if [ $? -eq 0 ]; then
 	echo "🔨 Rebuilding Configuration…"
 	case "$OSTYPE" in
-	linux*) sudo nixos-rebuild switch ;;
+	linux*) nixos-rebuild switch ;;
 	*) echo "unknown: $OSTYPE" ;;
 	esac
 	if [ $? -eq 0 ]; then
-		echo "❄️ Done! NixOS is Now Running Generation $(sudo nix-env --list-generations --profile /nix/var/nix/profiles/system | grep current | awk '{print $1}')."
+		echo "❄️ Done! NixOS is Now Running Generation $(nix-env --list-generations --profile /nix/var/nix/profiles/system | grep current | awk '{print $1}')."
 	fi
 else
 	echo "🚨 Could Not Build Configuration…"

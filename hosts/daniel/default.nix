@@ -106,7 +106,12 @@
   # Enable sound with pipewire.
   sound.enable = true;
   hardware.pulseaudio.enable = false;
-  security.rtkit.enable = true;
+  security = {
+    rtkit.enable = true;
+    # Polkit for hyprland to get sudo password prompts
+    polkit.enable = true;
+    pam.services.hyprlock.text = "auth include login";
+  };
   services.pipewire = {
     enable = true;
     alsa.enable = true;
@@ -127,7 +132,7 @@
   users.users.michael = {
     isNormalUser = true;
     description = "michael";
-    extraGroups = ["networkmanager" "wheel"];
+    extraGroups = ["networkmanager" "wheel" "dialout"];
     packages = with pkgs; [];
   };
 
@@ -148,8 +153,9 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    #  wget
+    polkit_gnome
+    libsecret
+    (git.override {withLibsecret = true;})
   ];
 
   services.tailscale.enable = true;

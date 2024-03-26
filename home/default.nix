@@ -135,6 +135,7 @@
     parabolic
     motrix
     qrscan
+    nur.repos.utybo.git-credential-manager
 
     # Media
     jellyfin-media-player

@@ -17,7 +17,7 @@
     lollypops.url = "github:pinpox/lollypops";
     agenix.url = "github:ryantm/agenix";
 
-    hyprland.url = "github:hyprwm/Hyprland";
+    # hyprland.url = "github:hyprwm/Hyprland";
     hyprlock.url = "github:hyprwm/hyprlock";
     ags.url = "github:Aylur/ags";
     nix-gaming.url = "github:fufexan/nix-gaming";

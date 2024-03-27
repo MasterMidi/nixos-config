@@ -131,7 +131,7 @@
   # services.wlr.enable = true;
   programs.hyprland = {
     enable = true;
-    package = inputs.hyprland.packages.${pkgs.system}.hyprland;
+    # package = inputs.hyprland.packages.${pkgs.system}.hyprland;
   };
 
   # Configure console keymap
@@ -245,8 +245,9 @@
       hyprland.default = ["gtk" "hyprland"];
     };
 
-    extraPortals = [
-      pkgs.xdg-desktop-portal-gtk
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-gtk
+      xdg-desktop-portal-hyprland
     ];
   };
 
@@ -299,7 +300,7 @@
       ];
     })
     (git.override {withLibsecret = true;})
-    # git-credential-manager
+    git-credential-manager
   ];
 
   services.tailscale.enable = true;
@@ -313,9 +314,8 @@
     remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
     dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
 
-    extraCompatPackages = [
-      # pkgs.luxtorpeda
-      inputs.nix-gaming.packages.${pkgs.system}.proton-ge
+    extraCompatPackages = with pkgs; [
+      proton-ge-bin
     ];
   };
   programs.gamemode.enable = true;
@@ -324,8 +324,12 @@
     rtkit.enable = true;
     # Polkit for hyprland to get sudo password prompts
     polkit.enable = true;
-    pam.services.swaylock = {};
     pam.services.hyprlock.text = "auth include login";
+  };
+  services.gnome.gnome-keyring.enable = true;
+  programs = {
+    seahorse.enable = true;
+    dconf.enable = true;
   };
 
   services.fstrim.enable = true;

@@ -98,7 +98,7 @@
     wdisplays
     pavucontrol
     neofetch
-    haskellPackages.kmonad
+    # haskellPackages.kmonad
     gnome3.gnome-tweaks
 
     # Productivity
@@ -115,7 +115,7 @@
     jq
     fzf
     tldr
-    handbrake
+    # handbrake
     # dupeguru
     gdu
     duf
@@ -135,7 +135,7 @@
     parabolic
     motrix
     qrscan
-    nur.repos.utybo.git-credential-manager
+    # nur.repos.utybo.git-credential-manager
 
     # Media
     jellyfin-media-player

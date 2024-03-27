@@ -3,7 +3,7 @@
   programs.firefox = {
     enable = true;
     nativeMessagingHosts = with pkgs.nur.repos; [
-      wolfangaukang.vdhcoapp
+      # wolfangaukang.vdhcoapp
     ];
   };
 }

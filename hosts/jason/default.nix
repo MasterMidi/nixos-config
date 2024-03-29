@@ -229,6 +229,7 @@
       "podman"
       "docker"
       "uinput" # for ydotool
+      "dialout" # for arduino and other serial devices
     ];
   };
 

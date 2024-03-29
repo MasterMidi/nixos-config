@@ -84,6 +84,7 @@
         kamadorueda.alejandra
         mads-hartmann.bash-ide-vscode
         mkhl.shfmt
+        rogalmic.bash-debug
         timonwong.shellcheck
         jeff-hykin.better-shellscript-syntax
         jeff-hykin.better-nix-syntax

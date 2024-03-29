@@ -8,7 +8,6 @@
     package = pkgs.vscodium;
     enableUpdateCheck = false;
     userSettings = {
-      "cargo.automaticCheck" = false;
       "files.autoSave" = "afterDelay";
       "editor.wordWrap" = "on";
       "editor.fontFamily" = "'MesloLGS Nerd Font'";
@@ -138,10 +137,9 @@
         dustypomerleau.rust-syntax
         swellaby.vscode-rust-test-adapter
         rust-lang.rust-analyzer
-        belfz.search-crates-io
         mtxr.sqltools
         # vsciot-vscode.vscode-arduino
-				# espressif.esp-idf-extension
+        # espressif.esp-idf-extension
         # vscodevim.vim
       ]
       ++ (with pkgs.vscode-extensions.extensions.x86_64-linux.open-vsx; [

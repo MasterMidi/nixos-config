@@ -61,7 +61,7 @@ in {
       direnv = {
         format = "[$symbol$loaded/$allowed]($style) ";
         style = "fg:${dark-text} bg:${pc-info}";
-        disabled = false;
+        disabled = true;
       };
 
       shlvl = {

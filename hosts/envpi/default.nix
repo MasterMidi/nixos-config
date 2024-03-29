@@ -1,8 +1,6 @@
 {
   config,
-  lib,
   pkgs,
-  outputs,
   ...
 }: {
   imports = [
@@ -86,7 +84,7 @@
 
   nixpkgs.config.allowUnfree = true;
 
-  hardware.i2c.enable = true;
+  # hardware.i2c.enable = true;
   hardware.enableRedistributableFirmware = true;
   hardware.enableAllFirmware = true;
 
@@ -109,15 +107,36 @@
     settings.PermitRootLogin = "yes";
   };
 
-  services.influxdb2 = {
+  services.home-assistant = {
     enable = true;
-    settings = {
-      http-bind-address = "0.0.0.0:8086";
+    extraComponents = [
+      # Components required to complete the onboarding
+      "esphome"
+      "met"
+      "radio_browser"
+    ];
+    config = {
+      # Includes dependencies for a basic setup
+      # https://www.home-assistant.io/integrations/default_config/
+      default_config = {};
+      frontend = {
+        themes = "!include_dir_merge_named themes";
+      };
+      automation = "!include automations.yaml";
+      script = "!include scripts.yaml";
+      scene = "!include scenes.yaml";
     };
   };
 
+  systemd.tmpfiles.rules = [
+    "d ${config.services.home-assistant.configDir}/themes 0755 hass hass"
+    "f ${config.services.home-assistant.configDir}/automations.yaml 0755 hass hass"
+    "f ${config.services.home-assistant.configDir}/scripts.yaml 0755 hass hass"
+    "f ${config.services.home-assistant.configDir}/scenes.yaml 0755 hass hass"
+  ];
+
   networking.firewall.allowedTCPPorts = [
-    8086 # influxdb2
+    8123 # home-assitant
   ];
 
   system.stateVersion = "23.11"; # Did you read the comment?

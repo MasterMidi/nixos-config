@@ -17,18 +17,17 @@
 #             the wallpapers included in the theme you are in.
 #	08.12.2023 08:37:20
 
-
-# Verificar si xdpyinfo e imagemagick están instalados
-if ! command -v convert > /dev/null 2>&1; then
+# Verify if xdpyinfo and imagemagick are installed
+if ! command -v convert >/dev/null 2>&1; then
 	notify-send "Missing package" "Please install the imagemagick package to continue" -u critical
-    exit 1
+	exit 1
 fi
 
 # Set some variables
-wall_dir="${HOME}/Pictures/wallpapers" # NOTE: symlinked folder needs "/" at the end, this is accounted for elsewhere in the script
+wallDir=$(realpath "${HOME}/Pictures/wallpapers") # NOTE: symlinked folder needs "/" at the end, this is accounted for elsewhere in the script
 cacheDir="${HOME}/.cache/wallpapers/"
-# rofi_command="rofi -dmenu -theme ${HOME}/.config/bspwm/scripts/WallSelect.rasi -theme-str ${rofi_override}"
-rofi_command="rofi -dmenu -theme ${HOME}/.config/rofi/wallpaper-switcher.rasi"
+# rofiCommand="rofi -dmenu -theme ${HOME}/.config/bspwm/scripts/WallSelect.rasi -theme-str ${rofi_override}"
+rofiCommand="rofi -dmenu -i -theme ${HOME}/.config/rofi/wallpaper-switcher.rasi"
 
 # monitor_res=$(xdpyinfo | grep dimensions | awk '{print $2}' | cut -d 'x' -f1)
 # monitor_scale=$(xdpyinfo | grep -oP "resolution:.*" | awk '{print $2}' | cut -d 'x' -f1)
@@ -36,24 +35,26 @@ rofi_command="rofi -dmenu -theme ${HOME}/.config/rofi/wallpaper-switcher.rasi"
 # rofi_override="element-icon{size:${monitor_res}px;border-radius:0px;}"
 
 # Create cache dir if not exists
-if [ ! -d "${cacheDir}" ] ; then
-		mkdir -p "${cacheDir}"
+if [ ! -d "${cacheDir}" ]; then
+	mkdir -p "${cacheDir}"
 fi
 
 # Convert images in directory and save to cache dir
-for imagen in "$wall_dir"/*.{jpg,jpeg,png,webp}; do
-	if [ -f "$imagen" ]; then
-		nombre_archivo=$(basename "$imagen")
-			if [ ! -f "${cacheDir}/${nombre_archivo}" ] ; then
-				convert -strip "$imagen" -thumbnail 500x500^ -gravity center -extent 500x500 "${cacheDir}/${nombre_archivo}"
-			fi
-    fi
+notify-send "Proccesing wallpapers in $wallDir" -t 2200
+for image in "$wallDir"*.{jpg,jpeg,png,webp,gif}; do
+	if [ -f "$image" ]; then
+		filename=$(basename "$image")
+		if [ ! -f "${cacheDir}/${filename}" ]; then
+			convert -strip "$image" -thumbnail 500x500^ -gravity center -extent 500x500 "${cacheDir}/${filename}"
+		fi
+	fi
 done
 
 # Launch rofi
-wall_selection=$(find "${wall_dir}/" -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.webp" \) -exec basename {} \; | sort | while read -r A ; do  echo -en "$A\x00icon\x1f""${cacheDir}"/"$A\n" ; done | $rofi_command)
+wall_selection=$(find "${wallDir}" -maxdepth 1 -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.webp" -o -iname "*.gif" \) -exec basename {} \; | sort | while read -r A; do echo -en "$A\x00icon\x1f""${cacheDir}"/"$A\n"; done | $rofiCommand)
 
 # Set wallpaper
 [[ -n "$wall_selection" ]] || exit 1
-swww img "$wall_dir"/"$wall_selection" --transition-step 255 --transition-type any
+swww img "$wallDir"/"$wall_selection" --transition-step 255 --transition-type any
+notify-send "Wallpaper set!" -i "$wallDir"/"$wall_selection" -t 2200
 exit 0

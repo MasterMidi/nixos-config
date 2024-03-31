@@ -36,6 +36,10 @@ in {
     iconTheme.name = "MoreWaita";
     iconTheme.package = moreWaita;
 
+    gtk2.extraConfig = ''
+      gtk-application-prefer-dark-theme = 1;
+    '';
+
     gtk3.extraCss = import ./adwaitaGtkCss.nix config.colorScheme;
     gtk3.extraConfig = {
       gtk-application-prefer-dark-theme = 1;
@@ -46,5 +50,11 @@ in {
       gtk-application-prefer-dark-theme = 1;
     };
     # theme.name = "Jasper-Grey-Dark-Compact";
+  };
+
+  qt = {
+    enable = true;
+    platformTheme = "gtk3";
+    style.name = "adwaita-dark";
   };
 }

@@ -1,4 +1,4 @@
-{
+{config, ...}: {
   "custom/launcher" = {
     format = "";
     # on-click = "$TERM_PROGRAM -e '$FILE_BROWSER'";
@@ -61,7 +61,7 @@
   "wlr/taskbar" = {
     format = "{icon}";
     icon-size = 24;
-    icon-theme = "Colloid";
+    icon-theme = config.gtk.iconTheme.name; # "Colloid";
     tooltip-format = "{title}";
     active-first = "false";
     on-click = "activate";

@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{config, ...}: {
   programs.waybar = {
     enable = true;
 
@@ -34,7 +34,7 @@
             "custom/wlogout"
           ];
         }
-        // import ./modules.nix;
+        // import ./modules.nix {inherit config;};
     };
   };
 }

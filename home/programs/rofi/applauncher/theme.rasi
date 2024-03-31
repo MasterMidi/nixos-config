@@ -11,7 +11,7 @@
 configuration {
 	modi: "drun,run,filebrowser,ssh,window";
 	show-icons: true;
-	icon-theme: "Papirus";
+	icon-theme: "MoreWaita";
 	display-drun: " Apps";
 	display-run: " Run";
 	display-filebrowser: " Files";

@@ -32,6 +32,7 @@
     rofi-systemd
     rofi-rbw-wayland
     rofi-bluetooth
+    bitwarden-menu
 
     (writeShellScriptBin "rofi-wall" (builtins.readFile ./wallpaper-switcher/wall-select.sh))
     (writeShellScriptBin "rofi-games" (builtins.readFile ./gamelauncher/gamelauncher.sh))

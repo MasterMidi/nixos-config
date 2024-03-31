@@ -108,7 +108,7 @@
 
     # Privacy
     mullvad-vpn
-    # bitwarden-cli
+    bitwarden-cli
 
     # Tools
     envsubst
@@ -135,7 +135,6 @@
     parabolic
     motrix
     qrscan
-    # nur.repos.utybo.git-credential-manager
 
     # Media
     jellyfin-media-player

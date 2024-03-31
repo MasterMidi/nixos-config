@@ -20,7 +20,6 @@
     # hyprland.url = "github:hyprwm/Hyprland";
     hyprlock.url = "github:hyprwm/hyprlock";
     ags.url = "github:Aylur/ags";
-    nix-gaming.url = "github:fufexan/nix-gaming";
 
     nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
     nix-colors.url = "github:misterio77/nix-colors"; # better nix theming?
@@ -64,7 +63,6 @@
         modules = [
           ./hosts/jason
           ./scripts
-          inputs.nix-gaming.nixosModules.pipewireLowLatency
           outputs.nixosModules.refind
           # outputs.nixosModules.qbitmanage
           agenix.nixosModules.default

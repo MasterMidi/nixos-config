@@ -43,7 +43,7 @@
 
   environment.binsh = "${pkgs.dash}/bin/dash";
 
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages_zen;
   # boot.kernelPackages = pkgs.linuxPackages_xanmod_latest;
   # boot.kernelPackages = pkgs.linuxKernel.packages.linux_lqx;
   # boot.kernelPackages = pkgs.linuxKernel.packages.linux_zen;
@@ -207,8 +207,12 @@
     enable = true;
     driSupport = true;
     driSupport32Bit = true; # Enables support for 32bit libs that steam uses
-    extraPackages = with pkgs; [amdvlk];
-    extraPackages32 = with pkgs; [driversi686Linux.amdvlk];
+    extraPackages = with pkgs; [
+      # amdvlk
+    ];
+    extraPackages32 = with pkgs; [
+      # driversi686Linux.amdvlk
+    ];
   };
   hardware.enableRedistributableFirmware = true;
   hardware.enableAllFirmware = true;
@@ -336,12 +340,24 @@
   programs.gnupg.agent = {
     enable = true;
     enableSSHSupport = true;
+    # pinentryPackage = pkgs.pinentry-gnome3;
   };
+  services.dbus.packages = [pkgs.gcr];
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
   boot.binfmt.emulatedSystems = ["aarch64-linux"]; # Allow compiling for ARM on x86_64
+
+  # Allow running AppImages directly from commandline
+  boot.binfmt.registrations.appimage = {
+    wrapInterpreterInShell = false;
+    interpreter = "${pkgs.appimage-run}/bin/appimage-run";
+    recognitionType = "magic";
+    offset = 0;
+    mask = ''\xff\xff\xff\xff\x00\x00\x00\x00\xff\xff\xff'';
+    magicOrExtension = ''\x7fELF....AI\x02'';
+  };
 
   # Open ports in the firewall.
   networking.firewall = {

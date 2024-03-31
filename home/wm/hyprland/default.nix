@@ -27,8 +27,6 @@ in {
           # "eDP-1, 2240x1400@60, 0x0, 1"
         ];
 
-        "misc:vfr" = true;
-
         xwayland = {
           use_nearest_neighbor = false;
           force_zero_scaling = true;

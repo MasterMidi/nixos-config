@@ -23,6 +23,7 @@
     "nix/flake-channels/nixpkgs".source = inputs.nixpkgs;
     "nix/flake-channels/home-manager".source = inputs.home-manager;
   };
+	
   nix = {
     # set the path for channels compat
     nixPath = [
@@ -41,9 +42,9 @@
       dates = ["daily"];
     };
 
-    package = pkgs.nixUnstable;
+    package = pkgs.nixUnstable; # use the newest vwersion of the nix package manager
 
-    # pin the registry to avoid downloading and evaling a new nixpkgs version every time
+    # pin the registry to avoid downloading and evaling a new nixpkgs version every time using 'nix shell nixpkgs#...'
     registry = lib.mapAttrs (_: v: {flake = v;}) inputs;
 
     # Free up to 1GiB whenever there is less than 100MiB left.
@@ -59,19 +60,15 @@
       experimental-features = ["nix-command" "flakes" "auto-allocate-uids"];
       auto-optimise-store = true;
       builders-use-substitutes = true;
-      # trusted-users = ["root" "@wheel"];
       max-jobs = "auto";
-      # use binary cache, its not gentoo
       substituters = [
-        #   "https://cache.nixos.org"
-        #   "https://nixpkgs-wayland.cachix.org"
-        #   "https://nix-community.cachix.org"
+        "https://cache.nixos.org"
+        "https://nix-community.cachix.org"
       ];
 
       trusted-public-keys = [
-        #   "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-        #   "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
-        #   "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       ];
     };
   };

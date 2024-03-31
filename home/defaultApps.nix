@@ -7,9 +7,9 @@
   generateMappings = {
     type,
     extensions,
-    viewer,
+    app,
   }: let
-    makePair = ext: {"${type}/${ext}" = viewer;};
+    makePair = ext: {"${type}/${ext}" = app;};
     mergeAttrs = list: builtins.foldl' (acc: elem: acc // elem) {} list;
   in
     mergeAttrs (map makePair extensions);
@@ -25,7 +25,7 @@ in {
           "x-extension-xhtml"
           "xhtml+xml"
         ];
-        viewer = browser;
+        app = browser;
       }
       // generateMappings {
         type = "audio";
@@ -44,7 +44,7 @@ in {
           "x-vorbis+ogg"
           "x-xm"
         ];
-        viewer = audioPlayer;
+        app = audioPlayer;
       }
       // generateMappings {
         type = "image";
@@ -72,7 +72,7 @@ in {
           "x-qoi"
           "x-tga"
         ];
-        viewer = imageViewer;
+        app = imageViewer;
       }
       // generateMappings {
         type = "video";
@@ -80,12 +80,12 @@ in {
           "x-matroska"
           "mp4"
         ];
-        viewer = videoPlayer;
+        app = videoPlayer;
       }
       // generateMappings {
         type = "x-scheme-handler";
         extensions = ["ror2mm"];
-        viewer = "r2modman.desktop";
+        app = "r2modman.desktop";
       };
     associations.added = {
       "x-scheme-handler/mailto" = "userapp-Thunderbird-L02IE2.desktop";

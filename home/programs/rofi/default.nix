@@ -32,9 +32,6 @@
     rofi-systemd
     rofi-rbw-wayland
     rofi-bluetooth
-    pinentry-rofi
-    # pinentry-gnome
-    # pinentry
 
     (writeShellScriptBin "rofi-wall" (builtins.readFile ./wallpaper-switcher/wall-select.sh))
     (writeShellScriptBin "rofi-games" (builtins.readFile ./gamelauncher/gamelauncher.sh))

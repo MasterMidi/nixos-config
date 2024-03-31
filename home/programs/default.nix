@@ -16,6 +16,7 @@
     ./mpv
     ./ripgrep.nix
     ./rofi
+    ./rbw.nix
     ./starship.nix
     ./swaylock.nix
     ./tmux.nix

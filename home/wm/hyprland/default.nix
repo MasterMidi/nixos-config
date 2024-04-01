@@ -121,10 +121,10 @@ in {
         };
 
         windowrulev2 = [
-          "monitor 1, class:(discord|VencordDesktop)"
-          "stayfocused, title:^()$,class:^(steam)$" # fix steam menues
-          "minsize 1 1, title:^()$,class:^(steam)$" # Fix steam friends list
+          "monitor 1, class:^(discord|VencordDesktop)$"
+          # "stayfocused, title:^()$,class:^(steam)$" # fix steam menues losing focus
 
+          "stayfocused, class:^(pinentry-)" # fix pinentry losing focus
           "opacity 0.0 override 0.0 override,class:^(xwaylandvideobridge)$"
           "noanim,class:^(xwaylandvideobridge)$"
           "noinitialfocus,class:^(xwaylandvideobridge)$"

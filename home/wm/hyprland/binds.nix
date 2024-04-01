@@ -4,7 +4,7 @@ in {
   bind = [
     ", Print, exec, grimblast --freeze copy area" # Screenshots
     "${mainMod}, L, exec, hyprlock"
-    "${mainMod} SHIFT, W, exec, killall .waybar-wrapped 2>/dev/null && waybar" # Restart waybar
+    "${mainMod} SHIFT, W, exec, killall -q .waybar-wrapped ; waybar" # Restart waybar
     "${mainMod} ALT, W, exec, waybar" # Restart waybar
     "${mainMod}, Q, exec, kitty"
     "${mainMod}, B, exec, firefox"

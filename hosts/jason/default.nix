@@ -12,20 +12,8 @@
     ./hardware-configuration.nix
     # ./refind.nix
     ./containers
-    ../core
-  ];
-
-  nixpkgs = {
-    # Configure nixpkgs instance
-    config = {
-      allowUnfree = true;
-      permittedInsecurePackages = [
-        "electron-25.9.0" # TODO remove when culprit found
-        "electron-19.1.9" # TODO remove when culprit found
-        "nix-2.16.2"
+    ./gaming.nix
       ];
-    };
-  };
 
   nix = {
     settings = {
@@ -279,7 +267,6 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     qbitmanage
-    bottles
     onlyoffice-bin
     docker-compose
     podman-compose
@@ -288,37 +275,17 @@
     tree
     lm_sensors
     libsecret
-    protontricks
-    winetricks
-    wineWowPackages.waylandFull
-    lutris
-    (lutris.override {
-      extraPkgs = pkgs: [
-        libnghttp2
-        winetricks
-        inputs.nix-gaming.packages.${pkgs.system}.wine-ge
-      ];
-    })
     (git.override {withLibsecret = true;})
     git-credential-manager
   ];
+
+  services.gvfs.enable = true; # for nautlius to work with ttrash and network shares
 
   services.tailscale.enable = true;
 
   services.mullvad-vpn.enable = true;
 
   programs.nix-ld.enable = true;
-
-  programs.steam = {
-    enable = true;
-    remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
-    dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
-
-    extraCompatPackages = with pkgs; [
-      proton-ge-bin
-    ];
-  };
-  programs.gamemode.enable = true;
 
   security = {
     rtkit.enable = true;

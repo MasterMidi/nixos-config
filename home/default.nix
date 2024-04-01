@@ -136,6 +136,10 @@
     motrix
     qrscan
 
+    # gaming tools
+    protonup-qt
+    adwsteamgtk
+
     # Media
     jellyfin-media-player
     ffmpeg-full

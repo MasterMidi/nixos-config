@@ -23,15 +23,25 @@ in {
           "x-extension-shtml"
           "x-extension-xht"
           "x-extension-xhtml"
+					"x-extension-html"
+					"x-extension-htm"
           "xhtml+xml"
         ];
         app = browser;
+      }
+      // generateMappings {
+        type = "application";
+        extensions = [
+          "pdf"
+        ];
+        app = "zathura.desktop";
       }
       // generateMappings {
         type = "audio";
         extensions = [
           "vorbis"
           "x-flac"
+          "flac"
           "x-it"
           "x-mod"
           "x-mp3"
@@ -92,10 +102,7 @@ in {
       "x-scheme-handler/mid" = "userapp-Thunderbird-L02IE2.desktop";
       "x-scheme-handler/webcal" = "userapp-Thunderbird-TJPIE2.desktop";
       "x-scheme-handler/webcals" = "userapp-Thunderbird-TJPIE2.desktop";
-      "audio/flac" = audioPlayer;
       "x-scheme-handler/chrome" = browser;
-      "application/x-extension-htm" = browser;
-      "application/x-extension-html" = browser;
       "text/html" = browser;
     };
   };

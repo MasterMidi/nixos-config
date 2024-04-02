@@ -21,6 +21,8 @@
       proton-ge-bin
     ];
   };
-	
+
   programs.gamemode.enable = true;
+
+  programs.gamescope.enable = true;
 }

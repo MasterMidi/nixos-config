@@ -60,6 +60,7 @@
       sharedOverlays = [
         nur.overlay
         self.overlay.additions
+        self.overlay.modifications
         self.overlay.vscode-extensions
       ];
 

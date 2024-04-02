@@ -6,7 +6,6 @@
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    ../core
   ];
 
   # boot.kernelPackages = pkgs.linuxPackages_rpi3;
@@ -81,8 +80,6 @@
   environment.systemPackages = with pkgs; [
     btop
   ];
-
-  nixpkgs.config.allowUnfree = true;
 
   # hardware.i2c.enable = true;
   hardware.enableRedistributableFirmware = true;

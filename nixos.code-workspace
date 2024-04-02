@@ -5,6 +5,6 @@
 		}
 	],
 	"settings": {
-		"nixEnvSelector.nixFile": "${workspaceRoot}/shell.nix"
+		"nixEnvSelector.nixFile": "${workspaceFolder}/flake.nix"
 	}
 }

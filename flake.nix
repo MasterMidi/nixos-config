@@ -4,8 +4,7 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     # nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-23.11";
-    # nixpkgs-legacy.url = "github:nixos/nixpkgs/nixos-23.05";
-    nur.url = "github:nix-community/NUR";
+    nur.url = "github:nix-community/NUR"; # Nix User Repository
 
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
@@ -24,131 +23,164 @@
     nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
     nix-colors.url = "github:misterio77/nix-colors"; # better nix theming?
     # stylix.url = "github:danth/stylix";
+
+    utils.url = "github:gytis-ivaskevicius/flake-utils-plus";
   };
 
-  outputs = {
+  outputs = inputs @ {
     self,
+    utils,
     nixpkgs,
-    nur,
     home-manager,
+    nur,
     nixos-hardware,
     lollypops,
     agenix,
     nix-colors,
     ...
-  } @ inputs: let
-    inherit (self) outputs;
+  }: let
+    # inherit (self) outputs;
+  in
+    utils.lib.mkFlake rec {
+      inherit self inputs;
 
-    systems = [
-      "aarch64-linux"
-      "x86_64-linux"
-    ];
+      supportedSystems = ["x86_64-linux" "aarch64-linux"];
 
-    forAllSystems = nixpkgs.lib.genAttrs systems;
+      channelsConfig = {
+        allowUnfree = true;
+        allowBroken = false;
 
-    username = "michael";
-    userfullname = "Michael Andreas Graversen";
-    useremail = "home@michael-graversen.dk";
-  in rec {
-    # Custom packages and modifications, exported as overlays
-    packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
-    overlays = import ./overlays {inherit inputs;};
-    nixosModules = import ./modules;
-
-    nixosConfigurations = {
-      jason = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-
-        specialArgs = {inherit inputs outputs nix-colors;}; # this is the important part
-        modules = [
-          ./hosts/jason
-          ./scripts
-          outputs.nixosModules.refind
-          # outputs.nixosModules.qbitmanage
-          agenix.nixosModules.default
-          lollypops.nixosModules.lollypops
-
-          home-manager.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-
-            home-manager.users.michael = import ./home;
-
-            # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix
-            home-manager.extraSpecialArgs = {inherit inputs outputs nix-colors;};
-          }
-          {
-            nixpkgs.overlays = [
-              nur.overlay
-              overlays.vscode-extensions
-              overlays.additions
-            ];
-          }
+        permittedInsecurePackages = [
+          # "electron-25.9.0" # TODO remove when culprit found
+          # "electron-19.1.9" # TODO remove when culprit found
+          # "nix-2.16.2"
         ];
       };
 
-      daniel = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
+      sharedOverlays = [
+        nur.overlay
+        self.overlay.additions
+        self.overlay.vscode-extensions
+      ];
 
-        specialArgs = {inherit inputs outputs nix-colors;}; # this is the important part
+      # Custom packages and modifications, exported as overlays
+      overlay = import ./overlays {inherit inputs;};
+      nixosModules = import ./modules;
+
+      hostDefaults = {
+        extraArgs = {inherit nix-colors;};
         modules = [
-          ./hosts/daniel
-          ./scripts
-          nixos-hardware.nixosModules.lenovo-ideapad-slim-5
-          nixos-hardware.nixosModules.common-cpu-amd-pstate
+          ./hosts/core
           lollypops.nixosModules.lollypops
-
-          home-manager.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-
-            home-manager.users.michael = import ./home;
-
-            # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix
-            home-manager.extraSpecialArgs = {inherit inputs outputs nix-colors;};
-          }
+          agenix.nixosModules.default
         ];
       };
 
-      nixpi = nixpkgs.lib.nixosSystem {
-        system = "aarch64-linux";
+      hosts = {
+        jason = {
+          system = "x86_64-linux";
+          specialArgs = {inherit inputs;}; # this is the important part
+          modules = [
+            ./hosts/jason
+            ./scripts
+            nixosModules.refind
+            # outputs.nixosModules.qbitmanage
 
-        specialArgs = {inherit inputs outputs;}; # this is the important part
-        modules = [
-          ./hosts/nixpi
-          agenix.nixosModules.default
-          lollypops.nixosModules.lollypops
-        ];
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.users.michael = import ./home;
+
+              # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix
+              home-manager.extraSpecialArgs = {inherit inputs nix-colors;};
+            }
+          ];
+        };
+
+        daniel = {
+          system = "x86_64-linux";
+
+          specialArgs = {inherit inputs;}; # this is the important part
+          modules = [
+            ./hosts/daniel
+            ./scripts
+            nixos-hardware.nixosModules.lenovo-ideapad-slim-5
+            nixos-hardware.nixosModules.common-cpu-amd-pstate
+
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.users.michael = import ./home;
+
+              # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix
+              home-manager.extraSpecialArgs = {inherit inputs nix-colors;};
+            }
+          ];
+        };
+
+        david = {
+          system = "x86_64-linux";
+
+          specialArgs = {inherit inputs;}; # this is the important part
+          modules = [
+            ./hosts/david
+            nixosModules.bitmagnet
+            nixosModules.recyclarr
+            nixosModules.jellyseerr
+          ];
+        };
+
+        envpi = {
+          system = "aarch64-linux";
+
+          specialArgs = {inherit inputs;}; # this is the important part
+          modules = [
+            ./hosts/envpi
+          ];
+        };
+
+        nixpi = {
+          system = "aarch64-linux";
+
+          specialArgs = {inherit inputs;}; # this is the important part
+          modules = [
+            ./hosts/nixpi
+          ];
+        };
       };
 
-      envpi = nixpkgs.lib.nixosSystem {
-        system = "aarch64-linux";
+      packages = nixpkgs.lib.genAttrs supportedSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
 
-        specialArgs = {inherit inputs outputs;}; # this is the important part
-        modules = [
-          ./hosts/envpi
-          agenix.nixosModules.default
-          lollypops.nixosModules.lollypops
-        ];
-      };
+      outputsBuilder = channels: {
+        apps = {
+          default = lollypops.apps."x86_64-linux".default {configFlake = self;};
+        };
 
-      david = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
+        # output packages for all supported systems
+        # packages = channels.nixpkgs.lib.genAttrs supportedSystems (system: import ./pkgs channels.nixpkgs.legacyPackages.${system});
+        # packages = {
+        #   inherit channels;
+        #   refind-minimal = import ./pkgs/refind-minimal nixpkgs.legacyPackages."x86_64-linux";
+        # };
 
-        specialArgs = {inherit inputs outputs;}; # this is the important part
-        modules = [
-          ./hosts/david
-          outputs.nixosModules.bitmagnet
-          outputs.nixosModules.recyclarr
-          outputs.nixosModules.jellyseerr
-          agenix.nixosModules.default
-          lollypops.nixosModules.lollypops
-        ];
+        # dev shell with tools for working with nix configuration
+        devShell = channels.nixpkgs.mkShell {
+          name = "nixos-config";
+          buildInputs = with channels.nixpkgs; [
+            nerdfix
+            nurl
+            nix-prefetch
+            nix-tree
+            nix-output-monitor
+            nix-index
+            nix-melt # view flake.lock files
+            nix-init # quick start to packaging projects
+            statix # find anti-patterns in nix code
+            nix-du # disk usage of nix store
+          ];
+        };
       };
     };
-
-    apps."x86_64-linux".default = lollypops.apps."x86_64-linux".default {configFlake = self;};
-  };
 }

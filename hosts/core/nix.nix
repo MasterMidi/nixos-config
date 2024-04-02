@@ -12,24 +12,17 @@
     dev.enable = false;
   };
 
-  nixpkgs = {
-    config = {
-      allowUnfree = true;
-      allowBroken = false;
-    };
-  };
+  # environment.etc = {
+  #   "nix/flake-channels/nixpkgs".source = inputs.nixpkgs;
+  #   "nix/flake-channels/home-manager".source = inputs.home-manager;
+  # };
 
-  environment.etc = {
-    "nix/flake-channels/nixpkgs".source = inputs.nixpkgs;
-    "nix/flake-channels/home-manager".source = inputs.home-manager;
-  };
-	
   nix = {
     # set the path for channels compat
-    nixPath = [
-      "nixpkgs=/etc/nix/flake-channels/nixpkgs"
-      "home-manager=/etc/nix/flake-channels/home-manager"
-    ];
+    # nixPath = [
+    #   "nixpkgs=/etc/nix/flake-channels/nixpkgs"
+    #   "home-manager=/etc/nix/flake-channels/home-manager"
+    # ];
 
     gc = {
       automatic = true;
@@ -45,7 +38,7 @@
     package = pkgs.nixUnstable; # use the newest vwersion of the nix package manager
 
     # pin the registry to avoid downloading and evaling a new nixpkgs version every time using 'nix shell nixpkgs#...'
-    registry = lib.mapAttrs (_: v: {flake = v;}) inputs;
+    # registry = lib.mapAttrs (_: v: {flake = v;}) inputs;
 
     # Free up to 1GiB whenever there is less than 100MiB left.
     extraOptions = ''

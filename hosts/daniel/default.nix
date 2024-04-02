@@ -1,17 +1,10 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-{
-  config,
-  pkgs,
-  inputs,
-  outputs,
-  ...
-}: {
+{pkgs, ...}: {
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    ../core
   ];
 
   # Bootloader.
@@ -37,7 +30,6 @@
 
   programs.hyprland = {
     enable = true;
-    package = inputs.hyprland.packages.${pkgs.system}.hyprland;
   };
 
   xdg.portal = {
@@ -50,16 +42,6 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
-
-  nixpkgs.overlays = [
-    inputs.nur.overlay
-    outputs.overlays.vscode-extensions
-  ];
-
-  nixpkgs.config.permittedInsecurePackages = [
-    "electron-19.1.9"
-    "nix-2.16.2"
-  ];
 
   environment.binsh = "${pkgs.dash}/bin/dash";
 

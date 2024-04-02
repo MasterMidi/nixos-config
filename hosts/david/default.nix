@@ -13,7 +13,6 @@ in {
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ./recyclarr.nix
-    ../core
   ];
 
   boot.kernelModules = ["coretemp"];
@@ -60,9 +59,6 @@ in {
     extraGroups = ["networkmanager" "wheel" "docker" "libvirtd"];
     packages = with pkgs; [];
   };
-
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget

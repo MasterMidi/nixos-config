@@ -225,8 +225,11 @@
   # services.flatpak.enable = true;
   xdg.portal = {
     enable = true;
-    xdgOpenUsePortal = true;
-    extraPortals = with pkgs; [xdg-desktop-portal-gtk];
+    xdgOpenUsePortal = false; # DON'T EVER SET THIS TRUE WILL RUIN XDG-OPEN FUNCTIONALITY
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-gtk
+      xdg-desktop-portal-hyprland
+    ];
     config = {
       # common.default = ["gtk"];
       hyprland.default = ["hyprland" "gtk"];

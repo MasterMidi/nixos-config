@@ -31,10 +31,10 @@ in {
     # gtk3.extraConfig.gtk-decoration-layout = "menu:";
     # cursorTheme.name = "Qogir";
     enable = true;
-    # theme.name = "Colloid";
-    # theme.package = pkgs.colloid-gtk-theme;
-    iconTheme.name = "MoreWaita";
-    iconTheme.package = moreWaita;
+    iconTheme.name = "Papirus";
+    iconTheme.package = pkgs.papirus-icon-theme;
+    # iconTheme.name = "MoreWaita";
+    # iconTheme.package = moreWaita;
 
     gtk2.extraConfig = ''
       gtk-application-prefer-dark-theme = 1;

@@ -23,9 +23,17 @@ in {
           "x-extension-shtml"
           "x-extension-xht"
           "x-extension-xhtml"
-					"x-extension-html"
-					"x-extension-htm"
+          "x-extension-html"
+          "x-extension-htm"
           "xhtml+xml"
+        ];
+        app = browser;
+      }
+      // generateMappings {
+        type = "x-scheme-handler";
+        extensions = [
+          "http"
+          "https"
         ];
         app = browser;
       }

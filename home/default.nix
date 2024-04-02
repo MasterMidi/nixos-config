@@ -88,8 +88,16 @@
   home.packages = with pkgs; [
     # gnome
     nautilus-open-any-terminal
+		gnome.sushi
     gnome.nautilus-python
-    gnome.nautilus
+    (gnome.nautilus.overrideAttrs (super: {
+      buildInputs =
+        super.buildInputs
+        ++ (with gst_all_1; [
+          gst-plugins-good
+          gst-plugins-bad
+        ]);
+    }))
 
     # System
     base16-schemes

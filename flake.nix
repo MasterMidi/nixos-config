@@ -2,32 +2,37 @@
   description = "NixOS configuration";
 
   inputs = {
+    # Package repos
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     # nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-23.11";
     nur.url = "github:nix-community/NUR"; # Nix User Repository
+    nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions"; # All vscode extensions
 
-    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    # Premade modules
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master"; # Hardware specific setup modules
+    srvos.url = "github:nix-community/srvos"; # Server specific modules
 
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # deploment & secret tools
     lollypops.url = "github:pinpox/lollypops";
     agenix.url = "github:ryantm/agenix";
 
-    # hyprland.url = "github:hyprwm/Hyprland";
+    # Individual program packages
     hyprlock.url = "github:hyprwm/hyprlock";
     ags.url = "github:Aylur/ags";
 
-    nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
-    nix-colors.url = "github:misterio77/nix-colors"; # better nix theming?
-    # stylix.url = "github:danth/stylix";
+    # Theming
+    nix-colors.url = "github:misterio77/nix-colors"; # Theming in nix configuration
 
+    # nix/flake utilities
     utils.url = "github:gytis-ivaskevicius/flake-utils-plus";
   };
 
-  outputs = inputs @ {
+  outputs = {
     self,
     utils,
     nixpkgs,
@@ -37,9 +42,12 @@
     lollypops,
     agenix,
     nix-colors,
+    srvos,
     ...
-  }: let
+  } @ inputs: let
     # inherit (self) outputs;
+    name = "Michael Andreas Graversen";
+    email = "home@michael-graversen.dk";
   in
     utils.lib.mkFlake rec {
       inherit self inputs;
@@ -49,19 +57,13 @@
       channelsConfig = {
         allowUnfree = true;
         allowBroken = false;
-
-        permittedInsecurePackages = [
-          # "electron-25.9.0" # TODO remove when culprit found
-          # "electron-19.1.9" # TODO remove when culprit found
-          # "nix-2.16.2"
-        ];
+        permittedInsecurePackages = [];
       };
 
       sharedOverlays = [
         nur.overlay
         self.overlay.additions
         self.overlay.modifications
-        self.overlay.vscode-extensions
       ];
 
       # Custom packages and modifications, exported as overlays
@@ -69,7 +71,7 @@
       nixosModules = import ./modules;
 
       hostDefaults = {
-        extraArgs = {inherit nix-colors;};
+        specialArgs = {inherit inputs;};
         modules = [
           ./hosts/core
           lollypops.nixosModules.lollypops
@@ -80,7 +82,6 @@
       hosts = {
         jason = {
           system = "x86_64-linux";
-          specialArgs = {inherit inputs;}; # this is the important part
           modules = [
             ./hosts/jason
             ./scripts
@@ -101,8 +102,6 @@
 
         daniel = {
           system = "x86_64-linux";
-
-          specialArgs = {inherit inputs;}; # this is the important part
           modules = [
             ./hosts/daniel
             ./scripts
@@ -123,20 +122,19 @@
 
         david = {
           system = "x86_64-linux";
-
-          specialArgs = {inherit inputs;}; # this is the important part
           modules = [
             ./hosts/david
             nixosModules.bitmagnet
             nixosModules.recyclarr
-            nixosModules.jellyseerr
+            nixosModules.qbittorrent
+            # srvos.nixosModules.server
+            # srvos.nixosModules.common
+            srvos.nixosModules.mixins-terminfo
           ];
         };
 
         envpi = {
           system = "aarch64-linux";
-
-          specialArgs = {inherit inputs;}; # this is the important part
           modules = [
             ./hosts/envpi
           ];
@@ -144,15 +142,13 @@
 
         nixpi = {
           system = "aarch64-linux";
-
-          specialArgs = {inherit inputs;}; # this is the important part
           modules = [
             ./hosts/nixpi
           ];
         };
       };
 
-      packages = nixpkgs.lib.genAttrs supportedSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
+      # packages = nixpkgs.lib.genAttrs supportedSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
 
       outputsBuilder = channels: {
         apps = {
@@ -161,10 +157,7 @@
 
         # output packages for all supported systems
         # packages = channels.nixpkgs.lib.genAttrs supportedSystems (system: import ./pkgs channels.nixpkgs.legacyPackages.${system});
-        # packages = {
-        #   inherit channels;
-        #   refind-minimal = import ./pkgs/refind-minimal nixpkgs.legacyPackages."x86_64-linux";
-        # };
+        packages = channels.nixpkgs.lib.genAttrs supportedSystems overlay.additions.qbitmanage;
 
         # dev shell with tools for working with nix configuration
         devShell = channels.nixpkgs.mkShell {
@@ -180,6 +173,7 @@
             nix-init # quick start to packaging projects
             statix # find anti-patterns in nix code
             nix-du # disk usage of nix store
+            nixos-generators
           ];
         };
       };

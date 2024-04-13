@@ -1,7 +1,11 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-{pkgs, ...}: {
+{
+  pkgs,
+  config,
+  ...
+}: {
   imports = [
     ./hardware-configuration.nix
     # ./refind.nix
@@ -314,24 +318,54 @@
   boot.binfmt.emulatedSystems = ["aarch64-linux"]; # Allow compiling for ARM on x86_64
 
   # Allow running AppImages directly from commandline
-  boot.binfmt.registrations.appimage = {
-    wrapInterpreterInShell = false;
-    interpreter = "${pkgs.appimage-run}/bin/appimage-run";
-    recognitionType = "magic";
-    offset = 0;
-    mask = ''\xff\xff\xff\xff\x00\x00\x00\x00\xff\xff\xff'';
-    magicOrExtension = ''\x7fELF....AI\x02'';
-  };
+  # programs.appimage = {
+  #   enable = true;
+  #   binfmt = true;
+  # };
 
   # Open ports in the firewall.
   networking.firewall = {
     allowedTCPPorts = [
       57621 # Spotify sync local devices
+      2049 # NFS
     ];
     allowedUDPPorts = [
       5353 # Spotfify discover Connect devices
+      2049
     ];
   };
 
   system.stateVersion = "23.05"; # Did you read the comment?
+
+  ### TESTING AREA ###
+
+  fileSystems."/export/storage" = {
+    device = "/mnt/storage/media";
+    options = ["bind"];
+  };
+
+  services.nfs.server.enable = true;
+  services.nfs.server.exports = ''
+    /export         192.168.50.0/24(rw,fsid=0,no_subtree_check)
+    /export/storage	192.168.50.0/24(rw,nohide,insecure,no_subtree_check)
+  '';
+
+  users.groups.media = {gid = 500;};
+
+  users.users = {
+    media = {
+      group = "media";
+      uid = 500;
+    };
+
+    sonarr = {
+      group = "media";
+      uid = config.ids.uids.sonarr;
+    };
+
+    qbittorrent = {
+      group = "media";
+      uid = 501;
+    };
+  };
 }

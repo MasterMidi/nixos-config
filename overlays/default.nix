@@ -8,6 +8,7 @@
     refindTheme.refind-minimal = final.callPackage ../pkgs/refind-minimal {};
     rofi-nerdy = final.callPackage ../pkgs/rofi-nerdy {};
     qbitmanage = final.callPackage ../pkgs/qbitmanage {};
+    vscode-extensions = import inputs.nix-vscode-extensions;
   };
 
   # This one contains whatever you want to overlay
@@ -17,38 +18,5 @@
     # example = prev.example.overrideAttrs (oldAttrs: rec {
     # ...
     # });
-  };
-
-  # When applied, the unstable nixpkgs set (declared in the flake inputs) will
-  # be accessible through 'pkgs.unstable'
-  # unstable-packages = final: _prev: {
-  #   unstable = import inputs.nixpkgs-unstable {
-  #     system = final.system;
-  #     config.allowUnfree = true;
-  #   };
-  # };
-  stable-packages = final: _prev: {
-    stable = import inputs.nixpkgs-stable {
-      system = final.system;
-      config.allowUnfree = true;
-    };
-  };
-
-  legacy-packages = final: _prev: {
-    legacy = import inputs.nixpkgs-legacy {
-      system = final.system;
-      config.allowUnfree = true;
-    };
-  };
-
-  chaotic-packages = final: _prev: {
-    chaotic = import inputs.nixpkgs-chaotic.nixosModules.default {
-      system = final.system;
-      config.allowUnfree = true;
-    };
-  };
-
-  vscode-extensions = final: _prev: {
-    vscode-extensions = import inputs.nix-vscode-extensions;
   };
 }

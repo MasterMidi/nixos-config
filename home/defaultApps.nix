@@ -14,6 +14,8 @@
   in
     mergeAttrs (map makePair extensions);
 in {
+  # TODO: Add more mime types
+  # TODO: Use added associations more
   xdg.mimeApps = {
     enable = true;
     defaultApplications =
@@ -42,7 +44,21 @@ in {
         extensions = [
           "pdf"
         ];
-        app = "zathura.desktop";
+        app = "org.pwmt.zathura.desktop";
+      }
+      // generateMappings {
+        type = "application";
+        extensions = [
+          "vnd.appimage"
+        ];
+        app = "appimage-run";
+      }
+      // generateMappings {
+        type = "text";
+        extensions = [
+          "plain"
+        ];
+        app = "nano";
       }
       // generateMappings {
         type = "audio";

@@ -88,7 +88,7 @@
   home.packages = with pkgs; [
     # gnome
     nautilus-open-any-terminal
-		gnome.sushi
+    gnome.sushi
     gnome.nautilus-python
     (gnome.nautilus.overrideAttrs (super: {
       buildInputs =
@@ -113,12 +113,14 @@
     thunderbird
     distrobox
     obsidian
+    leafpad
 
     # Privacy
     mullvad-vpn
     bitwarden-cli
 
     # Tools
+    xdg-utils
     envsubst
     jq
     fzf

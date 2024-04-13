@@ -1,18 +1,13 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
 {
-  config,
   pkgs,
+  lib,
   ...
-}: let
-  # mediaServerPath = builtins.toPath "${config.users.users.michael.home}/.temp/containers";
-  mediaPath = builtins.toPath "/services/media";
-in {
+}: {
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    ./recyclarr.nix
+    ./recyclarr
+    ./nginx.nix
   ];
 
   boot.kernelModules = ["coretemp"];
@@ -53,16 +48,19 @@ in {
   console.keyMap = "dk-latin1";
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
+  users.mutableUsers = lib.mkForce true;
   users.users.michael = {
     isNormalUser = true;
     description = "michael";
-    extraGroups = ["networkmanager" "wheel" "docker" "libvirtd"];
-    packages = with pkgs; [];
+    extraGroups = ["networkmanager" "wheel" "docker"];
+    packages = with pkgs; [jellyseerr];
   };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    kitty.terminfo
+    nfs-utils
     btop
   ];
 
@@ -84,7 +82,7 @@ in {
     };
   };
 
-  services.logind.lidSwitchExternalPower = "ignore"; #ignore also works
+  services.logind.lidSwitchExternalPower = "ignore";
   hardware.cpu.intel.updateMicrocode = true;
   hardware.enableAllFirmware = true;
 
@@ -110,6 +108,9 @@ in {
         3333
         5055
         9696
+
+        80
+        443
       ];
       allowedUDPPorts = [
         9020
@@ -144,8 +145,6 @@ in {
   #   };
   # };
 
-  virtualisation.libvirtd.enable = true;
-
   hardware.opengl = {
     enable = true;
     driSupport = true;
@@ -154,11 +153,7 @@ in {
 
   # Doesn't work?????
   services.jellyseerr = {
-    enable = false;
-  };
-
-  services.jellyseerr2 = {
-    enable = false;
+    enable = true;
     openFirewall = true;
   };
 
@@ -170,27 +165,60 @@ in {
 
   services.bitmagnet = {
     enable = true;
-    package = let
-      version = "0.7.5";
-      src = pkgs.fetchFromGitHub {
-        owner = "bitmagnet-io";
-        repo = "bitmagnet";
-        rev = "v${version}";
-        sha256 = "sha256-hyF0SwhMXpM7imjVmxFaX+Z6h9tiZvZszVTEdhUGvFY=";
-      };
-    in (pkgs.bitmagnet.override rec {
-      buildGoModule = args:
-        pkgs.buildGo122Module (args
-          // {
-            inherit src version;
-            vendorHash = "sha256-y9RfaAx9AQS117J3+p/Yy8Mn5In1jmZmW4IxKjeV8T8=";
-          });
-    });
+    # package = let
+    #   version = "0.7.5";
+    #   src = pkgs.fetchFromGitHub {
+    #     owner = "bitmagnet-io";
+    #     repo = "bitmagnet";
+    #     rev = "v${version}";
+    #     sha256 = "sha256-hyF0SwhMXpM7imjVmxFaX+Z6h9tiZvZszVTEdhUGvFY=";
+    #   };
+    # in (pkgs.bitmagnet.override rec {
+    #   buildGoModule = args:
+    #     pkgs.buildGo122Module (args
+    #       // {
+    #         inherit src version;
+    #         vendorHash = "sha256-y9RfaAx9AQS117J3+p/Yy8Mn5In1jmZmW4IxKjeV8T8=";
+    #       });
+    # });
     environment = {
       TMDB_API_KEY = "12492bfcbf6f881563487630c079ba96";
       POSTGRES_USER = "postgres";
       POSTGRES_PASSWORD = "postgres";
     };
+  };
+
+  services.nginx = {
+    # virtualHosts."jellyseerr.michael-graversen.dk" = {
+    #   enableACME = true;
+    #   forceSSL = true;
+    #   locations."/" = {
+    #     proxyPass = "http://localhost:5055"; # Proxy to Jellyseerr
+    #     proxyWebsockets = true; # needed if you need to use WebSocket
+    #     extraConfig = ''
+    #     '';
+    #   };
+    # };
+    # virtualHosts."jellyfin.michael-graversen.dk" = {
+    #   enableACME = true;
+    #   forceSSL = true;
+    #   locations."/" = {
+    #     proxyPass = "http://192.168.50.2:9010"; # Proxy to Jellyseerr
+    #     proxyWebsockets = true; # needed if you need to use WebSocket
+    #     extraConfig = ''
+    #     '';
+    #   };
+    # };
+  };
+
+  # security.acme = {
+  #   acceptTerms = true;
+  #   defaults.email = "home@michael-graversen.dk";
+  # };
+
+  services.tailscale = {
+    enable = true;
+    openFirewall = true;
   };
 
   virtualisation = {
@@ -227,7 +255,7 @@ in {
   };
 
   services.ollama = {
-    enable = true;
+    enable = false;
     listenAddress = "0.0.0.0:11434";
   };
 
@@ -246,5 +274,56 @@ in {
     sudo.enable = false;
     sudo.command = "sudo";
     sudo.opts = [];
+  };
+
+  ### TESTING AREA ###
+  fileSystems."/mnt/storage" = {
+    device = "192.168.50.2:/storage";
+    fsType = "nfs";
+    options = ["x-systemd.automount" "noauto" "x-systemd.after=network-online.target" "x-systemd.mount-timeout=90"];
+  };
+
+  users.groups.media = {gid = 500;};
+
+  users.users = {
+    media = {
+      group = "media";
+      uid = 500;
+      isSystemUser = true;
+      createHome = true;
+      home = "/var/lib/media";
+    };
+  };
+
+  services.sonarr = {
+    enable = true;
+    openFirewall = true;
+    # dataDir = "/var/lib/media/.config/sonarr";
+    # user = "media";
+    group = "media";
+  };
+
+  services.radarr = {
+    enable = true;
+    openFirewall = true;
+    # dataDir = "/var/lib/media/.config/radarr";
+    # user = "media";
+    group = "media";
+  };
+
+  services.bazarr = {
+    enable = true;
+    openFirewall = true;
+    # user = "media";
+    group = "media";
+  };
+
+  services.qbittorrent = {
+    enable = true;
+    openFirewall = true;
+    # dataDir = "/var/lib/media/qBittorrent";
+    # user = "media";
+    group = "media";
+    webUIAddress.port = 8080;
   };
 }

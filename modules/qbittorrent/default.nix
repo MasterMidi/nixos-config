@@ -13,6 +13,18 @@ with lib; let
     [LegalNotice]
     Accepted=true
 
+    [AutoRun]
+    enabled=true
+    program=chmod -R 775 “%F/”
+
+    [BitTorrent]
+    Session\DisableAutoTMMByDefault=false
+    Session\DisableAutoTMMTriggers\CategorySavePathChanged=false
+    Session\DisableAutoTMMTriggers\DefaultSavePathChanged=false
+    Session\QueueingSystemEnabled=false
+    Session\SubcategoriesEnabled=true
+    Session\TempPathEnabled=true
+
     [Network]
     Cookies=@Invalid()
 
@@ -36,26 +48,15 @@ with lib; let
     };
   };
 
+  # TODO: replace with tmpfile rule
   initializeAndRun = pkgs.writers.writeBash "initializeAndRun-qBittorrent-config" ''
     set -efu
 
     mkdir -p ${cfg.configDir}
 
     if [ ! -f ${cfg.configDir}/qBittorrent.conf ]; then
-    cat >${cfg.configDir}/qBittorrent.conf <<EOL
-    [LegalNotice]
-    Accepted=true
-
-    [Network]
-    Cookies=@Invalid()
-
-    [Preferences]
-    Connection\PortRangeMin=62876
-    Queueing\QueueingEnabled=false
-    EOL
+    	cp ${qBittorrentConf} ${cfg.configDir}/qBittorrent.conf
     fi
-
-    ${cfg.package}/bin/qbittorrent-nox
   '';
 in {
   options.services.qbittorrent = {
@@ -118,18 +119,6 @@ in {
         The path where the settings will exist.
       '';
       default = cfg.dataDir + "/.config/qBittorrent";
-      defaultText = literalDocBook ''
-        [LegalNotice]
-        Accepted=true
-
-        [Network]
-        Cookies=@Invalid()
-
-        [Preferences]
-        Connection\PortRangeMin=62876
-        Queueing\QueueingEnabled=false
-        WebUI\Port=${cfg.webUIAddress.port}
-      '';
     };
   };
 
@@ -155,6 +144,7 @@ in {
     };
 
     systemd.tmpfiles.rules = [
+      # "f '${cfg.dataDir}/qBittorrent.conf' 0755 ${cfg.user} ${cfg.group} - ${qBittorrentConf}"
       # "d '${cfg.dataDir}' 0700 ${cfg.user} ${cfg.group} - -"
       # "d '${cfg.dataDir}/.cache/qBittorrent' 0755 ${cfg.user} ${cfg.group} - -"
       # "d '${cfg.dataDir}/.config/qBittorrent' 0755 ${cfg.user} ${cfg.group} - -"
@@ -174,21 +164,23 @@ in {
           StateDirectory = "qBittorrent";
           SyslogIdentifier = "qBittorrent";
           ExecStart = "${cfg.package}/bin/qbittorrent-nox --webui-port=${toString cfg.webUIAddress.port}";
-          ProtectHome = true;
-          ProtectSystem = "strict";
-          PrivateTmp = true;
-          PrivateDevices = true;
-          ProtectHostname = true;
-          ProtectClock = true;
-          ProtectKernelTunables = true;
-          ProtectKernelModules = true;
-          ProtectKernelLogs = true;
-          ProtectControlGroups = true;
-          NoNewPrivileges = true;
-          RestrictRealtime = true;
-          RestrictSUIDSGID = true;
-          RemoveIPC = true;
-          PrivateMounts = true;
+          ExecStartPre = initializeAndRun;
+          # BindPaths = ["/var/lib/qBittorrent/.config/qBittorrent.conf:${qBittorrentConf}"];
+          # ProtectHome = true;
+          # ProtectSystem = "strict";
+          # PrivateTmp = true;
+          # PrivateDevices = true;
+          # ProtectHostname = true;
+          # ProtectClock = true;
+          # ProtectKernelTunables = true;
+          # ProtectKernelModules = true;
+          # ProtectKernelLogs = true;
+          # ProtectControlGroups = true;
+          # NoNewPrivileges = true;
+          # RestrictRealtime = true;
+          # RestrictSUIDSGID = true;
+          # RemoveIPC = true;
+          # PrivateMounts = true;
         };
       };
     };

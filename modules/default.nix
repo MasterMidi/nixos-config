@@ -4,4 +4,5 @@
   refind = import ./refind;
   recyclarr = import ./recyclarr;
   jellyseerr = import ./jellyseerr;
+  qbittorrent = import ./qbittorrent;
 }

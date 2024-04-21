@@ -10,15 +10,16 @@
     ./eza.nix
     ./firefox.nix
     ./git.nix
+    ./hypridle.nix
     ./hyprlock.nix
     ./kitty.nix
+    ./lazygit.nix
     ./mangohud.nix
     ./mpv
     ./ripgrep.nix
     ./rofi
     ./rbw.nix
     ./starship.nix
-    ./swaylock.nix
     ./tmux.nix
     ./vscodium.nix
     ./waybar
@@ -26,6 +27,7 @@
     ./wlogout
     ./yazi.nix
     ./yt-dlp.nix
+    ./youtube-music.nix
     ./zathura.nix
     ./zoxide.nix
   ];

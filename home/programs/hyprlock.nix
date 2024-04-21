@@ -32,7 +32,7 @@ in {
 
     backgrounds = [
       {
-        path = "${config.xdg.userDirs.pictures}/wallpapers/anime girl closeup whitehair blueeyes.png"; # only pngs are supported
+        path = "${config.xdg.userDirs.pictures}/wallpapers/fuck you nvidia.png"; # only pngs are supported
         blur_size = 5;
         blur_passes = 3;
       }
@@ -40,7 +40,7 @@ in {
 
     input-fields = [
       {
-        monitor = "DP-1";
+        monitor = "eDP-1";
 
         size = {
           width = 300;

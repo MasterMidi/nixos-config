@@ -1,8 +1,15 @@
-{pkgs, ...}: let
-  config = ".config/hypr";
+{
+  pkgs,
+  config,
+  ...
+}: let
+  configPath = ".config/hypr";
+
+  rgb = color: "rgb(${color})";
+  rgba = color: alpha: "rgba(${color}${alpha})";
 in {
   home.file = {
-    "${config}/scripts".source = ./scripts;
+    "${configPath}/scripts".source = ./scripts;
   };
 
   wayland.windowManager.hyprland = {
@@ -10,11 +17,11 @@ in {
 
     plugins = with pkgs; [];
 
-    settings =
+    settings = with config.colorScheme.palette;
       {
         exec-once = [
           "waybar"
-          "sleep 2 && swww init"
+          "sleep 1 && swww init"
           "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
           "wl-paste --watch cliphist store"
         ];
@@ -24,7 +31,7 @@ in {
           # "HDMI-A-2, 1920x1080@60, 0x230, 0.93" # matches the dpi, but creates a gap around apps and poor font rendering
           "HDMI-A-2, 1920x1080@60, 0x275, 1"
           "DP-1, 3440x1440@144, 1920x0, 1"
-          # "eDP-1, 2240x1400@60, 0x0, 1"
+          "eDP-1, 2240x1400@60, 0x0, 1"
         ];
 
         xwayland = {
@@ -58,8 +65,8 @@ in {
           gaps_in = 5;
           gaps_out = 10;
           border_size = 2;
-          "col.active_border" = "rgba(33ccffee) rgba(00ff99ee) 45deg";
-          "col.inactive_border" = "rgba(595959aa)";
+          "col.active_border" = "${rgb base0D} ${rgb base0B} 45deg";
+          "col.inactive_border" = "${rgb base02}";
           layout = "dwindle";
 
           # Please see https://wiki.hyprland.org/Configuring/Tearing/ before you turn this on

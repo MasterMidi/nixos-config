@@ -18,16 +18,6 @@
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-  nix.settings = {
-    substituters = [
-      "https://hyprland.cachix.org"
-    ];
-
-    trusted-public-keys = [
-      "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
-    ];
-  };
-
   programs.hyprland = {
     enable = true;
   };
@@ -129,29 +119,33 @@
     themePackages = [(pkgs.adi1090x-plymouth-themes.override {selected_themes = ["angular_alt"];})];
   };
 
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    onlyoffice-bin
     polkit_gnome
     libsecret
     (git.override {withLibsecret = true;})
+    git-credential-manager
   ];
 
   services.tailscale.enable = true;
 
   services.mullvad-vpn.enable = true;
 
-  # programs.gnupg.agent.enable = true;
-  # programs.gnupg.agent.settings = {
-  #   # pinentry-program = "${pkgs.pinentry-rofi}/bin/pinentry-rofi";
-  # };
-  # # programs.gnupg.agent.pinentryFlavor = "pinentry-rofi";
-  # programs.gnupg.agent.pinentryFlavor = "tty";
+  programs = {
+    seahorse.enable = true;
+    dconf.enable = true;
+  };
 
+  programs.mtr.enable = true;
+  programs.gnupg.agent = {
+    enable = true;
+    enableSSHSupport = true;
+    # pinentryPackage = pkgs.pinentry-gnome3;
+  };
   services.dbus.packages = [pkgs.gcr];
+  services.gnome.gnome-keyring.enable = true;
 
   virtualisation.docker = {
     enable = true;

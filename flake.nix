@@ -32,7 +32,7 @@
     # Theming and customization
     nix-colors.url = "github:misterio77/nix-colors"; # Theming in nix configuration
     betterfox = {
-      url = "github:yokoffing/Betterfox"; # Firefox settings
+      url = "github:yokoffing/Betterfox"; # Firefox settings    nix-inspect.url = "github:bluskript/nix-inspect";
       flake = false;
     };
     firefox-gnome-theme = {

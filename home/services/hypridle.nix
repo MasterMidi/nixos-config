@@ -14,7 +14,7 @@ in {
     afterSleepCmd = "hyprctl dispatch dpms on";
     listeners = [
       {
-        timeout = 30; # 2.5min.
+        timeout = 250; # 2.5min.
         onTimeout = "${brightnessctl} -s set 10"; # set monitor backlight to minimum, avoid 0 on OLED monitor.
         onResume = "${brightnessctl} -r"; # monitor backlight restore.
       }

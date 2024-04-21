@@ -25,7 +25,7 @@ SIGNAL_STRENGTH_4="1234"
 VPN_PATTERN='(wireguard|vpn)'
 function initialization() {
 	source "$DIR/rofi-network-manager.conf" || source "${XDG_CONFIG_HOME:-$HOME/.config}/rofi/rofi-network-manager.conf"
-	{ [[ -f "$DIR/rofi-network-manager.rasi" ]] && RASI_DIR="$DIR/rofi-network-manager.rasi"; } || { [[ -f "${XDG_CONFIG_HOME:-$HOME/.config}/rofi/rofi-network-manager.rasi" ]] && RASI_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/rofi/rofi-network-manager.rasi"; } || exit
+	{ [[ -f "$DIR/theme.rasi" ]] && RASI_DIR="$DIR/theme.rasi"; } || { [[ -f "${XDG_CONFIG_HOME:-$HOME/.config}/rofi/theme.rasi" ]] && RASI_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/rofi/theme.rasi"; } || exit
 	for i in "${WIRELESS_INTERFACES[@]}"; do WIRELESS_INTERFACES_PRODUCT+=("$(nmcli -f general.product device show "$i" | awk '{print $2}')"); done
 	for i in "${WIRED_INTERFACES[@]}"; do WIRED_INTERFACES_PRODUCT+=("$(nmcli -f general.product device show "$i" | awk '{print $2}')"); done
 	wireless_interface_state && ethernet_interface_state
@@ -62,7 +62,7 @@ function rofi_menu() {
 	selection_action
 }
 function rofi_cmd() {
-	{ [[ -n "${1}" ]] && WIDTH=$(echo -e "$1" | awk '{print length}' | sort -n | tail -1) && ((WIDTH += $2)) && ((WIDTH = WIDTH / 2)); } || { ((WIDTH = $2 / 2)); }
+	{ [[ -n "${1}" ]] && WIDTH=$(echo -e "$1" | awk '{print length}' | sort -n | tail -1) && ((WIDTH += $2)) && ((WIDTH = WIDTH / 1)); } || { ((WIDTH = $2 / 2)); }
 	rofi -dmenu -i -location "$LOCATION" -yoffset "$Y_AXIS" -xoffset "$X_AXIS" $3 -theme "$RASI_DIR" -theme-str 'window{width: '"$WIDTH"'em;}textbox-prompt-colon{str:"'"$PROMPT"':";}'"$4"''
 }
 function change_wireless_interface() {

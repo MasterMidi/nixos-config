@@ -23,7 +23,7 @@
           modules-right = [
             "custom/weather"
             "temperature"
-            "disk#1"
+            "battery"
             "disk#2"
             "disk#3"
             "memory"

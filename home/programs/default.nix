@@ -10,7 +10,6 @@
     ./eza.nix
     ./firefox.nix
     ./git.nix
-    ./hypridle.nix
     ./hyprlock.nix
     ./kitty.nix
     ./lazygit.nix

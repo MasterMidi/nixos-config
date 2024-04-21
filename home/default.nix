@@ -2,12 +2,12 @@
   config,
   pkgs,
   lib,
-  nix-colors,
+  inputs,
   ...
 }: {
   # TODO setup nixd autocomplete
   imports = [
-    nix-colors.homeManagerModules.default
+    inputs.nix-colors.homeManagerModules.default
 
     ./wm/hyprland
     ./theme
@@ -24,7 +24,7 @@
 
   programs.home-manager.enable = false;
 
-  colorScheme = nix-colors.colorSchemes.gruvbox-material-dark-medium;
+  colorScheme = inputs.nix-colors.colorSchemes.gruvbox-material-dark-medium;
 
   home.sessionVariables = {
     XDG_CACHE_HOME = "$HOME/.cache";
@@ -82,6 +82,12 @@
     startupNotify = true;
     settings = {
       StartupWMClass = "youtube-music";
+    };
+  };
+
+  lib.hm.gvariant.dconf.settings = {
+    "org/gnome/desktop/interface" = {
+      cursor-theme = "graphite-light";
     };
   };
 

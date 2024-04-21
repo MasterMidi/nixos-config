@@ -1,13 +1,27 @@
 const myLabel = Widget.Label({
-	label: 'some example content',
+	label: 'some example content test',
 })
 
-const myBar = Widget.Window({
-	name: 'bar',
-	anchor: ['top', 'left', 'right'],
-	child: myLabel,
-})
+function Bar(monitor = 0) {
+	const myLabel = Widget.Label({
+		label: 'some example content',
+	})
+
+	Utils.interval(1000, () => {
+		myLabel.label = Utils.exec('date')
+	})
+
+	return Widget.Window({
+		monitor,
+		name: `bar${monitor}`,
+		anchor: ['top', 'left', 'right'],
+		child: myLabel,
+	})
+}
 
 App.config({
-	windows: [myBar]
+	windows: [
+		Bar(0),
+		Bar(1)
+	]
 })

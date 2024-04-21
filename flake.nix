@@ -41,7 +41,6 @@
     nixos-hardware,
     lollypops,
     agenix,
-    nix-colors,
     srvos,
     ...
   } @ inputs: let
@@ -95,7 +94,7 @@
               home-manager.users.michael = import ./home;
 
               # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix
-              home-manager.extraSpecialArgs = {inherit inputs nix-colors;};
+              home-manager.extraSpecialArgs = {inherit inputs ;};
             }
           ];
         };
@@ -115,7 +114,7 @@
               home-manager.users.michael = import ./home;
 
               # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix
-              home-manager.extraSpecialArgs = {inherit inputs nix-colors;};
+              home-manager.extraSpecialArgs = {inherit inputs ;};
             }
           ];
         };

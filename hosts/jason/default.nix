@@ -4,6 +4,7 @@
 {
   pkgs,
   config,
+  lib,
   ...
 }: {
   imports = [
@@ -101,6 +102,18 @@
     enable = true;
     autoSuspend = false;
   };
+  programs.dconf.enable = true;
+  programs.dconf.profiles = {
+    gdm.databases = [
+      {
+        settings = {
+          "org/gnome/desktop/interface" = {
+            cursor-theme = config.home-manager.users.michael.home.pointerCursor.name;
+          };
+        };
+      }
+    ];
+  };
   # services.xserver.desktopManager.gnome.enable = true;
 
   systemd.tmpfiles.rules = [
@@ -181,10 +194,10 @@
 
   # Disable the GNOME3/GDM auto-suspend feature that cannot be disabled in GUI!
   # If no user is logged in, the machine will power down after 20 minutes.
-  # systemd.targets.sleep.enable = false;
-  # systemd.targets.suspend.enable = false;
-  # systemd.targets.hibernate.enable = false;
-  # systemd.targets.hybrid-sleep.enable = false;
+  systemd.targets.sleep.enable = false;
+  systemd.targets.suspend.enable = false;
+  systemd.targets.hibernate.enable = false;
+  systemd.targets.hybrid-sleep.enable = false;
 
   virtualisation.libvirtd.enable = true;
 
@@ -267,6 +280,7 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    graphite-cursors
     qbitmanage
     onlyoffice-bin
     docker-compose
@@ -297,7 +311,7 @@
   services.gnome.gnome-keyring.enable = true;
   programs = {
     seahorse.enable = true;
-    dconf.enable = true;
+    # dconf.enable = lib.mkDefault true;
   };
 
   services.fstrim.enable = true;

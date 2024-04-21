@@ -40,10 +40,10 @@
       };
     };
 
-    theme = {
-      name = "materia-dark";
-      package = pkgs.materia-theme;
-    };
+    # theme = {
+    #   name = "MateriaDark";
+    #   package = pkgs.materia-theme;
+    # };
   };
 
   qt = {

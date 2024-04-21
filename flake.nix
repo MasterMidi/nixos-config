@@ -23,10 +23,22 @@
 
     # Individual program packages
     hyprlock.url = "github:hyprwm/hyprlock";
+    hypridle = {
+      url = "github:hyprwm/hypridle";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     ags.url = "github:Aylur/ags";
 
-    # Theming
+    # Theming and customization
     nix-colors.url = "github:misterio77/nix-colors"; # Theming in nix configuration
+    betterfox = {
+      url = "github:yokoffing/Betterfox"; # Firefox settings    nix-inspect.url = "github:bluskript/nix-inspect";
+      flake = false;
+    };
+    firefox-gnome-theme = {
+      url = "github:rafaelmardojai/firefox-gnome-theme";
+      flake = false;
+    };
 
     # nix/flake utilities
     utils.url = "github:gytis-ivaskevicius/flake-utils-plus";
@@ -151,7 +163,7 @@
 
       outputsBuilder = channels: {
         apps = {
-          default = lollypops.apps."x86_64-linux".default {configFlake = self;};
+          default = lollypops.apps.${nixpkgs.stdenv.hostPlatform.system}.default {configFlake = self;};
         };
 
         # output packages for all supported systems

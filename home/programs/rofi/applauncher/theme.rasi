@@ -19,6 +19,10 @@ configuration {
 	display-ssh: " SSH";
 	drun-display-format: "{name}";
 	window-format: "{w} · {c} · {t}";
+
+	matching: "fuzzy";
+levenshtein-sort: false;
+sort: true;
 }
 
 /*****----- Global Properties -----*****/

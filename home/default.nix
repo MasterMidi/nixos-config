@@ -96,7 +96,6 @@
     gnome3.gnome-tweaks
 
     # Productivity
-    thunderbird
     distrobox
     obsidian
     leafpad

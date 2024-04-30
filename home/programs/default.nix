@@ -19,6 +19,7 @@
     ./rofi
     ./rbw.nix
     ./starship.nix
+    ./thunderbird.nix
     ./tmux.nix
     ./vscodium.nix
     ./waybar

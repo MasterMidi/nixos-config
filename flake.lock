@@ -661,6 +661,7 @@
         "nixpkgs": "nixpkgs_9",
         "nur": "nur",
         "srvos": "srvos",
+        "thunderbird-gnome-theme": "thunderbird-gnome-theme",
         "utils": "utils"
       }
     },
@@ -848,6 +849,22 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default",
+        "type": "github"
+      }
+    },
+    "thunderbird-gnome-theme": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1710774977,
+        "narHash": "sha256-nQBz2PW3YF3+RTflPzDoAcs6vH1PTozESIYUGAwvSdA=",
+        "owner": "rafaelmardojai",
+        "repo": "thunderbird-gnome-theme",
+        "rev": "65d5c03fc9172d549a3ea72fd366d544981a002b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "rafaelmardojai",
+        "repo": "thunderbird-gnome-theme",
         "type": "github"
       }
     },

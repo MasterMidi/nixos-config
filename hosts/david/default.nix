@@ -74,13 +74,6 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
-  networking.wireless.enable = false;
-  networking.wireless.networks = {
-    "Asus RT-AX86U" = {
-      psk = "3zyn2dY&Gp";
-      #pskRaw="f5e51f4b158ceb87a44bc82d2ade090948de95c90d59689d3fe8c7427cb877d2";
-    };
-  };
 
   services.logind.lidSwitchExternalPower = "ignore";
   hardware.cpu.intel.updateMicrocode = true;
@@ -262,7 +255,7 @@
   lollypops.deployment = {
     local-evaluation = true;
     # Where on the remote the configuration (system flake) is placed
-    config-dir = "/etc/nixos";
+    config-dir = "/etc/nixos/";
 
     # SSH connection parameters
     ssh.host = "192.168.50.71";

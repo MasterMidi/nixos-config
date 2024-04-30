@@ -8,7 +8,7 @@ in {
   imports = [inputs.hypridle.homeManagerModules.default];
 
   services.hypridle = {
-    enable = true;
+    enable = false;
     lockCmd = "pidof hyprlock || hyprlock";
     beforeSleepCmd = "loginctl lock-session";
     afterSleepCmd = "hyprctl dispatch dpms on";

@@ -12,6 +12,7 @@
     # ./refind.nix
     ./containers
     ./gaming.nix
+    ./vfio.nix
   ];
 
   nix = {
@@ -280,6 +281,7 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    lact
     graphite-cursors
     qbitmanage
     onlyoffice-bin
@@ -352,6 +354,12 @@
   system.stateVersion = "23.05"; # Did you read the comment?
 
   ### TESTING AREA ###
+
+  vfio.enable = true;
+
+  # services.qbitmanage = {
+
+  # };
 
   fileSystems."/export/storage" = {
     device = "/mnt/storage/media";

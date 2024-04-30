@@ -23,6 +23,7 @@
     #   "nixpkgs=/etc/nix/flake-channels/nixpkgs"
     #   "home-manager=/etc/nix/flake-channels/home-manager"
     # ];
+    channel.enable = false;
 
     gc = {
       automatic = true;
@@ -38,17 +39,10 @@
     package = pkgs.nixUnstable; # use the newest vwersion of the nix package manager
 
     # pin the registry to avoid downloading and evaling a new nixpkgs version every time using 'nix shell nixpkgs#...'
-    # registry = lib.mapAttrs (_: v: {flake = v;}) inputs;
-    # daemonCPUSchedPolicy = lib.mkDefault "idle";
-    # daemonIOSchedClass = lib.mkDefault "idle";
-    # daemonIOSchedPriority = lib.mkDefault 7;
-
-    # Free up to 1GiB whenever there is less than 100MiB left.
-    extraOptions = ''
-      keep-outputs = true
-      warn-dirty = false
-      keep-derivations = true
-    '';
+    registry = lib.mapAttrs (_: v: {flake = v;}) inputs;
+    daemonCPUSchedPolicy = lib.mkDefault "idle";
+    daemonIOSchedClass = lib.mkDefault "idle";
+    daemonIOSchedPriority = lib.mkDefault 7;
 
     settings = {
       experimental-features =
@@ -59,7 +53,12 @@
         ++ lib.optional (lib.versionOlder (lib.versions.majorMinor config.nix.package.version) "2.18")
         # allows to drop references from filesystem images
         "discard-references";
+      keep-outputs = true;
+      warn-dirty = false;
+      keep-derivations = true;
+      # use-xdg-base-directories = true
 
+      # Free up to 1GiB whenever there is less than 100MiB left.
       min-free = 512 * 1024 * 1024;
       max-free = 3000 * 1024 * 1024;
 

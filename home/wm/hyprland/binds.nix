@@ -14,6 +14,7 @@ in {
     "${mainMod}, W, exec, rofi-wall"
     "${mainMod}, SPACE, exec, pkill rofi || rofi -show drun"
     "${mainMod} CTRL SHIFT, N, exec, pkill rofi-network || rofi-network"
+    "${mainMod} CTRL SHIFT, B, exec, pkill rofi-bluetooth || rofi-bluetooth"
     "${mainMod} ALT, SPACE, exec, rofi -show run"
     "${mainMod} SHIFT, SPACE, exec, rofi-rbw"
     "${mainMod} CTRL, B, exec, rofi-bluetooth"

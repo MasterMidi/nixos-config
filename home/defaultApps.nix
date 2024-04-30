@@ -17,7 +17,7 @@ in {
   # TODO: Add more mime types
   # TODO: Use added associations more
   xdg.mimeApps = {
-    enable = true;
+    enable = false;
     defaultApplications =
       generateMappings {
         type = "application";
@@ -115,6 +115,11 @@ in {
           "mp4"
         ];
         app = videoPlayer;
+      }
+      // generateMappings {
+        type = "text";
+        extensions = ["plain"];
+        app = "leafpad.desktop";
       }
       // generateMappings {
         type = "x-scheme-handler";

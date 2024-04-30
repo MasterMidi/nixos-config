@@ -16,6 +16,7 @@
     ./services
     ./keyboard
     ./defaultApps.nix
+    ./nix.nix
   ];
 
   home.username = "michael";
@@ -25,7 +26,8 @@
   programs.home-manager.enable = false;
 
   colorScheme = inputs.nix-colors.colorSchemes.gruvbox-material-dark-medium;
-  colorScheme = inputs.nix-colors.colorSchemes.gruvbox-material-dark-medium;
+
+  fonts.fontconfig.enable = true;
 
   home.sessionVariables = {
     XDG_CACHE_HOME = "$HOME/.cache";

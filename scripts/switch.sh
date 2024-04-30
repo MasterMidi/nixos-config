@@ -9,14 +9,14 @@ fi
 
 echo "${bold}⚗️  Testing Configuration ${normal}"
 case "$OSTYPE" in
-linux*) nixos-rebuild dry-build ;;
+linux*) nixos-rebuild dry-build --impure ;;
 *) echo "unknown: $OSTYPE" ;;
 esac
 
 if [ $? -eq 0 ]; then
 	echo "🔨 Rebuilding Configuration…"
 	case "$OSTYPE" in
-	linux*) nixos-rebuild switch ;;
+	linux*) nixos-rebuild switch --impure ;;
 	*) echo "unknown: $OSTYPE" ;;
 	esac
 	if [ $? -eq 0 ]; then

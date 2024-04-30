@@ -88,6 +88,9 @@ with lib; let
       description = "Rasi literal string";
     };
 in {
+  imports = [
+    ./wallpaper-switcher
+  ];
   programs.rofi = {
     enable = true;
     package = pkgs.rofi-wayland;
@@ -96,58 +99,22 @@ in {
       # rofi-emoji
       # rofi-nerdy
     ];
-    terminal = "kitty";
+    terminal = config.home.sessionVariables.TERM_PROGRAM;
     font = "MesloLGS Nerd Font 10";
     # theme = "/theme.rasi";
-    theme = {
-      configuration = {
-        modi = "drun,run,ssh";
-        show-icons = true;
-        icon-theme = "MoreWaita";
-        display-drun = " Apps";
-        display-run = " Run";
-        display-filebrowser = " Files";
-        display-window = " Windows";
-        display-ssh = " SSH";
-        drun-display-format = "{name}";
-        window-format = "{w} · {c} · {t}";
-        matching = "fuzzy";
-        levenshtein-sort = false;
-        sort = true;
-      };
-
-      "*" = with config.colorScheme.palette; {
-        background = mkLiteral "#${base00}";
-        background-alt = mkLiteral "#${base01}";
-        foreground = mkLiteral "#${base07}";
-        selected = mkLiteral "#${base07}";
-        active = mkLiteral "#${base07}";
-        urgent = mkLiteral "#${base08}";
-
-        border-colour = "var(selected)";
-        handle-colour = "var(selected)";
-        background-colour = "var(background)";
-        foreground-colour = "var(foreground)";
-        alternate-background = "var(background-alt)";
-        normal-background = "var(background)";
-        normal-foreground = "var(foreground)";
-        urgent-background = "var(urgent)";
-        urgent-foreground = "var(background)";
-        active-background = "var(active)";
-        active-foreground = "var(background)";
-        selected-normal-background = "var(selected)";
-        selected-normal-foreground = "var(background)";
-        selected-urgent-background = "var(active)";
-        selected-urgent-foreground = "var(background)";
-        selected-active-background = "var(urgent)";
-        selected-active-foreground = "var(background)";
-        alternate-normal-background = "var(background)";
-        alternate-normal-foreground = "var(foreground)";
-        alternate-urgent-background = "var(urgent)";
-        alternate-urgent-foreground = "var(background)";
-        alternate-active-background = "var(active)";
-        alternate-active-foreground = "var(background)";
-      };
+    theme = import ./theme.nix {inherit config;};
+    extraConfig = {
+      modi = "drun,run,ssh";
+      show-icons = true;
+      icon-theme = config.gtk.iconTheme.name;
+      display-drun = " Apps";
+      display-run = " Run";
+      display-ssh = " SSH";
+      drun-display-format = "{name}";
+      window-format = "{w} · {c} · {t}";
+      matching = "fuzzy";
+      levenshtein-sort = false;
+      sort = true;
     };
   };
 
@@ -176,18 +143,8 @@ in {
   ];
 
   xdg.configFile = {
-    "rofi/colors.rasi".text = toRasi {
-      "*" = with config.colorScheme.palette; {
-        background = mkLiteral "#${base00}";
-        background-alt = mkLiteral "#${base01}";
-        foreground = mkLiteral "#${base07}";
-        selected = mkLiteral "#${base07}";
-        active = mkLiteral "#${base07}";
-        urgent = mkLiteral "#${base08}";
-      };
-    };
-    # "rofi/theme.rasi".source = ./applauncher/theme.rasi;
-    "rofi/wallpaper-switcher.rasi".source = ./wallpaper-switcher/theme.rasi;
+    "rofi/colors.rasi".text = toRasi (import ./colors.nix {inherit config;});
+
     "rofi/gamelauncher.rasi".source = ./gamelauncher/theme.rasi;
     "rofi/rofi-network-manager.rasi".source = ./rofi-network-manager/rofi-network-manager.rasi;
     "rofi/rofi-network-manager.conf".source = ./rofi-network-manager/rofi-network-manager.conf;

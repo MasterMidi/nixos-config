@@ -28,6 +28,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     ags.url = "github:Aylur/ags";
+    caligula.url = "github:ifd3f/caligula";
 
     # Theming and customization
     nix-colors.url = "github:misterio77/nix-colors"; # Theming in nix configuration
@@ -106,7 +107,7 @@
               home-manager.users.michael = import ./home;
 
               # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix
-              home-manager.extraSpecialArgs = {inherit inputs ;};
+              home-manager.extraSpecialArgs = {inherit inputs;};
             }
           ];
         };
@@ -126,7 +127,7 @@
               home-manager.users.michael = import ./home;
 
               # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix
-              home-manager.extraSpecialArgs = {inherit inputs ;};
+              home-manager.extraSpecialArgs = {inherit inputs;};
             }
           ];
         };
@@ -138,7 +139,7 @@
             nixosModules.bitmagnet
             nixosModules.recyclarr
             nixosModules.qbittorrent
-            # srvos.nixosModules.server
+            srvos.nixosModules.server
             # srvos.nixosModules.common
             srvos.nixosModules.mixins-terminfo
           ];
@@ -159,34 +160,19 @@
         };
       };
 
-      # packages = nixpkgs.lib.genAttrs supportedSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
+      packages = nixpkgs.lib.genAttrs supportedSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
 
       outputsBuilder = channels: {
         apps = {
-          default = lollypops.apps.${nixpkgs.stdenv.hostPlatform.system}.default {configFlake = self;};
+          default = lollypops.apps.${channels.nixpkgs.stdenv.hostPlatform.system}.default {configFlake = self;};
         };
 
         # output packages for all supported systems
         # packages = channels.nixpkgs.lib.genAttrs supportedSystems (system: import ./pkgs channels.nixpkgs.legacyPackages.${system});
-        packages = channels.nixpkgs.lib.genAttrs supportedSystems overlay.additions.qbitmanage;
+        # packages = channels.nixpkgs.lib.genAttrs supportedSystems overlay.additions.qbitmanage;
 
         # dev shell with tools for working with nix configuration
-        devShell = channels.nixpkgs.mkShell {
-          name = "nixos-config";
-          buildInputs = with channels.nixpkgs; [
-            nerdfix
-            nurl
-            nix-prefetch
-            nix-tree
-            nix-output-monitor
-            nix-index
-            nix-melt # view flake.lock files
-            nix-init # quick start to packaging projects
-            statix # find anti-patterns in nix code
-            nix-du # disk usage of nix store
-            nixos-generators
-          ];
-        };
+        devShell = import ./shell.nix {pkgs = channels.nixpkgs;};
       };
     };
 }

@@ -1,9 +1,9 @@
 {
-  python39Packages,
+  python312Packages,
   fetchFromGitHub,
   lib,
 }:
-python39Packages.buildPythonApplication rec {
+python312Packages.buildPythonPackage rec {
   name = "qbitmanage";
   version = "4.0.8";
   src = fetchFromGitHub {
@@ -13,7 +13,7 @@ python39Packages.buildPythonApplication rec {
     sha256 = "sha256-llJUBm3O+LDv6euuuNojTFTkR8BmmCnffkmunYL1+0s=";
   };
 
-  dependencies = with python39Packages; [
+  propagatedBuildInputs = with python312Packages; [
     requests
     retrying
     schedule
@@ -23,16 +23,19 @@ python39Packages.buildPythonApplication rec {
     qbittorrent-api
   ];
 
-	postInstall = ''
-    mkdir -p $out/bin
-    cp qbit_manage.py $out/bin/qbitmanage
-    chmod +x $out/bin/qbitmanage
-  '';
+  doCheck = false;
+
+  # postInstall = ''
+  #   mkdir -p $out/bin
+  #   cp qbit_manage.py $out/bin/qbitmanage
+  #   chmod +x $out/bin/qbitmanage
+  # '';
 
   meta = with lib; {
-    homepage = https://github.com/StuffAnThings/qbit_manage;
+    homepage = "https://github.com/StuffAnThings/qbit_manage";
     description = "A tool to manage torrent and automate qBittorrent";
     license = licenses.mit;
+    mainProgram = "qbitmanage";
     maintainers = with maintainers; [];
   };
 }

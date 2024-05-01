@@ -14,5 +14,6 @@ pkgs.mkShell {
     statix # find anti-patterns in nix code
     nix-du # disk usage of nix store
     nixos-generators
+    nix-inspect
   ];
 }

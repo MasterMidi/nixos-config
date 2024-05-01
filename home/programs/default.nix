@@ -16,6 +16,7 @@
     ./mangohud.nix
     ./mpv
     ./ripgrep.nix
+    ./spotify.nix
     ./rofi
     ./rbw.nix
     ./starship.nix

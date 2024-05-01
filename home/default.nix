@@ -140,7 +140,6 @@
     ffmpeg-full
     rhythmbox
     vlc
-    spotify
     spotify-player
     sunshine # https://docs.lizardbyte.dev/projects/sunshine/en/latest/about/usage.html#setup
     g4music

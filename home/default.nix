@@ -94,6 +94,7 @@
     neofetch
     # haskellPackages.kmonad
     gnome3.gnome-tweaks
+    hyprcursor
 
     # Productivity
     distrobox

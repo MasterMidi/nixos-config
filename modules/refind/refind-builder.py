@@ -166,6 +166,7 @@ def main():
                     "@gnugrep@/bin",
                     "@gnused@/bin",
                     "@gawk@/bin",
+										"@findutils@/bin",
                 ])}
             )
         else:

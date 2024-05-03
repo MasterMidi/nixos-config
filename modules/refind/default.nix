@@ -35,20 +35,20 @@ with lib; let
     concatStringsSep "\n" filteredParts;
 
   copyThemeScript = pkgs.writeScriptBin "copy-refind-theme" ''
-      #!${pkgs.stdenv.shell}
-      set -euo pipefail
-      themeSource=${theme}
-      themeDestination=${installPath}/themes/${theme.pname}
+    #!${pkgs.stdenv.shell}
+    set -euo pipefail
+    themeSource=${theme}
+    themeDestination=${installPath}/themes/${theme.pname}
 
     if [ -d "$themeDestination" ]; then
-        rm -rf "$themeDestination"
-      fi
+    	rm -rf "$themeDestination"
+    fi
 
-      # Ensure the destination directory exists
-      mkdir -p $themeDestination
+    # Ensure the destination directory exists
+    mkdir -p $themeDestination
 
-      # Copy the theme files
-      cp -r $themeSource/* $themeDestination/
+    # Copy the theme files
+    cp -r $themeSource/* $themeDestination/
   '';
 
   refindBuilder = pkgs.substituteAll {
@@ -77,7 +77,7 @@ with lib; let
       then cfg.extraIcons
       else "";
 
-    inherit (pkgs) refind efibootmgr coreutils gnugrep gnused gawk utillinux;
+    inherit (pkgs) refind efibootmgr coreutils gnugrep gnused gawk utillinux findutils;
 
     inherit (efi) efiSysMountPoint canTouchEfiVariables;
   };

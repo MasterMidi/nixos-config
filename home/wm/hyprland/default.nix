@@ -31,6 +31,7 @@ in {
           # "HDMI-A-2, 1920x1080@60, 0x230, 0.93" # matches the dpi, but creates a gap around apps and poor font rendering
           "HDMI-A-2, 1920x1080@60, 0x275, 1"
           "DP-1, 3440x1440@144, 1920x0, 1"
+          "DP-3, 3440x1440@144, 1920x0, 1"
           "eDP-1, 2240x1400@60, 0x0, 1"
         ];
 

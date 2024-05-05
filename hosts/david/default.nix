@@ -7,7 +7,7 @@
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ./recyclarr
-    ./nginx.nix
+    # ./nginx.nix
   ];
 
   boot.kernelModules = ["coretemp"];
@@ -96,6 +96,7 @@
     firewall = {
       enable = true;
       allowedTCPPorts = [
+        5353 # mDNS
         9020
         9696
         3333
@@ -106,6 +107,7 @@
         443
       ];
       allowedUDPPorts = [
+        5353 # mDNS
         9020
         9696
         3333
@@ -114,6 +116,12 @@
       ];
     };
   };
+
+  system.nssModules = pkgs.lib.optional true pkgs.nssmdns;
+  system.nssDatabases.hosts = pkgs.lib.optionals true (pkgs.lib.mkMerge [
+    (pkgs.lib.mkBefore ["mdns4_minimal [NOTFOUND=return]"]) # before resolve
+    (pkgs.lib.mkAfter ["mdns4"]) # after dns
+  ]);
 
   # containers.jellyseerr = {
   #   autoStart = true;
@@ -144,7 +152,6 @@
     driSupport32Bit = true;
   };
 
-  # Doesn't work?????
   services.jellyseerr = {
     enable = true;
     openFirewall = true;
@@ -270,53 +277,53 @@
   };
 
   ### TESTING AREA ###
-  fileSystems."/mnt/storage" = {
-    device = "192.168.50.2:/storage";
-    fsType = "nfs";
-    options = ["x-systemd.automount" "noauto" "x-systemd.after=network-online.target" "x-systemd.mount-timeout=90"];
-  };
+  # fileSystems."/mnt/storage" = {
+  #   device = "192.168.50.2:/storage";
+  #   fsType = "nfs";
+  #   options = ["x-systemd.automount" "noauto" "x-systemd.after=network-online.target" "x-systemd.mount-timeout=90"];
+  # };
 
-  users.groups.media = {gid = 500;};
+  # users.groups.media = {gid = 500;};
 
-  users.users = {
-    media = {
-      group = "media";
-      uid = 500;
-      isSystemUser = true;
-      createHome = true;
-      home = "/var/lib/media";
-    };
-  };
+  # users.users = {
+  #   media = {
+  #     group = "media";
+  #     uid = 500;
+  #     isSystemUser = true;
+  #     createHome = true;
+  #     home = "/var/lib/media";
+  #   };
+  # };
 
-  services.sonarr = {
-    enable = true;
-    openFirewall = true;
-    # dataDir = "/var/lib/media/.config/sonarr";
-    # user = "media";
-    group = "media";
-  };
+  # services.sonarr = {
+  #   enable = true;
+  #   openFirewall = true;
+  #   # dataDir = "/var/lib/media/.config/sonarr";
+  #   # user = "media";
+  #   group = "media";
+  # };
 
-  services.radarr = {
-    enable = true;
-    openFirewall = true;
-    # dataDir = "/var/lib/media/.config/radarr";
-    # user = "media";
-    group = "media";
-  };
+  # services.radarr = {
+  #   enable = true;
+  #   openFirewall = true;
+  #   # dataDir = "/var/lib/media/.config/radarr";
+  #   # user = "media";
+  #   group = "media";
+  # };
 
-  services.bazarr = {
-    enable = true;
-    openFirewall = true;
-    # user = "media";
-    group = "media";
-  };
+  # services.bazarr = {
+  #   enable = true;
+  #   openFirewall = true;
+  #   # user = "media";
+  #   group = "media";
+  # };
 
-  services.qbittorrent = {
-    enable = true;
-    openFirewall = true;
-    # dataDir = "/var/lib/media/qBittorrent";
-    # user = "media";
-    group = "media";
-    webUIAddress.port = 8080;
-  };
+  # services.qbittorrent = {
+  #   enable = true;
+  #   openFirewall = true;
+  #   # dataDir = "/var/lib/media/qBittorrent";
+  #   # user = "media";
+  #   group = "media";
+  #   webUIAddress.port = 8080;
+  # };
 }

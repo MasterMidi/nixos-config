@@ -12,7 +12,7 @@ in {
       until_quality = "Bluray 1080p";
       until_score = 10000;
     };
-    min_format_score = 100;
+    min_format_score = 10;
     quality_sort = "top";
     qualities = [
       {
@@ -43,7 +43,7 @@ in {
       until_quality = qualities.webDl1080p;
       until_score = 10000;
     };
-    min_format_score = 100;
+    min_format_score = 10;
     quality_sort = "top";
     qualities = [
       {

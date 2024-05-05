@@ -8,7 +8,7 @@ in {
       until_quality = qualities.remux1080p;
       until_score = 10000;
     };
-    min_format_score = 100;
+    min_format_score = 10;
     qualities = [
       {
         name = qualities.remux1080p;
@@ -64,7 +64,7 @@ in {
       until_quality = qualities.remux2160p;
       until_score = 10000;
     };
-    min_format_score = 100;
+    min_format_score = 10;
     qualities = [
       {
         name = qualities.remux2160p;
@@ -134,7 +134,7 @@ in {
       until_quality = qualities.remux2160p;
       until_score = 10000;
     };
-    min_format_score = 100;
+    min_format_score = 10;
     qualities = [
       {
         name = qualities.remux2160p;
@@ -158,7 +158,7 @@ in {
       until_quality = qualities.remux1080p;
       until_score = 10000;
     };
-    min_format_score = 100;
+    min_format_score = 10;
     qualities = [
       {
         name = qualities.remux1080p;

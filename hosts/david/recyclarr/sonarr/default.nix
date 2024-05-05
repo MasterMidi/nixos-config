@@ -193,9 +193,17 @@ in {
         # Codecs
         trash_ids = [
           "15a05bc7c1a36e2b57fd628f8977e2fc" # AV1
-          # "9b64dff695c2115facf1b6ea59c9bd07" # x265 (no HDR/DV)
         ];
-        quality_profiles = [{name = qualityProfiles.anime.name;} {name = qualityProfiles.webdl.name;}];
+        quality_profiles = [
+          {
+            name = qualityProfiles.anime.name;
+            score = -10;
+          }
+          {
+            name = qualityProfiles.webdl.name;
+            score = -10;
+          }
+        ];
       }
       {
         # Unwanted

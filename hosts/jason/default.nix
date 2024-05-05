@@ -12,7 +12,6 @@
     # ./refind.nix
     ./containers
     ./gaming.nix
-    ./vfio.nix
   ];
 
   nix = {
@@ -355,7 +354,18 @@
 
   ### TESTING AREA ###
 
-  vfio.enable = true;
+  virtualisation.vfio.enable = true;
+
+  virtualisation.kvmfr = {
+    enable = true;
+    shm = {
+      enable = true;
+      size = 64;
+      user = "michael";
+      group = "libvirtd";
+      mode = "0600";
+    };
+  };
 
   # services.qbitmanage = {
 

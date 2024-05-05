@@ -95,6 +95,7 @@
     # haskellPackages.kmonad
     gnome3.gnome-tweaks
     hyprcursor
+    blesh
 
     # Productivity
     distrobox
@@ -109,7 +110,6 @@
     xdg-utils
     envsubst
     jq
-    fzf
     tldr
     # handbrake
     # dupeguru
@@ -126,11 +126,11 @@
     imagemagick
     lazygit
     lazydocker
-    # etcher
     ydotool
     parabolic
     motrix
     qrscan
+    networkmanagerapplet # NetworkManager tray icon
 
     # gaming tools
     protonup-qt

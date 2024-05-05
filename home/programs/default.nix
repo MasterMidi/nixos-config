@@ -9,6 +9,7 @@
     ./discord
     ./eza.nix
     ./firefox.nix
+    ./fzf.nix
     ./git.nix
     ./hyprlock.nix
     ./kitty.nix

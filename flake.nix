@@ -103,6 +103,7 @@
             ./hosts/jason
             ./scripts
             nixosModules.refind
+            nixosModules.vfio
             # outputs.nixosModules.qbitmanage
 
             home-manager.nixosModules.home-manager

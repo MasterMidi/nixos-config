@@ -20,18 +20,22 @@ in {
     settings = with config.colorScheme.palette;
       {
         exec-once = [
-          "waybar"
-          "sleep 1 && swww init"
-          "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
-          "wl-paste --watch cliphist store"
+          "waybar &"
+          "sleep 1 && swww init &"
+          "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1 &"
+          "wl-paste --watch cliphist store &"
+          "nm-applet --indicator &"
         ];
 
         monitor = [
           ",highrr,auto,1" # Default
           # "HDMI-A-2, 1920x1080@60, 0x230, 0.93" # matches the dpi, but creates a gap around apps and poor font rendering
+          "HDMI-A-1, 1920x1080@60, 0x275, 1"
           "HDMI-A-2, 1920x1080@60, 0x275, 1"
+          "HDMI-A-3, 1920x1080@60, 0x275, 1"
           "DP-1, 3440x1440@144, 1920x0, 1"
-          "DP-3, 3440x1440@144, 1920x0, 1"
+          "DP-2, 3440x1440@144, 1920x0, 1"
+          "DP-3, disable"
           "eDP-1, 2240x1400@60, 0x0, 1"
         ];
 

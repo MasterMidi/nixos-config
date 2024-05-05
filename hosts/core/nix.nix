@@ -36,7 +36,7 @@
       dates = ["daily"];
     };
 
-    package = pkgs.nixUnstable; # use the newest vwersion of the nix package manager
+    package = pkgs.nixVersions.latest; # use the newest vwersion of the nix package manager
 
     # pin the registry to avoid downloading and evaling a new nixpkgs version every time using 'nix shell nixpkgs#...'
     registry = lib.mapAttrs (_: v: {flake = v;}) inputs;
@@ -58,6 +58,8 @@
       keep-derivations = true;
       # use-xdg-base-directories = true
 
+      system-features = ["big-parallel" "kvm" "recursive-nix" "uid-range"];
+
       # Free up to 1GiB whenever there is less than 100MiB left.
       min-free = 512 * 1024 * 1024;
       max-free = 3000 * 1024 * 1024;
@@ -70,7 +72,6 @@
 
       auto-optimise-store = true;
       auto-allocate-uids = true;
-      system-features = ["uid-range"];
       builders-use-substitutes = true;
       max-jobs = "auto";
       substituters = [

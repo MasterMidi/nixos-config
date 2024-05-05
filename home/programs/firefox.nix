@@ -25,14 +25,12 @@
         "svg.context-properties.content.enabled" = true;
         "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
         "widget.gtk.rounded-bottom-corners.enabled" = true;
+        "gnomeTheme.normalWidthTabs" = true;
       };
       extraConfig = builtins.readFile "${inputs.betterfox}/user.js";
       userChrome = ''
         @import "firefox-gnome-theme/userChrome.css";
         @import "firefox-gnome-theme/theme/colors/dark.css";
-
-        /* Remove close button*/
-        #tabbrowser-tabs .tabbrowser-tab .tab-close-button { display:none!important; }
       '';
       userContent = ''
         @import "firefox-gnome-theme/userContent.css";

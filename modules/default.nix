@@ -5,4 +5,5 @@
   recyclarr = import ./recyclarr;
   jellyseerr = import ./jellyseerr;
   qbittorrent = import ./qbittorrent;
+	vfio = import ./vfio;
 }

@@ -1,6 +1,7 @@
 {
   pkgs,
   lib,
+  config,
   ...
 }: {
   imports = [
@@ -265,7 +266,7 @@
     config-dir = "/etc/nixos/";
 
     # SSH connection parameters
-    ssh.host = "192.168.50.71";
+    ssh.host = "${config.networking.hostName}.local";
     ssh.user = "root";
     ssh.command = "ssh";
     ssh.opts = [];

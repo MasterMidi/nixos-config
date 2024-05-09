@@ -15,6 +15,9 @@
       path = "nix.default";
       isDefault = true;
       settings = {
+				#General settings
+				"browser.tabs.tabMinWidth" = 150; # 76 is too smol :)
+				"general.autoScroll" = true; # Gotta love autoscrolling
         "extensions.activeThemeID" = "firefox-compact-dark@mozilla.org";
 
         # For Firefox GNOME theme:

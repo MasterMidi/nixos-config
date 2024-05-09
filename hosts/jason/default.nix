@@ -213,6 +213,14 @@
       # driversi686Linux.amdvlk
     ];
   };
+
+  services.hardware.openrgb = {
+    # enable = true;
+    # motherboard = "amd";
+    # package = pkgs.openrgb-with-all-plugins;
+  };
+  services.udev.packages = [pkgs.openrgb];
+
   hardware.enableRedistributableFirmware = true;
   hardware.enableAllFirmware = true;
 
@@ -233,6 +241,7 @@
       "docker"
       "uinput" # for ydotool
       "dialout" # for arduino and other serial devices
+      # "i2c" # maybe for openrgb
     ];
   };
 
@@ -280,6 +289,8 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    gparted # has to be a systempackage or it wont open
+    openrgb
     lact
     graphite-cursors
     qbitmanage
@@ -333,22 +344,30 @@
   boot.binfmt.emulatedSystems = ["aarch64-linux"]; # Allow compiling for ARM on x86_64
 
   # Allow running AppImages directly from commandline
-  # programs.appimage = {
-  #   enable = true;
-  #   binfmt = true;
-  # };
+  programs.appimage = {
+    enable = true;
+    binfmt = true;
+  };
 
   # Open ports in the firewall.
   networking.firewall = {
     allowedTCPPorts = [
       57621 # Spotify sync local devices
       2049 # NFS
+      5353 # mDNS
     ];
     allowedUDPPorts = [
       5353 # Spotfify discover Connect devices
       2049
+      5353 # mDNS
     ];
   };
+
+  # system.nssModules = pkgs.lib.optional true pkgs.nssmdns;
+  # system.nssDatabases.hosts = pkgs.lib.optionals true (pkgs.lib.mkMerge [
+  #   (pkgs.lib.mkBefore ["mdns4_minimal [NOTFOUND=return]"]) # before resolve
+  #   (pkgs.lib.mkAfter ["mdns4"]) # after dns
+  # ]);
 
   system.stateVersion = "23.05"; # Did you read the comment?
 

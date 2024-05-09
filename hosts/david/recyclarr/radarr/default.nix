@@ -5,7 +5,7 @@
   profilesToList = set: builtins.attrValues set;
 in {
   default = {
-    base_url = "http://192.168.50.2:9030";
+    base_url = "http://jason.local:9030";
     api_key = "51732014769e475a9455c1f5cd8f18d1";
     delete_old_custom_formats = true;
     replace_existing_custom_formats = true;

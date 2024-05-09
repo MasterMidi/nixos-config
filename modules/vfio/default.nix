@@ -185,7 +185,7 @@ in {
     };
 
     systemd.tmpfiles.rules = [
-      "L+ /var/lib/libvirt/vbios/rx7800xt-gb.rom - - - - ${./rx7800xt-gb.rom}" # vbios for the gpu
+      # "L+ /var/lib/libvirt/vbios/rx7800xt-gb.rom - - - - ${./rx7800xt-gb.rom}" # vbios for the gpu
       "L+ /var/lib/libvirt/hooks/qemu - - - - ${pkgs.writeShellScript "hook" (builtins.readFile ./scripts/qemu_hook.sh)}" # hook script to enable running script for vms
       "L+ /var/lib/libvirt/hooks/kvm.conf - - - - ${./scripts/kvm.conf}" # hook script to enable running script for vms
       # "L+ /var/lib/libvirt/hooks/qemu.d/win11/prepare/begin/start.sh - - - - ${pkgs.writeShellScript "start" ''

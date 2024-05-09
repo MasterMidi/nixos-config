@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  config,
+  ...
+}: {
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
@@ -11,7 +15,7 @@
 
   networking.hostName = "nixpi"; # Define your hostname.
   # Pick only one of the below networking options.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.<
   networking.networkmanager.enable = true; # Easiest to use and most distros use this by default.
 
   # Set your time zone.
@@ -102,7 +106,7 @@
     config-dir = "/etc/nixos";
 
     # SSH connection parameters
-    ssh.host = "192.168.50.47";
+    ssh.host = "${config.networking.hostName}.local";
     ssh.user = "raspi";
     ssh.command = "ssh";
     ssh.opts = [];

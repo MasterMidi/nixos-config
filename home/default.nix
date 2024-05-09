@@ -95,7 +95,6 @@
     # haskellPackages.kmonad
     gnome3.gnome-tweaks
     hyprcursor
-    blesh
 
     # Productivity
     distrobox
@@ -107,6 +106,7 @@
     bitwarden-cli
 
     # Tools
+    ventoy-full
     xdg-utils
     envsubst
     jq

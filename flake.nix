@@ -93,29 +93,15 @@
           ./scripts
           lollypops.nixosModules.lollypops
           agenix.nixosModules.default
-          (
-            {...}: {
-              services.avahi = {
-                enable = true;
-                ipv4 = true;
-                nssmdns4 = true;
-                publish = {
-                  enable = true;
-                  addresses = true;
-                  domain = true;
-                  hinfo = true;
-                  userServices = true;
-                  workstation = true;
-                };
-              };
-            }
-          )
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.extraSpecialArgs = {inherit inputs;};
-            home-manager.sharedModules = [({pkgs, ...}: {home.packages = with pkgs; [pciutils];})];
+            home-manager.users.michael = import ./home/michael.david;
+            home-manager.sharedModules = [
+              ./home/core
+            ];
           }
         ];
       };
@@ -133,7 +119,7 @@
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
-              home-manager.users.michael = import ./home;
+              home-manager.users.michael = import ./home/michael;
 
               # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix
               home-manager.extraSpecialArgs = {inherit inputs;};
@@ -152,7 +138,7 @@
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
-              home-manager.users.michael = import ./home;
+              home-manager.users.michael = import ./home/michael;
 
               # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix
               home-manager.extraSpecialArgs = {inherit inputs;};

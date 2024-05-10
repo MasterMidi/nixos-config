@@ -41,7 +41,7 @@ fi
 
 # Convert images in directory and save to cache dir
 notify-send "Proccesing wallpapers in $wallDir" -t 2200
-for image in "$wallDir"*.{jpg,jpeg,png,webp,gif}; do
+for image in "$wallDir"/*.{jpg,jpeg,png,webp,gif}; do
 	if [ -f "$image" ]; then
 		filename=$(basename "$image")
 		if [ ! -f "${cacheDir}/${filename}" ]; then
@@ -56,5 +56,7 @@ wall_selection=$(find "${wallDir}" -maxdepth 1 -type f \( -iname "*.jpg" -o -ina
 # Set wallpaper
 [[ -n "$wall_selection" ]] || exit 1
 swww img "$wallDir"/"$wall_selection" --transition-step 255 --transition-type any
+# lutgen apply -p gruvbox-dark "$wallDir"/"$wall_selection" -o "${HOME}/.cache/wallpapers-lut"
+# swww img "${HOME}/.cache/wallpapers-lut/$wall_selection" --transition-step 255 --transition-type any
 notify-send "Wallpaper set!" -i "$wallDir"/"$wall_selection" -t 2200
 exit 0

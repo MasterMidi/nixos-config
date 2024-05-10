@@ -52,7 +52,10 @@ with lib; let
       (removeAttrs attrs ["@theme" "@import"])
     ]);
 in {
-  home.packages = [(pkgs.writeShellScriptBin "rofi-wall" (builtins.readFile ./wall-select.sh))];
+  home.packages = [
+    (pkgs.writeShellScriptBin "rofi-wall" (builtins.readFile ./wall-select.sh))
+    pkgs.lutgen
+  ];
   xdg.configFile."rofi/wallpaper-switcher.rasi".text =
     toRasi {
       configuration = {

@@ -16,8 +16,8 @@
     #   }
     # );
     settings = {
-      # color-theme = "gruvbox_dark_v2";
-      color_theme = "base16";
+      color-theme = "gruvbox_material_dark";
+      # color_theme = "base16";
       shown_boxes = "proc cpu gpu0 mem net";
       update_ms = 500;
       show_gpu_info = "on";

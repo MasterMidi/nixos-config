@@ -30,11 +30,15 @@
 
   environment.binsh = "${pkgs.dash}/bin/dash";
 
-  boot.kernelPackages = pkgs.linuxPackages_zen;
+  # boot.kernelPackages = pkgs.linuxPackages_zen;
   # boot.kernelPackages = pkgs.linuxPackages_xanmod_latest;
   # boot.kernelPackages = pkgs.linuxKernel.packages.linux_lqx;
   # boot.kernelPackages = pkgs.linuxKernel.packages.linux_zen;
   boot.kernelModules = ["coretemp"];
+
+  services.logind = {
+    powerKey = "suspend";
+  };
 
   # Bootloader
   boot.loader.systemd-boot = {
@@ -194,8 +198,8 @@
 
   # Disable the GNOME3/GDM auto-suspend feature that cannot be disabled in GUI!
   # If no user is logged in, the machine will power down after 20 minutes.
-  systemd.targets.sleep.enable = false;
-  systemd.targets.suspend.enable = false;
+  systemd.targets.sleep.enable = true;
+  systemd.targets.suspend.enable = true;
   systemd.targets.hibernate.enable = false;
   systemd.targets.hybrid-sleep.enable = false;
 
@@ -372,7 +376,6 @@
   system.stateVersion = "23.05"; # Did you read the comment?
 
   ### TESTING AREA ###
-
   virtualisation.vfio.enable = true;
 
   virtualisation.kvmfr = {
@@ -382,7 +385,7 @@
       size = 64;
       user = "michael";
       group = "libvirtd";
-      mode = "0600";
+      mode = "0666";
     };
   };
 

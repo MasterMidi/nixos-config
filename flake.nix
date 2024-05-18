@@ -162,6 +162,9 @@
               home-manager.useUserPackages = true;
               home-manager.extraSpecialArgs = {inherit inputs;};
               home-manager.users.michael = import ./home/michael.david;
+              home-manager.sharedModules = [
+                ./home/core
+              ];
             }
           ];
         };

@@ -30,7 +30,7 @@ in {
       };
       mode = mkOption {
         type = types.str;
-        default = "0600";
+        default = "0660";
         description = "Mode of the shared memory device.";
       };
     };
@@ -52,6 +52,15 @@ in {
 
     services.udev.extraRules = optionals cfg.shm.enable ''
       SUBSYSTEM=="kvmfr", OWNER="${cfg.shm.user}", GROUP="${cfg.shm.group}", MODE="${cfg.shm.mode}"
+    '';
+
+    virtualisation.libvirtd.qemu.verbatimConfig = ''
+      namespaces = []
+      cgroup_device_acl = ["/dev/kvmfr0",
+      "/dev/null", "/dev/full", "/dev/zero",
+      "/dev/random", "/dev/urandom",
+      "/dev/ptmx", "/dev/kvm", "/dev/kqemu",
+      "/dev/rtc","/dev/hpet", "/dev/vfio/vfio"]
     '';
   };
 }

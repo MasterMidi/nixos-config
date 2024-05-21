@@ -138,6 +138,7 @@
         # vsciot-vscode.vscode-arduino
         # espressif.esp-idf-extension
         # vscodevim.vim
+        redhat.vscode-yaml
       ]
       ++ (with pkgs.vscode-extensions.extensions.x86_64-linux.open-vsx; [
         jeanp413.open-remote-ssh

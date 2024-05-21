@@ -3,8 +3,8 @@ upstream:
     - 1.1.1.1
     - 1.0.0.1
     - 8.8.8.8
-    - tcp-tls:fdns1.dismail.de:853
-    - https://dns.digitale-gesellschaft.ch/dns-query
+    - 212.10.10.4
+    - 212.10.10.5
 blocking:
   blackLists:
     ads:
@@ -15,3 +15,6 @@ blocking:
 ports:
   dns: 53
   http: 4000
+prometheus:
+  enable: true
+  path: /metrics

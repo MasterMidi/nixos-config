@@ -25,9 +25,8 @@ in {
     "${mainMod} SHIFT, C, exec, hyprpicker -a"
     "${mainMod}, C, killactive,"
     "${mainMod} SHIFT, Q, exec, ${./scripts/logout.sh},"
-    "${mainMod}, E, exec, nautilus"
+    "${mainMod}, E, exec, nautilus -w"
     "${mainMod}, F, togglefloating,"
-    "${mainMod}, R, exec, wofi --show drun"
     "${mainMod}, P, pseudo," # dwindle
     "${mainMod}, J, togglesplit," # dwindle
     "${mainMod}, left, movefocus, l"

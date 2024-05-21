@@ -136,12 +136,14 @@
 
             inputs.home-manager.nixosModules.home-manager
             {
+              home-manager.backupFileExtension = "backup";
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
-              home-manager.users.michael = import ./home/michael;
-
-              # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix
               home-manager.extraSpecialArgs = {inherit inputs;};
+              home-manager.users.michael = import ./home/michael;
+              home-manager.sharedModules = [
+                ./home/core
+              ];
             }
           ];
         };

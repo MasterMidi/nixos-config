@@ -178,6 +178,8 @@
           ];
         };
 
+        # TODO: make this a log aggregator for all systems
+        # TODO: Make this a dns-sinkhole
         nixpi = {
           system = "aarch64-linux";
           modules = [

@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# https://www.youtube.com/watch?v=0uZODoPQH9c
 #
 #replace xx\:xx.x with the number of your gpu and sound counterpart
 #

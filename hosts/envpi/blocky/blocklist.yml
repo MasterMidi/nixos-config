@@ -1,0 +1,31 @@
+upstream:
+  default:
+    - 1.1.1.1
+    - 1.0.0.1
+    - 8.8.8.8
+    - 8.8.4.4
+    - 10.1.128.1
+blocking:
+  blackLists:
+    ads:
+      - https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
+      - https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/pro.txt
+      - https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/popupads.txt # Popup ads
+    fakes:
+      - https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/fake.txt
+    threats:
+      - https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/tif.txt
+  clientGroupsBlock:
+    default:
+      - ads
+      - fakes
+      - threats
+caching:
+  prefetching: true
+  prefetchMaxItemsCount: 1000
+ports:
+  dns: 53
+  http: 4000
+prometheus:
+  enable: true
+  path: /metrics

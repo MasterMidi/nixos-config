@@ -8,6 +8,7 @@
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ./recyclarr
+    ./monitoring
     # ./nginx.nix
   ];
 
@@ -178,8 +179,6 @@
     # });
     environment = {
       TMDB_API_KEY = "12492bfcbf6f881563487630c079ba96";
-      POSTGRES_USER = "postgres";
-      POSTGRES_PASSWORD = "postgres";
     };
   };
 
@@ -216,38 +215,17 @@
     openFirewall = true;
   };
 
-  virtualisation = {
-    containers.enable = true;
-    docker = {
-      enable = false;
-      enableOnBoot = true;
-    };
-    podman = {
-      enable = true;
-      defaultNetwork.settings.dns_enabled = true;
-    };
-  };
-
-  # Remember, podman does not create folders that are not there
-  virtualisation.oci-containers = {
-    backend = "podman";
-    containers = {
-      # jellyseerr = {
-      #   image = "ghcr.io/hotio/jellyseerr";
-      #   autoStart = true;
-      #   ports = ["5055:5055"];
-      #   environment = {
-      #     PUID = "1000";
-      #     PGID = "100";
-      #     UMASK = "002";
-      #     TZ = "${config.time.timeZone}";
-      #   };
-      #   volumes = [
-      #     "${mediaPath}/config/jellyseerr:/config"
-      #   ];
-      # };
-    };
-  };
+  # virtualisation = {
+  #   containers.enable = true;
+  #   docker = {
+  #     enable = false;
+  #     enableOnBoot = true;
+  #   };
+  #   podman = {
+  #     enable = true;
+  #     defaultNetwork.settings.dns_enabled = true;
+  #   };
+  # };
 
   services.ollama = {
     enable = false;
@@ -257,7 +235,7 @@
   lollypops.deployment = {
     local-evaluation = true;
     # Where on the remote the configuration (system flake) is placed
-    config-dir = "/etc/nixos/";
+    # config-dir = "/etc/nixos/";
 
     # SSH connection parameters
     ssh.host = "${config.networking.hostName}.local";
@@ -272,6 +250,7 @@
   };
 
   ### TESTING AREA ###
+
   # fileSystems."/mnt/storage" = {
   #   device = "192.168.50.2:/storage";
   #   fsType = "nfs";

@@ -1,12 +1,12 @@
-{...}: let
+{config, ...}: let
   qualityProfiles = import ./qualityProfiles.nix;
 
   # Function to convert the set of profiles into a list
   profilesToList = set: builtins.attrValues set;
 in {
   main = {
-    base_url = "http://jason.local:9040";
-    api_key = "c5783cdc82d244e6b138be2988397813";
+    base_url = "!secret sonarr_main_url";
+    api_key = "!secret sonarr_main_apikey";
     delete_old_custom_formats = true;
     replace_existing_custom_formats = true;
     media_naming = {

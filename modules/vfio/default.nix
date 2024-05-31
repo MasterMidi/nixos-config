@@ -35,18 +35,17 @@ in {
         "amd"
       ];
 
-      kernelParams =
-        [
-          # enable IOMMU
-          "amd_iommu=on"
-          "iommu=pt"
-          # "video=efifb:off"
-          "kvm.ignore_msrs=1"
-          "vfio-pci.disable_idle_d3=1"
-        ]
-        ++ lib.optional cfg.enable
-        # isolate the GPU
-        ("vfio-pci.ids=" + lib.concatStringsSep "," gpuIDs);
+      kernelParams = [
+        # enable IOMMU
+        "amd_iommu=on"
+        "iommu=pt"
+        # "video=efifb:off"
+        "kvm.ignore_msrs=1"
+        "vfio-pci.disable_idle_d3=1"
+      ];
+      # ++ lib.optional cfg.enable
+      # # isolate the GPU
+      # ("vfio-pci.ids=" + lib.concatStringsSep "," gpuIDs);
     };
 
     hardware.opengl.enable = lib.mkForce true;

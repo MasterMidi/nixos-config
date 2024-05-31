@@ -6,6 +6,7 @@
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
+    ./blocky
   ];
 
   # boot.kernelPackages = pkgs.linuxPackages_rpi3;
@@ -144,7 +145,8 @@
     config-dir = "/etc/nixos";
 
     # SSH connection parameters
-    ssh.host = "${config.networking.hostName}.local";
+    # ssh.host = "${config.networking.hostName}.local";
+    ssh.host = "192.168.50.10";
     ssh.user = "root";
     ssh.command = "ssh";
     ssh.opts = [];

@@ -5,8 +5,8 @@
   profilesToList = set: builtins.attrValues set;
 in {
   default = {
-    base_url = "http://jason.local:9030";
-    api_key = "51732014769e475a9455c1f5cd8f18d1";
+    base_url = "!secret radarr_main_url";
+    api_key = "!secret radarr_main_apikey";
     delete_old_custom_formats = true;
     replace_existing_custom_formats = true;
     media_naming = {

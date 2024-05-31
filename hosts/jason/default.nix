@@ -12,6 +12,7 @@
     # ./refind.nix
     ./containers
     ./gaming.nix
+    ./media-server.nix
   ];
 
   nix = {
@@ -30,7 +31,7 @@
 
   environment.binsh = "${pkgs.dash}/bin/dash";
 
-  # boot.kernelPackages = pkgs.linuxPackages_zen;
+  boot.kernelPackages = pkgs.linuxPackages_zen;
   # boot.kernelPackages = pkgs.linuxPackages_xanmod_latest;
   # boot.kernelPackages = pkgs.linuxKernel.packages.linux_lqx;
   # boot.kernelPackages = pkgs.linuxKernel.packages.linux_zen;
@@ -293,6 +294,7 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    barrier
     gparted # has to be a systempackage or it wont open
     openrgb
     lact
@@ -359,11 +361,13 @@
       57621 # Spotify sync local devices
       2049 # NFS
       5353 # mDNS
+      24800 # input-leap
     ];
     allowedUDPPorts = [
       5353 # Spotfify discover Connect devices
       2049
       5353 # mDNS
+      24800 # input-leap
     ];
   };
 
@@ -376,7 +380,7 @@
   system.stateVersion = "23.05"; # Did you read the comment?
 
   ### TESTING AREA ###
-  virtualisation.vfio.enable = true;
+  virtualisation.vfio.enable = false;
 
   virtualisation.kvmfr = {
     enable = true;

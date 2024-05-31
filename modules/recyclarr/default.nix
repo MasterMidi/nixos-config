@@ -8,7 +8,28 @@
   recyclarrPackage = pkgs.recyclarr; # Ensure this is your packaged application
 
   settingsYaml = (pkgs.formats.yaml {}).generate "settings.yml" (cfg.settings);
-  recyclarrYaml = (pkgs.formats.yaml {}).generate "recyclarr.yml" (cfg.config);
+  # recyclarrYaml = (pkgs.formats.yaml {}).generate "recyclarr.yml" (cfg.config);
+
+  generate = name: value:
+    pkgs.callPackage ({
+      runCommand,
+      remarshal,
+    }:
+      runCommand name {
+        inherit value;
+        nativeBuildInputs = [remarshal];
+        passAsFile = ["value"];
+      } ''
+        json2yaml "$valuePath" "$out"
+      '') {};
+
+  recyclarrYaml = let
+    yamlRaw = (lib.generators.toYAML {}) cfg.config;
+    replaceStart = builtins.replaceStrings ["'!secret "] ["!secret "] yamlRaw;
+    replaceEnd = builtins.replaceStrings ["'"] [""] replaceStart;
+  in
+    # builtins.toFile "recyclarr.yml" replaceEnd;
+    generate "recyclarr.yml" replaceEnd;
 in {
   options.services.recyclarr = {
     enable = lib.mkEnableOption "Recyclarr Service";
@@ -17,6 +38,12 @@ in {
       type = lib.types.package;
       default = pkgs.recyclarr;
       description = "The Recyclarr package to use.";
+    };
+
+    secretsFile = lib.mkOption {
+      type = lib.types.path;
+      default = null;
+      description = "A secrets file to include in the config";
     };
 
     settings = lib.mkOption {

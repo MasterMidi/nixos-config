@@ -6,6 +6,8 @@
   # mediaServerPath = builtins.toPath "${config.users.users.michael.home}/.temp/containers";
   mediaServerPath = builtins.toPath "/services/media";
 in {
+  environment.systemPackages = with pkgs; [mediainfo];
+
   virtualisation.containers.enable = true;
   virtualisation.docker = {
     enable = true;

@@ -25,6 +25,10 @@
     # Individual program packages
     ags.url = "github:Aylur/ags";
     caligula.url = "github:ifd3f/caligula";
+    nixvim = {
+      url = "github:nix-community/nixvim";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # Theming and customization
     nix-colors.url = "github:misterio77/nix-colors"; # Theming in nix configuration

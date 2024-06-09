@@ -119,6 +119,34 @@
     };
   };
 
+  virtualisation.docker = {
+    enable = true;
+    enableOnBoot = true;
+    rootless = {
+      enable = true;
+      setSocketVariable = true;
+    };
+  };
+
+  virtualisation.oci-containers = {
+    backend = "docker";
+    containers = {
+      kavita = {
+        image = "jvmilazz0/kavita:latest";
+        # user = "1000:100";
+        autoStart = true;
+        ports = ["5000:5000"];
+        environment = {
+          TZ = config.time.timeZone;
+        };
+        volumes = [
+          "/var/lib/kavita/config:/kavita/config"
+          "/var/lib/kavita/data:/data"
+        ];
+      };
+    };
+  };
+
   # containers.jellyseerr = {
   #   autoStart = true;
   #   privateNetwork = false;
@@ -178,7 +206,7 @@
     #       });
     # });
     environment = {
-      TMDB_API_KEY = "12492bfcbf6f881563487630c079ba96";
+      # TMDB_API_KEY = builtins.readFile config.sops.secrets.TMDB_KEY.path;
     };
   };
 
@@ -215,21 +243,9 @@
     openFirewall = true;
   };
 
-  # virtualisation = {
-  #   containers.enable = true;
-  #   docker = {
-  #     enable = false;
-  #     enableOnBoot = true;
-  #   };
-  #   podman = {
-  #     enable = true;
-  #     defaultNetwork.settings.dns_enabled = true;
-  #   };
-  # };
-
   services.ollama = {
     enable = false;
-    listenAddress = "0.0.0.0:11434";
+    port = "11434";
   };
 
   lollypops.deployment = {

@@ -13,10 +13,11 @@
   };
 
   # https://github.com/Misterio77/nix-colors/blob/main/lib/contrib/gtk-theme.nix
+  # Setting GTK theme
   gtk = {
     enable = true;
     iconTheme = {
-      name = "Papirus";
+      name = "Papirus-Dark";
       package = pkgs.papirus-icon-theme.override {
         color = "paleorange";
       };
@@ -35,17 +36,17 @@
 
     gtk4 = {
       extraCss = import ./adwaitaGtkCss.nix config.colorScheme;
-      extraConfig = {
-        gtk-application-prefer-dark-theme = 1;
-      };
     };
-
-    # theme = {
-    #   name = "MateriaDark";
-    #   package = pkgs.materia-theme;
-    # };
   };
 
+  dconf.settings = {
+    # To set GTK4 to dark theme
+    "org/gnome/desktop/interface" = {
+      color-scheme = "prefer-dark";
+    };
+  };
+
+  # Setting QT theme
   qt = {
     enable = true;
     platformTheme.name = "qtct";

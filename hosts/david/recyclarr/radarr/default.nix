@@ -1,12 +1,12 @@
-{...}: let
+{config, ...}: let
   qualityProfiles = import ./qualityProfiles.nix;
 
   # Function to convert the set of profiles into a list
   profilesToList = set: builtins.attrValues set;
 in {
   default = {
-    base_url = "!secret radarr_main_url";
-    api_key = "!secret radarr_main_apikey";
+    base_url = "http://jason.local:9030";
+    # api_key = builtins.readFile config.sops.secrets.RADARR_KEY.path;
     delete_old_custom_formats = true;
     replace_existing_custom_formats = true;
     media_naming = {

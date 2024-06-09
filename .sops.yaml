@@ -1,0 +1,11 @@
+keys:
+  - &primary age1chvcefkzfesskrs2vf7sp9fjktpx5z8qc4ggksuwfn483fwpjvxsv88jpa
+  - &server_jason age1mslxutmqu56fhl0rgk7flysyacyxks3evnmfckzzykh3wcvzc5tqx9q6dd
+  - &server_david age1x3tjqh5n09yzmtlgdw7gxdavpxqtktvgavf4gdv6mw5qcq49uypqq34rqq
+creation_rules:
+  - path_regex: secrets/[^/]+\.(yaml|json|env|ini)$
+    key_groups:
+      - age:
+          - *primary
+          - *server_jason
+          - *server_david

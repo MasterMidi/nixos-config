@@ -5,8 +5,8 @@
   profilesToList = set: builtins.attrValues set;
 in {
   main = {
-    base_url = "!secret sonarr_main_url";
-    api_key = "!secret sonarr_main_apikey";
+    base_url = "http://jason.local:9040";
+    # api_key = builtins.readFile config.sops.secrets.SONARR_KEY.path;
     delete_old_custom_formats = true;
     replace_existing_custom_formats = true;
     media_naming = {

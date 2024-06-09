@@ -20,13 +20,9 @@
     # deploment & secret tools
     lollypops.url = "github:pinpox/lollypops";
     agenix.url = "github:ryantm/agenix";
+    sops-nix.url = "github:Mic92/sops-nix";
 
     # Individual program packages
-    hyprlock.url = "github:hyprwm/hyprlock";
-    hypridle = {
-      url = "github:hyprwm/hypridle";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     ags.url = "github:Aylur/ags";
     caligula.url = "github:ifd3f/caligula";
 
@@ -43,6 +39,10 @@
     };
     thunderbird-gnome-theme = {
       url = "github:rafaelmardojai/thunderbird-gnome-theme";
+      flake = false;
+    };
+    vuetorrent = {
+      url = "github:VueTorrent/VueTorrent";
       flake = false;
     };
 
@@ -93,6 +93,7 @@
           ./scripts
           lollypops.nixosModules.lollypops
           agenix.nixosModules.default
+          sops-nix.nixosModules.sops
           # home-manager.nixosModules.home-manager
           # {
           #   home-manager.useGlobalPkgs = true;

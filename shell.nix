@@ -15,5 +15,6 @@ pkgs.mkShell {
     nix-du # disk usage of nix store
     nixos-generators
     nix-inspect
+    sops # secret management
   ];
 }

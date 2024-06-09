@@ -143,6 +143,7 @@
     spotify-player
     sunshine # https://docs.lizardbyte.dev/projects/sunshine/en/latest/about/usage.html#setup
     g4music
+    amberol
     termusic
     ncmpcpp
 

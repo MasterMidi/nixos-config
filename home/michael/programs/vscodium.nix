@@ -67,6 +67,7 @@
       "files.associations" = {
         "*.rasi" = "css";
       };
+      "redhat.telemetry.enabled" = false; # Disable telemetry for Red Hat yml extension
     };
     keybindings = [
       {

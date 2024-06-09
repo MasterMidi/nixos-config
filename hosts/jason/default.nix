@@ -397,33 +397,33 @@
 
   # };
 
-  fileSystems."/export/storage" = {
-    device = "/mnt/storage/media";
-    options = ["bind"];
-  };
+  # fileSystems."/export/storage" = {
+  #   device = "/mnt/storage/media";
+  #   options = ["bind"];
+  # };
 
-  services.nfs.server.enable = true;
-  services.nfs.server.exports = ''
-    /export         192.168.50.0/24(rw,fsid=0,no_subtree_check)
-    /export/storage	192.168.50.0/24(rw,nohide,insecure,no_subtree_check)
-  '';
+  # services.nfs.server.enable = true;
+  # services.nfs.server.exports = ''
+  #   /export         192.168.50.0/24(rw,fsid=0,no_subtree_check)
+  #   /export/storage	192.168.50.0/24(rw,nohide,insecure,no_subtree_check)
+  # '';
 
-  users.groups.media = {gid = 500;};
+  # users.groups.media = {gid = 500;};
 
-  users.users = {
-    media = {
-      group = "media";
-      uid = 500;
-    };
+  # users.users = {
+  #   media = {
+  #     group = "media";
+  #     uid = 500;
+  #   };
 
-    sonarr = {
-      group = "media";
-      uid = config.ids.uids.sonarr;
-    };
+  #   sonarr = {
+  #     group = "media";
+  #     uid = config.ids.uids.sonarr;
+  #   };
 
-    qbittorrent = {
-      group = "media";
-      uid = 501;
-    };
-  };
+  #   qbittorrent = {
+  #     group = "media";
+  #     uid = 501;
+  #   };
+  # };
 }

@@ -15,67 +15,63 @@
 # base0D: "#7daea3"
 # base0E: "#d3869b"
 # base0F: "#bd6f3e"
-{
-  inputs,
-  config,
-  ...
-}: let
+{config, ...}: let
   theme = config.colorScheme.palette;
   font_family = "MesloLGS NF";
 in {
-  imports = [inputs.hyprlock.homeManagerModules.default];
-
   programs.hyprlock = {
     enable = true;
 
-    general.hide_cursor = false;
+    settings = {
+      general.hide_cursor = false;
 
-    backgrounds = [
-      {
-        path = "${config.xdg.userDirs.pictures}/wallpapers/fuck you nvidia.png"; # only pngs are supported
-        blur_size = 5;
-        blur_passes = 3;
-      }
-    ];
+      backgrounds = [
+        {
+          path = "${config.xdg.userDirs.pictures}/wallpapers/fuck you nvidia.png"; # only pngs are supported
+          blur_size = 5;
+          blur_passes = 3;
+        }
+      ];
 
-    input-fields = [
-      {
-        monitor = "eDP-1";
+      input-fields = [
+        {
+          monitor = "eDP-1";
 
-        size = {
-          width = 300;
-          height = 50;
-        };
+          size = {
+            width = 300;
+            height = 50;
+          };
 
-        outline_thickness = 2;
+          outline_thickness = 2;
 
-        outer_color = "rgb(${theme.base04})";
-        inner_color = "rgb(${theme.base00})";
-        font_color = "rgb(${theme.base0D})";
+          outer_color = "rgb(${theme.base04})";
+          inner_color = "rgb(${theme.base00})";
+          font_color = "rgb(${theme.base0D})";
 
-        fade_on_empty = false;
-        placeholder_text = ''<span font_family="${font_family}" foreground="##${theme.base0D}">Password...</span>'';
+          fade_on_empty = false;
+          placeholder_text = ''<span font_family="${font_family}" foreground="##${theme.base0D}">Password...</span>'';
 
-        dots_spacing = 0.3;
-        dots_center = true;
-      }
-    ];
+          dots_spacing = 0.3;
+          dots_center = true;
+        }
+      ];
 
-    labels = [
-      {
-        text = "$TIME";
-        inherit font_family;
-        font_size = 50;
-        color = "rgb(${theme.base00})";
+      labels = [
+        {
+          text = "$TIME";
+          inherit font_family;
+          font_size = 50;
+          color = "rgb(${theme.base00})";
 
-        position = {
-          x = 0;
-          y = 80;
-        };
+          position = {
+            x = 0;
+            y = 80;
+          };
 
-        valign = "center";
-        halign = "center";
-      }
-    ];
+          valign = "center";
+          halign = "center";
+        }
+      ];
+    };
   };
 }

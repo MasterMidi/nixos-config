@@ -134,6 +134,8 @@
     # gaming tools
     protonup-qt
     adwsteamgtk
+    prismlauncher
+    modrinth-app
 
     # Media
     jellyfin-media-player
@@ -152,8 +154,11 @@
     cinnamon.pix
     # loupe
 
+    # misc
+    pipes-rs
+
     # Communication
-    # vesktop # Discord but with vencord pre-installed
+    vesktop # Discord but with vencord pre-installed
     signal-desktop
     element-desktop
 

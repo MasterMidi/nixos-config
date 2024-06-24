@@ -294,6 +294,7 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    easyeffects
     barrier
     gparted # has to be a systempackage or it wont open
     openrgb
@@ -391,6 +392,11 @@
       group = "libvirtd";
       mode = "0666";
     };
+  };
+
+  metrics.netdata = {
+    enable = true;
+    disableWebUI = true;
   };
 
   # services.qbitmanage = {

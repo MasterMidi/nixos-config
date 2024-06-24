@@ -72,7 +72,7 @@
 
       channelsConfig = {
         allowUnfree = true;
-        allowBroken = false;
+        allowBroken = true;
         permittedInsecurePackages = [];
       };
 

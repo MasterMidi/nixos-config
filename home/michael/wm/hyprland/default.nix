@@ -20,11 +20,12 @@ in {
     settings = with config.colorScheme.palette;
       {
         exec-once = [
-          "waybar &"
-          "sleep 1 && swww init &"
-          "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1 &"
-          "wl-paste --watch cliphist store &"
-          "nm-applet --indicator &"
+          "waybar &" # start taskbar
+          "sleep 1 && swww init &" # set wallpaper
+          "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1 &" # start polkit agent
+          "wl-paste --watch cliphist store &" # start clipboard manager
+          "nm-applet --indicator &" # start network manager applet
+          "blueman-applet &" # start bluetooth applet
         ];
 
         monitor = [

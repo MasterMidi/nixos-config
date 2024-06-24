@@ -2,9 +2,6 @@
 # and may be overwritten by future invocations.  Please make changes
 # to /etc/nixos/configuration.nix instead.
 {
-  config,
-  lib,
-  pkgs,
   modulesPath,
   ...
 }: {
@@ -12,11 +9,8 @@
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
 
+	# Kernel modules for storage
   boot.initrd.availableKernelModules = ["nvme" "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod"];
-  # boot.initrd.kernelModules = ["amdgpu"];
-  boot.kernelModules = ["kvm-amd"];
-  boot.kernelParams = ["amd_pstate=active"];
-  boot.extraModulePackages = [];
 
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/7f4599a1-65eb-4eef-b09b-2c57aae16d20";
@@ -39,8 +33,6 @@
     fsType = "btrfs";
   };
 
-  swapDevices = [];
-
   # Other drives
   fileSystems."/mnt/games" = {
     device = "/dev/disk/by-uuid/6baf0c54-8fb0-425d-ac48-fd2ca868a2bf";
@@ -53,15 +45,4 @@
     fsType = "xfs";
     options = ["x-systemd.automount" "noauto"];
   };
-
-  # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
-  # (the default) this is the recommended approach. When using systemd-networkd it's
-  # still possible to use this option, but it's recommended to use it in conjunction
-  # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
-  networking.useDHCP = lib.mkDefault true;
-  # networking.interfaces.enp9s0.useDHCP = lib.mkDefault true;
-  # networking.interfaces.wlp6s0.useDHCP = lib.mkDefault true;
-
-  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-  hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 }

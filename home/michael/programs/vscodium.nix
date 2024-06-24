@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  inputs,
+  ...
+}: {
   programs.vscode = {
     enable = true;
     package = pkgs.vscodium;
@@ -75,7 +79,7 @@
         key = "ctrl+shift+[Semicolon]";
       }
     ];
-    extensions = with pkgs.vscode-extensions.extensions.x86_64-linux.vscode-marketplace;
+    extensions = with inputs.nix-vscode-extensions.extensions.x86_64-linux.vscode-marketplace;
       [
         sndst00m.vscode-native-svg-preview
         kamadorueda.alejandra
@@ -141,20 +145,20 @@
         # vscodevim.vim
         redhat.vscode-yaml
       ]
-      ++ (with pkgs.vscode-extensions.extensions.x86_64-linux.open-vsx; [
+      ++ (with inputs.nix-vscode-extensions.extensions.x86_64-linux.open-vsx; [
         jeanp413.open-remote-ssh
       ]);
   };
 
+  # Language tools
   home.packages = with pkgs; [
-    # Language tools
-    ## Nix tools
+    # Nix tools
     nil
     nixd
     nixpkgs-fmt
     alejandra
 
-    ## Shell tools
+    # Shell tools
     shellcheck
     shfmt
     bash-language-server

@@ -1,5 +1,11 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  lib,
+  ...
+}: {
   environment.systemPackages = with pkgs; [
+    mangohud
+    protonup-qt
     protontricks
     winetricks
     wineWowPackages.waylandFull
@@ -11,6 +17,7 @@
     })
   ];
 
+  # Enable steam
   programs.steam = {
     enable = true;
     remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
@@ -23,6 +30,20 @@
     ];
   };
 
+  # Enable OpenGL
+  hardware.opengl = {
+    enable = lib.mkForce true;
+    driSupport = true;
+    driSupport32Bit = true; # Enables support for 32bit libs that steam uses
+    extraPackages = with pkgs; [
+      # amdvlk
+    ];
+    extraPackages32 = with pkgs; [
+      # driversi686Linux.amdvlk
+    ];
+  };
+
+  # Enable gamemode
   programs.gamemode = {
     enable = true;
     enableRenice = true;
@@ -48,6 +69,7 @@
     ];
   };
 
+  # Enable SuperGFXD
   services.supergfxd = {
     enable = true;
     settings = {
@@ -56,11 +78,18 @@
     };
   };
 
-  boot.kernelParams = ["amd_pstate=active"];
-
-  # boot.kernelPatches = [
-  # 	{
-
-  # 	}
-  # ];
+  # Enable KVMFR for winows VM
+  virtualisation = {
+    vfio.enable = false;
+    kvmfr = {
+      enable = true;
+      shm = {
+        enable = true;
+        size = 64;
+        user = "michael";
+        group = "libvirtd";
+        mode = "0666";
+      };
+    };
+  };
 }

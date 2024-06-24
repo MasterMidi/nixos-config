@@ -1,7 +1,6 @@
 {
   config,
   pkgs,
-  lib,
   inputs,
   ...
 }: {
@@ -13,7 +12,6 @@
     ./theme
     ./programs
     ./services
-    ./keyboard
     ./defaultApps.nix
     ./nix.nix
   ];
@@ -132,7 +130,6 @@
     networkmanagerapplet # NetworkManager tray icon
 
     # gaming tools
-    protonup-qt
     adwsteamgtk
     prismlauncher
     modrinth-app

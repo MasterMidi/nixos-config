@@ -1,6 +1,0 @@
-{ ... }:
-{
-  imports = [
-    ./kmonad.nix
-  ];
-}

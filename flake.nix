@@ -113,6 +113,7 @@
             ./hosts/jason
             nixosModules.refind
             nixosModules.vfio
+            nixosModules.metrics
             # outputs.nixosModules.qbitmanage
 
             inputs.home-manager.nixosModules.home-manager

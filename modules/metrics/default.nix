@@ -13,6 +13,7 @@ in {
 
   config = lib.mkIf cfg.enable {
     services.netdata = {
+      enable = true;
       config = {
         global = {
           "memory mode" = "none";
@@ -31,5 +32,9 @@ in {
           api key = any string that is set also on the receiver side
       '';
     };
+
+    environment.systemPackages = with pkgs; [
+      jq # Required for netdata to get docker container names
+    ];
   };
 }

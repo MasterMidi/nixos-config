@@ -17,6 +17,5 @@ pkgs.mkShell {
     nix-inspect
     sops # secret management
     flake-checker # healthcheck for flake.lock files
-    nh # yet another nix
   ];
 }

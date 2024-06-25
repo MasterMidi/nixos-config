@@ -1,6 +1,6 @@
 {...}: {
   imports = [
+    # ./immich
     ./mediaserver
-    # ./immich.nix
   ];
 }

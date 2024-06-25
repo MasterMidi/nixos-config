@@ -12,10 +12,16 @@
     dev.enable = false;
   };
 
-  # environment.etc = {
-  #   "nix/flake-channels/nixpkgs".source = inputs.nixpkgs;
-  #   "nix/flake-channels/home-manager".source = inputs.home-manager;
-  # };
+  environment.systemPackages = with pkgs; [nh];
+
+  environment.variables = {
+    FLAKE = "/etc/nixos/";
+  };
+
+  environment.etc = {
+    # "nix/flake-channels/nixpkgs".source = inputs.nixpkgs;
+    # "nix/flake-channels/home-manager".source = inputs.home-manager;
+  };
 
   nix = {
     # set the path for channels compat

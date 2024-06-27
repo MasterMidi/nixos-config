@@ -173,6 +173,16 @@
           ];
         };
 
+				andromeda = {
+          system = "x86_64-linux";
+          modules = [
+            ./hosts/andromeda
+            # srvos.nixosModules.server
+            # srvos.nixosModules.common
+            inputs.srvos.nixosModules.mixins-terminfo
+          ];
+        };
+
         envpi = {
           system = "aarch64-linux";
           modules = [

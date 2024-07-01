@@ -25,6 +25,10 @@
     # Individual program packages
     ags.url = "github:Aylur/ags";
     caligula.url = "github:ifd3f/caligula";
+    nixvim = {
+      url = "github:nix-community/nixvim";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # Theming and customization
     nix-colors.url = "github:misterio77/nix-colors"; # Theming in nix configuration
@@ -94,15 +98,16 @@
           lollypops.nixosModules.lollypops
           agenix.nixosModules.default
           sops-nix.nixosModules.sops
-          # home-manager.nixosModules.home-manager
-          # {
-          #   home-manager.useGlobalPkgs = true;
-          #   home-manager.useUserPackages = true;
-          #   home-manager.extraSpecialArgs = {inherit inputs;};
-          #   home-manager.sharedModules = [
-          #     ./home/core
-          #   ];
-          # }
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.extraSpecialArgs = {inherit inputs;};
+            home-manager.users.root = import ./home/root;
+            home-manager.sharedModules = [
+              ./home/core
+            ];
+          }
         ];
       };
 
@@ -133,6 +138,7 @@
           system = "x86_64-linux";
           modules = [
             ./hosts/daniel
+            nixosModules.qbittorrent
             inputs.nixos-hardware.nixosModules.lenovo-ideapad-slim-5
             inputs.nixos-hardware.nixosModules.common-cpu-amd-pstate
 

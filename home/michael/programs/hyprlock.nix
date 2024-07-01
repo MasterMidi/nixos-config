@@ -25,7 +25,7 @@ in {
     settings = {
       general.hide_cursor = false;
 
-      backgrounds = [
+      background = [
         {
           path = "${config.xdg.userDirs.pictures}/wallpapers/fuck you nvidia.png"; # only pngs are supported
           blur_size = 5;
@@ -33,14 +33,11 @@ in {
         }
       ];
 
-      input-fields = [
+      input-field = [
         {
           monitor = "eDP-1";
 
-          size = {
-            width = 300;
-            height = 50;
-          };
+          size = "300, 50";
 
           outline_thickness = 2;
 
@@ -56,17 +53,14 @@ in {
         }
       ];
 
-      labels = [
+      label = [
         {
           text = "$TIME";
           inherit font_family;
           font_size = 50;
           color = "rgb(${theme.base00})";
 
-          position = {
-            x = 0;
-            y = 80;
-          };
+          position = "0, 80";
 
           valign = "center";
           halign = "center";

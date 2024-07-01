@@ -15,6 +15,7 @@
     ./kitty.nix
     ./lazygit.nix
     ./mangohud.nix
+    ./nvim
     ./mpv
     ./ripgrep.nix
     ./spotify.nix

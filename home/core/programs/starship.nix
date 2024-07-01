@@ -23,8 +23,9 @@ with config.colorScheme.palette; let
   error = "#${base08}";
   succes = "#${base0B}";
 
-  shell = "#${base0D}";
+  network = "#${base0E}";
   pc-info = "#${base07}";
+  shell = "#${base0D}";
   path = "#${base04}";
   git-module = "#${base03}";
   package-module = "#${base0C}";
@@ -42,10 +43,11 @@ in {
 
       # format = "($nix_shell$shlvl[](fg:${shell} bg:${pc-info}))$os$username$hostname$localip$sudo[](fg:${pc-info} bg:${path})$directory[](fg:${path} bg:${git-module})$git_branch$git_commit$git_state$git_status[](fg:${git-module} bg:${package-module})$package[](fg:${package-module} bg:${code-module})$container$kubernetes$docker_context$nodejs$rust$golang$php[](fg:${code-module})$cmd_duration\n$character";
       format = builtins.concatStringsSep "" [
-        (ifSection ["$nix_shell" "$direnv" "$shlvl"] "" shell pc-info)
-        (section ["$os" "$username" "$hostname" "$localip" "$sudo"] "" pc-info path)
+        (ifSection ["$localip"] "" network pc-info)
+        (section ["$os" "$username" "$hostname" "$sudo"] "" pc-info path)
         (section ["$directory"] "" path git-module)
-        (section ["$git_branch" "$git_commit" "$git_state$" "git_status"] "" git-module package-module)
+        (section ["$git_branch" "$git_commit" "$git_state$" "git_status"] "" git-module shell)
+        (ifSection ["$nix_shell" "$direnv" "$shlvl"] "" shell package-module)
         (section ["$package" "$container" "$kubernetes" "$docker_context"] "" package-module code-module)
         (section ["$lua" "$nodejs" "$rust" "$golang" "$php"] "" code-module "")
         "$cmd_duration\n$character"
@@ -59,8 +61,14 @@ in {
       };
 
       direnv = {
-        format = "[$symbol$loaded/$allowed]($style) ";
-        style = "fg:${dark-text} bg:${pc-info}";
+        format = "[$symbol$loaded/$allowed ]($style)";
+        style = "fg:${dark-text} bg:${shell}";
+        symbol = "";
+        allowed_msg = "󰄬";
+        not_allowed_msg = "";
+        denied_msg = "";
+        loaded_msg = "";
+        unloaded_msg = "";
         disabled = true;
       };
 

@@ -9,29 +9,52 @@ with lib; let
   defaultUser = "qbittorrent";
   defaultGroup = defaultUser;
 
-  qBittorrentConf = pkgs.writeText "qBittorrent.conf" ''
-    [LegalNotice]
-    Accepted=true
+  # qBittorrentConf =
+  #   if cfg.acceptLegalNotice
+  #   then
+  #     pkgs.writeText "qBittorrent.conf" (lib.generators.toINI {} {
+  #       LegalNotice = {
+  #         Accepted = true;
+  #       };
+  #       Preferences = {
+  #         "WebUI\Enabled" = true;
+  #         "WebUI\LocalHostAuth" = false;
+  #         "WebUI\UseUPnP" = true;
+  #       };
+  #     })
+  #   else pkgs.writeText "qBittorrent.conf" (lib.generators.toINI {} {});
 
-    [AutoRun]
-    enabled=true
-    program=chmod -R 775 “%F/”
+  qBittorrentConf = pkgs.writeText "qBittorrent.conf" (lib.generators.toINI {} {
+    LegalNotice = {
+      Accepted = true;
+    };
 
-    [BitTorrent]
-    Session\DisableAutoTMMByDefault=false
-    Session\DisableAutoTMMTriggers\CategorySavePathChanged=false
-    Session\DisableAutoTMMTriggers\DefaultSavePathChanged=false
-    Session\QueueingSystemEnabled=false
-    Session\SubcategoriesEnabled=true
-    Session\TempPathEnabled=true
+    AutoRun = {
+      enabled = true;
+      program = "chmod -R 664 “%F/”";
+    };
 
-    [Network]
-    Cookies=@Invalid()
+    BitTorrent = {
+      "Session\DisableAutoTMMByDefault" = false;
+      "Session\DisableAutoTMMTriggers\CategorySavePathChanged" = false;
+      "Session\DisableAutoTMMTriggers\DefaultSavePathChanged" = false;
+      "Session\QueueingSystemEnabled" = false;
+      "Session\SubcategoriesEnabled" = true;
+      "Session\TempPathEnabled" = true;
+    };
 
-    [Preferences]
-    Connection\PortRangeMin=62876
-    Queueing\QueueingEnabled=false
-  '';
+    Network = {
+      Cookies = "@Invalid()";
+    };
+
+    Preferences = {
+      "Connection\PortRangeMin" = 62876;
+      "Queueing\QueueingEnabled" = false;
+      "WebUI\Enabled" = true;
+      "WebUI\LocalHostAuth" = false;
+      "WebUI\UseUPnP" = true;
+    };
+  });
 
   webUIAddressSubmodule = lib.types.submodule {
     options = {
@@ -70,18 +93,42 @@ in {
       description = "The IP and port to which the webui will bind.";
     };
 
+    acceptLegalNotice = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Accept the legal notice on first run.";
+    };
+
+    settings = lib.mkOption {
+      type = lib.types.nullOr (lib.types.submodule {
+        options = {
+          BitTorrent = lib.mkOption {
+            type = lib.types.attrsOf lib.types.attrs;
+            default = {};
+            description = "The settings for the BitTorrent section of qBittorrent.conf";
+          };
+
+          Preferences = lib.mkOption {
+            type = lib.types.attrsOf lib.types.attrs;
+            default = {};
+            description = "The settings for the Preferences section of qBittorrent.conf";
+          };
+        };
+      });
+      default = null;
+      description = "The settings written to qBittorrent.conf";
+    };
+
+    customWebUI = lib.mkOption {
+      type = lib.type.nullOr lib.types.str;
+      default = null;
+      description = "Custom WebUI to use instead of the default one.";
+    };
+
     openFirewall = lib.mkOption {
       default = false;
       type = lib.types.bool;
       description = "Expose the webui to the network.";
-    };
-
-    systemService = mkOption {
-      type = types.bool;
-      default = true;
-      description = ''
-        Whether to auto-launch qBittorrent as a system service.
-      '';
     };
 
     user = mkOption {
@@ -120,15 +167,22 @@ in {
       '';
       default = cfg.dataDir + "/.config/qBittorrent";
     };
+
+    logDir = mkOption {
+      type = path;
+      default = "${cfg.dataDir}/log";
+      description = ''
+        Directory where the qbittorrent logs will be stored,
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
-    networking.firewall.allowedTCPPorts =
-      mkIf cfg.openFirewall [cfg.webUIAddress.port];
+    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [cfg.webUIAddress.port];
 
     systemd.packages = [cfg.package];
 
-    users.users = mkIf (cfg.systemService && cfg.user == defaultUser) {
+    users.users = mkIf (cfg.user == defaultUser) {
       ${defaultUser} = {
         group = cfg.group;
         home = cfg.dataDir;
@@ -139,48 +193,75 @@ in {
       };
     };
 
-    users.groups = mkIf (cfg.systemService && cfg.group == defaultGroup) {
+    users.groups = mkIf (cfg.group == defaultGroup) {
       ${defaultGroup}.gid = 500;
     };
 
-    systemd.tmpfiles.rules = [
-      # "f '${cfg.dataDir}/qBittorrent.conf' 0755 ${cfg.user} ${cfg.group} - ${qBittorrentConf}"
-      # "d '${cfg.dataDir}' 0700 ${cfg.user} ${cfg.group} - -"
-      # "d '${cfg.dataDir}/.cache/qBittorrent' 0755 ${cfg.user} ${cfg.group} - -"
-      # "d '${cfg.dataDir}/.config/qBittorrent' 0755 ${cfg.user} ${cfg.group} - -"
-      # "d '${cfg.dataDir}/.local/share/qBittorrent' 0755 ${cfg.user} ${cfg.group} - -"
-    ];
+    # systemd.tmpfiles.rules = [
+    #   "C ${cfg.configDir}/qBittorrent.conf 0755 ${cfg.user} ${cfg.group} - ${qBittorrentConf}"
+    # ];
+    systemd.tmpfiles.settings.qBittorrentDirs = {
+      # "${cfg.dataDir}".d = {
+      #   mode = "0700";
+      #   inherit (cfg) user group;
+      # };
+      # "${cfg.configDir}"."d" = {
+      #   mode = "700";
+      #   inherit (cfg) user group;
+      # };
+      # "${cfg.logDir}"."d" = {
+      #   mode = "700";
+      #   inherit (cfg) user group;
+      # };
+      # "${cfg.cacheDir}"."d" = {
+      #   mode = "700";
+      #   inherit (cfg) user group;
+      # };
+    };
+
+    # [
+    #   "f '${cfg.dataDir}/qBittorrent.conf' 0755 ${cfg.user} ${cfg.group} - ${qBittorrentConf}"
+    #   "d '${cfg.dataDir}' 0700 ${cfg.user} ${cfg.group} - -"
+    #   "d '${cfg.dataDir}/.cache/qBittorrent' 0755 ${cfg.user} ${cfg.group} - -"
+    #   "d '${cfg.dataDir}/.config/qBittorrent' 0755 ${cfg.user} ${cfg.group} - -"
+    #   "d '${cfg.dataDir}/.local/share/qBittorrent' 0755 ${cfg.user} ${cfg.group} - -"
+    # ];
 
     systemd.services = {
-      qbittorrent = mkIf cfg.systemService {
+      qbittorrent = {
         description = "a Bittorrent service";
         documentation = ["man:qBittorrent-nox(1)"];
-        wantedBy = ["multi-user.target"];
         after = ["network-online.target" "nss-lookup.target"];
+        wants = ["network-online.target"];
+        wantedBy = ["multi-user.target"];
         serviceConfig = {
-          Type = "exec";
+          Type = "simple";
           User = cfg.user;
           Group = cfg.group;
           StateDirectory = "qBittorrent";
           SyslogIdentifier = "qBittorrent";
+          WorkingDirectory = cfg.dataDir;
           ExecStart = "${cfg.package}/bin/qbittorrent-nox --webui-port=${toString cfg.webUIAddress.port}";
           ExecStartPre = initializeAndRun;
+          UMask = "0113";
           # BindPaths = ["/var/lib/qBittorrent/.config/qBittorrent.conf:${qBittorrentConf}"];
+          # NoNewPrivileges = true;
+          # SystemCallArchitectures = "native";
           # ProtectHome = true;
           # ProtectSystem = "strict";
-          # PrivateTmp = true;
           # PrivateDevices = true;
-          # ProtectHostname = true;
-          # ProtectClock = true;
-          # ProtectKernelTunables = true;
-          # ProtectKernelModules = true;
-          # ProtectKernelLogs = true;
-          # ProtectControlGroups = true;
-          # NoNewPrivileges = true;
-          # RestrictRealtime = true;
-          # RestrictSUIDSGID = true;
           # RemoveIPC = true;
           # PrivateMounts = true;
+          # RestrictNamespaces = !config.boot.isContainer;
+          # RestrictRealtime = true;
+          # RestrictSUIDSGID = true;
+          # ProtectControlGroups = !config.boot.isContainer;
+          # ProtectHostname = true;
+          # ProtectKernelLogs = !config.boot.isContainer;
+          # ProtectKernelModules = !config.boot.isContainer;
+          # ProtectKernelTunables = !config.boot.isContainer;
+          # LockPersonality = true;
+          # PrivateTmp = !config.boot.isContainer;
         };
       };
     };

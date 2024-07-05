@@ -27,14 +27,16 @@
     group = "media";
   };
 
-  # services.qbittorrent = {
-  #   enable = true;
-  #   openFirewall = true;
-  #   group = "media";
-  # };
+  services.qbittorrent = {
+    enable = true;
+    openFirewall = true;
+    acceptLegalNotice = true;
+    group = "media";
+  };
 
   users.groups.media = {
-    system = true;
     gid = 500;
   };
+
+  users.users.michael.extraGroups = ["media"];
 }

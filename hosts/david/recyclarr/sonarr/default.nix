@@ -1,15 +1,12 @@
 {config, ...}: let
   qualityProfiles = import ./qualityProfiles.nix;
-
-  # Function to convert the set of profiles into a list
-  profilesToList = set: builtins.attrValues set;
 in {
   main = {
-    base_url = "http://jason.local:9040";
-    # api_key = builtins.readFile config.sops.secrets.SONARR_KEY.path;
-    delete_old_custom_formats = true;
-    replace_existing_custom_formats = true;
-    media_naming = {
+    baseUrl = "http://jason.local:9040";
+    apiKey = "c5783cdc82d244e6b138be2988397813";
+    deleteOldCustomFormats = true;
+    replaceExistingCustomFormats = true;
+    mediaNaming = {
       series = "jellyfin";
       season = "default";
       episodes = {
@@ -19,11 +16,11 @@ in {
         anime = "default";
       };
     };
-    quality_profiles = profilesToList qualityProfiles;
-    custom_formats = [
-      {
+    qualityProfiles = import ./qualityProfiles.nix;
+    customFormats = [
+      { 
         # Anime Release Groups
-        trash_ids = [
+        trashIds = [
           "949c16fe0a8147f50ba82cc2df9411c9" # Anime BD Tier 01 (Top SeaDex Muxers)
           "ed7f1e315e000aef424a58517fa48727" # Anime BD Tier 02 (SeaDex Muxers)
           "096e406c92baa713da4a72d88030b815" # Anime BD Tier 03 (SeaDex Muxers)
@@ -41,43 +38,43 @@ in {
           "b4a1b3d705159cdca36d71e57ca86871" # Anime Raws
           "e3515e519f3b1360cbfc17651944354c" # Anime LQ Groups
         ];
-        quality_profiles = [{name = qualityProfiles.anime.name;}];
+        qualityProfiles = [{name = qualityProfiles.anime.name;}];
       }
       {
         # Anime Audio
-        trash_ids = [
+        trashIds = [
           "418f50b10f1907201b6cfdf881f467b7" # Anime Dual Audio
           "9c14d194486c4014d422adc64092d794" # dubs only
           "07a32f77690263bb9fda1842db7e273f" # VOSTFR
         ];
-        quality_profiles = [{name = qualityProfiles.anime.name;}];
+        qualityProfiles = [{name = qualityProfiles.anime.name;}];
       }
       {
         # Anime Versions
-        trash_ids = [
+        trashIds = [
           "4fc15eeb8f2f9a749f918217d4234ad8" # v4
           "0e5833d3af2cc5fa96a0c29cd4477feb" # v3
           "228b8ee9aa0a609463efca874524a6b8" # v2
           "273bd326df95955e1b6c26527d1df89b" # v1
           "d2d7b8a9d39413da5f44054080e028a3" # v0
         ];
-        quality_profiles = [{name = qualityProfiles.anime.name;}];
+        qualityProfiles = [{name = qualityProfiles.anime.name;}];
       }
       {
         # Anime Streaming Services
-        trash_ids = [
+        trashIds = [
           "3e0b26604165f463f3e8e192261e7284" # Crunchyroll
           "44a8ee6403071dd7b8a3a8dd3fe8cb20" # VRV
           "1284d18e693de8efe0fe7d6b3e0b9170" # FUNi
           "4c67ff059210182b59cdd41697b8cb08" # BiliBili
           "570b03b3145a25011bf073274a407259" # HIDIVE
         ];
-        quality_profiles = [{name = qualityProfiles.anime.name;}];
+        qualityProfiles = [{name = qualityProfiles.anime.name;}];
       }
       {
         # Anime DSNP
-        trash_ids = ["89358767a60cc28783cdc3d0be9388a4"];
-        quality_profiles = [
+        trashIds = ["89358767a60cc28783cdc3d0be9388a4"];
+        qualityProfiles = [
           {
             name = qualityProfiles.anime.name;
             score = 5;
@@ -86,8 +83,8 @@ in {
       }
       {
         # Anime NF
-        trash_ids = ["d34870697c9db575f17700212167be23"];
-        quality_profiles = [
+        trashIds = ["d34870697c9db575f17700212167be23"];
+        qualityProfiles = [
           {
             name = qualityProfiles.anime.name;
             score = 4;
@@ -96,8 +93,8 @@ in {
       }
       {
         # Anime AMZN
-        trash_ids = ["d660701077794679fd59e8bdf4ce3a29"];
-        quality_profiles = [
+        trashIds = ["d660701077794679fd59e8bdf4ce3a29"];
+        qualityProfiles = [
           {
             name = qualityProfiles.anime.name;
             score = 3;
@@ -106,8 +103,8 @@ in {
       }
       {
         # Anime ADN
-        trash_ids = ["d54cd2bf1326287275b56bccedb72ee2"];
-        quality_profiles = [
+        trashIds = ["d54cd2bf1326287275b56bccedb72ee2"];
+        qualityProfiles = [
           {
             name = qualityProfiles.anime.name;
             score = 1;
@@ -116,8 +113,8 @@ in {
       }
       {
         # Anime Remux Tier 01
-        trash_ids = ["9965a052eb87b0d10313b1cea89eb451"];
-        quality_profiles = [
+        trashIds = ["9965a052eb87b0d10313b1cea89eb451"];
+        qualityProfiles = [
           {
             name = qualityProfiles.anime.name;
             score = 1050;
@@ -126,8 +123,8 @@ in {
       }
       {
         # Anime Remux Tier 02
-        trash_ids = ["8a1d0c3d7497e741736761a1da866a2e"];
-        quality_profiles = [
+        trashIds = ["8a1d0c3d7497e741736761a1da866a2e"];
+        qualityProfiles = [
           {
             name = qualityProfiles.anime.name;
             score = 1000;
@@ -136,8 +133,8 @@ in {
       }
       {
         # Anime WEB Tier 01
-        trash_ids = ["e6258996055b9fbab7e9cb2f75819294"];
-        quality_profiles = [
+        trashIds = ["e6258996055b9fbab7e9cb2f75819294"];
+        qualityProfiles = [
           {
             name = qualityProfiles.anime.name;
             score = 350;
@@ -146,8 +143,8 @@ in {
       }
       {
         # Anime WEB Tier 02
-        trash_ids = ["58790d4e2fdcd9733aa7ae68ba2bb503"];
-        quality_profiles = [
+        trashIds = ["58790d4e2fdcd9733aa7ae68ba2bb503"];
+        qualityProfiles = [
           {
             name = qualityProfiles.anime.name;
             score = 150;
@@ -156,8 +153,8 @@ in {
       }
       {
         # Anime WEB Tier 03
-        trash_ids = ["d84935abd3f8556dcd51d4f27e22d0a6"];
-        quality_profiles = [
+        trashIds = ["d84935abd3f8556dcd51d4f27e22d0a6"];
+        qualityProfiles = [
           {
             name = qualityProfiles.anime.name;
             score = 150;
@@ -166,8 +163,8 @@ in {
       }
       {
         # Uncensored
-        trash_ids = ["026d5aadd1a6b4e550b134cb6c72b3ca"];
-        quality_profiles = [
+        trashIds = ["026d5aadd1a6b4e550b134cb6c72b3ca"];
+        qualityProfiles = [
           {
             name = qualityProfiles.anime.name;
             score = 101;
@@ -180,21 +177,21 @@ in {
       }
       {
         # Misc
-        trash_ids = [
+        trashIds = [
           "b2550eb333d27b75833e25b8c2557b38" # 10bit
           "3bc5f395426614e155e585a2f056cdf1" # Season pack
           "ec8fa7296b64e8cd390a1600981f3923" # Repack/Proper
           "eb3d5cc0a2be0db205fb823640db6a3c" # Repack v2
           "44e7c4de10ae50265753082e5dc76047" # Repack v3
         ];
-        quality_profiles = [{name = qualityProfiles.anime.name;} {name = qualityProfiles.webdl.name;}];
+        qualityProfiles = [{name = qualityProfiles.anime.name;} {name = qualityProfiles.webdl.name;}];
       }
       {
         # Codecs
-        trash_ids = [
+        trashIds = [
           "15a05bc7c1a36e2b57fd628f8977e2fc" # AV1
         ];
-        quality_profiles = [
+        qualityProfiles = [
           {
             name = qualityProfiles.anime.name;
             score = -10;
@@ -207,17 +204,17 @@ in {
       }
       {
         # Unwanted
-        trash_ids = [
+        trashIds = [
           "85c61753df5da1fb2aab6f2a47426b09" # BR-DISK
           "9c11cd3f07101cdba90a2d81cf0e56b4" # LQ
           "e2315f990da2e2cbfc9fa5b7a6fcfe48" # LQ (Release Title)
           "fbcb31d8dabd2a319072b84fc0b7249c" # Extras
         ];
-        quality_profiles = [{name = qualityProfiles.anime.name;} {name = qualityProfiles.webdl.name;}];
+        qualityProfiles = [{name = qualityProfiles.anime.name;} {name = qualityProfiles.webdl.name;}];
       }
       {
         # Streaming Services
-        trash_ids = [
+        trashIds = [
           "f67c9ca88f463a48346062e8ad07713f" # ATVP
           "89358767a60cc28783cdc3d0be9388a4" # DSNP
           "81d1fbf600e2540cee87f3a23f9d3c1c" # MAX
@@ -245,17 +242,17 @@ in {
           "fcc09418f67ccaddcf3b641a22c5cfd7" # ALL4
           "bbcaf03147de0f73be2be4a9078dfa03" # 4OD
         ];
-        quality_profiles = [{name = qualityProfiles.webdl.name;}];
+        qualityProfiles = [{name = qualityProfiles.webdl.name;}];
       }
       {
         # HQ Source Groups
-        trash_ids = [
+        trashIds = [
           "e6258996055b9fbab7e9cb2f75819294" # WEB Tier 01
           "58790d4e2fdcd9733aa7ae68ba2bb503" # WEB Tier 02
           "d84935abd3f8556dcd51d4f27e22d0a6" # WEB Tier 03
           "d0c516558625b04b363fa6c5c2c7cfd4" # WEB Scene
         ];
-        quality_profiles = [{name = qualityProfiles.webdl.name;}];
+        qualityProfiles = [{name = qualityProfiles.webdl.name;}];
       }
     ];
   };

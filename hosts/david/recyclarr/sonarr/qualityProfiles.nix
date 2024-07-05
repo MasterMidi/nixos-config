@@ -3,17 +3,17 @@ let
 in {
   anime = {
     name = "Anime";
-    reset_unmatched_scores = {
+    resetUnmatchedScores = {
       enabled = true;
       except = [];
     };
     upgrade = {
       allowed = true;
-      until_quality = "Bluray 1080p";
-      until_score = 10000;
+      untilQuality = "Bluray 1080p";
+      untilScore = 10000;
     };
-    min_format_score = 10;
-    quality_sort = "top";
+    minFormatScore = 10;
+    qualitySort = "top";
     qualities = [
       {
         name = "Bluray 1080p";
@@ -40,33 +40,19 @@ in {
     name = "WEB-DL (1080p)";
     upgrade = {
       allowed = true;
-      until_quality = qualities.webDl1080p;
-      until_score = 10000;
+      untilQuality = qualities.webDl1080p;
+      untilScore = 10000;
     };
-    min_format_score = 10;
-    quality_sort = "top";
+    minFormatScore = 10;
+    qualitySort = "top";
     qualities = [
-      {
-        name = qualities.webDl1080p;
-      }
-      {
-        name = qualities.webRip1080p;
-      }
-      {
-        name = qualities.hdtv1080p;
-      }
-      {
-        name = qualities.bluray720p;
-      }
-      {
-        name = qualities.webDl720p;
-      }
-      {
-        name = qualities.webRip720p;
-      }
-      {
-        name = qualities.hdtv720p;
-      }
+      {name = qualities.webDl1080p;}
+      {name = qualities.webRip1080p;}
+      {name = qualities.hdtv1080p;}
+      {name = qualities.bluray720p;}
+      {name = qualities.webDl720p;}
+      {name = qualities.webRip720p;}
+      {name = qualities.hdtv720p;}
     ];
   };
 }

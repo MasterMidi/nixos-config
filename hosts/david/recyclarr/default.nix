@@ -5,7 +5,7 @@
     settings = {};
     config = {
       sonarr = import ./sonarr {inherit config;};
-      radarr = import ./radarr {inherit config;};
+      # radarr = import ./radarr {inherit config;};
     };
   };
 }

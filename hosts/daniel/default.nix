@@ -226,30 +226,4 @@
     user = "michael";
     group = "users";
   };
-
-  services.qbittorrent = {
-    enable = true;
-    openFirewall = true;
-    acceptLegalNotice = true;
-    # user = "michael";
-    group = "users";
-    # settings = {
-    #   BitTorrent = {
-    #     Session = {
-    #       DisableAutoTMMByDefault = false;
-    #       DisableAutoTMMTriggers = {
-    #         CategorySavePathChanged = false;
-    #         DefaultSavePathChanged = false;
-    #       };
-    #       QueueingSystemEnabled = false;
-    #       SubcategoriesEnabled = true;
-    #       TempPathEnabled = true;
-    #     };
-    #   };
-    #   Preferences = {
-    #     Connection.PortRangeMin = 62876;
-    #     Queueing.QueueingEnabled = false;
-    #   };
-    # };
-  };
 }

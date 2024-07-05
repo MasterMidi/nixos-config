@@ -6,32 +6,25 @@
 }:
 with lib; let
   cfg = config.services.qbittorrent;
+
   defaultUser = "qbittorrent";
   defaultGroup = defaultUser;
 
-  # qBittorrentConf =
-  #   if cfg.acceptLegalNotice
-  #   then
-  #     pkgs.writeText "qBittorrent.conf" (lib.generators.toINI {} {
-  #       LegalNotice = {
-  #         Accepted = true;
-  #       };
-  #       Preferences = {
-  #         "WebUI\Enabled" = true;
-  #         "WebUI\LocalHostAuth" = false;
-  #         "WebUI\UseUPnP" = true;
-  #       };
-  #     })
-  #   else pkgs.writeText "qBittorrent.conf" (lib.generators.toINI {} {});
+  sourceStorePath = file: let
+    sourcePath = lib.toString file.source;
+    sourceName = config.lib.strings.storeFileName (baseNameOf sourcePath);
+  in
+    if builtins.hasContext sourcePath
+    then file.source
+    else
+      builtins.path {
+        path = file.source;
+        name = sourceName;
+      };
 
   qBittorrentConf = pkgs.writeText "qBittorrent.conf" (lib.generators.toINI {} {
     LegalNotice = {
       Accepted = true;
-    };
-
-    AutoRun = {
-      enabled = true;
-      program = "chmod -R 664 “%F/”";
     };
 
     BitTorrent = {
@@ -53,6 +46,8 @@ with lib; let
       "WebUI\Enabled" = true;
       "WebUI\LocalHostAuth" = false;
       "WebUI\UseUPnP" = true;
+      "WebUI\RootFolder" = /webui/vuetorrent;
+      "WebUI\AlternativeUIEnabled" = true;
     };
   });
 
@@ -70,17 +65,6 @@ with lib; let
       };
     };
   };
-
-  # TODO: replace with tmpfile rule
-  initializeAndRun = pkgs.writers.writeBash "initializeAndRun-qBittorrent-config" ''
-    set -efu
-
-    mkdir -p ${cfg.configDir}
-
-    if [ ! -f ${cfg.configDir}/qBittorrent.conf ]; then
-    	cp ${qBittorrentConf} ${cfg.configDir}/qBittorrent.conf
-    fi
-  '';
 in {
   options.services.qbittorrent = {
     enable = mkEnableOption "Featureful free software BitTorrent client";
@@ -119,10 +103,16 @@ in {
       description = "The settings written to qBittorrent.conf";
     };
 
-    customWebUI = lib.mkOption {
-      type = lib.type.nullOr lib.types.str;
-      default = null;
-      description = "Custom WebUI to use instead of the default one.";
+    # customWebUI = lib.mkOption {
+    #   type = lib.types.nullOr lib.types.path;
+    #   default = null;
+    #   description = "Custom WebUI to use instead of the default one.";
+    # };
+
+    umask = lib.mkOption {
+      type = lib.types.str;
+      default = "0002";
+      description = "The umask to use for the qBittorrent service.";
     };
 
     openFirewall = lib.mkOption {
@@ -152,8 +142,8 @@ in {
     };
 
     dataDir = mkOption {
-      type = types.path;
-      default = "/var/lib/qBittorrent";
+      type = types.str;
+      default = "/var/lib/qBittorrent/";
       example = "/home/yourUser";
       description = ''
         The path where qBittorrent config and state lives.
@@ -161,15 +151,20 @@ in {
     };
 
     configDir = mkOption {
-      type = types.path;
+      type = types.str;
       description = ''
         The path where the settings will exist.
       '';
-      default = cfg.dataDir + "/.config/qBittorrent";
+      default = cfg.dataDir + "/.config/";
+    };
+
+    cacheDir = mkOption {
+      type = types.str;
+      default = cfg.dataDir + "/.cache/";
     };
 
     logDir = mkOption {
-      type = path;
+      type = types.str;
       default = "${cfg.dataDir}/log";
       description = ''
         Directory where the qbittorrent logs will be stored,
@@ -186,82 +181,54 @@ in {
       ${defaultUser} = {
         group = cfg.group;
         home = cfg.dataDir;
-        createHome = true;
         uid = 501;
-        isSystemUser = true;
         description = "qBittorrent service user";
       };
     };
 
     users.groups = mkIf (cfg.group == defaultGroup) {
-      ${defaultGroup}.gid = 500;
+      qbittorrent.gid = 500;
     };
 
-    # systemd.tmpfiles.rules = [
-    #   "C ${cfg.configDir}/qBittorrent.conf 0755 ${cfg.user} ${cfg.group} - ${qBittorrentConf}"
-    # ];
-    systemd.tmpfiles.settings.qBittorrentDirs = {
-      # "${cfg.dataDir}".d = {
-      #   mode = "0700";
-      #   inherit (cfg) user group;
-      # };
-      # "${cfg.configDir}"."d" = {
-      #   mode = "700";
-      #   inherit (cfg) user group;
-      # };
-      # "${cfg.logDir}"."d" = {
-      #   mode = "700";
-      #   inherit (cfg) user group;
-      # };
-      # "${cfg.cacheDir}"."d" = {
-      #   mode = "700";
-      #   inherit (cfg) user group;
-      # };
-    };
-
-    # [
-    #   "f '${cfg.dataDir}/qBittorrent.conf' 0755 ${cfg.user} ${cfg.group} - ${qBittorrentConf}"
-    #   "d '${cfg.dataDir}' 0700 ${cfg.user} ${cfg.group} - -"
-    #   "d '${cfg.dataDir}/.cache/qBittorrent' 0755 ${cfg.user} ${cfg.group} - -"
-    #   "d '${cfg.dataDir}/.config/qBittorrent' 0755 ${cfg.user} ${cfg.group} - -"
-    #   "d '${cfg.dataDir}/.local/share/qBittorrent' 0755 ${cfg.user} ${cfg.group} - -"
-    # ];
+    systemd.tmpfiles.rules = [
+      # "d '${cfg.dataDir}' 0740 ${cfg.user} ${cfg.group} - -"
+      # "d '${cfg.configDir}' 0740 ${cfg.user} ${cfg.group} - -"
+      # "C '${cfg.configDir}/qBittorrent.conf' 0740 ${cfg.user} ${cfg.group} - ${qBittorrentConf}"
+      # "C+ '${cfg.dataDir}/webui/' - - - - ${sourceStorePath}"
+    ];
+    # systemd.tmpfiles.settings."qBittorrent" = {
+    #   "${cfg.dataDir}"."d" = {
+    #     mode = "0660";
+    #     inherit (cfg) user group;
+    #   };
+    #   "${cfg.configDir}"."d" = {
+    #     mode = "0660";
+    #     inherit (cfg) user group;
+    #   };
+    #   "${cfg.logDir}"."d" = {
+    #     mode = "0660";
+    #     inherit (cfg) user group;
+    #   };
+    # };
 
     systemd.services = {
       qbittorrent = {
         description = "a Bittorrent service";
         documentation = ["man:qBittorrent-nox(1)"];
-        after = ["network-online.target" "nss-lookup.target"];
-        wants = ["network-online.target"];
+        after = ["network-online.target"];
         wantedBy = ["multi-user.target"];
+        unitConfig = {
+          ConditionPathExists = cfg.dataDir;
+        };
         serviceConfig = {
           Type = "simple";
           User = cfg.user;
           Group = cfg.group;
-          StateDirectory = "qBittorrent";
-          SyslogIdentifier = "qBittorrent";
-          WorkingDirectory = cfg.dataDir;
+          # StateDirectory = "qBittorrent";
+          # SyslogIdentifier = "qBittorrent";
           ExecStart = "${cfg.package}/bin/qbittorrent-nox --webui-port=${toString cfg.webUIAddress.port}";
-          ExecStartPre = initializeAndRun;
-          UMask = "0113";
-          # BindPaths = ["/var/lib/qBittorrent/.config/qBittorrent.conf:${qBittorrentConf}"];
-          # NoNewPrivileges = true;
-          # SystemCallArchitectures = "native";
-          # ProtectHome = true;
-          # ProtectSystem = "strict";
-          # PrivateDevices = true;
-          # RemoveIPC = true;
-          # PrivateMounts = true;
-          # RestrictNamespaces = !config.boot.isContainer;
-          # RestrictRealtime = true;
-          # RestrictSUIDSGID = true;
-          # ProtectControlGroups = !config.boot.isContainer;
-          # ProtectHostname = true;
-          # ProtectKernelLogs = !config.boot.isContainer;
-          # ProtectKernelModules = !config.boot.isContainer;
-          # ProtectKernelTunables = !config.boot.isContainer;
-          # LockPersonality = true;
-          # PrivateTmp = !config.boot.isContainer;
+          Restart = "on-failure";
+          UMask = cfg.umask;
         };
       };
     };

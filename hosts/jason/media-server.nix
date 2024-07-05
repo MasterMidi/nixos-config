@@ -1,16 +1,8 @@
 {config, ...}: {
-  services.prometheus = {
+  services.jellyfin = {
     enable = true;
-
-    globalConfig = {
-      scrape_interval = "15s";
-      evaluation_interval = "15s";
-    };
-
-    scrapeConfigs = [
-      
-    ];
-
-
+    openFirewall = true;
+    group = "users";
+    user = "jellyfin";
   };
 }

@@ -1,4 +1,8 @@
-{pkgs, ...}:
+{
+  pkgs,
+  inputs,
+  ...
+}:
 pkgs.mkShell {
   name = "nixos-config";
   buildInputs = with pkgs; [
@@ -17,5 +21,6 @@ pkgs.mkShell {
     nix-inspect
     sops # secret management
     flake-checker # healthcheck for flake.lock files
+    deploy-rs # deploy nixos to remote servers
   ];
 }

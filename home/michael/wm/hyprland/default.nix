@@ -25,7 +25,7 @@ in {
           "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1 &" # start polkit agent
           "wl-paste --watch cliphist store &" # start clipboard manager
           "nm-applet --indicator &" # start network manager applet
-          "blueman-applet &" # start bluetooth applet
+          "blueman-tray" # start bluetooth tray icon
         ];
 
         monitor = [
@@ -119,7 +119,7 @@ in {
 
         master = {
           # See https://wiki.hyprland.org/Configuring/Master-Layout/ for more
-          new_is_master = true;
+          # new_is_master = true;
         };
 
         gestures = {

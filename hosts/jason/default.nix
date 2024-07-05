@@ -5,6 +5,7 @@
   pkgs,
   config,
   lib,
+  inputs,
   ...
 }: {
   imports = [
@@ -35,6 +36,7 @@
       "docker"
       "uinput" # for ydotool
       "dialout" # for arduino and other serial devices
+      "media"
     ];
   };
 
@@ -94,5 +96,17 @@
   metrics.netdata = {
     enable = true;
     disableWebUI = true;
+  };
+
+  services.qbittorrent = {
+    enable = true;
+    openFirewall = true;
+    acceptLegalNotice = true;
+    # customWebUI = inputs.vuetorrent;
+    group = "media";
+  };
+
+  users.groups.media = {
+    gid = 500;
   };
 }

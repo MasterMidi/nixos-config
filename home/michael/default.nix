@@ -133,6 +133,7 @@
     adwsteamgtk
     prismlauncher
     modrinth-app
+    sunshine # https://docs.lizardbyte.dev/projects/sunshine/en/latest/about/usage.html#setup
 
     # Media
     jellyfin-media-player
@@ -140,11 +141,11 @@
     rhythmbox
     vlc
     spotify-player
-    sunshine # https://docs.lizardbyte.dev/projects/sunshine/en/latest/about/usage.html#setup
     g4music
     amberol
     termusic
     ncmpcpp
+    feishin
 
     # Image viewer
     geeqie

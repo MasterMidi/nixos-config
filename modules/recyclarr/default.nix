@@ -8,43 +8,50 @@
 
   settingsYaml = (pkgs.formats.yaml {}).generate "settings.yml" (cfg.settings);
 
-  # Function to convert camelCase to snake_case
-  camelToSnake = s: let
-    upperToLower = c:
-      if lib.char.isUpper c
-      then "_" + (lib.char.toLower c)
-      else lib.toString c;
-  in
-    lib.concatMapStrings upperToLower s;
+  # Function to remove attributes with null values
+  removeNulls = set: lib.filterAttrs (_: v: v != null) set;
 
-  # Function to convert keys to snake_case
-  convertKeysToSnake = set:
-    lib.foldl' (
-      acc: k: let
-        newKey = camelToSnake k;
-        newVal =
-          if builtins.isAttrs set.${k}
-          then convertKeysToSnake set.${k}
-          else set.${k};
-      in
-        acc // {${newKey} = newVal;}
-    ) {} (lib.attrNames set);
+  convertProfilesToList = profiles:
+    lib.mapAttrsToList (name: value: value) (removeNulls profiles);
 
-  # Function to convert qualityProfiles attr sets into lists
-  convertProfilesToList = set:
-    lib.mapAttrs (k: v:
-      if k == "qualityProfiles"
-      then builtins.attrValues v
-      else if builtins.isAttrs v
-      then convertProfilesToList v
-      else v)
-    set;
-
-  # Recursively process all instances of sonarr and radarr
+  # Function to process the entire config
+  # Map each service, i.e. sonarr, radarr, etc.
   processInstances = settings:
-    lib.mapAttrs (
+    builtins.mapAttrs (
+      # Map each instance of the service
       serviceName: instances:
-        lib.mapAttrs (instanceName: instanceConfig: convertProfilesToList instanceConfig) instances
+        builtins.mapAttrs (
+          # Convert instance config values to variables
+          instanceName: instanceConfig:
+            removeNulls {
+              base_url = instanceConfig.baseUrl;
+              api_key = instanceConfig.apiKey;
+              delete_old_custom_formats = instanceConfig.deleteOldCustomFormats;
+              replace_existing_custom_formats = instanceConfig.replaceExistingCustomFormats;
+              media_naming = instanceConfig.mediaNaming;
+              quality_profiles = builtins.map (v:
+                removeNulls {
+                  name = v.name;
+                  reset_unmatched_scores = removeNulls v.resetUnmatchedScores;
+                  score_set = v.scoreSet;
+                  min_format_score = v.minFormatScore;
+                  upgrade = removeNulls {
+                    allowed = v.upgrade.allowed;
+                    until_quality = v.upgrade.untilQuality;
+                    until_score = v.upgrade.untilScore;
+                  };
+                  quality_sort = v.qualitySort;
+                  qualities = builtins.map (v: removeNulls v) v.qualities;
+                }) (convertProfilesToList instanceConfig.qualityProfiles);
+              custom_formats =
+                builtins.map (v: {
+                  trash_ids = v.trashIds;
+                  quality_profiles = builtins.map (v: removeNulls v) v.qualityProfiles;
+                })
+                instanceConfig.customFormats;
+            }
+        )
+        instances
     )
     settings;
 
@@ -135,7 +142,7 @@
       };
 
       resetUnmatchedScores = lib.mkOption {
-        type = lib.types.nullOr (lib.types.submodule {
+        type = lib.types.submodule {
           options = {
             enabled = lib.mkOption {
               type = lib.types.bool;
@@ -149,8 +156,8 @@
               description = "Except for these series.";
             };
           };
-        });
-        default = null;
+        };
+        default = {};
         description = "Reset unmatched scores.";
       };
 
@@ -298,7 +305,7 @@ in {
       description = "Recyclarr Sync Service";
       serviceConfig = {
         Type = "oneshot";
-        ExecStart = "${cfg.package}/bin/recyclarr sync --config ${recyclarrYaml} --config ${settingsYaml} --config ${cfg.secretsFile}";
+        ExecStart = "${cfg.package}/bin/recyclarr sync --config ${recyclarrYaml}";
       };
     };
 

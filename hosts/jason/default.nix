@@ -13,7 +13,7 @@
     ./containers
     ./gaming.nix
     ./graphical.nix
-    ./media-server.nix
+    ./mediaserver
     ./security.nix
     ./sound.nix
     ./system.nix
@@ -27,6 +27,7 @@
   users.mutableUsers = true;
   users.users.michael = {
     isNormalUser = true;
+    # uid = 1000;
     description = "Michael Andreas Graversen";
     extraGroups = [
       "networkmanager"
@@ -43,13 +44,13 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    qbitmanage
     easyeffects # Audio equalizer and effects
     barrier # Software KVM
     gparted # has to be a systempackage or it wont open
     openrgb # RGB control
     lact
     graphite-cursors
-    qbitmanage
     onlyoffice-bin
     docker-compose
     podman-compose

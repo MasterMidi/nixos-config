@@ -6,6 +6,10 @@
   # mediaServerPath = builtins.toPath "${config.users.users.michael.home}/.temp/containers";
   mediaServerPath = builtins.toPath "/services/media";
 in {
+  imports = [
+    ./qbitmanage.nix
+  ];
+
   environment.systemPackages = with pkgs; [mediainfo];
 
   virtualisation.containers.enable = true;

@@ -46,7 +46,7 @@ with lib; let
       "WebUI\Enabled" = true;
       "WebUI\LocalHostAuth" = false;
       "WebUI\UseUPnP" = true;
-      "WebUI\RootFolder" = /webui/vuetorrent;
+      "WebUI\RootFolder" = "/webui/vuetorrent";
       "WebUI\AlternativeUIEnabled" = true;
     };
   });
@@ -191,10 +191,10 @@ in {
     };
 
     systemd.tmpfiles.rules = [
-      # "d '${cfg.dataDir}' 0740 ${cfg.user} ${cfg.group} - -"
-      # "d '${cfg.configDir}' 0740 ${cfg.user} ${cfg.group} - -"
-      # "C '${cfg.configDir}/qBittorrent.conf' 0740 ${cfg.user} ${cfg.group} - ${qBittorrentConf}"
-      # "C+ '${cfg.dataDir}/webui/' - - - - ${sourceStorePath}"
+      "d '${cfg.dataDir}' 0740 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.configDir}' 0740 ${cfg.user} ${cfg.group} - -"
+      "C '${cfg.configDir}/qBittorrent.conf' 0740 ${cfg.user} ${cfg.group} - ${qBittorrentConf}"
+      # "C+ '${cfg.dataDir}/webui/' - - - - ${sourceStorePath }"
     ];
     # systemd.tmpfiles.settings."qBittorrent" = {
     #   "${cfg.dataDir}"."d" = {

@@ -29,6 +29,10 @@
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    ccase = {
+      url = "github:rutrum/ccase";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # Theming and customization
     nix-colors.url = "github:misterio77/nix-colors"; # Theming in nix configuration
@@ -119,7 +123,8 @@
             nixosModules.vfio
             nixosModules.metrics
             nixosModules.qbittorrent
-            # outputs.nixosModules.qbitmanage
+            nixosModules.recyclarr
+            nixosModules.qbitmanage
 
             inputs.home-manager.nixosModules.home-manager
             {
@@ -213,6 +218,7 @@
 
         # output packages for all supported systems
         # packages = channels.nixpkgs.lib.genAttrs supportedSystems (system: import ./pkgs channels.nixpkgs.legacyPackages.${system});
+        packages = {inherit (channels.nixpkgs) qbitmanage;};
 
         # dev shell with tools for working with nix configuration
         devShells.default = import ./shell.nix {

@@ -1,3 +1,6 @@
+# TODO: make git ssh agent ask only once (like magnus setup)
+# TODO: add git ssh keys to sops so all devices can use the same keys
+# TODO: Automate adding new devices to sops
 {
   description = "NixOS configuration";
 
@@ -17,10 +20,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # deploment & secret tools
+    # deployment & secret tools
     lollypops.url = "github:pinpox/lollypops";
     deploy-rs.url = "github:serokell/deploy-rs";
     sops-nix.url = "github:Mic92/sops-nix";
+    nix-generators.url = "github:nix-community/nixos-generators";
 
     # Individual program packages
     ags.url = "github:Aylur/ags";
@@ -192,21 +196,31 @@
           ];
         };
 
-        # envpi = {
-        #   system = "aarch64-linux";
-        #   modules = [
-        #     ./hosts/envpi
-        #   ];
-        # };
+        envpi = {
+          system = "aarch64-linux";
+          modules = [
+            ./hosts/envpi
+            inputs.nixos-hardware.nixosModules.raspberry-pi-3
+          ];
+        };
 
-        # # TODO: make this a log aggregator for all systems
-        # # TODO: Make this a dns-sinkhole
-        # nixpi = {
-        #   system = "aarch64-linux";
-        #   modules = [
-        #     ./hosts/nixpi
-        #   ];
-        # };
+        # TODO: make this a log aggregator for all systems
+        # TODO: Make this a dns-sinkhole
+        nixpi = {
+          system = "aarch64-linux";
+          modules = [
+            ./hosts/nixpi
+            inputs.nixos-hardware.nixosModules.raspberry-pi-3
+          ];
+        };
+
+        polaris = {
+          system = "aarch64-linux";
+          modules = [
+            ./hosts/polaris
+            inputs.nixos-hardware.nixosModules.raspberry-pi-5
+          ];
+        };
       };
 
       outputsBuilder = channels: {
@@ -218,13 +232,49 @@
 
         # output packages for all supported systems
         # packages = channels.nixpkgs.lib.genAttrs supportedSystems (system: import ./pkgs channels.nixpkgs.legacyPackages.${system});
-        packages = {inherit (channels.nixpkgs) qbitmanage;};
+        # packages = {inherit (channels.nixpkgs) qbitmanage;};
+        packages = {
+          rpi5 = images.rpi5;
+          # rpi5 = inputs.nix-generators.nixosGenerate {
+          #   system = "aarch64-linux";
+          #   specialArgs = {inherit inputs;};
+          #   modules = with inputs; [
+          #     ./hosts/polaris
+          #     # inputs.nixos-hardware.nixosModules.raspberry-pi-5
+          #     ./system/core
+          #     lollypops.nixosModules.lollypops
+          #   ];
+          #   format = "iso";
+          # };
+        };
 
         # dev shell with tools for working with nix configuration
         devShells.default = import ./shell.nix {
           inherit inputs;
           pkgs = channels.nixpkgs;
         };
+      };
+
+      nixosConfigurations.rpi5 = inputs.nixpkgs.lib.nixosSystem {
+        system = "aarch64-linux";
+        modules = [
+          ./hosts/polaris
+          inputs.nixos-hardware.nixosModules.raspberry-pi-5
+          ./system/core
+          inputs.lollypops.nixosModules.lollypops
+          "${inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
+          {
+            disabledModules = ["profiles/base.nix"];
+            nixpkgs.config.allowUnsupportedSystem = true;
+            # nixpkgs.hostPlatform.system = "aarch64-linux";
+            # nixpkgs.buildPlatform.system = "x86_64-linux"; #If you build on x86 otherwise changes this.
+            sdImage.compressImage = false;
+          }
+        ];
+      };
+
+      images = {
+        rpi5 = nixosConfigurations.rpi5.config.system.build.sdImage;
       };
 
       deploy.nodes.andromeda = {

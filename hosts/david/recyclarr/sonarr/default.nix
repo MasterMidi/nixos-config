@@ -1,7 +1,5 @@
-{config, ...}: let
-  qualityProfiles = import ./qualityProfiles.nix;
-in {
-  main = {
+{...}: {
+  main = rec {
     baseUrl = "http://jason.local:9040";
     apiKey = "c5783cdc82d244e6b138be2988397813";
     deleteOldCustomFormats = true;
@@ -18,7 +16,7 @@ in {
     };
     qualityProfiles = import ./qualityProfiles.nix;
     customFormats = [
-      { 
+      {
         # Anime Release Groups
         trashIds = [
           "949c16fe0a8147f50ba82cc2df9411c9" # Anime BD Tier 01 (Top SeaDex Muxers)

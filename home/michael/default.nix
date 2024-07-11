@@ -13,7 +13,6 @@
     ./programs
     ./services
     ./defaultApps.nix
-    ./nix.nix
   ];
 
   home.username = "michael";

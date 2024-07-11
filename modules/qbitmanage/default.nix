@@ -6,6 +6,8 @@
 }:
 with lib; let
   cfg = config.services.qbitmanage;
+
+  conf = pkgs.writeText "config.yml" (builtins.readFile cfg.config);
 in {
   options = {
     services.qbitmanage = {
@@ -32,7 +34,7 @@ in {
       };
 
       config = mkOption {
-        type = lib.types.str;
+        type = lib.types.path;
         # default = {};
         description = "Configuration for qbitmanage.";
       };
@@ -47,6 +49,14 @@ in {
         type = types.attrsOf types.str;
         default = {};
         description = "Environment variables for the qbitmanage service.";
+      };
+
+      volumes = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [];
+        description = ''
+          Volumes to mount for the qbitmanage service.
+        '';
       };
     };
   };
@@ -67,53 +77,48 @@ in {
 
     systemd.tmpfiles.rules = [
       "d '${cfg.dataDir}' 0740 ${cfg.user} ${cfg.group} - -"
-      # "d '${cfg.dataDir}/config' 0740 ${cfg.user} ${cfg.group} - -"
-      # "f+ '${cfg.dataDir}/config/config.yml' 0740 ${cfg.user} ${cfg.group} - ${cfg.config}"
+      "d '${cfg.dataDir}/config' 0740 ${cfg.user} ${cfg.group} - -"
+      "C+ '${cfg.dataDir}/config/config.yml' - - - - ${conf}"
     ];
 
-    systemd.services = {
-      qbitmanage = {
-        description = "qbitmanage Service";
-        after = ["network-online.target"];
-        wantedBy = ["multi-user.target"];
-        # unitConfig = {
-        #   ConditionPathExists = cfg.dataDir;
-        # };
-        serviceConfig = {
-          Type = "oneshot";
-          User = cfg.user;
-          Group = cfg.group;
-          WorkingDirectory = "${cfg.package}/bin/";
-          ExecStart = "${cfg.package}/bin/qbitmanage -r";
-          BindPaths = ["${cfg.dataDir}/:${cfg.package}/bin/"];
-          Restart = "on-failure";
-          UMask = cfg.umask;
-        };
-      };
-    };
-
-    # virtualisation.oci-containers.containers = {
+    # systemd.services = {
     #   qbitmanage = {
-    #     image = "ghcr.io/hotio/qbitmanage:nightly";
-    #     hostname = "qbitmanage";
-    #     user = "${builtins.toString config.users.users."${cfg.user}".uid}:${builtins.toString config.users.groups."${cfg.group}".gid}";
-    #     autoStart = true;
-    #     environment =
-    #       cfg.environment
-    #       // {
-    #         PUID = builtins.toString config.users.users."${cfg.user}".uid;
-    #         PGID = builtins.toString config.users.groups."${cfg.group}".gid;
-    #         TZ = config.time.timeZone;
-    #         UMASK = cfg.umask;
-    #       };
-    #     volumes = [
-    #       "${cfg.dataDir}/config:/config"
-    #       "${cfg.dataDir}/data:/data"
-    #       "/home/michael/.temp/data/torrents:/storage/torrents"
-    #       "/mnt/storage/media/torrents:/cold/torrents"
-    #     ];
-    #     extraOptions = ["--network=host"];
+    #     description = "qbitmanage Service";
+    #     after = ["network-online.target"];
+    #     wantedBy = ["multi-user.target"];
+    #     # unitConfig = {
+    #     #   ConditionPathExists = cfg.dataDir;
+    #     # };
+    #     serviceConfig = {
+    #       Type = "oneshot";
+    #       User = cfg.user;
+    #       Group = cfg.group;
+    #       WorkingDirectory = "${cfg.package}/bin/";
+    #       ExecStart = "${cfg.package}/bin/qbitmanage -r";
+    #       BindPaths = ["${cfg.dataDir}/:${cfg.package}/bin/"];
+    #       Restart = "on-failure";
+    #       UMask = cfg.umask;
+    #     };
     #   };
     # };
+
+    virtualisation.oci-containers.containers = {
+      qbitmanage = {
+        image = "ghcr.io/hotio/qbitmanage:nightly";
+        hostname = "qbitmanage";
+        user = "${builtins.toString config.users.users."${cfg.user}".uid}:${builtins.toString config.users.groups."${cfg.group}".gid}";
+        autoStart = true;
+        environment =
+          cfg.environment
+          // {
+            PUID = builtins.toString config.users.users."${cfg.user}".uid;
+            PGID = builtins.toString config.users.groups."${cfg.group}".gid;
+            TZ = config.time.timeZone;
+            UMASK = cfg.umask;
+          };
+        volumes = ["${cfg.dataDir}/config:/config"] ++ cfg.volumes;
+        extraOptions = ["--network=host"];
+      };
+    };
   };
 }

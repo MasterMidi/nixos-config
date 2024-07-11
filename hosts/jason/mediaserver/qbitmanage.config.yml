@@ -31,7 +31,6 @@ settings:
     - noHL
     - issue
     - cross-seed
-
   tracker_error_tag: issue
   share_limits_min_seeding_time_tag: MinSeedTimeNotReached
   share_limits_min_num_seeds_tag: MinSeedsNotMet
@@ -41,6 +40,7 @@ settings:
   share_limits_filter_completed: true
   tag_nohardlinks_filter_completed: true
   cat_update_all: true
+
 directory:
   cross_seed: /storage/torrents/cross_seed/
   root_dir: /storage/torrents/

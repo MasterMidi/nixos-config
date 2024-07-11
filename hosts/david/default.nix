@@ -6,9 +6,9 @@
 }: {
   imports = [
     # Include the results of the hardware scan.
+    ./monitoring
     ./hardware-configuration.nix
     ./recyclarr
-    ./monitoring
     # ./nginx.nix
   ];
 

@@ -194,7 +194,7 @@ in {
       "d '${cfg.dataDir}' 0740 ${cfg.user} ${cfg.group} - -"
       "d '${cfg.configDir}' 0740 ${cfg.user} ${cfg.group} - -"
       "C '${cfg.configDir}/qBittorrent.conf' 0740 ${cfg.user} ${cfg.group} - ${qBittorrentConf}"
-      # "C+ '${cfg.dataDir}/webui/' - - - - ${sourceStorePath }"
+      # "C+ '${cfg.dataDir}/webui/' - - - - ${sourceStorePath}"
     ];
     # systemd.tmpfiles.settings."qBittorrent" = {
     #   "${cfg.dataDir}"."d" = {
@@ -224,11 +224,15 @@ in {
           Type = "simple";
           User = cfg.user;
           Group = cfg.group;
-          # StateDirectory = "qBittorrent";
-          # SyslogIdentifier = "qBittorrent";
+          StateDirectory = "qBittorrent";
+          SyslogIdentifier = "qBittorrent";
           ExecStart = "${cfg.package}/bin/qbittorrent-nox --webui-port=${toString cfg.webUIAddress.port}";
           Restart = "on-failure";
           UMask = cfg.umask;
+          AmbientCapabilities = ["CAP_NET_BIND_SERVICE"];
+          IOSchedulingClass = "idle";
+          IOSchedulingPriority = "7";
+          LimitNOFILE = "infinity";
         };
       };
     };

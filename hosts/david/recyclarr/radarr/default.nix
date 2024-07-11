@@ -1,15 +1,10 @@
-{config, ...}: let
-  qualityProfiles = import ./qualityProfiles.nix;
-
-  # Function to convert the set of profiles into a list
-  profilesToList = set: builtins.attrValues set;
-in {
-  default = {
-    base_url = "http://jason.local:9030";
-    # api_key = builtins.readFile config.sops.secrets.RADARR_KEY.path;
-    delete_old_custom_formats = true;
-    replace_existing_custom_formats = true;
-    media_naming = {
+{...}: {
+  default = rec {
+    baseUrl = "http://jason.local:9030";
+    apiKey = "51732014769e475a9455c1f5cd8f18d1";
+    deleteOldCustomFormats = true;
+    replaceExistingCustomFormats = true;
+    mediaNaming = {
       folder = "jellyfin";
       movie = {
         rename = true;
@@ -17,10 +12,10 @@ in {
       };
     };
     # quality_definition = {}; # Set this later
-    quality_profiles = profilesToList qualityProfiles;
-    custom_formats = [
+    qualityProfiles = import ./qualityProfiles.nix;
+    customFormats = [
       {
-        trash_ids = [
+        trashIds = [
           "e23edd2482476e595fb990b12e7c609c"
           "58d6a88f13e2db7f5059c41047876f00"
           "55d53828b9d81cbe20b02efd00aa0efd"
@@ -34,10 +29,10 @@ in {
           "9364dd386c9b4a1100dde8264690add7"
           "923b6abef9b17f937fab56cfcf89e1f1"
         ];
-        quality_profiles = [{name = "Remux + WEB (2160p)";} {name = "Remux + WEB (1080p)";} {name = "Legacy";} {name = qualityProfiles.animeRemux1080p.name;}];
+        qualityProfiles = [{name = "Remux + WEB (2160p)";} {name = "Remux + WEB (1080p)";} {name = "Legacy";} {name = qualityProfiles.animeRemux1080p.name;}];
       }
       {
-        trash_ids = [
+        trashIds = [
           "0f12c086e289cf966fa5948eac571f44"
           "570bc9ebecd92723d2d21500f4be314c"
           "eca37840c13c6ef2dd0262b141a5482f"
@@ -48,26 +43,26 @@ in {
           "eecf3a857724171f968a66cb5719e152"
           "9f6cbff8cfe4ebbc1bde14c7b7bec0de"
         ];
-        quality_profiles = [{name = "Remux + WEB (2160p)";} {name = "Remux + WEB (1080p)";} {name = "Legacy";}];
+        qualityProfiles = [{name = "Remux + WEB (2160p)";} {name = "Remux + WEB (1080p)";} {name = "Legacy";}];
       }
       {
-        trash_ids = [
+        trashIds = [
           "4d74ac4c4db0b64bff6ce0cffef99bf0"
           "a58f517a70193f8e578056642178419d"
           "e71939fae578037e7aed3ee219bbe7c1"
         ];
-        quality_profiles = [{name = "Remux + WEB (2160p)";}];
+        qualityProfiles = [{name = "Remux + WEB (2160p)";}];
       }
       {
-        trash_ids = [
+        trashIds = [
           "ed27ebfef2f323e964fb1f61391bcb35"
           "c20c8647f2746a1f4c4262b0fbbeeeae"
           "5608c71bcebba0a5e666223bae8c9227"
         ];
-        quality_profiles = [{name = "Remux + WEB (1080p)";} {name = "Legacy";}];
+        qualityProfiles = [{name = "Remux + WEB (1080p)";} {name = "Legacy";}];
       }
       {
-        trash_ids = [
+        trashIds = [
           "3a3ff47579026e76d6504ebea39390de"
           "9f98181fe5a3fbeb0cc29340da2a468a"
           "8baaf0b3142bf4d94c42a724f034e27a"
@@ -75,10 +70,10 @@ in {
           "403816d65392c79236dcb6dd591aeda4"
           "af94e0fe497124d1f9ce732069ec8c3b"
         ];
-        quality_profiles = [{name = "Remux + WEB (2160p)";} {name = "Remux + WEB (1080p)";} {name = "Legacy";}];
+        qualityProfiles = [{name = "Remux + WEB (2160p)";} {name = "Remux + WEB (1080p)";} {name = "Legacy";}];
       }
       {
-        trash_ids = [
+        trashIds = [
           "b3b3a6ac74ecbd56bcdbefa4799fb9df"
           "40e9380490e748672c2522eaaeb692f7"
           "cc5e51a9e85a6296ceefe097a77f12f4"
@@ -100,17 +95,17 @@ in {
           "f1b0bae9bc222dab32c1b38b5a7a1088"
           "279bda7434fd9075786de274e6c3c202"
         ];
-        quality_profiles = [{name = "Remux + WEB (2160p)";} {name = "Remux + WEB (1080p)";} {name = "Legacy";}];
+        qualityProfiles = [{name = "Remux + WEB (2160p)";} {name = "Remux + WEB (1080p)";} {name = "Legacy";}];
       }
       {
-        trash_ids = [
+        trashIds = [
           "e7718d7a3ce595f289bfee26adc178f5"
           "ae43b294509409a6a13919dedd4764c4"
         ];
-        quality_profiles = [{name = "Remux + WEB (2160p)";} {name = "Remux + WEB (1080p)";} {name = "Legacy";}];
+        qualityProfiles = [{name = "Remux + WEB (2160p)";} {name = "Remux + WEB (1080p)";} {name = "Legacy";}];
       }
       {
-        trash_ids = [
+        trashIds = [
           "ed38b889b31be83fda192888e2286d83"
           "90a6f9a284dff5103f6346090e6280c8"
           "e204b80c87be9497a8a6eaff48f72905"
@@ -118,13 +113,13 @@ in {
           "bfd8eb01832d646a0a89c4deb46f8564"
           "0a3f082873eb454bde444150b70253cc"
         ];
-        quality_profiles = [{name = "Remux + WEB (2160p)";} {name = "Remux + WEB (1080p)";} {name = "Legacy";}];
+        qualityProfiles = [{name = "Remux + WEB (2160p)";} {name = "Remux + WEB (1080p)";} {name = "Legacy";}];
       }
 
       ###### ANIME STUFFF
 
       {
-        trash_ids = [
+        trashIds = [
           "fb3ccc5d5cc8f77c9055d4cb4561dded"
           "66926c8fa9312bc74ab71bf69aae4f4a"
           "fa857662bad28d5ff21a6e611869a0ff"
@@ -152,11 +147,11 @@ in {
           "5f400539421b8fcf71d51e6384434573"
           "c259005cbaeb5ab44c06eddb4751e70c"
         ];
-        quality_profiles = [{name = qualityProfiles.animeRemux1080p.name;} {name = qualityProfiles.animeRemux2160p.name;}];
+        qualityProfiles = [{name = qualityProfiles.animeRemux1080p.name;} {name = qualityProfiles.animeRemux2160p.name;}];
       }
       {
-        trash_ids = ["064af5f084a0a24458cc8ecd3220f93f"];
-        quality_profiles = [
+        trashIds = ["064af5f084a0a24458cc8ecd3220f93f"];
+        qualityProfiles = [
           {
             name = qualityProfiles.animeRemux1080p.name;
             score = 50;
@@ -168,8 +163,8 @@ in {
         ];
       }
       {
-        trash_ids = ["3a3ff47579026e76d6504ebea39390de"];
-        quality_profiles = [
+        trashIds = ["3a3ff47579026e76d6504ebea39390de"];
+        qualityProfiles = [
           {
             name = qualityProfiles.animeRemux1080p.name;
             score = 1050;
@@ -181,8 +176,8 @@ in {
         ];
       }
       {
-        trash_ids = ["9f98181fe5a3fbeb0cc29340da2a468a"];
-        quality_profiles = [
+        trashIds = ["9f98181fe5a3fbeb0cc29340da2a468a"];
+        qualityProfiles = [
           {
             name = qualityProfiles.animeRemux1080p.name;
             score = 1000;
@@ -194,8 +189,8 @@ in {
         ];
       }
       {
-        trash_ids = ["8baaf0b3142bf4d94c42a724f034e27a"];
-        quality_profiles = [
+        trashIds = ["8baaf0b3142bf4d94c42a724f034e27a"];
+        qualityProfiles = [
           {
             name = qualityProfiles.animeRemux1080p.name;
             score = 950;
@@ -207,8 +202,8 @@ in {
         ];
       }
       {
-        trash_ids = ["c20f169ef63c5f40c2def54abaf4438e"];
-        quality_profiles = [
+        trashIds = ["c20f169ef63c5f40c2def54abaf4438e"];
+        qualityProfiles = [
           {
             name = qualityProfiles.animeRemux1080p.name;
             score = 350;
@@ -220,8 +215,8 @@ in {
         ];
       }
       {
-        trash_ids = ["403816d65392c79236dcb6dd591aeda4"];
-        quality_profiles = [
+        trashIds = ["403816d65392c79236dcb6dd591aeda4"];
+        qualityProfiles = [
           {
             name = qualityProfiles.animeRemux1080p.name;
             score = 250;
@@ -233,8 +228,8 @@ in {
         ];
       }
       {
-        trash_ids = ["af94e0fe497124d1f9ce732069ec8c3b"];
-        quality_profiles = [
+        trashIds = ["af94e0fe497124d1f9ce732069ec8c3b"];
+        qualityProfiles = [
           {
             name = qualityProfiles.animeRemux1080p.name;
             score = 150;

@@ -3,16 +3,13 @@ let
 in {
   anime = {
     name = "Anime";
-    resetUnmatchedScores = {
-      enabled = true;
-      except = [];
-    };
+    resetUnmatchedScores.enabled = true;
     upgrade = {
       allowed = true;
       untilQuality = "Bluray 1080p";
       untilScore = 10000;
     };
-    minFormatScore = 10;
+    minFormatScore = 0;
     qualitySort = "top";
     qualities = [
       {
@@ -43,7 +40,7 @@ in {
       untilQuality = qualities.webDl1080p;
       untilScore = 10000;
     };
-    minFormatScore = 10;
+    minFormatScore = 0;
     qualitySort = "top";
     qualities = [
       {name = qualities.webDl1080p;}

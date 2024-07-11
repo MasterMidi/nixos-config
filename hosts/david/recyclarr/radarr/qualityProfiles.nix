@@ -5,10 +5,10 @@ in {
     name = "Anime Remux (1080p)";
     upgrade = {
       allowed = true;
-      until_quality = qualities.remux1080p;
-      until_score = 10000;
+      untilQuality = qualities.remux1080p;
+      untilScore = 10000;
     };
-    min_format_score = 10;
+    minFormatScore = 0;
     qualities = [
       {
         name = qualities.remux1080p;
@@ -61,10 +61,10 @@ in {
     name = "Anime Remux (2160p)";
     upgrade = {
       allowed = true;
-      until_quality = qualities.remux2160p;
-      until_score = 10000;
+      untilQuality = qualities.remux2160p;
+      untilScore = 10000;
     };
-    min_format_score = 10;
+    minFormatScore = 0;
     qualities = [
       {
         name = qualities.remux2160p;
@@ -131,10 +131,10 @@ in {
     name = "Remux + WEB (2160p)";
     upgrade = {
       allowed = true;
-      until_quality = qualities.remux2160p;
-      until_score = 10000;
+      untilQuality = qualities.remux2160p;
+      untilScore = 10000;
     };
-    min_format_score = 10;
+    minFormatScore = 0;
     qualities = [
       {
         name = qualities.remux2160p;
@@ -155,10 +155,10 @@ in {
     name = "Remux + WEB (1080p)";
     upgrade = {
       allowed = true;
-      until_quality = qualities.remux1080p;
-      until_score = 10000;
+      untilQuality = qualities.remux1080p;
+      untilScore = 10000;
     };
-    min_format_score = 10;
+    minFormatScore = 0;
     qualities = [
       {
         name = qualities.remux1080p;
@@ -179,10 +179,10 @@ in {
     name = "Legacy";
     upgrade = {
       allowed = true;
-      until_quality = qualities.bluray720p;
-      until_score = 10000;
+      untilQuality = qualities.bluray720p;
+      untilScore = 10000;
     };
-    min_format_score = 0;
+    minFormatScore = 0;
     qualities = [
       {
         name = qualities.bluray720p;

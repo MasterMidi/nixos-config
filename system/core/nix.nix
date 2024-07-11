@@ -45,7 +45,7 @@
     package = pkgs.nixVersions.latest; # use the newest vwersion of the nix package manager
 
     # pin the registry to avoid downloading and evaling a new nixpkgs version every time using 'nix shell nixpkgs#...'
-    registry = lib.mapAttrs (_: v: {flake = v;}) inputs;
+    # registry = lib.mapAttrs (_: v: {flake = v;}) inputs;
     daemonCPUSchedPolicy = lib.mkDefault "idle";
     daemonIOSchedClass = lib.mkDefault "idle";
     daemonIOSchedPriority = lib.mkDefault 7;

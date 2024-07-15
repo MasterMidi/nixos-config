@@ -3,9 +3,9 @@
   inputs,
   ...
 }:
-pkgs.mkShell {
+pkgs.devshell.mkShell {
   name = "nixos-config";
-  buildInputs = with pkgs; [
+  packages = with pkgs; [
     nixpkgs-fmt
     nerdfix # fix nerdfont symbols in text files
     nurl
@@ -22,5 +22,20 @@ pkgs.mkShell {
     sops # secret management
     flake-checker # healthcheck for flake.lock files
     deploy-rs # deploy nixos to remote servers
+  ];
+
+  commands = with pkgs; [
+    # {
+    #   name = git.pname;
+    #   help = git.meta.description;
+    #   category = "vcs";
+    #   package = git;
+    # }
+    {
+      name = "nix-update";
+      category = "main";
+      help = "good luck";
+      command = "${./scripts/update.sh}";
+    }
   ];
 }

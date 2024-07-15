@@ -60,17 +60,14 @@
 
     # nix/flake utilities
     utils.url = "github:gytis-ivaskevicius/flake-utils-plus";
+    devshell.url = "github:numtide/devshell";
   };
 
   outputs = {
     self,
     utils,
     ...
-  } @ inputs: let
-    # inherit (self) outputs;
-    name = "Michael Andreas Graversen";
-    email = "home@michael-graversen.dk";
-  in
+  } @ inputs:
     utils.lib.mkFlake rec {
       inherit self inputs;
 
@@ -92,11 +89,12 @@
         inputs.nur.overlay
         self.overlays.additions
         self.overlays.modifications
+        inputs.devshell.overlays.default
       ];
 
       # Custom packages and modifications, exported as overlays
       overlays = import ./overlays {inherit inputs;};
-      nixosModules = import ./modules;
+      nixosModules = import ./modules; # Maybe overlay the modules instead of importing them individually
 
       hostDefaults = {
         specialArgs = {inherit inputs;};
@@ -123,12 +121,12 @@
           system = "x86_64-linux";
           modules = [
             ./hosts/jason
-            nixosModules.refind
-            nixosModules.vfio
-            nixosModules.metrics
-            nixosModules.qbittorrent
-            nixosModules.recyclarr
-            nixosModules.qbitmanage
+            nixosModules.configs.refind
+            nixosModules.configs.vfio
+            nixosModules.services.metrics
+            nixosModules.services.qbittorrent
+            nixosModules.services.recyclarr
+            nixosModules.services.qbitmanage
 
             inputs.home-manager.nixosModules.home-manager
             {
@@ -162,9 +160,9 @@
           system = "x86_64-linux";
           modules = [
             ./hosts/david
-            nixosModules.bitmagnet
-            nixosModules.recyclarr
-            nixosModules.qbittorrent
+            nixosModules.services.bitmagnet
+            nixosModules.services.recyclarr
+            nixosModules.services.qbittorrent
             # srvos.nixosModules.server
             # srvos.nixosModules.common
             inputs.srvos.nixosModules.mixins-terminfo
@@ -182,7 +180,7 @@
           system = "x86_64-linux";
           modules = [
             ./hosts/andromeda
-            nixosModules.qbittorrent
+            nixosModules.services.qbittorrent
             # srvos.nixosModules.server
             # srvos.nixosModules.common
             inputs.srvos.nixosModules.mixins-terminfo

@@ -66,12 +66,18 @@
     };
     calendar.accounts = {
       "home@michael-graversen.dk" = {
-        remote = {
-          type = "caldav";
+				remote = {
+          type = "google_calendar";
           userName = "home@michael-graversen.dk";
           remote = "https://dav.simply.com/calendars/home@michael-graversen.dk/home@michael-graversen.dk/";
           passwordCommand = "cat ${config.sops.secrets.HOME_MICHAEL_GRAVERSEN_DK.path}";
         };
+        # remote = {
+        #   type = "caldav";
+        #   userName = "home@michael-graversen.dk";
+        #   remote = "https://dav.simply.com/calendars/home@michael-graversen.dk/home@michael-graversen.dk/";
+        #   passwordCommand = "cat ${config.sops.secrets.HOME_MICHAEL_GRAVERSEN_DK.path}";
+        # };
       };
     };
   };

@@ -131,7 +131,7 @@
     # gaming tools
     adwsteamgtk
     prismlauncher
-    modrinth-app
+    # modrinth-app
     sunshine # https://docs.lizardbyte.dev/projects/sunshine/en/latest/about/usage.html#setup
 
     # Media

@@ -61,6 +61,10 @@
     # nix/flake utilities
     utils.url = "github:gytis-ivaskevicius/flake-utils-plus";
     devshell.url = "github:numtide/devshell";
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -121,6 +125,7 @@
           system = "x86_64-linux";
           modules = [
             ./hosts/jason
+            inputs.disko.nixosModules.disko
             nixosModules.configs.refind
             nixosModules.configs.vfio
             nixosModules.services.metrics

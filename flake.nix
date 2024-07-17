@@ -87,9 +87,9 @@
 
       sharedOverlays = [
         inputs.nur.overlay
-        self.overlays.additions
-        self.overlays.modifications
         inputs.devshell.overlays.default
+        overlays.additions
+        overlays.modifications
       ];
 
       # Custom packages and modifications, exported as overlays

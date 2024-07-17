@@ -83,8 +83,6 @@
     pam.services.hyprlock.text = "auth include login";
   };
 
-  # Enable sound with pipewire.
-  sound.enable = false;
   hardware.pulseaudio.enable = false;
   services.pipewire = {
     enable = true;

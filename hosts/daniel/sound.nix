@@ -1,6 +1,4 @@
 {pkgs, ...}: {
-  # Enable sound with pipewire.
-  sound.enable = false;
   hardware.pulseaudio.enable = false;
   services.pipewire = {
     enable = true;

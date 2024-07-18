@@ -4,6 +4,13 @@
 {
   description = "NixOS configuration";
 
+  nixConfig = {
+    extra-substituters = ["https://raspberry-pi-nix.cachix.org"];
+    extra-trusted-public-keys = [
+      "raspberry-pi-nix.cachix.org-1:WmV2rdSangxW0rZjY/tBvBDSaNFQ3DyEQsVw8EvHn9o="
+    ];
+  };
+
   inputs = {
     # Package repos
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
@@ -14,6 +21,7 @@
     # Premade modules
     nixos-hardware.url = "github:NixOS/nixos-hardware/master"; # Hardware specific setup modules
     srvos.url = "github:nix-community/srvos"; # Server specific modules
+    raspberry-pi-nix.url = "github:tstat/raspberry-pi-nix"; # easily create pi images
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -221,7 +229,9 @@
           system = "aarch64-linux";
           modules = [
             ./hosts/polaris
-            inputs.nixos-hardware.nixosModules.raspberry-pi-5
+            ./system/core
+            inputs.raspberry-pi-nix.nixosModules.raspberry-pi
+            # inputs.nixos-hardware.nixosModules.raspberry-pi-5
           ];
         };
       };

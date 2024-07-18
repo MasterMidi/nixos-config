@@ -64,7 +64,7 @@
       keep-derivations = true;
       # use-xdg-base-directories = true
 
-      system-features = ["big-parallel" "kvm" "recursive-nix" "uid-range"];
+      system-features = ["recursive-nix" "uid-range"];
 
       # Free up to 1GiB whenever there is less than 100MiB left.
       min-free = 512 * 1024 * 1024;
@@ -80,11 +80,15 @@
       auto-allocate-uids = true;
       builders-use-substitutes = true;
       max-jobs = "auto";
+
+      trusted-users = ["@wheel"];
+
       substituters = [
         "https://cache.nixos.org"
         "https://nix-community.cachix.org"
         "https://cache.garnix.io"
         "https://numtide.cachix.org"
+        "https://raspberry-pi-nix.cachix.org"
       ];
 
       trusted-public-keys = [
@@ -92,6 +96,7 @@
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
         "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
         "numtide.cachix.org-1:2ps1kLBUWjxIneOy1Ik6cQjb41X0iXVXeHigGmycPPE="
+        "raspberry-pi-nix.cachix.org-1:WmV2rdSangxW0rZjY/tBvBDSaNFQ3DyEQsVw8EvHn9o="
       ];
     };
   };

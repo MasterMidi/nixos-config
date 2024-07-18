@@ -9,9 +9,9 @@
   ];
 
   # Use the extlinux boot loader. (NixOS wants to enable GRUB by default)
-  boot.loader.grub.enable = false;
+  # boot.loader.grub.enable = false;
   # Enables the generation of /boot/extlinux/extlinux.conf
-  boot.loader.generic-extlinux-compatible.enable = true;
+  # boot.loader.generic-extlinux-compatible.enable = true;
 
   networking.hostName = "polaris"; # Define your hostname.
   # Pick only one of the below networking options.
@@ -20,6 +20,7 @@
   networking.wireless = {
     enable = true;
     networks."Asus RT-AX86U".psk = "3zyn2dY&Gp";
+    networks."McDonald's McWifi".psk = "lady121205";
   };
 
   # Set your time zone.
@@ -53,12 +54,37 @@
     initialPassword = "root";
   };
 
+  networking = {
+    useDHCP = false;
+    interfaces = {wlan0.useDHCP = true;};
+  };
+
+  hardware = {
+    bluetooth.enable = true;
+    raspberry-pi = {
+      config = {
+        all = {
+          base-dt-params = {
+            # enable autoprobing of bluetooth driver
+            # https://github.com/raspberrypi/linux/blob/c8c99191e1419062ac8b668956d19e788865912a/arch/arm/boot/dts/overlays/README#L222-L224
+            krnbt = {
+              enable = true;
+              value = "on";
+            };
+          };
+        };
+      };
+    };
+  };
+
   # Enable sudo for wheel group
   security.sudo.wheelNeedsPassword = true; # set to true if you want the password prompt
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    bluez
+    bluez-tools
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

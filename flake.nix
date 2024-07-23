@@ -111,7 +111,7 @@
       hostDefaults = {
         specialArgs = {inherit inputs;};
         modules = with inputs; [
-          ./system/core
+          ./hosts/shared/core
           ./scripts
           lollypops.nixosModules.lollypops
           sops-nix.nixosModules.sops
@@ -132,8 +132,7 @@
         jason = {
           system = "x86_64-linux";
           modules = [
-            ./hosts/jason
-            inputs.disko.nixosModules.disko
+            ./hosts/desktop/jason
             nixosModules.configs.refind
             nixosModules.configs.vfio
             nixosModules.services.metrics
@@ -141,6 +140,7 @@
             nixosModules.services.recyclarr
             nixosModules.services.qbitmanage
 
+            inputs.disko.nixosModules.disko
             inputs.home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
@@ -154,7 +154,7 @@
         daniel = {
           system = "x86_64-linux";
           modules = [
-            ./hosts/daniel
+            ./hosts/desktop/daniel
             inputs.nixos-hardware.nixosModules.lenovo-ideapad-slim-5
             inputs.nixos-hardware.nixosModules.common-cpu-amd-pstate
 
@@ -172,7 +172,8 @@
         david = {
           system = "x86_64-linux";
           modules = [
-            ./hosts/david
+            ./hosts/servers/david
+            ./hosts/servers/core
             nixosModules.services.bitmagnet
             nixosModules.services.recyclarr
             nixosModules.services.qbittorrent
@@ -192,7 +193,8 @@
         andromeda = {
           system = "x86_64-linux";
           modules = [
-            ./hosts/andromeda
+            ./hosts/servers/andromeda
+            ./hosts/servers/core
             nixosModules.services.qbittorrent
             # srvos.nixosModules.server
             # srvos.nixosModules.common
@@ -210,7 +212,8 @@
         envpi = {
           system = "aarch64-linux";
           modules = [
-            ./hosts/envpi
+            ./hosts/servers/envpi
+            ./hosts/servers/core
             inputs.nixos-hardware.nixosModules.raspberry-pi-3
           ];
         };
@@ -220,7 +223,8 @@
         nixpi = {
           system = "aarch64-linux";
           modules = [
-            ./hosts/nixpi
+            ./hosts/servers/nixpi
+            ./hosts/servers/core
             inputs.nixos-hardware.nixosModules.raspberry-pi-3
           ];
         };
@@ -228,8 +232,8 @@
         polaris = {
           system = "aarch64-linux";
           modules = [
-            ./hosts/polaris
-            ./system/core
+            ./hosts/servers/polaris
+            ./hosts/servers/core
             inputs.raspberry-pi-nix.nixosModules.raspberry-pi
             # inputs.nixos-hardware.nixosModules.raspberry-pi-5
           ];
@@ -268,26 +272,8 @@
         };
       };
 
-      nixosConfigurations.rpi5 = inputs.nixpkgs.lib.nixosSystem {
-        system = "aarch64-linux";
-        modules = [
-          ./hosts/polaris
-          inputs.nixos-hardware.nixosModules.raspberry-pi-5
-          ./system/core
-          inputs.lollypops.nixosModules.lollypops
-          "${inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
-          {
-            disabledModules = ["profiles/base.nix"];
-            nixpkgs.config.allowUnsupportedSystem = true;
-            # nixpkgs.hostPlatform.system = "aarch64-linux";
-            # nixpkgs.buildPlatform.system = "x86_64-linux"; #If you build on x86 otherwise changes this.
-            sdImage.compressImage = false;
-          }
-        ];
-      };
-
       images = {
-        rpi5 = nixosConfigurations.rpi5.config.system.build.sdImage;
+        polaris = self.nixosConfigurations.polaris.config.system.build.sdImage;
       };
 
       deploy.nodes.andromeda = {

@@ -70,6 +70,8 @@
     variant = "nodeadkeys";
   };
 
+  boot.binfmt.emulatedSystems = ["aarch64-linux"];
+
   # Configure console keymap
   console.keyMap = "dk-latin1";
 

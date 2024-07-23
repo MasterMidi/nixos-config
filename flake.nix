@@ -14,7 +14,7 @@
   inputs = {
     # Package repos
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    # nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-23.11";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-23.11";
     nur.url = "github:nix-community/NUR"; # Nix User Repository
     nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions"; # All vscode extensions
 
@@ -209,6 +209,7 @@
           ];
         };
 
+        # TODO: turn into bluetooth speaker device
         envpi = {
           system = "aarch64-linux";
           modules = [
@@ -249,21 +250,7 @@
 
         # output packages for all supported systems
         # packages = channels.nixpkgs.lib.genAttrs supportedSystems (system: import ./pkgs channels.nixpkgs.legacyPackages.${system});
-        # packages = {inherit (channels.nixpkgs) qbitmanage;};
-        packages = {
-          rpi5 = images.rpi5;
-          # rpi5 = inputs.nix-generators.nixosGenerate {
-          #   system = "aarch64-linux";
-          #   specialArgs = {inherit inputs;};
-          #   modules = with inputs; [
-          #     ./hosts/polaris
-          #     # inputs.nixos-hardware.nixosModules.raspberry-pi-5
-          #     ./system/core
-          #     lollypops.nixosModules.lollypops
-          #   ];
-          #   format = "iso";
-          # };
-        };
+        packages = {inherit (channels.nixpkgs) qbitmanage;};
 
         # dev shell with tools for working with nix configuration
         devShells.default = import ./shell.nix {

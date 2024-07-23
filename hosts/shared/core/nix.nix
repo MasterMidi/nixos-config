@@ -64,7 +64,7 @@
       keep-derivations = true;
       # use-xdg-base-directories = true
 
-      system-features = ["recursive-nix" "uid-range"];
+      system-features = ["big-parallel" "recursive-nix" "uid-range"];
 
       # Free up to 1GiB whenever there is less than 100MiB left.
       min-free = 512 * 1024 * 1024;

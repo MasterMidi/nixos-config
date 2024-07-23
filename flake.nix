@@ -14,7 +14,7 @@
   inputs = {
     # Package repos
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    # nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-23.11";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-23.11";
     nur.url = "github:nix-community/NUR"; # Nix User Repository
     nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions"; # All vscode extensions
 
@@ -207,6 +207,7 @@
           ];
         };
 
+        # TODO: turn into bluetooth speaker device
         envpi = {
           system = "aarch64-linux";
           modules = [
@@ -245,21 +246,7 @@
 
         # output packages for all supported systems
         # packages = channels.nixpkgs.lib.genAttrs supportedSystems (system: import ./pkgs channels.nixpkgs.legacyPackages.${system});
-        # packages = {inherit (channels.nixpkgs) qbitmanage;};
-        packages = {
-          rpi5 = images.rpi5;
-          # rpi5 = inputs.nix-generators.nixosGenerate {
-          #   system = "aarch64-linux";
-          #   specialArgs = {inherit inputs;};
-          #   modules = with inputs; [
-          #     ./hosts/polaris
-          #     # inputs.nixos-hardware.nixosModules.raspberry-pi-5
-          #     ./system/core
-          #     lollypops.nixosModules.lollypops
-          #   ];
-          #   format = "iso";
-          # };
-        };
+        packages = {inherit (channels.nixpkgs) qbitmanage;};
 
         # dev shell with tools for working with nix configuration
         devShells.default = import ./shell.nix {
@@ -268,21 +255,62 @@
         };
       };
 
-      nixosConfigurations.rpi5 = inputs.nixpkgs.lib.nixosSystem {
+    
+      nixosConfigurations.rpi5 = let
+      inherit (inputs.nixpkgs-stable.lib) nixosSystem;
+      basic-config = { pkgs, lib, ... }: {
+        services.openssh = {
+          enable = true;
+          settings.PermitRootLogin = "yes";
+        };
+        time.timeZone = "America/New_York";
+        users.users.root.initialPassword = "root";
+        networking = {
+          hostName = "polaris";
+          useDHCP = false;
+          interfaces = { wlan0.useDHCP = true; };
+          wireless = {
+            enable = true;
+            networks."Asus RT-AX86U".psk = "3zyn2dY&Gp";
+            networks."McDonald's McWifi".psk = "lady121205";
+          };
+        };
+        environment.systemPackages = with pkgs; [ bluez bluez-tools ];
+        hardware = {
+          bluetooth.enable = true;
+          raspberry-pi = {
+            config = {
+              all = {
+                base-dt-params = {
+                  # enable autoprobing of bluetooth driver
+                  # https://github.com/raspberrypi/linux/blob/c8c99191e1419062ac8b668956d19e788865912a/arch/arm/boot/dts/overlays/README#L222-L224
+                  krnbt = {
+                    enable = true;
+                    value = "on";
+                  };
+                };
+              };
+            };
+          };
+        };
+      };
+
+    in 
+      nixosSystem {
         system = "aarch64-linux";
         modules = [
-          ./hosts/polaris
-          inputs.nixos-hardware.nixosModules.raspberry-pi-5
-          ./system/core
-          inputs.lollypops.nixosModules.lollypops
-          "${inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
-          {
-            disabledModules = ["profiles/base.nix"];
-            nixpkgs.config.allowUnsupportedSystem = true;
-            # nixpkgs.hostPlatform.system = "aarch64-linux";
-            # nixpkgs.buildPlatform.system = "x86_64-linux"; #If you build on x86 otherwise changes this.
-            sdImage.compressImage = false;
-          }
+          # ./hosts/polaris
+          # # inputs.nixos-hardware.nixosModules.raspberry-pi-5
+          # # ./system/core
+          # inputs.lollypops.nixosModules.lollypops
+          basic-config
+          inputs.raspberry-pi-nix.nixosModules.raspberry-pi
+          # ({...}:{
+          #   nixpkgs.config.allowUnsupportedSystem = true;
+          #   # nixpkgs.hostPlatform.system = "aarch64-linux";
+          #   # nixpkgs.buildPlatform.system = "x86_64-linux"; #If you build on x86 otherwise changes this.
+          #   sdImage.compressImage = true;
+          # })
         ];
       };
 

@@ -8,7 +8,7 @@ in {
   imports = [inputs.spicetify-nix.homeManagerModule];
 
   programs.spicetify = {
-    enable = true;
+    # enable = true;
     theme = spicePkgs.themes.text;
     colorScheme = "gruvbox";
 

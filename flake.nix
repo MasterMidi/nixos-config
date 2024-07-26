@@ -135,6 +135,7 @@
             home-manager.sharedModules = [
               ./home/shared/core
               inputs.nix-colors.homeManagerModules.default # import color themes for all users
+              inputs.sops-nix.homeManagerModules.sops # add sops to all users
             ];
           }
         ];

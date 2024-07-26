@@ -5,8 +5,18 @@
   description = "NixOS configuration";
 
   nixConfig = {
-    extra-substituters = ["https://raspberry-pi-nix.cachix.org"];
+    extra-substituters = [
+      "https://cache.nixos.org"
+      "https://nix-community.cachix.org"
+      "https://cache.garnix.io"
+      "https://numtide.cachix.org"
+      "https://raspberry-pi-nix.cachix.org"
+    ];
     extra-trusted-public-keys = [
+      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
+      "numtide.cachix.org-1:2ps1kLBUWjxIneOy1Ik6cQjb41X0iXVXeHigGmycPPE="
       "raspberry-pi-nix.cachix.org-1:WmV2rdSangxW0rZjY/tBvBDSaNFQ3DyEQsVw8EvHn9o="
     ];
   };
@@ -110,19 +120,21 @@
 
       hostDefaults = {
         specialArgs = {inherit inputs;};
-        modules = with inputs; [
-          ./system/core
+        modules = [
+          ./hosts/shared/core
           ./scripts
-          lollypops.nixosModules.lollypops
-          sops-nix.nixosModules.sops
-          home-manager.nixosModules.home-manager
+          inputs.lollypops.nixosModules.lollypops
+          inputs.sops-nix.nixosModules.sops
+          inputs.home-manager.nixosModules.home-manager
           {
+            home-manager.backupFileExtension = "backup";
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.extraSpecialArgs = {inherit inputs;};
-            home-manager.users.root = import ./home/root;
+            home-manager.users.root = import ./home/shared/users/root;
             home-manager.sharedModules = [
-              ./home/core
+              ./home/shared/core
+              inputs.nix-colors.homeManagerModules.default # import color themes for all users
             ];
           }
         ];
@@ -132,8 +144,7 @@
         jason = {
           system = "x86_64-linux";
           modules = [
-            ./hosts/jason
-            inputs.disko.nixosModules.disko
+            ./hosts/desktop/jason
             nixosModules.configs.refind
             nixosModules.configs.vfio
             nixosModules.services.metrics
@@ -141,12 +152,16 @@
             nixosModules.services.recyclarr
             nixosModules.services.qbitmanage
 
+            inputs.disko.nixosModules.disko
             inputs.home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.extraSpecialArgs = {inherit inputs;};
-              home-manager.users.michael = import ./home/michael;
+              home-manager.users.michael.imports = [
+                ./hosts/desktop/jason/home
+                ./home/desktop
+              ];
             }
           ];
         };
@@ -154,17 +169,19 @@
         daniel = {
           system = "x86_64-linux";
           modules = [
-            ./hosts/daniel
+            ./hosts/desktop/daniel
             inputs.nixos-hardware.nixosModules.lenovo-ideapad-slim-5
             inputs.nixos-hardware.nixosModules.common-cpu-amd-pstate
 
             inputs.home-manager.nixosModules.home-manager
             {
-              home-manager.backupFileExtension = "backup";
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.extraSpecialArgs = {inherit inputs;};
-              home-manager.users.michael = import ./home/michael;
+              home-manager.users.michael.imports = [
+                ./hosts/desktop/daniel/home
+                ./home/desktop
+              ];
             }
           ];
         };
@@ -172,7 +189,8 @@
         david = {
           system = "x86_64-linux";
           modules = [
-            ./hosts/david
+            ./hosts/servers/david
+            ./hosts/servers/core
             nixosModules.services.bitmagnet
             nixosModules.services.recyclarr
             nixosModules.services.qbittorrent
@@ -192,7 +210,8 @@
         andromeda = {
           system = "x86_64-linux";
           modules = [
-            ./hosts/andromeda
+            ./hosts/servers/andromeda
+            ./hosts/servers/core
             nixosModules.services.qbittorrent
             # srvos.nixosModules.server
             # srvos.nixosModules.common
@@ -211,7 +230,8 @@
         envpi = {
           system = "aarch64-linux";
           modules = [
-            ./hosts/envpi
+            ./hosts/servers/envpi
+            ./hosts/servers/core
             inputs.nixos-hardware.nixosModules.raspberry-pi-3
           ];
         };
@@ -221,7 +241,8 @@
         nixpi = {
           system = "aarch64-linux";
           modules = [
-            ./hosts/nixpi
+            ./hosts/servers/nixpi
+            ./hosts/servers/core
             inputs.nixos-hardware.nixosModules.raspberry-pi-3
           ];
         };
@@ -229,8 +250,8 @@
         polaris = {
           system = "aarch64-linux";
           modules = [
-            ./hosts/polaris
-            ./system/core
+            ./hosts/servers/polaris
+            ./hosts/servers/core
             inputs.raspberry-pi-nix.nixosModules.raspberry-pi
             # inputs.nixos-hardware.nixosModules.raspberry-pi-5
           ];
@@ -255,67 +276,8 @@
         };
       };
 
-    
-      nixosConfigurations.rpi5 = let
-      inherit (inputs.nixpkgs-stable.lib) nixosSystem;
-      basic-config = { pkgs, lib, ... }: {
-        services.openssh = {
-          enable = true;
-          settings.PermitRootLogin = "yes";
-        };
-        time.timeZone = "America/New_York";
-        users.users.root.initialPassword = "root";
-        networking = {
-          hostName = "polaris";
-          useDHCP = false;
-          interfaces = { wlan0.useDHCP = true; };
-          wireless = {
-            enable = true;
-            networks."Asus RT-AX86U".psk = "3zyn2dY&Gp";
-            networks."McDonald's McWifi".psk = "lady121205";
-          };
-        };
-        environment.systemPackages = with pkgs; [ bluez bluez-tools ];
-        hardware = {
-          bluetooth.enable = true;
-          raspberry-pi = {
-            config = {
-              all = {
-                base-dt-params = {
-                  # enable autoprobing of bluetooth driver
-                  # https://github.com/raspberrypi/linux/blob/c8c99191e1419062ac8b668956d19e788865912a/arch/arm/boot/dts/overlays/README#L222-L224
-                  krnbt = {
-                    enable = true;
-                    value = "on";
-                  };
-                };
-              };
-            };
-          };
-        };
-      };
-
-    in 
-      nixosSystem {
-        system = "aarch64-linux";
-        modules = [
-          # ./hosts/polaris
-          # # inputs.nixos-hardware.nixosModules.raspberry-pi-5
-          # # ./system/core
-          # inputs.lollypops.nixosModules.lollypops
-          basic-config
-          inputs.raspberry-pi-nix.nixosModules.raspberry-pi
-          # ({...}:{
-          #   nixpkgs.config.allowUnsupportedSystem = true;
-          #   # nixpkgs.hostPlatform.system = "aarch64-linux";
-          #   # nixpkgs.buildPlatform.system = "x86_64-linux"; #If you build on x86 otherwise changes this.
-          #   sdImage.compressImage = true;
-          # })
-        ];
-      };
-
       images = {
-        rpi5 = nixosConfigurations.rpi5.config.system.build.sdImage;
+        polaris = self.nixosConfigurations.polaris.config.system.build.sdImage;
       };
 
       deploy.nodes.andromeda = {

@@ -12,24 +12,26 @@
     dev.enable = false;
   };
 
-  environment.systemPackages = with pkgs; [nh];
+  environment.systemPackages = with pkgs; [
+    nh # simple nix system management
+  ];
 
   environment.variables = {
-    FLAKE = "/etc/nixos/";
+    FLAKE = "/etc/nixos/"; # used by nh command
   };
 
   environment.etc = {
-    # "nix/flake-channels/nixpkgs".source = inputs.nixpkgs;
-    # "nix/flake-channels/home-manager".source = inputs.home-manager;
+    "nix/flake-channels/nixpkgs".source = inputs.nixpkgs;
+    "nix/flake-channels/home-manager".source = inputs.home-manager;
   };
 
   nix = {
     # set the path for channels compat
-    # nixPath = [
-    #   "nixpkgs=/etc/nix/flake-channels/nixpkgs"
-    #   "home-manager=/etc/nix/flake-channels/home-manager"
-    # ];
-    channel.enable = false;
+    channel.enable = true;
+    nixPath = [
+      "nixpkgs=/etc/nix/flake-channels/nixpkgs"
+      "home-manager=/etc/nix/flake-channels/home-manager"
+    ];
 
     gc = {
       automatic = true;
@@ -45,7 +47,7 @@
     package = pkgs.nixVersions.latest; # use the newest vwersion of the nix package manager
 
     # pin the registry to avoid downloading and evaling a new nixpkgs version every time using 'nix shell nixpkgs#...'
-    # registry = lib.mapAttrs (_: v: {flake = v;}) inputs;
+    registry = lib.mapAttrs (_: v: {flake = v;}) inputs;
     daemonCPUSchedPolicy = lib.mkDefault "idle";
     daemonIOSchedClass = lib.mkDefault "idle";
     daemonIOSchedPriority = lib.mkDefault 7;
@@ -81,23 +83,7 @@
       builders-use-substitutes = true;
       max-jobs = "auto";
 
-      trusted-users = ["@wheel"];
-
-      substituters = [
-        "https://cache.nixos.org"
-        "https://nix-community.cachix.org"
-        "https://cache.garnix.io"
-        "https://numtide.cachix.org"
-        "https://raspberry-pi-nix.cachix.org"
-      ];
-
-      trusted-public-keys = [
-        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-        "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
-        "numtide.cachix.org-1:2ps1kLBUWjxIneOy1Ik6cQjb41X0iXVXeHigGmycPPE="
-        "raspberry-pi-nix.cachix.org-1:WmV2rdSangxW0rZjY/tBvBDSaNFQ3DyEQsVw8EvHn9o="
-      ];
+      trusted-users = ["@wheel"]; # allow wheel group to run nix commands
     };
   };
   # Make builds to be more likely killed than important services.

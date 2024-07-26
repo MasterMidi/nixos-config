@@ -5,8 +5,18 @@
   description = "NixOS configuration";
 
   nixConfig = {
-    extra-substituters = ["https://raspberry-pi-nix.cachix.org"];
+    extra-substituters = [
+      "https://cache.nixos.org"
+      "https://nix-community.cachix.org"
+      "https://cache.garnix.io"
+      "https://numtide.cachix.org"
+      "https://raspberry-pi-nix.cachix.org"
+    ];
     extra-trusted-public-keys = [
+      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
+      "numtide.cachix.org-1:2ps1kLBUWjxIneOy1Ik6cQjb41X0iXVXeHigGmycPPE="
       "raspberry-pi-nix.cachix.org-1:WmV2rdSangxW0rZjY/tBvBDSaNFQ3DyEQsVw8EvHn9o="
     ];
   };
@@ -110,19 +120,21 @@
 
       hostDefaults = {
         specialArgs = {inherit inputs;};
-        modules = with inputs; [
+        modules = [
           ./hosts/shared/core
           ./scripts
-          lollypops.nixosModules.lollypops
-          sops-nix.nixosModules.sops
-          home-manager.nixosModules.home-manager
+          inputs.lollypops.nixosModules.lollypops
+          inputs.sops-nix.nixosModules.sops
+          inputs.home-manager.nixosModules.home-manager
           {
+            home-manager.backupFileExtension = "backup";
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.extraSpecialArgs = {inherit inputs;};
-            home-manager.users.root = import ./home/root;
+            home-manager.users.root = import ./home/shared/users/root;
             home-manager.sharedModules = [
-              ./home/core
+              ./home/shared/core
+              inputs.nix-colors.homeManagerModules.default # import color themes for all users
             ];
           }
         ];
@@ -146,7 +158,10 @@
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.extraSpecialArgs = {inherit inputs;};
-              home-manager.users.michael = import ./home/michael;
+              home-manager.users.michael.imports = [
+                ./hosts/desktop/jason/home
+                ./home/desktop
+              ];
             }
           ];
         };
@@ -160,11 +175,13 @@
 
             inputs.home-manager.nixosModules.home-manager
             {
-              home-manager.backupFileExtension = "backup";
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.extraSpecialArgs = {inherit inputs;};
-              home-manager.users.michael = import ./home/michael;
+              home-manager.users.michael.imports = [
+                ./hosts/desktop/daniel/home
+                ./home/desktop
+              ];
             }
           ];
         };

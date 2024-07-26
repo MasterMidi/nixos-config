@@ -8,6 +8,7 @@
   imports = [
     inputs.nix-colors.homeManagerModules.default
 
+    ./core
     ./wm/hyprland
     ./theme
     ./programs
@@ -15,13 +16,7 @@
     ./defaultApps.nix
   ];
 
-  home.username = "michael";
-  home.homeDirectory = "/home/michael";
-  home.stateVersion = "23.05";
-
   programs.home-manager.enable = false;
-
-  colorScheme = inputs.nix-colors.colorSchemes.gruvbox-material-dark-medium;
 
   fonts.fontconfig.enable = true;
 

@@ -29,7 +29,7 @@
     ./wlogout
     ./yazi.nix
     ./yt-dlp.nix
-    ./youtube-music.nix
+    ./youtube-music
     ./zathura.nix
     ./zoxide.nix
   ];

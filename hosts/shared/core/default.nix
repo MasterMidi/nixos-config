@@ -5,6 +5,5 @@
     ./packages.nix
     # ./sops.nix
     ./system.nix
-    ./upgrade-diff.nix
   ];
 }

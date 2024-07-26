@@ -1,11 +1,14 @@
 {inputs, ...}: {
-  imports = [
-    inputs.nix-colors.homeManagerModules.default
-  ];
-
   home.username = "michael";
   home.homeDirectory = "/home/michael";
-  home.stateVersion = "23.11";
+  home.stateVersion = "23.05";
 
   colorScheme = inputs.nix-colors.colorSchemes.gruvbox-material-dark-medium;
+
+  services = {
+    swayosd = {
+      enable = true;
+      # display = "eDP-1";
+    };
+  };
 }

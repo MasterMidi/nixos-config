@@ -1,6 +1,7 @@
 {
   lib,
   inputs,
+  pkgs,
   ...
 }: {
   nix = {
@@ -11,5 +12,7 @@
     };
 
     registry = lib.mapAttrs (_: v: {flake = v;}) inputs;
+
+    # channels = {nixpkgs = pkgs;};
   };
 }

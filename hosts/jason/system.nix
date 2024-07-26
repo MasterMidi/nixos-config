@@ -22,12 +22,12 @@
 
   # Bootloader
   boot.loader.systemd-boot = {
-    enable = true;
+    enable = false;
     editor = false;
     configurationLimit = 5;
   };
   boot.loader.refind = {
-    enable = false;
+    enable = true;
     theme = pkgs.refindTheme.refind-minimal;
     settings = {
       resolution = "3440 1440";

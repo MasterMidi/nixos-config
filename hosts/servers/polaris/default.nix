@@ -108,6 +108,13 @@
     settings.PermitRootLogin = "yes";
   };
 
+  # Set powermanagement options
+  boot.kernelModules = ["coretemp"]; # for powertop
+  powerManagement = {
+    powertop.enable = true;
+    cpuFreqGovernor = "schedutil";
+  };
+
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   system.stateVersion = "24.05"; # Did you read the comment?
@@ -118,8 +125,8 @@
     config-dir = "/etc/nixos";
 
     # SSH connection parameters
-    ssh.host = "${config.networking.hostName}.local";
-    ssh.user = "michael";
+    ssh.host = config.networking.hostName;
+    ssh.user = "root";
     ssh.command = "ssh";
     ssh.opts = [];
 

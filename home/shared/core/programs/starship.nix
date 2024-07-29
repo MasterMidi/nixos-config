@@ -43,8 +43,8 @@ in {
 
       # format = "($nix_shell$shlvl[](fg:${shell} bg:${pc-info}))$os$username$hostname$localip$sudo[](fg:${pc-info} bg:${path})$directory[](fg:${path} bg:${git-module})$git_branch$git_commit$git_state$git_status[](fg:${git-module} bg:${package-module})$package[](fg:${package-module} bg:${code-module})$container$kubernetes$docker_context$nodejs$rust$golang$php[](fg:${code-module})$cmd_duration\n$character";
       format = builtins.concatStringsSep "" [
-        (ifSection ["$localip"] "" network pc-info)
-        (section ["$os" "$username" "$hostname" "$sudo"] "" pc-info path)
+        (section ["$os" "$username" "$hostname" "$sudo"] "" pc-info network)
+        (section ["$localip"] "" network path)
         (section ["$directory"] "" path git-module)
         (section ["$git_branch" "$git_commit" "$git_state$" "git_status"] "" git-module shell)
         (ifSection ["$nix_shell" "$direnv" "$shlvl"] "" shell package-module)
@@ -134,8 +134,8 @@ in {
       };
 
       localip = {
-        format = "[$localipv4]($style)";
-        style = "fg:${dark-text} bg:${pc-info}";
+        format = "[ $localipv4]($style)";
+        style = "italic fg:${dark-text} bg:${network}";
         disabled = false;
         ssh_only = true;
       };

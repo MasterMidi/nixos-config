@@ -11,6 +11,7 @@
       "https://cache.garnix.io"
       "https://numtide.cachix.org"
       "https://raspberry-pi-nix.cachix.org"
+      "https://nix-gaming.cachix.org"
     ];
     extra-trusted-public-keys = [
       "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
@@ -18,6 +19,7 @@
       "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
       "numtide.cachix.org-1:2ps1kLBUWjxIneOy1Ik6cQjb41X0iXVXeHigGmycPPE="
       "raspberry-pi-nix.cachix.org-1:WmV2rdSangxW0rZjY/tBvBDSaNFQ3DyEQsVw8EvHn9o="
+      "nix-gaming.cachix.org-1:nbjlureqMbRAxR1gJ/f3hxemL9svXaZF/Ees8vCUUs4="
     ];
   };
 
@@ -32,6 +34,7 @@
     nixos-hardware.url = "github:NixOS/nixos-hardware/master"; # Hardware specific setup modules
     srvos.url = "github:nix-community/srvos"; # Server specific modules
     raspberry-pi-nix.url = "github:tstat/raspberry-pi-nix"; # easily create pi images
+    nix-gaming.url = "github:fufexan/nix-gaming";
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -131,7 +134,7 @@
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.extraSpecialArgs = {inherit inputs;};
-            home-manager.users.root = import ./home/shared/users/root;
+            home-manager.users.root.imports = [./home/shared/users/root];
             home-manager.sharedModules = [
               ./home/shared/core
               inputs.nix-colors.homeManagerModules.default # import color themes for all users
@@ -191,7 +194,7 @@
           system = "x86_64-linux";
           modules = [
             ./hosts/servers/david
-            ./hosts/servers/core
+            ./hosts/servers/shared/core
             nixosModules.services.bitmagnet
             nixosModules.services.recyclarr
             nixosModules.services.qbittorrent
@@ -212,7 +215,7 @@
           system = "x86_64-linux";
           modules = [
             ./hosts/servers/andromeda
-            ./hosts/servers/core
+            ./hosts/servers/shared/core
             nixosModules.services.qbittorrent
             # srvos.nixosModules.server
             # srvos.nixosModules.common
@@ -228,14 +231,14 @@
         };
 
         # TODO: turn into bluetooth speaker device
-        envpi = {
-          system = "aarch64-linux";
-          modules = [
-            ./hosts/servers/envpi
-            ./hosts/servers/core
-            inputs.nixos-hardware.nixosModules.raspberry-pi-3
-          ];
-        };
+        # envpi = {
+        #   system = "aarch64-linux";
+        #   modules = [
+        #     ./hosts/servers/envpi
+        #     ./hosts/servers/shared/core
+        #     inputs.nixos-hardware.nixosModules.raspberry-pi-3
+        #   ];
+        # };
 
         # TODO: make this a log aggregator for all systems
         # TODO: Make this a dns-sinkhole
@@ -243,7 +246,7 @@
           system = "aarch64-linux";
           modules = [
             ./hosts/servers/nixpi
-            ./hosts/servers/core
+            ./hosts/servers/shared/core
             inputs.nixos-hardware.nixosModules.raspberry-pi-3
           ];
         };
@@ -252,9 +255,20 @@
           system = "aarch64-linux";
           modules = [
             ./hosts/servers/polaris
-            ./hosts/servers/core
+            ./hosts/servers/shared/core
+            ./hosts/shared/core
             inputs.raspberry-pi-nix.nixosModules.raspberry-pi
             # inputs.nixos-hardware.nixosModules.raspberry-pi-5
+            inputs.home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.extraSpecialArgs = {inherit inputs;};
+              home-manager.users.michael.imports = [
+                ./hosts/servers/polaris/home
+                ./home/shared/core
+              ];
+            }
           ];
         };
       };
@@ -279,6 +293,8 @@
 
       images = {
         polaris = self.nixosConfigurations.polaris.config.system.build.sdImage;
+        envpi = self.nixosConfigurations.envpi.config.system.build.sdImage;
+        nixpi = self.nixosConfigurations.nixpi.config.system.build.sdImage;
       };
 
       deploy.nodes.andromeda = {

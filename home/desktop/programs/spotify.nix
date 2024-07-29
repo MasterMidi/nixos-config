@@ -7,6 +7,10 @@
 in {
   imports = [inputs.spicetify-nix.homeManagerModule];
 
+  home.packages = with pkgs; [
+    spotify
+  ];
+
   programs.spicetify = {
     enable = false;
     theme = spicePkgs.themes.text;
@@ -14,7 +18,7 @@ in {
 
     enabledExtensions = with spicePkgs.extensions; [
       fullAppDisplay
-      shuffle # shuffle+ (special characters are sanitized out of ext names)
+      shuffle # shuffle+
       hidePodcasts
     ];
   };

@@ -1,8 +1,13 @@
 {
+  inputs,
   pkgs,
   lib,
   ...
 }: {
+  imports = [
+    inputs.nix-gaming.nixosModules.platformOptimizations
+  ];
+
   environment.systemPackages = with pkgs; [
     mangohud
     protonup-qt
@@ -24,6 +29,7 @@
     dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
     localNetworkGameTransfers.openFirewall = true; # Enable local network game transfers
     gamescopeSession.enable = true;
+    platformOptimizations.enable = true;
 
     extraCompatPackages = with pkgs; [
       # proton-ge-bin

@@ -1,5 +1,6 @@
 {pkgs, ...}: {
   environment.systemPackages = with pkgs; [
-    wget
+    kitty.terminfo # for kitty terminal ssh support
+    btop # system monitor utility
   ];
 }

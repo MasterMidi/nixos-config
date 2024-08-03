@@ -65,9 +65,9 @@
   home.packages = with pkgs; [
     # gnome
     nautilus-open-any-terminal
-    gnome.sushi
-    gnome.nautilus-python
-    (gnome.nautilus.overrideAttrs (super: {
+    sushi
+    nautilus-python
+    (nautilus.overrideAttrs (super: {
       buildInputs =
         super.buildInputs
         ++ (with gst_all_1; [
@@ -84,7 +84,7 @@
     pavucontrol
     neofetch
     # haskellPackages.kmonad
-    gnome3.gnome-tweaks
+    gnome-tweaks
     hyprcursor
 
     # Productivity
@@ -143,7 +143,7 @@
 
     # Image viewer
     geeqie
-    cinnamon.pix
+    pix
     # loupe
 
     # misc

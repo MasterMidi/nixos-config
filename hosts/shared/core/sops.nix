@@ -15,6 +15,7 @@
     secrets = {
       # This is the actual specification of the secrets.
       TMDB_KEY = {};
+      TAILSCALE_KEY = {};
     };
   };
 }

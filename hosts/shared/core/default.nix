@@ -5,5 +5,6 @@
     ./packages.nix
     ./sops.nix
     ./system.nix
+    ./tailscale.nix
   ];
 }

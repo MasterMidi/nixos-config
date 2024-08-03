@@ -8,7 +8,6 @@
     refindTheme.refind-minimal = final.callPackage ../pkgs/refind-minimal {};
     rofi-nerdy = final.callPackage ../pkgs/rofi-nerdy {};
     qbitmanage = final.callPackage ../pkgs/qbitmanage {};
-    ccase = inputs.ccase.packages."x86_64-linux".default;
   };
 
   # This one contains whatever you want to overlay
@@ -18,5 +17,12 @@
     # example = prev.example.overrideAttrs (oldAttrs: rec {
     # ...
     # });
+  };
+
+  packages = final: _prev: {
+    stable = import inputs.nixpkgs-stable {
+      system = final.system;
+      config.allowUnfree = true;
+    };
   };
 }

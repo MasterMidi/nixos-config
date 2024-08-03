@@ -1,7 +1,6 @@
 {
   pkgs,
   lib,
-  config,
   ...
 }: {
   # inital Nixos version

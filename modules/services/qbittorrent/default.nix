@@ -216,6 +216,7 @@ in {
         description = "a Bittorrent service";
         documentation = ["man:qBittorrent-nox(1)"];
         after = ["network-online.target"];
+        requires = ["network-online.target"];
         wantedBy = ["multi-user.target"];
         unitConfig = {
           ConditionPathExists = cfg.dataDir;

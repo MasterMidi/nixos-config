@@ -37,9 +37,9 @@
   };
 
   # Enable OpenGL
-  hardware.opengl = {
+  hardware.graphics = {
     enable = lib.mkForce true;
-    driSupport32Bit = true; # Enables support for 32bit libs that steam uses
+    enable32Bit = true; # Enables support for 32bit libs that steam uses
     extraPackages = with pkgs; [
       # amdvlk
     ];

@@ -26,7 +26,7 @@
   inputs = {
     # Package repos
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-23.11";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.05";
     nur.url = "github:nix-community/NUR"; # Nix User Repository
     nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions"; # All vscode extensions
 
@@ -52,10 +52,6 @@
     caligula.url = "github:ifd3f/caligula";
     nixvim = {
       url = "github:nix-community/nixvim";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    ccase = {
-      url = "github:rutrum/ccase";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -115,6 +111,7 @@
         inputs.devshell.overlays.default
         overlays.additions
         overlays.modifications
+        overlays.packages
       ];
 
       # Custom packages and modifications, exported as overlays
@@ -225,7 +222,10 @@
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.extraSpecialArgs = {inherit inputs;};
-              home-manager.users.michael = import ./home/michael.david;
+              home-manager.users.michael.imports = [
+                ./hosts/servers/andromeda/home
+                ./home/shared/core
+              ];
             }
           ];
         };

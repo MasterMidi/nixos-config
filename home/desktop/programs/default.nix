@@ -15,12 +15,11 @@
     ./kitty.nix
     ./lazygit.nix
     ./mangohud.nix
-    ./nvim
     ./mpv
-    ./ripgrep.nix
-    ./spotify.nix
-    ./rofi
     ./rbw.nix
+    ./ripgrep.nix
+    ./rofi
+    ./spotify.nix
     ./thunderbird.nix
     ./tmux.nix
     ./vscodium.nix
@@ -28,9 +27,10 @@
     ./wezterm.nix
     ./wlogout
     ./yazi.nix
-    ./yt-dlp.nix
     ./youtube-music
+    ./yt-dlp.nix
     ./zathura.nix
     ./zoxide.nix
+    # ./nvim
   ];
 }

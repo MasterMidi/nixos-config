@@ -51,11 +51,48 @@ with lib; let
       (filterAttrs (n: _: n == "@import") attrs)
       (removeAttrs attrs ["@theme" "@import"])
     ]);
+
+  allowedFileFormats = ["jpeg" "png" "gif" "pnm" "tga" "tiff" "webp" "bmp" "farbfeld"];
 in {
   home.packages = [
-    (pkgs.writeShellScriptBin "rofi-wall" (builtins.readFile ./wall-select.sh))
-    pkgs.lutgen
+    (pkgs.writeShellScriptBin "rofi-wall" ''
+      # Set some variables
+      wallDir=$1 # NOTE: symlinked folder needs "/" at the end, this is accounted for elsewhere in the script
+      cacheDir="$HOME/.cache/wallpapers/"
+      rofiCommand="${config.programs.rofi.package}/bin/rofi -dmenu -i -theme ${config.home.homeDirectory}/${config.xdg.configFile."rofi/wallpaper-switcher.rasi".target}"
+
+      # Create cache dir if not exists
+      if [ ! -d "$cacheDir" ]; then
+      	mkdir -p "$cacheDir"
+      fi
+
+      # Convert images in directory and save to cache dir
+      ${pkgs.libnotify}/bin/notify-send "Proccesing wallpapers in $wallDir" -t 2200
+      for image in "$wallDir"/*.{${lib.concatStringsSep "," allowedFileFormats}}; do
+      	if [ -f "$image" ]; then
+      		filename=$(basename "$image")
+      		if [ ! -f "$cacheDir/$filename" ]; then
+      			${pkgs.imagemagick}/bin/convert -strip "$image" -thumbnail 500x500^ -gravity center -extent 500x500 "$cacheDir/$filename"
+      		fi
+      	fi
+      done
+
+      # Launch rofi
+      wall_selection=$(${pkgs.findutils}/bin/find "$wallDir" -maxdepth 1 -type f \( ${lib.concatMapStringsSep " -o " (x: ''-iname "*.${x}"'') allowedFileFormats} \) -exec basename {} \; | sort | while read -r A; do echo -en "$A\x00icon\x1f""$cacheDir"/"$A\n"; done | $rofiCommand)
+
+      # output information
+      OUTPUT_DISPLAY=$(${config.wayland.windowManager.hyprland.package}/bin/hyprctl activeworkspace -j | ${pkgs.jq}/bin/jq -r '.monitor')
+
+      # Set wallpaper
+      [[ -n "$wall_selection" ]] || exit 1
+      ${pkgs.swww}/bin/swww img "$wallDir"/"$wall_selection" --transition-step 50 --transition-fps 200 --transition-type any --outputs "$OUTPUT_DISPLAY"
+      # ${pkgs.lutgen}/bin/lutgen apply -p gruvbox-dark "$wallDir"/"$wall_selection" -o "$HOME/.cache/wallpapers-lut"
+      # ${pkgs.swww}/bin/swww img "$HOME/.cache/wallpapers-lut/$wall_selection" --transition-step 255 --transition-type any
+      ${pkgs.libnotify}/bin/notify-send "Wallpaper set!" -i "$wallDir"/"$wall_selection" -t 2200
+      exit 0
+    '')
   ];
+
   xdg.configFile."rofi/wallpaper-switcher.rasi".text =
     toRasi {
       configuration = {

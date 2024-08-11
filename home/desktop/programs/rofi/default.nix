@@ -91,6 +91,7 @@ in {
   imports = [
     ./wallpaper-switcher
   ];
+
   programs.rofi = {
     enable = true;
     package = pkgs.rofi-wayland;
@@ -125,7 +126,6 @@ in {
     bemoji
     bitwarden-menu
 
-    (writeShellScriptBin "rofi-wall" (builtins.readFile ./wallpaper-switcher/wall-select.sh))
     (writeShellScriptBin "rofi-games" (builtins.readFile ./gamelauncher/gamelauncher.sh))
     (writeShellScriptBin "rofi-network" (builtins.readFile ./rofi-network-manager/rofi-network-manager.sh))
     (writeShellScriptBin "rofi-bitwarden" (builtins.readFile ./rofi-bitwarden.sh))

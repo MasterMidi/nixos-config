@@ -3,6 +3,7 @@
   imageViewer = "pix.desktop";
   audioPlayer = "org.gnome.rhythmbox3.desktop";
   videoPlayer = "mpv.desktop";
+	textEditor = "leafpad.desktop";
 
   generateMappings = {
     type,
@@ -52,13 +53,6 @@ in {
           "vnd.appimage"
         ];
         app = "appimage-run";
-      }
-      // generateMappings {
-        type = "text";
-        extensions = [
-          "plain"
-        ];
-        app = "nano";
       }
       // generateMappings {
         type = "audio";
@@ -119,7 +113,7 @@ in {
       // generateMappings {
         type = "text";
         extensions = ["plain"];
-        app = "leafpad.desktop";
+        app = textEditor;
       }
       // generateMappings {
         type = "x-scheme-handler";

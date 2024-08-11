@@ -1,4 +1,8 @@
-{pkgs, ...}: let
+{
+  pkgs,
+  config,
+  ...
+}: let
   mainMod = "SUPER";
 in {
   wayland.windowManager.hyprland.settings = {
@@ -7,12 +11,11 @@ in {
       "${mainMod}, L, exec, hyprlock"
       "${mainMod} SHIFT, W, exec, killall -q .waybar-wrapped ; waybar" # Restart waybar
       "${mainMod} SHIFT, A, exec, killall -q .ags-wrapped ; ags" # Restart ags
-      "${mainMod} ALT, W, exec, waybar" # Restart waybar
       "${mainMod}, Q, exec, kitty"
       "${mainMod}, B, exec, firefox"
       "${mainMod} SHIFT, B, exec, firefox --private-window"
       "${mainMod}, G, exec, rofi-games"
-      "${mainMod}, W, exec, rofi-wall"
+      "${mainMod}, W, exec, rofi-wall ${config.home.homeDirectory}/Pictures/wallpapers"
       "${mainMod}, SPACE, exec, pkill rofi || rofi -show drun"
       "${mainMod} CTRL SHIFT, N, exec, pkill rofi-network || rofi-network"
       "${mainMod} CTRL SHIFT, B, exec, pkill rofi-bluetooth || rofi-bluetooth"

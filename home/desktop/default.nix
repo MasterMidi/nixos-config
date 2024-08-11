@@ -41,12 +41,6 @@
     FILE_BROWSER = "nautilus";
   };
 
-  home.file = {
-    "Pictures/wallpapers" = {
-      source = config.lib.file.mkOutOfStoreSymlink "/etc/nixos/home/wallpapers";
-    };
-  };
-
   nixpkgs.overlays = [(import ./programs/discord/electron-overlay.nix)];
 
   # Manage keyboard layouts
@@ -114,7 +108,6 @@
     libnotify
     magic-wormhole-rs
     trash-cli
-    imagemagick
     lazygit
     lazydocker
     ydotool

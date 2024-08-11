@@ -23,23 +23,16 @@ in {
 
     settings = with config.colorScheme.palette; {
       exec-once = [
-        "waybar &" # start taskbar
-        "sleep 1 && swww init &" # set wallpaper
-        "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1 &" # start polkit agent
-        "wl-paste --watch cliphist store &" # start clipboard manager
-        "nm-applet --indicator &" # start network manager applet
-        "blueman-tray" # start bluetooth tray icon
+        "${pkgs.waybar}/bin/waybar" # start taskbar
+        "${pkgs.swww}/bin/swww-daemon" # start wallpaper daemon
+        "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1" # start polkit agent
+        "${pkgs.wl-clipboard}/bin/wl-paste --watch cliphist store" # start clipboard manager
+        "${pkgs.networkmanagerapplet}/bin/nm-applet --indicator" # start network manager applet
+        "${pkgs.blueman}/bin/blueman-applet" # start bluetooth tray icon
       ];
 
       monitor = [
         ",highrr,auto,1" # Default
-        # "HDMI-A-2, 1920x1080@60, 0x230, 0.93" # matches the dpi, but creates a gap around apps and poor font rendering
-        "HDMI-A-1, 1920x1080@60, 0x275, 1"
-        "HDMI-A-2, 1920x1080@60, 0x275, 1"
-        "HDMI-A-3, 1920x1080@60, 0x275, 1"
-        "DP-1, 3440x1440@144, 1920x0, 1"
-        "DP-2, 3440x1440@144, 1920x0, 1"
-        "DP-3, disable"
       ];
 
       xwayland = {

@@ -29,6 +29,7 @@ in {
         "${pkgs.wl-clipboard}/bin/wl-paste --watch cliphist store" # start clipboard manager
         "${pkgs.networkmanagerapplet}/bin/nm-applet --indicator" # start network manager applet
         "${pkgs.blueman}/bin/blueman-applet" # start bluetooth tray icon
+        "${pkgs.xwaylandvideobridge}/bin/xwaylandvideobridge" # start xwayland video bridge
       ];
 
       monitor = [

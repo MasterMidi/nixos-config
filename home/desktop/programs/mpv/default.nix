@@ -69,7 +69,8 @@
       audio-pitch-correction = true;
       save-position-on-quit = true;
       watch-later-options-remove = "sub-pos";
-      fullscreen = true;
+      fullscreen = false;
+      hwdec = "auto";
 
       # Audio
       alang = "eng";

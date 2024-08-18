@@ -96,16 +96,16 @@
 
   metrics.netdata = {
     enable = true;
-    disableWebUI = true;
+    disableWebUI = false;
   };
 
-  services.qbittorrent = {
-    enable = true;
-    openFirewall = true;
-    acceptLegalNotice = true;
-    # customWebUI = inputs.vuetorrent;
-    group = "media";
-  };
+  # services.qbittorrent = {
+  #   enable = true;
+  #   openFirewall = true;
+  #   acceptLegalNotice = true;
+  #   # customWebUI = inputs.vuetorrent;
+  #   group = "media";
+  # };
 
   users.groups.media = {
     gid = 500;

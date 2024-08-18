@@ -1,8 +1,7 @@
 {...}: {
   imports = [
     ./homarr.nix
-    ./mealie.nix
+    # ./mealie.nix
+    ./immich.nix
   ];
-
-  virtualisation.oci-containers.backend = "docker";
 }

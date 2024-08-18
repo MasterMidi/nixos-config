@@ -11,7 +11,11 @@
   ];
 
   # Bootloader.
-  boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot = {
+    enable = true;
+    editor = false;
+    configurationLimit = 5;
+  };
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = "andromeda";
@@ -34,7 +38,7 @@
     # independent third-party "nouveau" open source driver).
     # Support is limited to the Turing and later architectures.
     open = false;
-    nvidiaSettings = true;
+    nvidiaSettings = false;
     package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
 

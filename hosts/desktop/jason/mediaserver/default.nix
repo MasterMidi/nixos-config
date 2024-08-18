@@ -8,24 +8,25 @@
 in {
   imports = [
     ./qbitmanage.nix
+    ./mediaserver.nix
   ];
 
   environment.systemPackages = with pkgs; [mediainfo];
 
-  virtualisation.containers.enable = true;
-  virtualisation.docker = {
-    enable = true;
-    rootless = {
-      enable = true;
-      setSocketVariable = true;
-    };
-    enableOnBoot = true;
-    storageDriver = "btrfs";
-  };
-  virtualisation.podman = {
-    enable = true;
-    defaultNetwork.settings.dns_enabled = true; # Required for containers under podman-compose to be able to talk to each other.
-  };
+  # virtualisation.containers.enable = true;
+  # virtualisation.docker = {
+  #   enable = true;
+  #   rootless = {
+  #     enable = true;
+  #     setSocketVariable = true;
+  #   };
+  #   enableOnBoot = true;
+  #   storageDriver = "btrfs";
+  # };
+  # virtualisation.podman = {
+  #   enable = true;
+  #   defaultNetwork.settings.dns_enabled = true; # Required for containers under podman-compose to be able to talk to each other.
+  # };
   # virtualisation.oci-containers = {
   #   backend = "podman";
   #   containers = {

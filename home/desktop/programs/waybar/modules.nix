@@ -75,7 +75,7 @@
     format = "󰃰 {:%B %d  %H:%M:%S}";
     format-alt = " {:%H:%M}";
     on-click-middle = "thunderbird -calendar"; # TODO: find new calendar app (cli based?)
-    tooltip-format = "\n<span size='14pt' font='MesloLGS Nerd Font'>{calendar}</span>";
+    tooltip-format = "\n<span size='14pt' font='${builtins.head config.fonts.fontconfig.defaultFonts.monospace}'>{calendar}</span>";
     calendar = {
       mode = "month";
       mode-mon-col = 3;

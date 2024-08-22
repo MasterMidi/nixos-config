@@ -99,7 +99,7 @@ in {
         modi = "drun";
         show-icons = true;
         drun-display-format = "{name}";
-        font = "MesloLGS Nerd Font Bold 11";
+        font = "${builtins.head config.fonts.fontconfig.defaultFonts.monospace} Bold 11";
         matching = "fuzzy";
         levenshtein-sort = false;
         sort = true;

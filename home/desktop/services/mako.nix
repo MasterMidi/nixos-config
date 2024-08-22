@@ -29,7 +29,7 @@
     borderRadius = 17;
     icons = true;
     maxIconSize = 64;
-    font = "MesloLGS Nerd Font 10";
+    font = "${builtins.head config.fonts.fontconfig.defaultFonts.monospace} 10";
     anchor = "top-right";
     markup = true;
 

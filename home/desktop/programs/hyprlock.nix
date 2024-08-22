@@ -17,7 +17,7 @@
 # base0F: "#bd6f3e"
 {config, ...}: let
   theme = config.colorScheme.palette;
-  font_family = "MesloLGS NF";
+  font_family = builtins.head config.fonts.fontconfig.defaultFonts.monospace;
 in {
   programs.hyprlock = {
     enable = true;

@@ -2,7 +2,7 @@ configuration {
 	modi: "drun";
 	show-icons: true;
 	drun-display-format: "{name}";
-	font: "MesloLGS Nerd Font Bold 11";
+	font: "JetBrainsMono NF Bold 11";
 
 	//hover-select:				 true;
 	//me-select-entry:			 "";

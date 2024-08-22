@@ -1,6 +1,8 @@
 {
   pkgs,
   inputs,
+  config,
+  lib,
   ...
 }: {
   programs.vscode = {
@@ -10,7 +12,7 @@
     userSettings = {
       "files.autoSave" = "afterDelay";
       "editor.wordWrap" = "on";
-      "editor.fontFamily" = "'MesloLGS Nerd Font'";
+      "editor.fontFamily" = lib.concatMapStringsSep "," (x: "'${x}'") config.fonts.fontconfig.defaultFonts.monospace;
       "editor.fontLigatures" = true;
       "editor.fontSize" = 14;
       "editor.fontWeight" = "normal";
@@ -19,7 +21,7 @@
       "editor.inlineSuggest.enabled" = true;
       "editor.bracketPairColorization.enabled" = true;
       "editor.guides.bracketPairs" = "active";
-      "terminal.integrated.fontFamily" = "'MesloLGS Nerd Font'";
+      "terminal.integrated.fontFamily" = lib.concatMapStringsSep "," (x: "'${x}'") config.fonts.fontconfig.defaultFonts.monospace;
       "terminal.integrated.fontSize" = 14;
       "terminal.external.linuxExec" = "kitty";
       "terminal.integrated.gpuAcceleration" = "auto";

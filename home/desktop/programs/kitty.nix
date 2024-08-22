@@ -4,8 +4,8 @@
     shellIntegration.enableBashIntegration = false; # When true, makes starship fail on first load for some reason
     # theme = "Gruvbox Material Dark Hard";
     font = {
-      name = "MesloLGS Nerd Font";
-      size = 10;
+      name = "${builtins.head config.fonts.fontconfig.defaultFonts.monospace}";
+      size = 11;
     };
     settings = with config.colorScheme.palette; rec {
       confirm_os_window_close = 0;

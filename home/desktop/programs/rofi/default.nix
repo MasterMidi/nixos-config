@@ -101,7 +101,7 @@ in {
       # rofi-nerdy
     ];
     terminal = config.home.sessionVariables.TERM_PROGRAM;
-    font = "MesloLGS Nerd Font 10";
+    font = "${builtins.head config.fonts.fontconfig.defaultFonts.monospace} 10";
     # theme = "/theme.rasi";
     theme = import ./theme.nix {inherit config;};
     extraConfig = {

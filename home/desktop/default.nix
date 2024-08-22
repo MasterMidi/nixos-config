@@ -18,7 +18,13 @@
 
   programs.home-manager.enable = false;
 
-  fonts.fontconfig.enable = true;
+  fonts.fontconfig = {
+    enable = true;
+    defaultFonts = {
+      monospace = ["JetBrainsMono NF"];
+      sansSerif = ["Inter"];
+    };
+  };
 
   home.sessionVariables = {
     XDG_CACHE_HOME = "$HOME/.cache";
@@ -133,6 +139,7 @@
     termusic
     ncmpcpp
     feishin
+    ladybird
 
     # Image viewer
     geeqie
@@ -156,6 +163,7 @@
     jetbrains.rider
 
     # Fonts
-    (nerdfonts.override {fonts = ["Meslo" "FiraCode"];})
+    (nerdfonts.override {fonts = ["JetBrainsMono"];})
+    inter
   ];
 }

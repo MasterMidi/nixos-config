@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  config,
+  ...
+}: {
   programs.mpv = {
     enable = true;
 
@@ -56,7 +60,7 @@
     config = {
       # OSC
       osc = false;
-      osd-font = "MesloLGS Nerd Font";
+      osd-font = builtins.head config.fonts.fontconfig.defaultFonts.monospace;
       osd-font-size = 30;
       osd-color = "#C0FFFFFF";
 
@@ -81,7 +85,7 @@
       audio-channels = "stereo";
 
       # Subs
-      sub-font = "MesloLGS Nerd Font";
+      sub-font = builtins.head config.fonts.fontconfig.defaultFonts.sansSerif;
       sub-bold = false;
       sub-font-size = 25;
       sub-blur = 1;
@@ -131,7 +135,7 @@
       };
 
       console = {
-        font = "MesloLGS Nerd Font";
+        font = builtins.head config.fonts.fontconfig.defaultFonts.monospace;
         font_size = 18;
       };
 

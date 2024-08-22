@@ -46,11 +46,11 @@
       }
       {
         job_name = "sonarr";
-        static_configs = [{targets = ["localhost:${builtins.toString config.services.prometheus.exporters.exportarr-sonarr.port}"];}];
+        static_configs = [{targets = ["jason:9041"];}];
       }
       {
         job_name = "radarr";
-        static_configs = [{targets = ["localhost:${builtins.toString config.services.prometheus.exporters.exportarr-radarr.port}"];}];
+        static_configs = [{targets = ["jason:9031"];}];
       }
       {
         job_name = "prowlarr";
@@ -58,33 +58,11 @@
       }
       {
         job_name = "bazarr";
-        static_configs = [{targets = ["localhost:${builtins.toString config.services.prometheus.exporters.exportarr-bazarr.port}"];}];
+        static_configs = [{targets = ["jason:9081"];}];
       }
     ];
 
     exporters = {
-      exportarr-sonarr = {
-        enable = true;
-        url = "http://jason:9040";
-        port = 9041;
-        openFirewall = true;
-        # apiKeyFile = ../../secrets/sonarr-api-key.txt;
-        environment = {
-          API_KEY = "c5783cdc82d244e6b138be2988397813";
-        };
-      };
-
-      exportarr-radarr = {
-        enable = true;
-        url = "http://jason:9030";
-        port = 9031;
-        openFirewall = true;
-        # apiKeyFile = ../../secrets/sonarr-api-key.txt;
-        environment = {
-          API_KEY = "51732014769e475a9455c1f5cd8f18d1";
-        };
-      };
-
       exportarr-prowlarr = {
         enable = true;
         url = "http://localhost:9696";
@@ -94,17 +72,6 @@
         environment = {
           API_KEY = "9fb4395699e94c1595a270d4086783f8";
           PROWLARR__BACKFILL = "true";
-        };
-      };
-
-      exportarr-bazarr = {
-        enable = true;
-        url = "http://jason:9080";
-        port = 9081;
-        openFirewall = true;
-        # apiKeyFile = ../../secrets/sonarr-api-key.txt;
-        environment = {
-          API_KEY = "a1e271e0a6cb3da6a89d5c23ed13fd2e";
         };
       };
     };

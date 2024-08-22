@@ -18,6 +18,7 @@
     ./sound.nix
     ./system.nix
     ./virtualization.nix
+    ./secrets
   ];
 
   # Enable CUPS to print documents.

@@ -12,6 +12,7 @@
       "https://numtide.cachix.org"
       "https://raspberry-pi-nix.cachix.org"
       "https://nix-gaming.cachix.org"
+      "https://cuda-maintainers.cachix.org"
     ];
     extra-trusted-public-keys = [
       "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
@@ -20,6 +21,7 @@
       "numtide.cachix.org-1:2ps1kLBUWjxIneOy1Ik6cQjb41X0iXVXeHigGmycPPE="
       "raspberry-pi-nix.cachix.org-1:WmV2rdSangxW0rZjY/tBvBDSaNFQ3DyEQsVw8EvHn9o="
       "nix-gaming.cachix.org-1:nbjlureqMbRAxR1gJ/f3hxemL9svXaZF/Ees8vCUUs4="
+      "cuda-maintainers.cachix.org-1:0dq3bujKpuEPMCX6U4WylrUDZ9JyUG0VpVZa7CNfq5E="
     ];
   };
 
@@ -203,7 +205,9 @@
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.extraSpecialArgs = {inherit inputs;};
-              home-manager.users.michael = import ./home/michael.david;
+              home-manager.users.michael.imports = [
+                ./hosts/servers/david/home
+              ];
             }
           ];
         };
@@ -224,7 +228,6 @@
               home-manager.extraSpecialArgs = {inherit inputs;};
               home-manager.users.michael.imports = [
                 ./hosts/servers/andromeda/home
-                ./home/shared/core
               ];
             }
           ];

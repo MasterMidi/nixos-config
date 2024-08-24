@@ -2,6 +2,7 @@ keys:
   - users:
       - &michael age1chvcefkzfesskrs2vf7sp9fjktpx5z8qc4ggksuwfn483fwpjvxsv88jpa
   - hosts:
+      - &daniel age1tsfvlywtu7c9aux8y9efscqak3nvmz85zanyv5q2qvwthphf5u7qa499tl
       - &jason age1mslxutmqu56fhl0rgk7flysyacyxks3evnmfckzzykh3wcvzc5tqx9q6dd
       - &david age1x3tjqh5n09yzmtlgdw7gxdavpxqtktvgavf4gdv6mw5qcq49uypqq34rqq
       - &andromeda age1lz59a9hcx9wfknc2p4lv9hej4exjqawsx04g82e8d7e8fkhqegkqpmegu9
@@ -9,7 +10,8 @@ creation_rules:
   - path_regex: .*secrets/[^/]+\.(yaml|json|env|ini)$
     key_groups:
       - age:
-          - *michael 
+          - *michael
+          - *daniel
           - *jason
           - *david
           - *andromeda

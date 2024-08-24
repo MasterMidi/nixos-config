@@ -7,8 +7,8 @@
 }: {
   programs.firefox = {
     enable = true;
-    nativeMessagingHosts = with pkgs.nur.repos; [
-      # wolfangaukang.vdhcoapp
+    nativeMessagingHosts = with pkgs; [
+      vdhcoapp
     ];
     profiles.default = {
       name = "Default";

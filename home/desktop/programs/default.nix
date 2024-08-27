@@ -24,7 +24,6 @@
     ./tmux.nix
     ./vscodium
     ./waybar
-    ./wezterm.nix
     ./wlogout
     ./yazi.nix
     ./youtube-music

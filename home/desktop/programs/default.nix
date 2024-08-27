@@ -22,7 +22,7 @@
     ./spotify.nix
     ./thunderbird.nix
     ./tmux.nix
-    ./vscodium.nix
+    ./vscodium
     ./waybar
     ./wezterm.nix
     ./wlogout

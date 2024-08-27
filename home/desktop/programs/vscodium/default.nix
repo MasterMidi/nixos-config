@@ -5,6 +5,10 @@
   lib,
   ...
 }: {
+  imports = [
+    ./elixir.nix
+  ];
+
   programs.vscode = {
     enable = true;
     package = pkgs.vscodium;

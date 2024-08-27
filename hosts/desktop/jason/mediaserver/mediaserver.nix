@@ -376,6 +376,8 @@ in {
   services.prometheus.exporters = {
     exportarr-sonarr = {
       enable = true;
+      user = "michael";
+      group = "users";
       url = "http://localhost:9040";
       openFirewall = true;
       apiKeyFile = config.sops.secrets.SONARR_API_KEY.path;
@@ -384,6 +386,8 @@ in {
 
     exportarr-radarr = {
       enable = true;
+      user = "michael";
+      group = "users";
       url = "http://localhost:9030";
       openFirewall = true;
       apiKeyFile = config.sops.secrets.RADARR_API_KEY.path;
@@ -392,6 +396,8 @@ in {
 
     exportarr-bazarr = {
       enable = true;
+      user = "michael";
+      group = "users";
       url = "http://localhost:9080";
       openFirewall = true;
       apiKeyFile = config.sops.secrets.BAZARR_API_KEY.path;

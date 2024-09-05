@@ -103,6 +103,8 @@
     qrscan
 
     # gaming tools
+    ryujinx
+    pegasus-frontend
     adwsteamgtk
     # prismlauncher
     # modrinth-app

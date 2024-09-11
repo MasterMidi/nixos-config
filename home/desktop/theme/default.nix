@@ -36,6 +36,9 @@
 
     gtk4 = {
       extraCss = import ./adwaitaGtkCss.nix config.colorScheme;
+      extraConfig = {
+        gtk-application-prefer-dark-theme = 1;
+      };
     };
   };
 

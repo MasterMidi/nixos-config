@@ -7,6 +7,7 @@
 }: {
   imports = [
     ./elixir.nix
+    ./go.nix
   ];
 
   programs.vscode = {

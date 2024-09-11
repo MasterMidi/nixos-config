@@ -139,6 +139,7 @@
     # Development
     # dotnet-sdk_7
     # jetbrains.rider
+    hoppscotch
 
     # Fonts
     (nerdfonts.override {fonts = ["JetBrainsMono"];})

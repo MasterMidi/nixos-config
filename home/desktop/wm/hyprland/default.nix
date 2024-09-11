@@ -17,7 +17,7 @@ in {
     settings = with config.colorScheme.palette; {
       exec-once = [
         "${pkgs.waybar}/bin/waybar" # start taskbar
-        "${pkgs.swww}/bin/swww-daemon" # start wallpaper daemon
+        "sleep 1 && ${pkgs.swww}/bin/swww-daemon" # start wallpaper daemon
         "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1" # start polkit agent
         "${pkgs.wl-clipboard}/bin/wl-paste --watch cliphist store" # start clipboard manager
         "${pkgs.networkmanagerapplet}/bin/nm-applet --indicator" # start network manager applet

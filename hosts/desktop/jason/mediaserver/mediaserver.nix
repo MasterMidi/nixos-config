@@ -5,7 +5,7 @@
   config,
   ...
 }: let
-  Timezone = "Europe/Copenhagen";
+  TZ = "Europe/Copenhagen";
   PGID = builtins.toString config.users.groups.users.gid;
   PUID = "1000";
 in {
@@ -14,8 +14,6 @@ in {
   virtualisation.podman = {
     enable = true;
     autoPrune.enable = true;
-    dockerCompat = true;
-    dockerSocket.enable = true;
     defaultNetwork.settings = {
       # Required for container networking to be able to use names.
       dns_enabled = true;
@@ -31,9 +29,7 @@ in {
   virtualisation.oci-containers.containers."bazarr" = {
     image = "lscr.io/linuxserver/bazarr:development";
     environment = {
-      "PGID" = PGID;
-      "PUID" = PUID;
-      "TZ" = Timezone;
+      inherit PGID PUID TZ;
     };
     volumes = [
       "/home/michael/.temp/data/media:/storage/media:rw"
@@ -74,8 +70,7 @@ in {
   virtualisation.oci-containers.containers."jellyfin" = {
     image = "lscr.io/linuxserver/jellyfin:latest";
     environment = {
-      inherit PGID PUID;
-      "TZ" = Timezone;
+      inherit PGID PUID TZ;
       DOCKER_MODS = "ghcr.io/jumoog/intro-skipper"; # fix intro skipper file permission issues for linuxserver image
     };
     volumes = [
@@ -123,9 +118,7 @@ in {
   virtualisation.oci-containers.containers."qbit-media" = {
     image = "ghcr.io/hotio/qbittorrent:latest";
     environment = {
-      "PGID" = PGID;
-      "PUID" = PUID;
-      "TZ" = Timezone;
+      inherit PGID PUID TZ;
       "UMASK" = "002";
       "WEBUI_PORTS" = "9060";
     };
@@ -172,9 +165,7 @@ in {
   virtualisation.oci-containers.containers."qbit-media-private" = {
     image = "ghcr.io/hotio/qbittorrent:latest";
     environment = {
-      "PGID" = PGID;
-      "PUID" = PUID;
-      "TZ" = Timezone;
+      inherit PGID PUID TZ;
       "UMASK" = "002";
       "WEBUI_PORTS" = "9061";
     };
@@ -221,9 +212,7 @@ in {
   virtualisation.oci-containers.containers."radarr" = {
     image = "lscr.io/linuxserver/radarr:latest";
     environment = {
-      "PGID" = PGID;
-      "PUID" = PUID;
-      "TZ" = Timezone;
+      inherit PGID PUID TZ;
     };
     volumes = [
       "/home/michael/.temp/data:/storage:rw"
@@ -264,9 +253,7 @@ in {
   virtualisation.oci-containers.containers."sonarr" = {
     image = "ghcr.io/hotio/sonarr:nightly";
     environment = {
-      "PGID" = PGID;
-      "PUID" = PUID;
-      "TZ" = Timezone;
+      inherit PGID PUID TZ;
       "UMASK" = "002";
     };
     volumes = [

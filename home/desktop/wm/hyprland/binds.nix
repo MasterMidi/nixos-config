@@ -43,6 +43,7 @@ in {
 
       # Media keys
       ", Print, exec, ${pkgs.grimblast}/bin/grimblast --freeze copy area" # Screenshots
+      "${mainMod} SHIFT, S, exec, ${(pkgs.writeShellScriptBin "qr-decoder" "${pkgs.qrtool}/bin/qrtool decode $(${pkgs.grimblast}/bin/grimblast --freeze save area)")}/bin/qr-decoder | ${pkgs.wl-clipboard}/bin/wl-copy"
       ",XF86AudioPlay, exec, ${pkgs.playerctl}/bin/playerctl play-pause --player='spotify,spotify_player,%any'"
       ",XF86AudioNext, exec, ${pkgs.playerctl}/bin/playerctl next --player='spotify,spotify_player,%any'"
       ",XF86AudioPrev, exec, ${pkgs.playerctl}/bin/playerctl previous --player='spotify,spotify_player,%any'"

@@ -16,6 +16,7 @@
     };
   };
   virtualisation.oci-containers.backend = "podman";
+  # TODO: add gpu support to immich https://github.com/aksiksi/compose2nix?tab=readme-ov-file#nvidia-gpu-support
   hardware.nvidia-container-toolkit.enable = true; # Enable NVIDIA GPU support
 
   # Firewall

@@ -42,13 +42,13 @@ in {
       "${mainMod} SHIFT, F, fullscreen, 0"
 
       # Media keys
-      ", Print, exec, ${pkgs.grimblast}/bin/grimblast --freeze copy area" # Screenshots
-      "${mainMod} SHIFT, S, exec, ${(pkgs.writeShellScriptBin "qr-decoder" "${pkgs.qrtool}/bin/qrtool decode $(${pkgs.grimblast}/bin/grimblast --freeze save area)")}/bin/qr-decoder | ${pkgs.wl-clipboard}/bin/wl-copy"
-      ",XF86AudioPlay, exec, ${pkgs.playerctl}/bin/playerctl play-pause --player='spotify,spotify_player,%any'"
-      ",XF86AudioNext, exec, ${pkgs.playerctl}/bin/playerctl next --player='spotify,spotify_player,%any'"
-      ",XF86AudioPrev, exec, ${pkgs.playerctl}/bin/playerctl previous --player='spotify,spotify_player,%any'"
-      "${mainMod}, mouse_down, exec, ${pkgs.playerctl}/bin/playerctl volume '0.05+' --player='spotify,spotify_player,%any'"
-      "${mainMod}, mouse_up, exec, ${pkgs.playerctl}/bin/playerctl volume '0.05-' --player='spotify,spotify_player,%any'"
+      "${mainMod} SHIFT, S, exec, ${pkgs.grimblast}/bin/grimblast --freeze copy area" # Screenshots
+      "${mainMod} CTRL SHIFT, S, exec, ${pkgs.qrtool}/bin/qrtool decode $(${pkgs.grimblast}/bin/grimblast --freeze save area) | ${pkgs.wl-clipboard}/bin/wl-copy" # Scans QR code and copies data to clipboard
+      ",XF86AudioPlay, exec, ${pkgs.playerctl}/bin/playerctl play-pause --player='spotify,spotify_player,%any'" # Play/pause
+      ",XF86AudioNext, exec, ${pkgs.playerctl}/bin/playerctl next --player='spotify,spotify_player,%any'" # Next track
+      ",XF86AudioPrev, exec, ${pkgs.playerctl}/bin/playerctl previous --player='spotify,spotify_player,%any'" # Previous track
+      "${mainMod}, mouse_down, exec, ${pkgs.playerctl}/bin/playerctl volume '0.05+' --player='spotify,spotify_player,%any'" # Volume up
+      "${mainMod}, mouse_up, exec, ${pkgs.playerctl}/bin/playerctl volume '0.05-' --player='spotify,spotify_player,%any'" # Volume down
       # TODO keybind to activate gamemode (+ add gamemode start from rofi gamelauncher)
 
       # Example special workspace (scratchpad)

@@ -13,7 +13,7 @@ pkgs.devshell.mkShell {
     nix-tree # visualize nix store
     nix-output-monitor # monitor nix build output
     nix-index # prebuilt-index nix store
-    nix-melt # view flake.lock files
+    # nix-melt # view flake.lock files
     nix-init # quick start to packaging projects
     statix # find anti-patterns in nix code
     nix-du # disk usage of nix store

@@ -52,7 +52,7 @@ with lib; let
       (removeAttrs attrs ["@theme" "@import"])
     ]);
 
-  allowedFileFormats = ["jpeg" "png" "gif" "pnm" "tga" "tiff" "webp" "bmp" "farbfeld"];
+  allowedFileFormats = ["jpeg" "jpg" "png" "gif" "pnm" "tga" "tiff" "webp" "bmp" "farbfeld"];
 in {
   home.packages = [
     (pkgs.writeShellScriptBin "rofi-wall" ''
@@ -72,7 +72,7 @@ in {
       	if [ -f "$image" ]; then
       		filename=$(basename "$image")
       		if [ ! -f "$cacheDir/$filename" ]; then
-      			${pkgs.imagemagick}/bin/convert -strip "$image" -thumbnail 500x500^ -gravity center -extent 500x500 "$cacheDir/$filename"
+      			${pkgs.imagemagick}/bin/magick convert -strip "$image" -thumbnail 500x500^ -gravity center -extent 500x500 "$cacheDir/$filename"
       		fi
       	fi
       done

@@ -19,7 +19,11 @@ pkgs.devshell.mkShell {
     nix-du # disk usage of nix store
     nixos-generators
     nix-inspect
-    sops # secret management
+
+    # secret management
+    sops
+    ssh-to-age
+
     flake-checker # healthcheck for flake.lock files
     deploy-rs # deploy nixos to remote servers
   ];

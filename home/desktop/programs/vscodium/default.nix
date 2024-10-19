@@ -5,6 +5,11 @@
   lib,
   ...
 }: {
+  imports = [
+    ./elixir.nix
+    ./go.nix
+  ];
+
   programs.vscode = {
     enable = true;
     package = pkgs.vscodium;

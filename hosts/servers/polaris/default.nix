@@ -15,13 +15,8 @@
 
   networking.hostName = "polaris"; # Define your hostname.
   # Pick only one of the below networking options.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.<
-  # networking.networkmanager.enable = true; # Easiest to use and most distros use this by default.
-  networking.wireless = {
-    enable = true;
-    networks."Asus RT-AX86U".psk = "3zyn2dY&Gp";
-    networks."McDonald's McWifi".psk = "lady121205";
-  };
+  networking.networkmanager.enable = true; # Easiest to use and most distros use this by default.
+  raspberry-pi-nix.board = "bcm2712";
 
   # Set your time zone.
   time.timeZone = "Europe/Copenhagen";
@@ -56,7 +51,10 @@
 
   networking = {
     useDHCP = false;
-    interfaces = {wlan0.useDHCP = true;};
+    interfaces = {
+      wlan0.useDHCP = true;
+      eth0.useDHCP = true;
+    };
   };
 
   hardware = {

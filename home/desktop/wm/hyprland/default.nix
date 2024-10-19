@@ -3,18 +3,11 @@
   config,
   ...
 }: let
-  configPath = ".config/hypr";
-
   rgb = color: "rgb(${color})";
-  rgba = color: alpha: "rgba(${color}${alpha})";
 in {
   imports = [
     ./binds.nix
   ];
-
-  home.file = {
-    "${configPath}/scripts".source = ./scripts;
-  };
 
   wayland.windowManager.hyprland = {
     enable = true;
@@ -24,7 +17,7 @@ in {
     settings = with config.colorScheme.palette; {
       exec-once = [
         "${pkgs.waybar}/bin/waybar" # start taskbar
-        "${pkgs.swww}/bin/swww-daemon" # start wallpaper daemon
+        "sleep 1 && ${pkgs.swww}/bin/swww-daemon" # start wallpaper daemon
         "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1" # start polkit agent
         "${pkgs.wl-clipboard}/bin/wl-paste --watch cliphist store" # start clipboard manager
         "${pkgs.networkmanagerapplet}/bin/nm-applet --indicator" # start network manager applet
@@ -141,19 +134,6 @@ in {
         "maxsize 1 1,class:^(xwaylandvideobridge)$"
         "noblur,class:^(xwaylandvideobridge)$"
       ];
-
-      # workspace = [
-      #   "1, monitor:DP-1"
-      #   "2, monitor:HMDI-A-2"
-      #   "3, monitor:DP-1"
-      #   "4, monitor:HMDI-A-2"
-      #   "5, monitor:DP-1"
-      #   "6, monitor:HMDI-A-2"
-      #   "7, monitor:DP-1"
-      #   "8, monitor:HMDI-A-2"
-      #   "9, monitor:DP-1"
-      #   "10, monitor:HMDI-A-2"
-      # ];
     };
   };
 }

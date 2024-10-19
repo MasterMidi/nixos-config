@@ -49,11 +49,6 @@
 
   nixpkgs.overlays = [(import ./programs/discord/electron-overlay.nix)];
 
-  # Manage keyboard layouts
-  # home.keyboard = {
-
-  # };
-
   programs.thefuck.enable = true;
 
   lib.hm.gvariant.dconf.settings = {
@@ -80,12 +75,8 @@
     base16-schemes
     xwaylandvideobridge
     wl-clipboard
-    wdisplays
     pavucontrol
     neofetch
-    # haskellPackages.kmonad
-    gnome-tweaks
-    hyprcursor
 
     # Productivity
     distrobox
@@ -102,65 +93,53 @@
     envsubst
     jq
     tldr
-    # handbrake
-    # dupeguru
     gdu
     duf
-    killall
-    inotify-tools
-    swww
-    grimblast
     hyprpicker
     libnotify
     magic-wormhole-rs
     trash-cli
     lazygit
-    lazydocker
-    ydotool
-    parabolic
-    motrix
     qrscan
-    networkmanagerapplet # NetworkManager tray icon
 
     # gaming tools
+    ryujinx
+    pegasus-frontend
     adwsteamgtk
-    prismlauncher
+    # prismlauncher
     # modrinth-app
-    sunshine # https://docs.lizardbyte.dev/projects/sunshine/en/latest/about/usage.html#setup
+    # sunshine # https://docs.lizardbyte.dev/projects/sunshine/en/latest/about/usage.html#setup
 
     # Media
     jellyfin-media-player
-    ffmpeg-full
-    rhythmbox
-    vlc
-    spotify-player
-    g4music
+    # spotify-player
+    # g4music
     amberol
-    termusic
-    ncmpcpp
-    feishin
-    ladybird
+    # termusic
+    # ncmpcpp
+    # feishin
+    # ladybird
 
     # Image viewer
-    geeqie
+    # geeqie
     pix
-    # loupe
 
     # misc
     pipes-rs
 
     # Communication
-    vesktop # Discord but with vencord pre-installed
+    # vesktop # Discord but with vencord pre-installed
     signal-desktop
-    element-desktop
+    # element-desktop
 
     # Gaming
-    r2modman
+    # r2modman
     heroic
 
     # Development
-    dotnet-sdk_7
-    jetbrains.rider
+    # dotnet-sdk_7
+    # jetbrains.rider
+    hoppscotch
 
     # Fonts
     (nerdfonts.override {fonts = ["JetBrainsMono"];})

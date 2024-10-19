@@ -12,17 +12,19 @@
     dev.enable = false;
   };
 
-  environment.systemPackages = with pkgs; [
-    nh # simple nix system management
-  ];
-
-  environment.variables = {
-    FLAKE = "/etc/nixos/"; # used by nh command
-  };
-
   environment.etc = {
     "nix/flake-channels/nixpkgs".source = inputs.nixpkgs;
     "nix/flake-channels/home-manager".source = inputs.home-manager;
+  };
+
+  programs.nh = {
+    enable = true;
+    flake = "/etc/nixos";
+    clean = {
+      enable = true;
+      dates = "daily";
+      extraArgs = "--keep-since 4d --keep 3";
+    };
   };
 
   nix = {
@@ -32,17 +34,6 @@
       "nixpkgs=/etc/nix/flake-channels/nixpkgs"
       "home-manager=/etc/nix/flake-channels/home-manager"
     ];
-
-    gc = {
-      automatic = true;
-      dates = "daily";
-      options = "--delete-older-than 7d";
-    };
-
-    optimise = {
-      automatic = true;
-      dates = ["daily"];
-    };
 
     package = pkgs.nixVersions.latest; # use the newest vwersion of the nix package manager
 

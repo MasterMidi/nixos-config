@@ -7,30 +7,32 @@
 in {
   wayland.windowManager.hyprland.settings = {
     bind = [
-      ", Print, exec, grimblast --freeze copy area" # Screenshots
-      "${mainMod}, L, exec, hyprlock"
-      "${mainMod} SHIFT, W, exec, killall -q .waybar-wrapped ; waybar" # Restart waybar
-      "${mainMod} SHIFT, A, exec, killall -q .ags-wrapped ; ags" # Restart ags
-      "${mainMod}, Q, exec, kitty"
-      "${mainMod}, B, exec, firefox"
-      "${mainMod} SHIFT, B, exec, firefox --private-window"
-      "${mainMod}, G, exec, rofi-games"
-      "${mainMod}, W, exec, rofi-wall ${config.home.homeDirectory}/Pictures/wallpapers"
-      "${mainMod}, SPACE, exec, pkill rofi || rofi -show drun"
-      "${mainMod} CTRL SHIFT, N, exec, pkill rofi-network || rofi-network"
-      "${mainMod} CTRL SHIFT, B, exec, pkill rofi-bluetooth || rofi-bluetooth"
-      "${mainMod} ALT, SPACE, exec, rofi -show run"
-      "${mainMod} SHIFT, SPACE, exec, rofi-rbw"
-      "${mainMod} CTRL, B, exec, rofi-bluetooth"
-      "${mainMod} CTRL, S, exec, rofi-systemd"
-      "${mainMod} CTRL, SPACE, exec, rofi -show calc -modi calc"
-      "${mainMod}, PERIOD, exec, bemoji"
-      "${mainMod}, V, exec, rofi-clipboard"
-      "${mainMod} SHIFT, C, exec, hyprpicker -a"
-      "${mainMod}, C, killactive,"
-      "${mainMod} SHIFT, Q, exec, ${./scripts/logout.sh},"
-      "${mainMod}, E, exec, nautilus -w"
-      "${mainMod}, F, togglefloating,"
+      # Programs
+      "${mainMod}, Q, exec, kitty" # Terminal
+      "${mainMod}, E, exec, nautilus -w" # File manager
+      "${mainMod}, B, exec, firefox" # Browser
+      "${mainMod} SHIFT, B, exec, firefox --private-window" # Private browser
+      "${mainMod} SHIFT, W, exec, ${pkgs.killall}/bin/killall -q .waybar-wrapped ; waybar" # Restart waybar
+      "${mainMod} SHIFT, A, exec, ${pkgs.killall}/bin/killall -q .ags-wrapped ; ags" # Restart ags
+      "${mainMod} SHIFT, C, exec, hyprpicker -a" # Color picker
+
+      # Rofi menues
+      "${mainMod}, G, exec, rofi-games" # rofi games menu
+      "${mainMod}, W, exec, rofi-wall ${config.home.homeDirectory}/Pictures/wallpapers" # rofi wallpaper menu
+      "${mainMod}, SPACE, exec, pkill rofi || ${config.programs.rofi.package}/bin/rofi -show drun" # Rofi app launcher
+      "${mainMod} CTRL SHIFT, N, exec, pkill rofi-network || rofi-network" # Rofi network menu
+      "${mainMod} CTRL, B, exec, pkill rofi-bluetooth || rofi-bluetooth" # Rofi bluetooth menu
+      "${mainMod} ALT, SPACE, exec, rofi -show run" # Rofi run menu
+      "${mainMod} SHIFT, SPACE, exec, rofi-rbw" # Rofi rbw menu
+      "${mainMod} CTRL, S, exec, rofi-systemd" # Rofi systemd menu
+      "${mainMod} CTRL, SPACE, exec, rofi -show calc -modi calc" # Rofi calculator
+      "${mainMod}, PERIOD, exec, bemoji" # Emoji picker
+      "${mainMod}, V, exec, rofi-clipboard" # Rofi clipboard manager
+
+      # Window management
+      "${mainMod}, L, exec, hyprlock" # Lock screen
+      "${mainMod}, C, killactive," # Close current window
+      "${mainMod}, F, togglefloating," # Toggle floating mode
       "${mainMod}, P, pseudo," # dwindle
       "${mainMod}, J, togglesplit," # dwindle
       "${mainMod}, left, movefocus, l"
@@ -39,11 +41,13 @@ in {
       "${mainMod}, down, movefocus, d"
       "${mainMod} SHIFT, F, fullscreen, 0"
 
+      # Media keys
+      ", Print, exec, ${pkgs.grimblast}/bin/grimblast --freeze copy area" # Screenshots
       ",XF86AudioPlay, exec, ${pkgs.playerctl}/bin/playerctl play-pause --player='spotify,spotify_player,%any'"
       ",XF86AudioNext, exec, ${pkgs.playerctl}/bin/playerctl next --player='spotify,spotify_player,%any'"
       ",XF86AudioPrev, exec, ${pkgs.playerctl}/bin/playerctl previous --player='spotify,spotify_player,%any'"
-      "${mainMod}, mouse_up, exec, ${pkgs.playerctl}/bin/playerctl volume '0.05+' --player='spotify,spotify_player,%any'"
-      "${mainMod}, mouse_down, exec, ${pkgs.playerctl}/bin/playerctl volume '0.05-' --player='spotify,spotify_player,%any'"
+      "${mainMod}, mouse_down, exec, ${pkgs.playerctl}/bin/playerctl volume '0.05+' --player='spotify,spotify_player,%any'"
+      "${mainMod}, mouse_up, exec, ${pkgs.playerctl}/bin/playerctl volume '0.05-' --player='spotify,spotify_player,%any'"
       # TODO keybind to activate gamemode (+ add gamemode start from rofi gamelauncher)
 
       # Example special workspace (scratchpad)

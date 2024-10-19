@@ -90,6 +90,8 @@ with lib; let
 in {
   imports = [
     ./wallpaper-switcher
+    ./clipboard.nix
+    ./gamelauncher.nix
   ];
 
   programs.rofi = {
@@ -126,20 +128,8 @@ in {
     bemoji
     bitwarden-menu
 
-    (writeShellScriptBin "rofi-games" (builtins.readFile ./gamelauncher/gamelauncher.sh))
     (writeShellScriptBin "rofi-network" (builtins.readFile ./rofi-network-manager/rofi-network-manager.sh))
     (writeShellScriptBin "rofi-bitwarden" (builtins.readFile ./rofi-bitwarden.sh))
-    (writeShellScriptBin "rofi-clipboard" (builtins.readFile ./rofi-clipboard.sh))
-    # (writeShellScriptBin "rofi-emoji" (builtins.readFile ./rofi-emoji.sh))
-    # (writeShellScriptBin "rofi-kaomoji" (builtins.readFile (
-    #   pkgs.substituteAll {rofi-emoji
-    #     src = ./rofi-kaomoji.sh;
-    #     isExecutable = true;
-
-    #     # Substitutions
-    #     kaomojis = ./kaomoji.txt;
-    #   }
-    # )))
   ];
 
   xdg.configFile = {

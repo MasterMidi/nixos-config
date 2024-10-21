@@ -8,13 +8,13 @@
       media_server = {
         default = "http_status:404";
         ingress = {
-          "jellyseerr.mgrlab.dk" = "http://192.168.50.2:5055";
-          "jellyfin.mgrlab.dk" = "http://192.168.50.2:9010";
+          "jellyseerr.mgrlab.dk" = "http://localhost:5055";
+          "jellyfin.mgrlab.dk" = "http://localhost:9010";
           "ssh.mgrlab.dk" = "ssh://localhost:22";
           "immich.mgrlab.dk" = "http://andromeda:2283";
-          "qbit.mgrlab.dk" = "http://192.168.50.2:9060";
-          "radarr.mgrlab.dk" = "http://192.168.50.2:9030";
-          "sonarr.mgrlab.dk" = "http://192.168.50.2:9040";
+          "qbit.mgrlab.dk" = "http://localhost:9060";
+          "radarr.mgrlab.dk" = "http://localhost:9030";
+          "sonarr.mgrlab.dk" = "http://localhost:9040";
         };
       };
     };

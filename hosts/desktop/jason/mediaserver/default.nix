@@ -36,11 +36,12 @@ in {
         environment = {
           VPN_SERVICE_PROVIDER = "mullvad";
         };
-        ports = [
-          "9060:9060/tcp"
-          "6881:6881/tcp"
-          "6881:6881/udp"
-        ];
+        ports =
+          [
+            "9090:9696/tcp"
+          ]
+          config.virtualisation.oci-containers.compose.mediaserver.containers.qbit.ports
+          ++ config.virtualisation.oci-containers.compose.mediaserver.containers.qbit-private.ports;
         extraOptions = [
           "--device=/dev/net/tun"
           "--cap-add=NET_ADMIN"
@@ -71,7 +72,7 @@ in {
       };
       qbit-private = rec {
         image = "ghcr.io/hotio/qbittorrent:latest";
-        networks = ["mediaserver-default"];
+        networks = ["container:mediaserver-gluetun"];
         environment = {
           inherit PGID PUID TZ;
           UMASK = "002";
@@ -88,8 +89,19 @@ in {
           "6882:6882/tcp"
           "6882:6882/udp"
         ];
-        extraOptions = [
-          "--network-alias=qbittorrent-private"
+        dependsOn = ["gluetun"];
+      };
+      prowlarr = {
+        image = "ghcr.io/hotio/prowlarr:latest";
+        networks = ["container:mediaserver-gluetun"];
+        environment = {
+          inherit PGID PUID TZ;
+        };
+        volumes = [
+          "/services/media/prowlarr/config:/config:rw"
+        ];
+        ports = [
+          "9696:9696/tcp"
         ];
       };
       qbitmanage = {

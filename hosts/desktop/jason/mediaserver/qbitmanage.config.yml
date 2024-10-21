@@ -18,7 +18,7 @@ commands:
   skip_cleanup: false
 
 qbt:
-  host: 192.168.50.2:9060
+  host: mediaserver-gluetun:9060
   user: michael
   pass: Servurb42
 
@@ -58,12 +58,17 @@ cat:
 tracker:
   nyaa:
     tag: nyaa
+  milkie:
+    tag: milkie
 
 nohardlinks:
   - radarr:
       exclude_tags:
         - keep
   - sonarr:
+      exclude_tags:
+        - keep
+  - prowlarr:
       exclude_tags:
         - keep
 

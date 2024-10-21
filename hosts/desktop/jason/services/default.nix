@@ -1,6 +1,7 @@
 {config, ...}: {
   imports = [
     ./solaar.nix
+    ./cloudflared.nix
   ];
 
   services.i2pd = {

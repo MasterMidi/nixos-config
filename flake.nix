@@ -154,6 +154,7 @@
             ./hosts/desktop/jason
             nixosModules.configs.refind
             nixosModules.configs.vfio
+            nixosModules.configs.compose
             nixosModules.services.metrics
             nixosModules.services.qbittorrent
             nixosModules.services.recyclarr

@@ -27,7 +27,7 @@
 
   inputs = {
     # Package repos
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.05";
     nur.url = "github:nix-community/NUR"; # Nix User Repository
     nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions"; # All vscode extensions

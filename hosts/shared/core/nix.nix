@@ -31,7 +31,7 @@
     # set the path for channels compat
     channel.enable = true;
     nixPath = [
-      "nixpkgs=/etc/nix/flake-channels/nixpkgs"
+      "nixpkgs=${inputs.nixpkgs}"
       "home-manager=/etc/nix/flake-channels/home-manager"
     ];
 
@@ -45,7 +45,7 @@
 
     settings = {
       experimental-features =
-        ["nix-command" "flakes" "auto-allocate-uids" "cgroups" "fetch-closure" "recursive-nix"]
+        ["nix-command" "flakes" "auto-allocate-uids" "cgroups" "fetch-closure" "recursive-nix" "pipe-operators"]
         ++ lib.optional (lib.versionAtLeast (lib.versions.majorMinor config.nix.package.version) "2.19")
         # Allow the use of the impure-env setting.
         "configurable-impure-env"

@@ -137,8 +137,9 @@
     heroic
 
     # Development
-    # dotnet-sdk_7
-    # jetbrains.rider
+    # dotnet-sdk_8
+    dotnetCorePackages.sdk_9_0
+    jetbrains.rider
     hoppscotch
 
     # Fonts

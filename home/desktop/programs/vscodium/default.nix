@@ -8,6 +8,7 @@
   imports = [
     ./elixir.nix
     ./go.nix
+    ./nix.nix
   ];
 
   programs.vscode = {
@@ -46,29 +47,6 @@
       "workbench.preferredHighContrastColorTheme" = "Default High Contrast Light";
       "workbench.settings.editor" = "json";
       "workbench.tree.indent" = 20;
-      "nix.enableLanguageServer" = true;
-      "nix.serverPath" = "nil";
-      "nix.serverSettings" = {
-        nixd = {
-          formatting = {
-            command = "nixpkgs-fmt";
-          };
-          options = {
-            # Disable it if you are not writting modules.
-            enable = true;
-            target = {
-              args = [];
-              # Example of NixOS options.
-              installable = "<flakeref>#nixosConfigurations.<name>.options";
-            };
-          };
-        };
-        nil = {
-          formatting = {
-            command = ["nixpkgs-fmt"];
-          };
-        };
-      };
       "css.validate" = false;
       "less.validate" = false;
       "scss.validate" = false;
@@ -159,12 +137,6 @@
 
   # Language tools
   home.packages = with pkgs; [
-    # Nix tools
-    nil
-    nixd
-    nixpkgs-fmt
-    alejandra
-
     # Shell tools
     shellcheck
     shfmt

@@ -3,9 +3,9 @@
   inputs,
   ...
 }: let
-  spicePkgs = inputs.spicetify-nix.packages.${pkgs.system}.default;
+  spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
 in {
-  imports = [inputs.spicetify-nix.homeManagerModule];
+  imports = [inputs.spicetify-nix.homeManagerModules.default];
 
   home.packages = with pkgs; [
     spotify
@@ -13,7 +13,7 @@ in {
 
   programs.spicetify = {
     enable = false;
-    theme = spicePkgs.themes.text;
+    theme = spicePkgs.themes.onepunch;
     colorScheme = "gruvbox";
 
     enabledExtensions = with spicePkgs.extensions; [

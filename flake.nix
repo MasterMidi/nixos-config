@@ -63,7 +63,7 @@
 
     # Theming and customization
     nix-colors.url = "github:misterio77/nix-colors"; # Theming in nix configuration
-    spicetify-nix.url = "github:the-argus/spicetify-nix";
+    spicetify-nix.url = "github:Gerg-L/spicetify-nix";
     betterfox = {
       url = "github:yokoffing/Betterfox"; # Firefox settings
       flake = false;

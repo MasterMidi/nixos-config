@@ -13,6 +13,7 @@
     ./sound.nix
     ./system.nix
     ./virtualization.nix
+    ./programs
   ];
 
   # Enable CUPS to print documents.

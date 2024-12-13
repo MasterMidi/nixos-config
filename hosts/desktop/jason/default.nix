@@ -6,7 +6,7 @@
     ./gaming.nix
     ./graphical.nix
     ./hardware-configuration.nix
-    ./mediaserver
+    ./containers
     ./secrets
     ./security.nix
     ./services
@@ -59,6 +59,7 @@
   services.tailscale.enable = true;
 
   services.mullvad-vpn.enable = true;
+  services.resolved.enable = true;
 
   programs.nix-ld.enable = true;
 

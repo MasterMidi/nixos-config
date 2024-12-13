@@ -1,0 +1,32 @@
+options:
+  source: /config/source/
+  series:
+    - /config/yaml/sonarr_sync_tv.yml
+    - /config/yaml/sonarr_sync_anime.yml
+  filename_format: "{full_name} - S{season:02}E{episode:02}"
+  season_folder_format: "Season {season:02}"
+  sync_specials: false
+
+jellyfin:
+  url: http://jellyfin:8096/
+  username: michael
+
+sonarr:
+  url: http://sonarr:8989/api/v3/ # Your Sonarr IP address
+  downloaded_only: true
+  sync:
+    - file: /config/yaml/sonarr_sync_tv.yml
+      mode: match
+      card_directory: /config/cards/
+      downloaded_only: true
+      series_type:
+        - standard
+        - daily
+    - file: /config/yaml/sonarr_sync_anime.yml
+      mode: match
+      card_directory: /config/cards/
+      downloaded_only: true
+      series_type:
+        - anime
+
+tmdb:

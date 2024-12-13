@@ -46,7 +46,7 @@
               custom_formats =
                 builtins.map (v: {
                   trash_ids = v.trashIds;
-                  quality_profiles = builtins.map (v: removeNulls v) v.qualityProfiles;
+                  assign_scores_to = builtins.map (v: removeNulls v) v.assignScoresTo;
                 })
                 instanceConfig.customFormats;
             }
@@ -241,7 +241,7 @@
         description = "Trash IDs to import.";
       };
 
-      qualityProfiles = lib.mkOption {
+      assignScoresTo = lib.mkOption {
         type = lib.types.listOf (lib.types.submodule {
           options = {
             name = lib.mkOption {

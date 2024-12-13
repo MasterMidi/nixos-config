@@ -18,9 +18,7 @@ commands:
   skip_cleanup: false
 
 qbt:
-  host: mediaserver-gluetun:9060
-  user: michael
-  pass: Servurb42
+  host: qbit-private:9061
 
 settings:
   force_auto_tmm: false
@@ -42,18 +40,17 @@ settings:
   cat_update_all: true
 
 directory:
-  cross_seed: /storage/torrents/cross_seed/
-  root_dir: /storage/torrents/
-  remote_dir: /storage/torrents/
-  recycle_bin: /storage/torrents/.Trash-1000
-  torrents_dir: /storage/torrents/.torrents
-  orphaned_dir: /storage/torrents/orphaned_data
+  cross_seed: /storage/torrents-priv/cross_seed/
+  root_dir: /storage/torrents-priv/
+  remote_dir: /storage/torrents-priv/
+  recycle_bin: /storage/torrents-priv/.Trash-1000
+  torrents_dir: /storage/torrents-priv/.torrents
+  orphaned_dir: /storage/torrents-priv/orphaned_data
 
 cat:
-  prowlarr: /storage/torrents/prowlarr
-  radarr: /storage/torrents/radarr
-  radarr-anime: /storage/torrents/radarr-anime
-  sonarr: /storage/torrents/sonarr
+  prowlarr: /storage/torrents-priv/prowlarr
+  radarr: /storage/torrents-priv/radarr
+  sonarr: /storage/torrents-priv/sonarr
 
 tracker:
   nyaa:

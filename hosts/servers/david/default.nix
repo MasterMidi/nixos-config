@@ -157,11 +157,6 @@
     driSupport32Bit = true;
   };
 
-  services.jellyseerr = {
-    enable = true;
-    openFirewall = true;
-  };
-
   services.prowlarr = {
     enable = true;
     openFirewall = true;

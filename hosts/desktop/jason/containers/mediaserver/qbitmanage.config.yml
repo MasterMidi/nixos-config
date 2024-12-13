@@ -1,0 +1,139 @@
+# This is an example configuration file that documents all the options.
+# It will need to be modified for your specific use case.
+# Please refer to the link below for more details on how to set up the configuration file
+# https://github.com/StuffAnThings/qbit_manage/wiki/Config-Setup
+
+commands:
+  dry_run: false
+  cross_seed: false
+  recheck: false
+  cat_update: false
+  tag_update: true
+  rem_unregistered: true
+  tag_tracker_error: true
+  rem_orphaned: true
+  tag_nohardlinks: true
+  share_limits: true
+  skip_qb_version_check: false
+  skip_cleanup: false
+
+qbt:
+  host: qbit:9060
+
+settings:
+  force_auto_tmm: false
+  # tracker_error_tag: issue
+  nohardlinks_tag: noHL
+  share_limits_tag: ~share_limit
+  ignoreTags_OnUpdate:
+    - noHL
+    - issue
+    - cross-seed
+  tracker_error_tag: issue
+  share_limits_min_seeding_time_tag: MinSeedTimeNotReached
+  share_limits_min_num_seeds_tag: MinSeedsNotMet
+  share_limits_last_active_tag: LastActiveLimitNotReached
+  cross_seed_tag: cross-seed
+  cat_filter_completed: true
+  share_limits_filter_completed: true
+  tag_nohardlinks_filter_completed: true
+  cat_update_all: true
+
+directory:
+  cross_seed: /storage/torrents/cross_seed/
+  root_dir: /storage/torrents/
+  remote_dir: /storage/torrents/
+  recycle_bin: /storage/torrents/.Trash-1000
+  torrents_dir: /storage/torrents/.torrents
+  orphaned_dir: /storage/torrents/orphaned_data
+
+cat:
+  prowlarr: /storage/torrents/prowlarr
+  radarr: /storage/torrents/radarr
+  radarr-anime: /storage/torrents/radarr-anime
+  sonarr: /storage/torrents/sonarr
+
+tracker:
+  nyaa:
+    tag: nyaa
+  milkie:
+    tag: milkie
+
+nohardlinks:
+  - radarr:
+      exclude_tags:
+        - keep
+  - sonarr:
+      exclude_tags:
+        - keep
+  - prowlarr:
+      exclude_tags:
+        - keep
+
+share_limits:
+  keep:
+    priority: 1
+    include_all_tags:
+      - keep
+    include_any_tags:
+      - keep
+    max_ratio: -1
+    max_seeding_time: -1
+    last_active: 0
+    limit_upload_speed: 0
+    cleanup: false
+    resume_torrent_after_change: true
+    add_group_to_tag: true
+    min_num_seeds: 0
+  legacy:
+    priority: 2
+    include_any_tags:
+      - noHL
+    max_ratio: 1
+    min_seeding_time: 0
+    last_active: 0
+    cleanup: true
+    resume_torrent_after_change: true
+    add_group_to_tag: true
+    min_num_seeds: 0
+  default:
+    priority: 3
+    max_ratio: 10
+    min_seeding_time: 0
+    last_active: 0
+    cleanup: true
+    resume_torrent_after_change: true
+    add_group_to_tag: true
+    min_num_seeds: 10
+
+recyclebin:
+  enabled: true
+  empty_after_x_days: 30
+  save_torrents: false
+  split_by_category: true
+
+orphaned:
+  empty_after_x_days: 30
+  exclude_patterns:
+    - "**/.DS_Store"
+    - "**/Thumbs.db"
+    - "**/@eaDir"
+    - /data/torrents/temp/**
+    - "**/*.!qB"
+    - "**/*_unpackerred"
+
+webhooks:
+  error:
+  run_start:
+  run_end:
+  function:
+    cross_seed:
+    recheck:
+    cat_update:
+    tag_update:
+    rem_unregistered:
+    tag_tracker_error:
+    rem_orphaned:
+    tag_nohardlinks:
+    share_limits:
+    cleanup_dirs:

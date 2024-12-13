@@ -81,7 +81,7 @@
     # Productivity
     distrobox
     obsidian
-    leafpad
+    xfce.mousepad
 
     # Privacy
     mullvad-vpn

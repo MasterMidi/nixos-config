@@ -3,7 +3,7 @@
   imageViewer = "pix.desktop";
   audioPlayer = "org.gnome.rhythmbox3.desktop";
   videoPlayer = "mpv.desktop";
-	textEditor = "leafpad.desktop";
+  textEditor = "mousepad.desktop";
 
   generateMappings = {
     type,

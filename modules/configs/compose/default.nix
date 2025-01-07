@@ -292,6 +292,11 @@
         default = [];
         description = "Commands to run on the container entrypoint.";
       };
+      labels = lib.mkOption {
+				type = lib.types.listOf lib.types.str;
+				default = [];
+				description = "Labels to apply to the container.";
+			};
     };
   };
 
@@ -379,6 +384,7 @@ in {
                 extraOptions =
                   (makeNetworkOptions composeName containerConfig)
                   ++ (lib.optional (containerConfig.autoUpdate != null) "--label=io.containers.autoupdate=${containerConfig.autoUpdate}")
+                  ++ (map (label: "--label=${label}") containerConfig.labels)
 									++ (map (ip: "--ip=${ip}") containerConfig.networking.ips)
                   ++ (map (cap: "--cap-add=${cap}") containerConfig.capabilities)
                   ++ (map (dev: "--device=${dev}") containerConfig.devices)

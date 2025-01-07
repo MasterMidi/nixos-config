@@ -14,7 +14,7 @@ self: let
     );
 in
   super: {
-    discord = enableWayland super.dicord "discord";
+    # discord = enableWayland super.dicord "discord";
     vesktop = enableWayland super.vesktop "vencorddesktop";
     vscodium = enableWayland super.vscodium "codium";
   }

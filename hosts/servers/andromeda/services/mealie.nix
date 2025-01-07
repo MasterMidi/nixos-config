@@ -2,6 +2,7 @@
 {
   pkgs,
   lib,
+  config,
   ...
 }: {
   # Runtime
@@ -26,7 +27,7 @@
       POSTGRES_SERVER = "postgres";
       POSTGRES_USER = "mealie";
       PUID = "1000";
-      TZ = "Europe/Copenhagen";
+      TZ = config.time.timeZone;
       WEB_CONCURRENCY = "1";
     };
     volumes = [

@@ -143,7 +143,7 @@
     hoppscotch
 
     # Fonts
-    (nerdfonts.override {fonts = ["JetBrainsMono"];})
+    nerd-fonts.jetbrains-mono
     inter
   ];
 }

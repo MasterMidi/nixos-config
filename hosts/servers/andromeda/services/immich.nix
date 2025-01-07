@@ -18,6 +18,7 @@
   virtualisation.oci-containers.backend = "podman";
   # TODO: add gpu support to immich https://github.com/aksiksi/compose2nix?tab=readme-ov-file#nvidia-gpu-support
   hardware.nvidia-container-toolkit.enable = true; # Enable NVIDIA GPU support
+  services.xserver.videoDrivers = ["nvidia"];
 
   # Firewall
   networking.firewall.interfaces."podman+".allowedUDPPorts = [53 5353];

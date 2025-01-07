@@ -7,6 +7,8 @@
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ./services
+    ./gaming.nix
+    ./mergerfs.nix
   ];
 
   # Bootloader.
@@ -43,6 +45,13 @@
 
   hardware.cpu.amd.updateMicrocode = true;
   hardware.enableAllFirmware = true;
+  hardware = {
+    graphics = {
+      enable = true;
+      enable32Bit = true;
+    };
+  };
+
 
   powerManagement.powertop.enable = true;
   powerManagement.cpuFreqGovernor = "schedutil";
@@ -83,6 +92,10 @@
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
+  services.desktopManager.plasma6.enable = true;
+
+  services.mullvad-vpn.enable = true;
+
   system.stateVersion = "24.05";
 
   lollypops.deployment = {
@@ -92,7 +105,7 @@
 
     # SSH connection parameters
     # ssh.host = "${config.networking.hostName}.local";
-    ssh.host = "192.168.50.229";
+    ssh.host = "andromeda.local";
     ssh.user = "root";
     ssh.command = "ssh";
     ssh.opts = [];

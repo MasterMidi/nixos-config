@@ -243,6 +243,16 @@
           ];
         };
 
+        nova = {
+          system = "x86_64-linux";
+          modules = [
+            ./hosts/servers/nova
+            ./hosts/servers/shared/core
+            inputs.srvos.nixosModules.mixins-terminfo
+            inputs.disko.nixosModules.disko
+          ];
+        };
+
         # TODO: turn into bluetooth speaker device
         # envpi = {
         #   system = "aarch64-linux";

@@ -1,11 +1,16 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-{pkgs, ...}: {
+{
+  pkgs,
+  inputs,
+  ...
+}: {
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ./sound.nix
+    # ./testing.nix
   ];
 
   # Bootloader.
@@ -142,7 +147,6 @@
     isNormalUser = true;
     description = "michael";
     extraGroups = ["networkmanager" "wheel" "dialout"];
-    packages = with pkgs; [];
   };
 
   boot.plymouth = {
@@ -164,17 +168,20 @@
     libsecret
     (git.override {withLibsecret = true;})
     git-credential-manager
+    # mullvad-vpn
   ];
 
   services.tailscale.enable = true;
 
   services.mullvad-vpn.enable = true;
+  services.resolved.enable = true; # Needed for mullvad to work: https://discourse.nixos.org/t/connected-to-mullvadvpn-but-no-internet-connection/35803/8
 
   programs = {
     seahorse.enable = true;
     dconf.enable = true;
   };
 
+  services.gvfs.enable = true; # for nautlius to work with ttrash and network shares
   programs.mtr.enable = true;
   programs.gnupg.agent = {
     enable = true;

@@ -6,8 +6,8 @@
   ...
 }: {
   imports = [
-    ./elixir.nix
-    ./go.nix
+    # ./elixir.nix
+    # ./go.nix
     ./nix.nix
   ];
 

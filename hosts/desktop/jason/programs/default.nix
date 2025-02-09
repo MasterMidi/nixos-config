@@ -4,7 +4,7 @@
   users.users.michael.extraGroups = ["kvm" "adbusers" "udev"];
 
   environment.systemPackages = with pkgs; [
-    androidStudioPackages.stable
+    android-studio
     flutter
     dart
   ];

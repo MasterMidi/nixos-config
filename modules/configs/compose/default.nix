@@ -176,7 +176,7 @@
     options = {
       path = lib.mkOption {
         type = lib.types.str;
-        description = "The secret value.";
+        description = "Path to the secret value.";
       };
       driver = lib.mkOption {
         type = lib.types.enum ["file" "pass" "shell"];
@@ -337,6 +337,16 @@
 				default = false;
 				description = "Disable the DNS resolver for this network.";
 			};
+      subnets = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [];
+        description = "";
+      };
+      gateways = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [];
+        description = "";
+      };
 		};
 	};
 
@@ -417,10 +427,12 @@ in {
                       RemainAfterExit = true;
                       ExecStop = "${backend} network rm -f ${composeName}-${networkName}";
                     };
-                    script = "${backend} network inspect ${composeName}-${networkName} || ${backend} network create ${composeName}-${networkName} " + builtins.concatStringsSep " " [
+                    script = "${backend} network inspect ${composeName}-${networkName} || ${backend} network create ${composeName}-${networkName} " + builtins.concatStringsSep " " ([
 											"--driver=${networkOptions.driver}"
 											(lib.optionalString networkOptions.internal "--internal")
-										];
+										]
+                    ++ (map (subnet: "--subnet=${subnet}") networkOptions.subnets)
+                    ++ (map (gateway: "--gateway=${gateway}") networkOptions.gateways));
                     partOf = ["${backend}-compose-${composeName}-root.target"];
                     wantedBy = ["${backend}-compose-${composeName}-root.target"];
                   }
@@ -457,7 +469,7 @@ in {
                             RemainAfterExit = true;
                             ExecStop = "${backend} secret rm ${composeName}-${containerName}-${secretName}";
                           };
-                          script = "${backend} secret create --driver=${secretValue.driver} --replace=${toString secretValue.replace} ${lib.optionalString (secretValue.labels != null) "--label=${(builtins.concatStringsSep "," (lib.mapAttrsToList (key: val: "${key}=${val}") secretValue.labels))}"} ${composeName}-${containerName}-${secretName} ${secretValue.path}";
+                          script = "${backend} secret create --driver=${secretValue.driver} ${lib.optionalString secretValue.replace "--replace"} ${lib.optionalString (secretValue.labels != null) "--label=${(builtins.concatStringsSep "," (lib.mapAttrsToList (key: val: "${key}=${val}") secretValue.labels))}"} ${composeName}-${containerName}-${secretName} ${secretValue.path}";
                           partOf = ["${backend}-${composeName}-${containerName}.service"];
                           wantedBy = ["${backend}-${composeName}-${containerName}.service"];
                           before = ["${backend}-${composeName}-${containerName}.service"];

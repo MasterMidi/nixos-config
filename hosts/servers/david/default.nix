@@ -6,9 +6,8 @@
 }: {
   imports = [
     # Include the results of the hardware scan.
-    ./monitoring
+    # ./monitoring
     ./hardware-configuration.nix
-    ./recyclarr
     # ./nginx.nix
   ];
 
@@ -36,7 +35,7 @@
   users.users.michael = {
     isNormalUser = true;
     description = "michael";
-    extraGroups = ["networkmanager" "wheel" "docker"];
+    extraGroups = ["networkmanager" "wheel" "docker" "podman"];
     packages = with pkgs; [jellyseerr];
   };
 
@@ -101,33 +100,33 @@
     };
   };
 
-  virtualisation.docker = {
-    enable = true;
-    enableOnBoot = true;
-    rootless = {
-      enable = true;
-      setSocketVariable = true;
-    };
-  };
+  # virtualisation.docker = {
+  #   enable = true;
+  #   enableOnBoot = true;
+  #   rootless = {
+  #     enable = true;
+  #     setSocketVariable = true;
+  #   };
+  # };
 
-  virtualisation.oci-containers = {
-    backend = "docker";
-    containers = {
-      kavita = {
-        image = "jvmilazz0/kavita:latest";
-        # user = "1000:100";
-        autoStart = true;
-        ports = ["5000:5000"];
-        environment = {
-          TZ = config.time.timeZone;
-        };
-        volumes = [
-          "/var/lib/kavita/config:/kavita/config"
-          "/var/lib/kavita/data:/data"
-        ];
-      };
-    };
-  };
+  # virtualisation.oci-containers = {
+  #   backend = "docker";
+  #   containers = {
+  #     kavita = {
+  #       image = "jvmilazz0/kavita:latest";
+  #       # user = "1000:100";
+  #       autoStart = true;
+  #       ports = ["5000:5000"];
+  #       environment = {
+  #         TZ = config.time.timeZone;
+  #       };
+  #       volumes = [
+  #         "/var/lib/kavita/config:/kavita/config"
+  #         "/var/lib/kavita/data:/data"
+  #       ];
+  #     };
+  #   };
+  # };
 
   # containers.jellyseerr = {
   #   autoStart = true;
@@ -158,33 +157,157 @@
   };
 
   services.prowlarr = {
-    enable = true;
+    enable = false;
     openFirewall = true;
     # port = 8020;
   };
 
-  services.bitmagnet = {
+  # Runtime
+  virtualisation.containers.enable = true;
+  virtualisation.podman = {
     enable = true;
-    # package = let
-    #   version = "0.7.5";
-    #   src = pkgs.fetchFromGitHub {
-    #     owner = "bitmagnet-io";
-    #     repo = "bitmagnet";
-    #     rev = "v${version}";
-    #     sha256 = "sha256-hyF0SwhMXpM7imjVmxFaX+Z6h9tiZvZszVTEdhUGvFY=";
-    #   };
-    # in (pkgs.bitmagnet.override rec {
-    #   buildGoModule = args:
-    #     pkgs.buildGo122Module (args
-    #       // {
-    #         inherit src version;
-    #         vendorHash = "sha256-y9RfaAx9AQS117J3+p/Yy8Mn5In1jmZmW4IxKjeV8T8=";
-    #       });
-    # });
-    environment = {
-      # TMDB_API_KEY = builtins.readFile config.sops.secrets.TMDB_KEY.path;
+    autoPrune.enable = true;
+    defaultNetwork.settings = {
+      # Required for container networking to be able to use names.
+      dns_enabled = true;
+      # network_interface = "podman0";
     };
   };
+  virtualisation.oci-containers.backend = "podman";
+
+  # Firewall
+  networking.firewall.interfaces."podman+".allowedUDPPorts = [53 5353];
+
+  # Containers
+  virtualisation.oci-containers.compose.mediaserver = {
+    enable = true;
+    networks.default = {};
+    containers = {
+      bitmagnet = {
+        image = "ghcr.io/bitmagnet-io/bitmagnet:v0.10.0-beta.5";
+        networking = {
+          networks = ["default"];
+          aliases = ["bitmagnet"];
+          ports = {
+            webui = {
+              host = 3333;
+              internal = 3333;
+            };
+            crawler1 = {
+              host = 3334;
+              internal = 3334;
+              protocol = "tcp";
+            };
+            crawler2 = {
+              host = 3334;
+              internal = 3334;
+              protocol = "udp";
+            };
+          };
+        };
+        environment = {
+          POSTGRES_HOST = "bitmagnet-postgres";
+          POSTGRES_NAME = "bitmagnet";
+          POSTGRES_USER = "postgres";
+          POSTGRES_PASSWORD = "postgres";
+          # TMDB_API_KEY  = config.sops.secrets.TMDB_KEY.path;
+        };
+        commands = [
+          "worker"
+          "run"
+          "--keys=http_server"
+          "--keys=queue_server"
+          # disable the next line to run without DHT crawler
+          "--keys=dht_crawler"
+        ];
+        dependsOn = ["bitmagnet-postgres"];
+      };
+      bitmagnet-postgres = {
+        image = "postgres:16-alpine";
+        networking = {
+          networks = ["default"];
+          aliases = ["bitmagnet-postgres"];
+          ports = {
+            main = {
+              host = 5432;
+              internal = 5432;
+            };
+          };
+        };
+        volumes = [
+          "/root/data/postgres:/var/lib/postgresql/data"
+        ];
+        environment = {
+          POSTGRES_PASSWORD = "postgres";
+          POSTGRES_DB = "bitmagnet";
+          PGUSER = "postgres";
+        };
+        extraOptions = ["--shm-size=1g"];
+      };
+    };
+  };
+
+  # bitmagnet = {
+  #         image = "ghcr.io/bitmagnet-io/bitmagnet:latest";
+  #         hostname = "bitmagnet";
+  #         autoStart = true;
+  #         environment =
+  #           cfg.environment
+  #           // {
+  #             POSTGRES_HOST = cfg.postgresHost;
+  #             POSTGRES_NAME = cfg.postgresName;
+  #             POSTGRES_USER = cfg.postgresUser;
+  #             POSTGRES_PASSWORD = cfg.postgresPassword;
+  #           };
+  #         ports = [
+  #           "3333:3333"
+  #           "3334:3334/tcp"
+  #           "3334:3334/udp"
+  #         ];
+  #         cmd = [
+  #           "worker"
+  #           "run"
+  #           "--keys=http_server"
+  #           "--keys=queue_server"
+  #           # disable the next line to run without DHT crawler
+  #           "--keys=dht_crawler"
+  #         ];
+  #         dependsOn = ["bitmagnet-postgres"];
+  #         extraOptions = ["--network=host"];
+  #       };
+
+  #       bitmagnet-postgres = {
+  #         image = "postgres:16-alpine";
+  #         hostname = "bitmagnet-postgres";
+  #         autoStart = true;
+  #         volumes = [
+  #           "/root/data/postgres:/var/lib/postgresql/data"
+  #         ];
+  #         environment = {
+  #           POSTGRES_PASSWORD = cfg.postgresPassword;
+  #           POSTGRES_DB = cfg.postgresName;
+  #           PGUSER = cfg.postgresUser;
+  #         };
+  #         extraOptions = ["--shm-size=1g"];
+  #         ports = ["5432:5432"];
+  #       };
+
+  #       redis = {
+  #         image = "redis:7-alpine";
+  #         hostname = "bitmagnet-redis";
+  #         autoStart = true;
+  #         entrypoint = "redis-server";
+  #         cmd = ["--save 60 1"];
+  #         volumes = [
+  #           "/root/data/redis:/data"
+  #         ];
+  #         environment = {
+  #           POSTGRES_PASSWORD = "postgres";
+  #           POSTGRES_DB = "bitmagnet";
+  #           PGUSER = "postgres";
+  #         };
+  #         ports = ["6379:6379"];
+  #       };
 
   services.nginx = {
     # virtualHosts."jellyseerr.michael-graversen.dk" = {

@@ -1,6 +1,6 @@
 {pkgs, ...}: {
   imports = [
-    ./mediaserver/recyclarr
+    ./mediaserver
   ];
 
   # Runtime

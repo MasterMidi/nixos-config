@@ -226,6 +226,7 @@
           modules = [
             ./hosts/servers/andromeda
             ./hosts/servers/shared/core
+            nixosModules.configs.compose
             nixosModules.services.qbittorrent
             # srvos.nixosModules.server
             # srvos.nixosModules.common

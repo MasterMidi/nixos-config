@@ -1,8 +1,7 @@
 {...}: {
   imports = [
-    ./homarr.nix
+    ./cloudflared.nix
     # ./mealie.nix
-    ./immich.nix
   ];
 
   users.groups.media = {

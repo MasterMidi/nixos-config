@@ -6,6 +6,8 @@
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
+    ./containers
+    ./secrets
     ./services
     ./gaming.nix
     ./mergerfs.nix
@@ -53,7 +55,7 @@
   };
 
 
-  powerManagement.powertop.enable = true;
+  powerManagement.powertop.enable = false;
   powerManagement.cpuFreqGovernor = "schedutil";
 
   services.fstrim.enable = true;
@@ -63,12 +65,42 @@
 
   users.users.michael = {
     isNormalUser = true;
+    uid = 1000;
     description = "Michael Andreas Graversen";
     extraGroups = ["networkmanager" "wheel"];
     packages = with pkgs; [];
   };
 
-  environment.systemPackages = with pkgs; [kitty.terminfo];
+  environment.systemPackages = with pkgs; [
+    kitty.terminfo
+    (writeShellScriptBin "zip" ''
+      ${pkgs.gnutar}/bin/tar cf - $1 -P | ${pkgs.pv}/bin/pv -s $(${pkgs.coreutils}/bin/du -sb $1 | ${pkgs.gawk}/bin/awk '{print $1}') | ${pkgs.gzip}/bin/gzip > $2.tar.gz
+    '')
+    (writeShellScriptBin "uzip" ''
+      ${pkgs.pv}/bin/pv $1 | ${pkgs.gnutar}/bin/tar -x
+    '')
+    (writeShellScriptBin "rtc" ''
+      # Check if any arguments were provided
+      if [ $# -eq 0 ]; then
+          echo "Usage: $0 command [arguments...]"
+          echo "Example: $0 tar -xf some_file.tar"
+          exit 1
+      fi
+
+      # Run the command in background
+      "$@" &
+
+      # Get the job ID of the last background process
+      job_id=$!
+
+      # Disown the process so it continues after terminal closes
+      disown -h "$job_id"
+
+      # Print confirmation message
+      echo "Process started with PID $job_id and disowned"
+      echo "It will continue running even if you disconnect"
+    '')
+  ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -105,7 +137,7 @@
 
     # SSH connection parameters
     # ssh.host = "${config.networking.hostName}.local";
-    ssh.host = "andromeda.local";
+    ssh.host = "andromeda";
     ssh.user = "root";
     ssh.command = "ssh";
     ssh.opts = [];

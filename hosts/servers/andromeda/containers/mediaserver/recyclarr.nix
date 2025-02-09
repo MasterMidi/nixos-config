@@ -8,8 +8,8 @@
         user = "root";
         volumes=[
           "/mnt/ssd/services/recyclarr/config:/config"
-          "${./configs/recyclarr.yml}:/config/recyclarr.yml"
-          "${./configs/recyclarr.settings.yml}:/config/settings.yml"
+          "${config.sops.secrets.RECYCLARR_CONF.path}:/config/recyclarr.yml"
+          "${config.sops.secrets.RECYCLARR_SETTINGS.path}:/config/settings.yml"
         ];
         environment={
           TZ = config.time.timeZone;

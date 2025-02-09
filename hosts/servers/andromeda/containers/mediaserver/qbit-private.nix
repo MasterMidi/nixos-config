@@ -50,7 +50,7 @@
 					UNBOUND_ENABLED="false";
         };
         volumes = [
-					"${./configs/wireguard.airvpn.conf}:/config/wireguard/wg0.conf:ro"
+					"${config.sops.secrets.WIREGUARD_AIRVPN_CONF.path}:/config/wireguard/wg0.conf:ro"
           "/mnt/hdd/torrents/private:/storage/torrents/private:rw"
           "/mnt/ssd/services/qbit-private/config:/config:rw"
         ];
@@ -102,6 +102,7 @@
         };
         volumes = [
           "/mnt/ssd/services/cross-seed-private/config:/config:rw" # config location
+          "${config.sops.secrets.CROSS_SEED_CONFIG_PRIVATE.path}:/config/config.js:ro"
           "/mnt/ssd/services/qbit-private/config/data/BT_backup:/mnt/ssd/services/qbit-private/config/data/BT_backup:ro" # readonly access to torrent files for qbit
           "/mnt/hdd/torrents/private:/storage/torrents/private:rw" # root folder for torrents in qbit
         ];
@@ -119,7 +120,7 @@
       #   };
       #   volumes = [
       #     "/services/media/qbitmanage-private/config:/config:rw"
-      #     # "${./qbitmanage.private.config.yml}:/config/config.yml:ro"
+      #     # "${config.sops.secrets.QBITMANAGE_CONFIG_PPRIVATE.path}:/config/config.yml:ro"
       #     "/home/michael/.temp/data/torrents-priv:/storage/torrents-priv:rw"
       #   ];
       #   dependsOn = ["qbit-private"];

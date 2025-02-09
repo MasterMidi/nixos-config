@@ -25,23 +25,8 @@
           PGID = builtins.toString config.users.groups.users.gid;
           PUID = "1000";
           TZ = config.time.timeZone;
-
-					# VPN settings
-					VPN_ENABLED="false";
-					VPN_CONF="wg0";
-					VPN_PROVIDER="generic";
-					VPN_LAN_NETWORK="192.168.1.0/24,127.0.0.1";
-					VPN_LAN_LEAK_ENABLED="false";
-          # VPN_EXPOSE_PORTS_ON_LAN  = "${builtins.toString networking.ports.webui.host}/tcp";
-					VPN_AUTO_PORT_FORWARD="false";
-					VPN_KEEP_LOCAL_DNS="true";
-					VPN_FIREWALL_TYPE="auto";
-					VPN_HEALTHCHECK_ENABLED="true";
-					PRIVOXY_ENABLED="false";
-					UNBOUND_ENABLED="false";
         };
         volumes = [
-          "${./configs/wireguard.mullvad.conf}:/config/wireguard/wg0.conf:ro"
           "/mnt/ssd/services/prowlarr/config:/config:rw"
         ];
         capabilities = ["NET_ADMIN"];

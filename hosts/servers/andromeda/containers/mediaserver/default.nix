@@ -8,6 +8,7 @@
   PUID = "1000";
 in {
   imports = [
+    ./configs
     ./authentik.nix
     ./autobrr.nix
     ./bazarr.nix

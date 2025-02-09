@@ -114,7 +114,7 @@ in {
 					UNBOUND_ENABLED="false";
         };
         volumes = [
-					"${./configs/wireguard.airvpn.conf}:/config/wireguard/wg0.conf:ro"
+					"${config.sops.secrets.WIREGUARD_AIRVPN_CONF.path}:/config/wireguard/wg0.conf:ro"
           "/mnt/hdd/torrents/public:/storage/torrents/public:rw"
           "/mnt/ssd/services/qbit/config:/config:rw"
           "${script}/bin:/scripts/:ro"
@@ -169,6 +169,7 @@ in {
         };
         volumes = [
           "/mnt/ssd/services/cross-seed-public/config:/config:rw" # config location
+          "${config.sops.secrets.CROSS_SEED_CONFIG_PUBLIC.path}:/config/config.js:ro"
           "/mnt/ssd/services/qbit/config/data/BT_backup:/mnt/ssd/services/qbit/config/data/BT_backup:ro" # readonly access to torrent files for qbit
           "/mnt/hdd/torrents:/storage/torrents:rw" # root folder for torrents in qbit
         ];

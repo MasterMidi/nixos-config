@@ -54,7 +54,6 @@
     };
   };
 
-
   powerManagement.powertop.enable = false;
   powerManagement.cpuFreqGovernor = "schedutil";
 
@@ -131,20 +130,6 @@
   system.stateVersion = "24.05";
 
   lollypops.deployment = {
-    local-evaluation = true;
-    # Where on the remote the configuration (system flake) is placed
     config-dir = "/etc/nixos/";
-
-    # SSH connection parameters
-    # ssh.host = "${config.networking.hostName}.local";
-    ssh.host = "andromeda";
-    ssh.user = "root";
-    ssh.command = "ssh";
-    ssh.opts = [];
-
-    # sudo options
-    sudo.enable = false;
-    sudo.command = "sudo";
-    sudo.opts = [];
   };
 }

@@ -211,12 +211,23 @@
 				default = null;
 				description = "The protocol to use.";
 			};
+      # protocols = lib.mkOption {
+			# 	type = lib.types.listOf (lib.types.enum ["tcp" "udp"]);
+			# 	default = null;
+			# 	description = "The protocol to use.";
+			# };
 		};
 	};
 
   # Container options
-  containerOptions = {
+  containerOptions = { name, composeName, ... }: {
     options = {
+      unitName = lib.mkOption {
+        type = lib.types.str;
+        default = "${backend}-${composeName}-${name}.service";
+        description = "The name of the generated systemd unit. Defaults to <backend>-<composeName>-<containerName>";
+        readOnly = true;
+      };
       user = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
         default = null;
@@ -351,11 +362,11 @@
 	};
 
   # Rest of the options and configuration remain the same
-  composeOptions = {
+  composeOptions = { name, ... }: {
     options = {
       enable = lib.mkEnableOption "Enable the compose service";
       containers = lib.mkOption {
-        type = lib.types.attrsOf (lib.types.submodule containerOptions);
+        type = lib.types.attrsOf (lib.types.submodule (args: containerOptions { name = (builtins.trace "Current args: " args.config._module.args.name); composeName = name; }));
         default = {};
         description = "Containers defined in this compose service.";
       };

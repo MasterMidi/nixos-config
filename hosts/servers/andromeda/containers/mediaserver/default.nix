@@ -8,11 +8,11 @@
   PUID = "1000";
 in {
   imports = [
-    ./configs
     ./authentik.nix
     ./autobrr.nix
     ./bazarr.nix
     ./bitmagnet.nix
+    ./glance.nix
     ./gotify.nix
     ./hoarder.nix
     ./homarr.nix
@@ -20,13 +20,15 @@ in {
     ./jellyfin.nix
     ./jellysearch.nix
     ./jellyseerr.nix
+		./newt.nix
     ./prowlarr.nix
-    ./qbit-private.nix
-    ./qbit.nix
+    ./qbit
     ./radarr.nix
     ./recyclarr.nix
     ./scrutiny.nix
+    ./searxng.nix
     ./sonarr.nix
+    # ./title-card-maker.nix
     ./traefik.nix
     ./uptime-kuma.nix
   ];
@@ -61,7 +63,7 @@ in {
       #     "/home/michael/.temp/data/media:/storage/media:rw"
       #   ];
       # };
-      
+
       # whisper = {
       #   image = "docker.io/onerahmet/openai-whisper-asr-webservice:latest";
       #   autoUpdate = "registry";

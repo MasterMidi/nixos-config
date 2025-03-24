@@ -1,9 +1,12 @@
-{pkgs, config, ...}: {
+{
+  pkgs,
+  config,
+  ...
+}: {
   environment.systemPackages = with pkgs; [cloudflared];
 
   services.cloudflared = {
     enable = true;
-    user = "michael";
     tunnels = {
       media_server = {
         default = "http_status:404";

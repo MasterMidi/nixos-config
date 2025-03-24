@@ -1,5 +1,5 @@
 # Based on https://github.com/immich-app/immich/blob/main/docker/docker-compose.yml
-{config,...}:{
+{config, ...}: {
   services.cloudflared.tunnels.andromeda.ingress = {
     # "immich.mgrlab.dk" = "http://localhost:${toString config.virtualisation.oci-containers.compose.mediaserver.containers.traefik.networking.ports.local.host}";
     "immich.mgrlab.dk" = "http://localhost:2283";
@@ -60,7 +60,7 @@
         ];
       };
       immich-machine-learning = {
-        image = "ghcr.io/immich-app/immich-machine-learning:v1.124.2";
+        image = "ghcr.io/immich-app/immich-machine-learning:v1.124.2-cuda"; # -cuda for Nvidia GPU support
         networking = {
           networks = ["immich"];
           aliases = ["immich-ml"];
@@ -101,18 +101,18 @@
         volumes = [
           "/mnt/ssd/services/immich/postgres:/var/lib/postgresql/data:rw"
         ];
-#         healthcheck = {
-#           cmd = [''
-# pg_isready --dbname="$''${POSTGRES_DB}" --username="$''${POSTGRES_USER}" || exit 1;
-# Chksum="$$(psql --dbname="$''${POSTGRES_DB}" --username="$''${POSTGRES_USER}" --tuples-only --no-align
-# --command='SELECT COALESCE(SUM(checksum_failures), 0) FROM pg_stat_database')";
-# echo "checksum failure count is $$Chksum";
-# [ "$$Chksum" = '0' ] || exit 1
-#           ''];
-#           startPeriod = "5m";
-#           interval = "5m";
-#           timeout = "3s";
-#         };
+        #         healthcheck = {
+        #           cmd = [''
+        # pg_isready --dbname="$''${POSTGRES_DB}" --username="$''${POSTGRES_USER}" || exit 1;
+        # Chksum="$$(psql --dbname="$''${POSTGRES_DB}" --username="$''${POSTGRES_USER}" --tuples-only --no-align
+        # --command='SELECT COALESCE(SUM(checksum_failures), 0) FROM pg_stat_database')";
+        # echo "checksum failure count is $$Chksum";
+        # [ "$$Chksum" = '0' ] || exit 1
+        #           ''];
+        #           startPeriod = "5m";
+        #           interval = "5m";
+        #           timeout = "3s";
+        #         };
         # commands = [
         #   "postgres"
         #   "-c shared_preload_libraries=vectors.so"
@@ -133,7 +133,7 @@
       };
     };
   };
-  
+
   hardware.nvidia-container-toolkit.enable = true; # Enable NVIDIA GPU support
   services.xserver.videoDrivers = ["nvidia"];
 }

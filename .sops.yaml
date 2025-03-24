@@ -6,8 +6,9 @@ keys:
       - &jason age1mslxutmqu56fhl0rgk7flysyacyxks3evnmfckzzykh3wcvzc5tqx9q6dd
       - &david age1x3tjqh5n09yzmtlgdw7gxdavpxqtktvgavf4gdv6mw5qcq49uypqq34rqq
       - &andromeda age1lz59a9hcx9wfknc2p4lv9hej4exjqawsx04g82e8d7e8fkhqegkqpmegu9
+      - &nova age13mlxtvdznjlh9tafmtsamus4zsu905rwn5mzdhjcehuqs0p92qwq0tvuuh
 creation_rules:
-  - path_regex: .*/(secrets|configs)/.*\.(yml|yaml|json|env|ini|conf|js)$
+  - path_regex: .*/(secrets|configs)/.*\.sops\.(yml|yaml|json|env|ini|conf|js)$
     key_groups:
       - age:
           - *michael
@@ -15,3 +16,4 @@ creation_rules:
           - *jason
           - *david
           - *andromeda
+          - *nova

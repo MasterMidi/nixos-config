@@ -61,6 +61,7 @@
     # gnome
     nautilus-open-any-terminal
     sushi
+    file-roller # GNOME archive manager
     nautilus-python
     (nautilus.overrideAttrs (super: {
       buildInputs =
@@ -73,7 +74,7 @@
 
     # System
     base16-schemes
-    xwaylandvideobridge
+    kdePackages.xwaylandvideobridge
     wl-clipboard
     pavucontrol
     neofetch
@@ -101,6 +102,7 @@
     trash-cli
     lazygit
     qrscan
+    podman-tui
 
     # gaming tools
     ryujinx
@@ -133,7 +135,7 @@
     # element-desktop
 
     # Gaming
-    # r2modman
+    r2modman
     heroic
 
     # Development

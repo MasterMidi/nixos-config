@@ -1,6 +1,6 @@
 {...}: {
   services.recyclarr = {
-    enable = true;
+    enable = false;
     # secretsFile = ./secrets.yml; # not checked in for now :P
     settings = {};
     config = {

@@ -53,6 +53,9 @@
       "[css]" = {
         "editor.defaultFormatter" = "stylelint.vscode-stylelint";
       };
+      "[typescriptreact]" = {
+        "editor.defaultFormatter" = "esbenp.prettier-vscode";
+      };
       "files.associations" = {
         "*.rasi" = "css";
       };

@@ -1,6 +1,7 @@
 {...}: {
   main = rec {
     baseUrl = "http://sonarr:8989";
+    apiKey = "c5783cdc82d244e6b138be2988397813";
     deleteOldCustomFormats = true;
     replaceExistingCustomFormats = true;
     mediaNaming = {

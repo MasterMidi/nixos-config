@@ -30,23 +30,23 @@ in {
     options = ["x-systemd.automount" "noauto"];
   };
 
-  fileSystems."/mnt/pool" = {
-    device = "/mnt/hdd:/mnt/ssd";
-    fsType = "fuse.mergerfs";
-    options = [
-      "defaults"
-      "nonempty"
-      "allow_other"
-      "inodecalc=hybrid-hash"
-      "cache.files=off"
-      "moveonenospc=true"
-      "dropcacheonclose=true"
-      "minfreespace=10G"
-      "fsname=mergerfs"
+  # fileSystems."/mnt/pool" = {
+  #   device = "/mnt/hdd:/mnt/ssd";
+  #   fsType = "fuse.mergerfs";
+  #   options = [
+  #     "defaults"
+  #     "nonempty"
+  #     "allow_other"
+  #     "inodecalc=hybrid-hash"
+  #     "cache.files=off"
+  #     "moveonenospc=true"
+  #     "dropcacheonclose=true"
+  #     "minfreespace=10G"
+  #     "fsname=mergerfs"
 
-      "policy=custom:${script}"
-      "category.create=custom"
-    ];
-  };
+  #     "policy=custom:${script}"
+  #     "category.create=custom"
+  #   ];
+  # };
 }
 

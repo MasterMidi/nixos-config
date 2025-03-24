@@ -22,7 +22,7 @@ in {
         "${pkgs.wl-clipboard}/bin/wl-paste --watch cliphist store" # start clipboard manager
         "${pkgs.networkmanagerapplet}/bin/nm-applet --indicator" # start network manager applet
         "${pkgs.blueman}/bin/blueman-applet" # start bluetooth tray icon
-        "${pkgs.xwaylandvideobridge}/bin/xwaylandvideobridge" # start xwayland video bridge
+        "${pkgs.kdePackages.xwaylandvideobridge}/bin/kdePackages.xwaylandvideobridge" # start xwayland video bridge
       ];
 
       monitor = [
@@ -130,11 +130,11 @@ in {
         # "stayfocused, title:^()$,class:^(steam)$" # fix steam menues losing focus
 
         "stayfocused, class:^(pinentry-)" # fix pinentry losing focus
-        "opacity 0.0 override 0.0 override,class:^(xwaylandvideobridge)$"
-        "noanim,class:^(xwaylandvideobridge)$"
-        "noinitialfocus,class:^(xwaylandvideobridge)$"
-        "maxsize 1 1,class:^(xwaylandvideobridge)$"
-        "noblur,class:^(xwaylandvideobridge)$"
+        "opacity 0.0 override 0.0 override,class:^(kdePackages.xwaylandvideobridge)$"
+        "noanim,class:^(kdePackages.xwaylandvideobridge)$"
+        "noinitialfocus,class:^(kdePackages.xwaylandvideobridge)$"
+        "maxsize 1 1,class:^(kdePackages.xwaylandvideobridge)$"
+        "noblur,class:^(kdePackages.xwaylandvideobridge)$"
       ];
     };
   };

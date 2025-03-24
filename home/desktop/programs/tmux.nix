@@ -11,6 +11,6 @@
   #   '';
   # };
   programs.zellij = {
-    enable = true;
+    enable = false;
   };
 }

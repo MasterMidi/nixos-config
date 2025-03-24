@@ -44,6 +44,21 @@
     enable = true;
   };
 
+  home-manager.users.michael.wayland.windowManager.hyprland.settings = {
+    monitor = [
+      # "HDMI-A-2, 1920x1080@60, 0x230, 0.93" # matches the dpi, but creates a gap around apps and poor font rendering
+      "HDMI-A-1, 1920x1080@60, 0x275, 1"
+      "HDMI-A-2, 1920x1080@60, 0x275, 1"
+      "HDMI-A-3, 1920x1080@60, 0x275, 1"
+
+      # Xiaomi mi 34" curved monitor.
+      # DON'T enable VRR/FreeSync, will flicker screen
+      "DP-1, 3440x1440@144, 1920x0, 1"
+      "DP-2, 3440x1440@144, 1920x0, 1"
+      "DP-3, disable"
+    ];
+  };
+
   xdg.portal = {
     enable = true;
     xdgOpenUsePortal = false; # DON'T EVER SET THIS TRUE WILL RUIN XDG-OPEN FUNCTIONALITY

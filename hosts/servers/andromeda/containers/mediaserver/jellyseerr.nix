@@ -6,7 +6,7 @@
   virtualisation.oci-containers.compose.mediaserver = {
     containers = {
       jellyseerr = {
-        image = "ghcr.io/hotio/jellyseerr";
+        image = "ghcr.io/fallenbagel/jellyseerr:develop";
         autoUpdate = "registry";
         networking = {
           networks = ["default"];
@@ -19,10 +19,11 @@
           };
         };
         environment = {
-          PGID = builtins.toString config.users.groups.users.gid;
-          PUID = "1000";
+          # PGID = builtins.toString config.users.groups.users.gid;
+          # PUID = "1000";
           TZ = config.time.timeZone;
-          UMASK = "002";
+          PORT = "5055";
+          # UMASK = "002";
         };
         volumes = [
           "/mnt/ssd/services/jellyseerr/config:/app/config:rw"

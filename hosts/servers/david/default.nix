@@ -7,6 +7,7 @@
   imports = [
     # Include the results of the hardware scan.
     # ./monitoring
+    ./secrets
     ./hardware-configuration.nix
     # ./nginx.nix
   ];

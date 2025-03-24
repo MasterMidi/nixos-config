@@ -1,10 +1,11 @@
-{config,...}:{
+{config, ...}: {
   virtualisation.oci-containers.compose.mediaserver = {
     containers = {
-      traefik={
+      traefik = {
         image = "traefik:v3.2";
         networking = {
           networks = ["default"];
+          aliases = ["traefik"];
           ports = {
             dashboard = {
               host = 8081;
@@ -64,7 +65,7 @@
           # Experimental features
           "--experimental.fastProxy" # a new proxy implementation, no http2 support
         ];
-        volumes=[
+        volumes = [
           "/mnt/ssd/services/traefik/config:/config:rw"
           "/var/run/podman/podman.sock:/var/run/docker.sock:ro"
         ];

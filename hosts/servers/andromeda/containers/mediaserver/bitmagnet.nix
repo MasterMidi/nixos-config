@@ -12,7 +12,7 @@
       bitmagnetgluetun = rec {
         image = "qmcgaw/gluetun:latest";
         networking = {
-          networks = ["bitmagnet"];
+          networks = ["default" "bitmagnet"];
           aliases = ["bitmagnet"];
           ports = let
             dht-port = lib.toInt bitmagnet.environment.DHT_SERVER_PORT;
@@ -60,7 +60,7 @@
       };
 
       bitmagnet = rec {
-        image = "ghcr.io/bitmagnet-io/bitmagnet:v0.10.0-beta.5";
+        image = "ghcr.io/bitmagnet-io/bitmagnet:v0.10.0-beta.7";
         networking = {
           networks = ["container:bitmagnetgluetun"];
           # aliases = ["bitmagnet"];

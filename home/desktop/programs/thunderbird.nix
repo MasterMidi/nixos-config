@@ -30,7 +30,7 @@
         address = "home@michael-graversen.dk";
         userName = "home@michael-graversen.dk";
         realName = "Michael Andreas Graversen";
-        passwordCommand = "cat ${config.sops.secrets.HOME_MICHAEL_GRAVERSEN_DK.path}";
+        passwordCommand = "cat ${config.sops.secrets.HOME_MICHAEL_GRAVERSEN_DK.path}"; # Maybe create an EMAIL secret, that has sub secrets, if possible
         signature.text = ''
           Mvh. ${realName}
         '';

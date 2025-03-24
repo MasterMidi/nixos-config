@@ -10,6 +10,8 @@
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ./sound.nix
+    ./secrets
+    ./development
     # ./testing.nix
   ];
 
@@ -144,8 +146,6 @@
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.michael = {
-    isNormalUser = true;
-    description = "michael";
     extraGroups = ["networkmanager" "wheel" "dialout"];
   };
 
@@ -233,5 +233,9 @@
     openFirewall = true;
     user = "michael";
     group = "users";
+  };
+
+  lollypops.deployment = {
+    config-dir = "/etc/nixos/";
   };
 }

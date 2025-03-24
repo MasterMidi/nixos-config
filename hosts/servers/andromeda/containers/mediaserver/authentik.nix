@@ -1,4 +1,4 @@
-{config,...}:{
+{config, ...}: {
   services.cloudflared.tunnels.andromeda.ingress = {
     "auth.mgrlab.dk" = "http://localhost:${toString config.virtualisation.oci-containers.compose.mediaserver.containers.authentik-server.networking.ports.http.host}";
   };
@@ -25,7 +25,7 @@
         commands = ["server"];
         environment = {
           # AUTHENTIK_COOKIE_DOMAIN = ".mgrlab.dk";
-          AUTHENTIK_HOST = "http://authentik-server:9000";  # This is crucial
+          AUTHENTIK_HOST = "http://authentik-server:9000"; # This is crucial
           AUTHENTIK_HOST_BROWSER = "https://auth.mgrlab.dk";
           AUTHENTIK_ERROR_REPORTING__ENABLED = "false";
           AUTHENTIK_REDIS__HOST = "authentik-redis";
@@ -48,7 +48,7 @@
         labels = [
           "traefik.enable=true"
           "traefik.port=9000"
-          "traefik.http.routers.authentik.rule=Host(`auth.mgrlab.dk`) && PathPrefix(`/outpost.goauthentik.io/`)"
+          "traefik.http.routers.authentik.rule=Host(`auth.mgrlab.dk`)"
           "traefik.http.middlewares.authentik.forwardauth.address=https://auth.mgrlab.dk/outpost.goauthentik.io/auth/traefik"
           "traefik.http.middlewares.authentik.forwardauth.trustForwardHeader=true"
           "traefik.http.middlewares.authentik.forwardauth.authResponseHeaders=X-authentik-username,X-authentik-groups,X-authentik-entitlements,X-authentik-email,X-authentik-name,X-authentik-uid,X-authentik-jwt,X-authentik-meta-jwks,X-authentik-meta-outpost,X-authentik-meta-provider,X-authentik-meta-app,X-authentik-meta-version"
@@ -122,7 +122,7 @@
       #     "kuma.authentik.http.name=Authentik Server"
       #     "kuma.authentik.http.url=https://auth.mgrlab.dk"
       #   ];
-      # }; 
+      # };
       authentik-redis = {
         image = "docker.io/library/redis:7-alpine";
         autoUpdate = "registry";

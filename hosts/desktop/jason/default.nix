@@ -7,13 +7,13 @@
     ./graphical.nix
     ./hardware-configuration.nix
     ./containers
-    ./secrets
     ./security.nix
     ./services
     ./sound.nix
     ./system.nix
     ./virtualization.nix
     ./programs
+    ./secrets
   ];
 
   # Enable CUPS to print documents.
@@ -55,6 +55,7 @@
     tree
     lm_sensors
     git
+    devenv
   ];
 
   services.tailscale.enable = true;
@@ -78,6 +79,7 @@
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
+  services.openssh.settings.PermitRootLogin = "yes"; # TODO temporary, REMOVE!!!!
 
   # Open ports in the firewall.
   networking.firewall = {

@@ -4,27 +4,6 @@
 {
   description = "NixOS configuration";
 
-  nixConfig = {
-    extra-substituters = [
-      "https://cache.nixos.org"
-      "https://nix-community.cachix.org"
-      "https://cache.garnix.io"
-      "https://numtide.cachix.org"
-      "https://raspberry-pi-nix.cachix.org"
-      "https://nix-gaming.cachix.org"
-      "https://cuda-maintainers.cachix.org"
-    ];
-    extra-trusted-public-keys = [
-      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-      "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
-      "numtide.cachix.org-1:2ps1kLBUWjxIneOy1Ik6cQjb41X0iXVXeHigGmycPPE="
-      "raspberry-pi-nix.cachix.org-1:WmV2rdSangxW0rZjY/tBvBDSaNFQ3DyEQsVw8EvHn9o="
-      "nix-gaming.cachix.org-1:nbjlureqMbRAxR1gJ/f3hxemL9svXaZF/Ees8vCUUs4="
-      "cuda-maintainers.cachix.org-1:0dq3bujKpuEPMCX6U4WylrUDZ9JyUG0VpVZa7CNfq5E="
-    ];
-  };
-
   inputs = {
     # Package repos
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
@@ -156,12 +135,12 @@
           system = "x86_64-linux";
           modules = [
             ./hosts/desktop/jason
+            ./hosts/shared/networking
             nixosModules.configs.refind
             nixosModules.configs.vfio
             nixosModules.configs.compose
             nixosModules.services.metrics
             nixosModules.services.qbittorrent
-            nixosModules.services.recyclarr
             nixosModules.services.qbitmanage
 
             inputs.disko.nixosModules.disko
@@ -182,6 +161,7 @@
           system = "x86_64-linux";
           modules = [
             ./hosts/desktop/daniel
+            ./hosts/shared/networking
             inputs.nixos-hardware.nixosModules.lenovo-ideapad-slim-5
             inputs.nixos-hardware.nixosModules.common-cpu-amd-pstate
 
@@ -203,8 +183,8 @@
           modules = [
             ./hosts/servers/david
             ./hosts/servers/shared/core
+            ./hosts/shared/networking
             nixosModules.configs.compose
-            nixosModules.services.recyclarr
             nixosModules.services.qbittorrent
             # srvos.nixosModules.server
             # srvos.nixosModules.common
@@ -226,6 +206,7 @@
           modules = [
             ./hosts/servers/andromeda
             ./hosts/servers/shared/core
+            ./hosts/shared/networking
             nixosModules.configs.compose
             nixosModules.services.qbittorrent
             # srvos.nixosModules.server
@@ -249,6 +230,7 @@
           modules = [
             ./hosts/servers/nova
             ./hosts/servers/shared/core
+            nixosModules.configs.compose
             inputs.srvos.nixosModules.mixins-terminfo
             inputs.disko.nixosModules.disko
           ];
@@ -280,7 +262,7 @@
           modules = [
             ./hosts/servers/polaris
             ./hosts/servers/shared/core
-            ./hosts/shared/core
+            ./hosts/shared/networking
             inputs.raspberry-pi-nix.nixosModules.raspberry-pi
             # inputs.nixos-hardware.nixosModules.raspberry-pi-5
             inputs.home-manager.nixosModules.home-manager

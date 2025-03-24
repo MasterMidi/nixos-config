@@ -37,9 +37,30 @@ pkgs.devshell.mkShell {
     # }
     {
       name = "nix-update";
-      category = "main";
+      category = "nixos";
       help = "good luck";
       command = "${./scripts/update.sh}";
+    }
+
+    {
+      name = "dply";
+      category = "deploy";
+      help = "deploy to remote server";
+      command = "nix run . -- $1";
+    }
+
+    {
+      name = "evl";
+      category = "nixos";
+      help = "evaluate nixos configuration";
+      command = "nix eval --impure .#nixosConfigurations.$1";
+    }
+
+    {
+      name = "usops";
+      category = "secrets";
+      help = "updates all sops secrets with the current keys in .sops.yaml";
+      command = "${./scripts/update-sops-keys.sh}";
     }
   ];
 }

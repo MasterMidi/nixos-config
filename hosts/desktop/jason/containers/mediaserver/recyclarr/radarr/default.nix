@@ -1,6 +1,7 @@
 {...}: {
   default = rec {
     baseUrl = "http://radarr:7878";
+    apiKey = "51732014769e475a9455c1f5cd8f18d1";
     deleteOldCustomFormats = true;
     replaceExistingCustomFormats = true;
     mediaNaming = {

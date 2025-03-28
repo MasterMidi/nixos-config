@@ -27,7 +27,7 @@
     };
   };
 
-  nixpkgs.config = lib.mkForce {
+  nixpkgs.config = {
     allowUnfree = true;
     extra-substituters = [
       "https://cache.nixos.org"

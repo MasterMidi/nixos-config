@@ -51,7 +51,6 @@
                   }
                 ];
                 trash_ids = [
-                  "d6e9318c875905d6cfb5bee961afcea9"
                   "a570d4a0e56a2874b64e5bfa55202a1b"
                   "923b6abef9b17f937fab56cfcf89e1f1"
                   "b974a6cd08c1066250f1f177d7aa1225"
@@ -137,7 +136,6 @@
                   }
                 ];
                 trash_ids = [
-                  "d6e9318c875905d6cfb5bee961afcea9"
                   "fb3ccc5d5cc8f77c9055d4cb4561dded"
                   "66926c8fa9312bc74ab71bf69aae4f4a"
                   "fa857662bad28d5ff21a6e611869a0ff"
@@ -323,7 +321,6 @@
                   }
                 ];
                 trash_ids = [
-                  "ae575f95ab639ba5d15f663bf019e3e8"
                   "949c16fe0a8147f50ba82cc2df9411c9"
                   "ed7f1e315e000aef424a58517fa48727"
                   "096e406c92baa713da4a72d88030b815"
@@ -409,7 +406,6 @@
                   }
                 ];
                 trash_ids = [
-                  "ae575f95ab639ba5d15f663bf019e3e8"
                   "e6258996055b9fbab7e9cb2f75819294"
                   "58790d4e2fdcd9733aa7ae68ba2bb503"
                   "d84935abd3f8556dcd51d4f27e22d0a6"

@@ -1,61 +1,9 @@
-{pkgs, ...}: let
-  pangolinConfig = (pkgs.formats.yaml {}).generate "config.yml" {
-    app = {
-      dashboard_url = "https://tunnel.mgrlab.dk";
-      base_domain = "mgrlab.dk";
-      log_level = "info";
-      save_logs = false;
-    };
-
-    server = {
-      external_port = 3000;
-      internal_port = 3001;
-      next_port = 3002;
-      internal_hostname = "pangolin";
-      session_cookie_name = "p_session_token";
-      resource_access_token_param = "p_token";
-      resource_session_request_param = "p_session_request";
-    };
-
-    traefik = {
-      cert_resolver = "letsencrypt";
-      http_entrypoint = "web";
-      https_entrypoint = "websecure";
-      prefer_wildcard_cert = true;
-    };
-
-    gerbil = {
-      start_port = 51820;
-      base_endpoint = "tunnel.mgrlab.dk";
-      use_subdomain = false;
-      block_size = 24;
-      site_block_size = 30;
-      subnet_group = "138.199.154.0/24";
-    };
-
-    rate_limits = {
-      global = {
-        window_minutes = 1;
-        max_requests = 100;
-      };
-    };
-
-    users = {
-      server_admin = {
-        email = "home@michael-graversen.dk";
-        password = "Servurb42!";
-      };
-    };
-
-    flags = {
-      require_email_verification = true;
-      disable_signup_without_invite = true;
-      disable_user_create_org = true;
-      allow_raw_resources = true;
-      allow_base_domain_resources = true;
-    };
-  };
-
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}: let
   traefikConfig = (pkgs.formats.yaml {}).generate "traefik_config.yml" {
     api = {
       insecure = true;
@@ -211,7 +159,7 @@ in {
         };
         volumes = [
           "/containers/pangolin/config:/app/config"
-          "${pangolinConfig}:/app/config/config.yml:ro"
+          "${config.sops.templates.PANGOLIN_CONFIG.path}:/app/config/config.yml:ro"
         ];
         healthcheck = {
           cmd = ["CMD" "curl" "-f" "http://localhost:3001/api/v1/"];
@@ -273,6 +221,66 @@ in {
           CF_API_KEY = "35c72073040b7ff45c4beee2fa30decc5f336";
           CF_API_EMAIL = "home@michael-graversen.dk";
         };
+      };
+    };
+  };
+
+  sops.templates.PANGOLIN_CONFIG = {
+    restartUnits = [config.virtualisation.oci-containers.compose.tunnel.containers.pangolin.unitName];
+    content = lib.generators.toYAML {} {
+      app = {
+        dashboard_url = "https://tunnel.mgrlab.dk";
+        base_domain = "mgrlab.dk";
+        log_level = "info";
+        save_logs = false;
+      };
+
+      server = {
+        external_port = 3000;
+        internal_port = 3001;
+        next_port = 3002;
+        internal_hostname = "pangolin";
+        session_cookie_name = "p_session_token";
+        resource_access_token_param = "p_token";
+        resource_session_request_param = "p_session_request";
+      };
+
+      traefik = {
+        cert_resolver = "letsencrypt";
+        http_entrypoint = "web";
+        https_entrypoint = "websecure";
+        prefer_wildcard_cert = true;
+      };
+
+      gerbil = {
+        start_port = 51820;
+        base_endpoint = "tunnel.mgrlab.dk";
+        use_subdomain = false;
+        block_size = 24;
+        site_block_size = 30;
+        subnet_group = "138.199.154.0/24";
+      };
+
+      rate_limits = {
+        global = {
+          window_minutes = 1;
+          max_requests = 100;
+        };
+      };
+
+      users = {
+        server_admin = {
+          email = "home@michael-graversen.dk";
+          password = config.sops.placeholder.PANGOLING_ADMIN_PASSWORD;
+        };
+      };
+
+      flags = {
+        require_email_verification = true;
+        disable_signup_without_invite = true;
+        disable_user_create_org = true;
+        allow_raw_resources = true;
+        allow_base_domain_resources = true;
       };
     };
   };

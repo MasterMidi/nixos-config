@@ -191,16 +191,6 @@
   services.dbus.packages = [pkgs.gcr];
   services.gnome.gnome-keyring.enable = true;
 
-  virtualisation.docker = {
-    enable = true;
-    rootless = {
-      enable = true;
-      setSocketVariable = true;
-    };
-    enableOnBoot = true;
-    storageDriver = "btrfs";
-  };
-
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
@@ -227,13 +217,6 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.05"; # Did you read the comment?
-
-  services.jellyfin = {
-    enable = true;
-    openFirewall = true;
-    user = "michael";
-    group = "users";
-  };
 
   lollypops.deployment = {
     config-dir = "/etc/nixos/";

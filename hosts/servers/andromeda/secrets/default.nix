@@ -103,6 +103,11 @@
       group = config.users.groups.users.name;
       sopsFile = ./secrets.sops.yaml;
     };
+    QBITMANAGE_GOTIFY_KEY = {
+      owner = config.users.users.michael.name;
+      group = config.users.groups.users.name;
+      sopsFile = ./secrets.sops.yaml;
+    };
     QBIT_PUBLIC_PASSWORD = {
       owner = config.users.users.michael.name;
       group = config.users.groups.users.name;

@@ -1,7 +1,8 @@
-{config,...}:{
-  services.cloudflared.tunnels.andromeda.ingress = {
-    "jellyfin.mgrlab.dk" = "http://localhost:${toString config.virtualisation.oci-containers.compose.mediaserver.containers.traefik.networking.ports.local.host}";
-  };
+{config, ...}: {
+  imports = [
+    ./fonts.nix
+    ./jellysearch.nix
+  ];
 
   virtualisation.oci-containers.compose.mediaserver = {
     containers = {

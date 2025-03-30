@@ -17,10 +17,9 @@ in {
     ./hoarder.nix
     ./homarr.nix
     ./immich.nix
-    ./jellyfin.nix
-    ./jellysearch.nix
+    ./jellyfin
     ./jellyseerr.nix
-		./newt.nix
+    ./newt.nix
     ./prowlarr.nix
     ./qbit
     ./radarr.nix
@@ -42,7 +41,7 @@ in {
   # Containers
   virtualisation.oci-containers.compose.mediaserver = {
     enable = true;
-		networks.default = {};
+    networks.default = {};
     containers = rec {
       # titlecardmaker = {
       #   image = "docker.io/collinheist/titlecardmaker:latest";

@@ -1,17 +1,21 @@
-{config,lib,...}:{
+{
+  config,
+  lib,
+  ...
+}: {
   virtualisation.oci-containers.compose.mediaserver = {
     containers = {
-      recyclarr={
-        image= "ghcr.io/recyclarr/recyclarr";
+      recyclarr = {
+        image = "ghcr.io/recyclarr/recyclarr";
         autoUpdate = "registry";
-        networking= {networks = ["default"];};
+        networking = {networks = ["default"];};
         user = "root";
-        volumes=[
+        volumes = [
           "/mnt/ssd/services/recyclarr/config:/config"
           "${config.sops.templates.RECYCLARR_CONF.path}:/config/recyclarr.yml"
           "${config.sops.templates.RECYCLARR_SETTINGS.path}:/config/settings.yml"
         ];
-        environment={
+        environment = {
           TZ = config.time.timeZone;
         };
       };
@@ -598,9 +602,9 @@
       content = lib.generators.toYAML {} {
         notifications = {
           apprise = {
-              mode = "stateful";
-              base_url = "http://apprise:8000";
-              key = config.sops.placeholder.RECYCLARR_APPRISE_KEY;
+            mode = "stateful";
+            base_url = "http://apprise:8000";
+            key = config.sops.placeholder.RECYCLARR_APPRISE_KEY;
           };
         };
       };

@@ -51,7 +51,7 @@
 
   nix = {
     # set the path for channels compat
-    channel.enable = true;
+    channel.enable = false;
     nixPath = [
       "nixpkgs=${inputs.nixpkgs}"
       "home-manager=/etc/nix/flake-channels/home-manager"

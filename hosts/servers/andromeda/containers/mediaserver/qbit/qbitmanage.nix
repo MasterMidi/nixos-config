@@ -250,17 +250,17 @@
       webhooks = {
         error = "apprise";
         run_start = null;
-        run_end = "apprise";
+        run_end = null;
         function = {
           recheck = null;
           cat_update = null;
           tag_update = null;
-          rem_unregistered = null;
+          rem_unregistered = "apprise";
           tag_tracker_error = null;
-          rem_orphaned = null;
-          tag_nohardlinks = null;
+          rem_orphaned = "apprise";
+          tag_nohardlinks = "apprise";
           share_limits = null;
-          cleanup_dirs = null;
+          cleanup_dirs = "apprise";
         };
       };
     };

@@ -26,6 +26,8 @@ pkgs.devshell.mkShell {
 
     flake-checker # healthcheck for flake.lock files
     deploy-rs # deploy nixos to remote servers
+
+    nixos-facter
   ];
 
   commands = with pkgs; [

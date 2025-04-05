@@ -8,7 +8,7 @@
     networks.qbit-public = {};
     containers = rec {
       qbit = {
-        image = "ghcr.io/hotio/qbittorrent:release-5.0.2"; # until qbitmanage update
+        image = "ghcr.io/hotio/qbittorrent:release-5.0.4";
         autoUpdate = "registry";
         networking = {
           networks = ["default"]; # dont support multiple networks because of vpn setup it seems
@@ -93,30 +93,30 @@
   };
 
   sops.templates.WIREGUARD_AIRVPN_CONF = {
-      owner = config.users.users.michael.name;
-      group = config.users.groups.users.name;
-      restartUnits = [
-        config.virtualisation.oci-containers.compose.mediaserver.containers.qbit.unitName
-        # config.virtualisation.oci-containers.compose.mediaserver.containers.qbit-private.unitName
-      ];
-      content = lib.generators.toINI {} {
-        Interface = {
-          Address = "10.142.244.184/32,fd7d:76ee:e68f:a993:77f5:2a70:242b:6a1a/128";
-          PrivateKey = config.sops.placeholder.AIRVPN_WIREGUARD_PRIVATE_KEY;
-          MTU = 1320;
-          DNS = "10.128.0.1, fd7d:76ee:e68f:a993::1";
-        };
-        Peer = {
-          PublicKey = "PyLCXAQT8KkM4T+dUsOQfn+Ub3pGxfGlxkIApuig+hk=";
-          PresharedKey = config.sops.placeholder.AIRVPN_WIREGUARD_PRESHARED_KEY;
-          Endpoint = "europe3.vpn.airdns.org:1637";
-          AllowedIPs = "0.0.0.0/0,::/0";
-          PersistentKeepalive = 15;
-        };
+    owner = config.users.users.michael.name;
+    group = config.users.groups.users.name;
+    restartUnits = [
+      config.virtualisation.oci-containers.compose.mediaserver.containers.qbit.unitName
+      # config.virtualisation.oci-containers.compose.mediaserver.containers.qbit-private.unitName
+    ];
+    content = lib.generators.toINI {} {
+      Interface = {
+        Address = "10.142.244.184/32,fd7d:76ee:e68f:a993:77f5:2a70:242b:6a1a/128";
+        PrivateKey = config.sops.placeholder.AIRVPN_WIREGUARD_PRIVATE_KEY;
+        MTU = 1320;
+        DNS = "10.128.0.1, fd7d:76ee:e68f:a993::1";
+      };
+      Peer = {
+        PublicKey = "PyLCXAQT8KkM4T+dUsOQfn+Ub3pGxfGlxkIApuig+hk=";
+        PresharedKey = config.sops.placeholder.AIRVPN_WIREGUARD_PRESHARED_KEY;
+        Endpoint = "europe3.vpn.airdns.org:1637";
+        AllowedIPs = "0.0.0.0/0,::/0";
+        PersistentKeepalive = 15;
       };
     };
+  };
 
-	# Systemd service to update uptime kuma port checker based on qbit log: Detected external IP. IP: "xxx.xxx.xxx.xxx"
+  # Systemd service to update uptime kuma port checker based on qbit log: Detected external IP. IP: "xxx.xxx.xxx.xxx"
 
   # Systemd service with script to update automatic trackerlist
   # systemd.services.qbittorrent-trackers = {

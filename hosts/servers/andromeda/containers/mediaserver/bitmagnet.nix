@@ -1,11 +1,15 @@
-{config,lib,...}:{
+{
+  config,
+  lib,
+  ...
+}: {
   services.cloudflared.tunnels.andromeda.ingress = {
     "bitmagnet.mgrlab.dk" = "http://localhost:${toString config.virtualisation.oci-containers.compose.mediaserver.containers.traefik.networking.ports.local.host}";
   };
 
   virtualisation.oci-containers.compose.mediaserver = {
     networks.bitmagnet = {
-      subnets= ["10.89.100.0/24"];
+      subnets = ["10.89.100.0/24"];
       gateways = ["10.89.100.1"];
     };
     containers = rec {
@@ -36,8 +40,8 @@
         environment = {
           FIREWALL_VPN_INPUT_PORTS = bitmagnet.environment.DHT_SERVER_PORT;
 
-          VPN_SERVICE_PROVIDER="airvpn";
-          VPN_TYPE="wireguard";
+          VPN_SERVICE_PROVIDER = "airvpn";
+          VPN_TYPE = "wireguard";
           WIREGUARD_ADDRESSES = "10.142.244.184/32,fd7d:76ee:e68f:a993:77f5:2a70:242b:6a1a/128";
           SERVER_REGIONS = "Europe";
         };
@@ -45,11 +49,11 @@
           WIREGUARD_PRIVATE_KEY.path = config.sops.secrets.AIRVPN_WIREGUARD_PRIVATE_KEY.path;
           WIREGUARD_PRESHARED_KEY.path = config.sops.secrets.AIRVPN_WIREGUARD_PRESHARED_KEY.path;
         };
-				capabilities = ["NET_ADMIN"];
+        capabilities = ["NET_ADMIN"];
         devices = ["/dev/net/tun"];
-				extraOptions = [
+        extraOptions = [
           "--add-host=${builtins.head bitmagnet-postgres.networking.aliases}:10.89.100.5"
-				];
+        ];
         labels = [
           "traefik.enable=true"
           "traefik.http.routers.bitmagnet.rule=Host(`bitmagnet.mgrlab.dk`)"
@@ -60,7 +64,7 @@
       };
 
       bitmagnet = rec {
-        image = "ghcr.io/bitmagnet-io/bitmagnet:v0.10.0-beta.7";
+        image = "ghcr.io/bitmagnet-io/bitmagnet:v0.10.0";
         networking = {
           networks = ["container:bitmagnetgluetun"];
           # aliases = ["bitmagnet"];

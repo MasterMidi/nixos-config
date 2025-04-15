@@ -17,6 +17,7 @@ in {
     ./hoarder.nix
     ./homarr.nix
     ./immich.nix
+		./jdupes.nix
     ./jellyfin
     ./jellyseerr.nix
     ./newt.nix

@@ -1,16 +1,12 @@
-{
-  config,
-  pkgs,
-  ...
-}: {
+{config, ...}: {
   virtualisation.oci-containers.compose.mediaserver = {
-    containers = rec {
+    containers = {
       cross-seed = {
         image = "ghcr.io/cross-seed/cross-seed:6";
         user = "${builtins.toString config.users.users.michael.uid}:${builtins.toString config.users.groups.users.gid}";
         commands = ["daemon"];
         networking = {
-          networks = ["default:ip=10.89.1.101"];
+          networks = ["default"];
           aliases = ["cross-seed"];
           ports = {
             http = {

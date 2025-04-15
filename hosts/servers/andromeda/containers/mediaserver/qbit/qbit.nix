@@ -159,5 +159,3 @@
 
   # Systemd service with script to update torrents with bad trackers
 }
-# curl -XPOST cross-seed-public:2469/api/webhook?apikey=ef5d258cb193893abc952a7ee4d3614c73e060daf8411819 --data-urlencode "infoHash=%I"
-

@@ -12,6 +12,7 @@
     ./sound.nix
     ./secrets
     ./development
+    ./home-assistant.nix
     # ./testing.nix
   ];
 

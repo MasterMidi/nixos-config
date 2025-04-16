@@ -18,6 +18,7 @@
   '';
 in {
   imports = [
+		./builders.nix
     ./deployment.nix
     ./nix.nix
     ./packages.nix

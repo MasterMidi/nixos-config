@@ -5,4 +5,5 @@
 	qbitmanage = import ./qbitmanage;
   qbittorrent = import ./qbittorrent;
   metrics = import ./metrics;
+	otbr = import ./openthread-border-router;
 }

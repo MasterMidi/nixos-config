@@ -165,6 +165,7 @@
             ./hosts/shared/networking
             inputs.nixos-hardware.nixosModules.lenovo-ideapad-slim-5
             inputs.nixos-hardware.nixosModules.common-cpu-amd-pstate
+            nixosModules.services.otbr
 
             inputs.home-manager.nixosModules.home-manager
             {

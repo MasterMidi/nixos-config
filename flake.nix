@@ -14,7 +14,7 @@
     # Premade modules
     nixos-hardware.url = "github:NixOS/nixos-hardware/master"; # Hardware specific setup modules
     srvos.url = "github:nix-community/srvos"; # Server specific modules
-    raspberry-pi-nix.url = "github:tstat/raspberry-pi-nix"; # easily create pi images
+    raspberry-pi-nix.url = "github:cmyk/raspberry-pi-nix"; # easily create pi images
     nix-gaming.url = "github:fufexan/nix-gaming"; # gaming related
     jovian = {
       url = "github:Jovian-Experiments/Jovian-NixOS";
@@ -102,6 +102,7 @@
         overlays.additions
         overlays.modifications
         overlays.packages
+        inputs.raspberry-pi-nix.overlays.core
       ];
 
       # Custom packages and modifications, exported as overlays
@@ -266,17 +267,18 @@
             ./hosts/servers/shared/core
             ./hosts/shared/networking
             inputs.raspberry-pi-nix.nixosModules.raspberry-pi
-            # inputs.nixos-hardware.nixosModules.raspberry-pi-5
-            inputs.home-manager.nixosModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.extraSpecialArgs = {inherit inputs;};
-              home-manager.users.michael.imports = [
-                ./hosts/servers/polaris/home
-                ./home/shared/core
-              ];
-            }
+            inputs.raspberry-pi-nix.nixosModules.sd-image
+            inputs.nixos-hardware.nixosModules.raspberry-pi-5
+            # inputs.home-manager.nixosModules.home-manager
+            # {
+            #   home-manager.useGlobalPkgs = true;
+            #   home-manager.useUserPackages = true;
+            #   home-manager.extraSpecialArgs = {inherit inputs;};
+            #   home-manager.users.michael.imports = [
+            #     ./hosts/servers/polaris/home
+            #     ./home/shared/core
+            #   ];
+            # }
           ];
         };
       };

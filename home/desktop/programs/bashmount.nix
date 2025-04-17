@@ -1,3 +1,0 @@
-{...}: {
-  programs.bashmount.enable = true;
-}

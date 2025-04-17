@@ -1,9 +1,3 @@
 {
-  # List your module files here
-  bitmagnet = import ./bitmagnet;
-  recyclarr = import ./recyclarr;
-	qbitmanage = import ./qbitmanage;
-  qbittorrent = import ./qbittorrent;
-  metrics = import ./metrics;
-	otbr = import ./openthread-border-router;
+	openthread-border-router = import ./openthread-border-router;
 }

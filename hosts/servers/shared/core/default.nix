@@ -1,5 +1,0 @@
-{...}: {
-  imports = [
-    ./upgrade-diff.nix
-  ];
-}

@@ -1,0 +1,6 @@
+{...}: {
+  imports = [
+		./home
+    ./users.nix
+  ];
+}

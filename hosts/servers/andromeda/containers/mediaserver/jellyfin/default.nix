@@ -62,6 +62,12 @@
     };
   };
 
+  systemd.services.podman-mediaserver-jellyfin.serviceConfig = {
+    IOSchedulingClass = "best-effort"; # Default class but with lower priority
+    IOSchedulingPriority = 0; # Range is 0-7, with 7 being lowest priority
+    Nice = -10; # Medium-high priority
+  };
+
   hardware.nvidia-container-toolkit.enable = true; # Enable NVIDIA GPU support
   services.xserver.videoDrivers = ["nvidia"];
 

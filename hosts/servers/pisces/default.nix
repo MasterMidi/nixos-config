@@ -6,17 +6,20 @@
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
+    ./home-assistant.nix
   ];
+
+  facter.reportPath = ./facter.json;
 
   # Use the extlinux boot loader. (NixOS wants to enable GRUB by default)
   boot.loader.grub.enable = false;
   # Enables the generation of /boot/extlinux/extlinux.conf
   boot.loader.generic-extlinux-compatible.enable = true;
 
-  networking.hostName = "nixpi"; # Define your hostname.
+  networking.hostName = "pisces"; # Define your hostname.
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.<
-  networking.networkmanager.enable = true; # Easiest to use and most distros use this by default.
+  # networking.networkmanager.enable = true; # Easiest to use and most distros use this by default.
 
   # Set your time zone.
   time.timeZone = "Europe/Copenhagen";
@@ -56,12 +59,6 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    (vscode-with-extensions.override {
-      vscode = vscodium;
-      vscodeExtensions = with pkgs.vscode-extensions.extensions.x86_64-linux.open-vsx; [
-        jeanp413.open-remote-ssh
-      ];
-    })
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -78,6 +75,16 @@
   services.openssh = {
     enable = true;
     settings.PermitRootLogin = "yes";
+  };
+
+  hardware.enableRedistributableFirmware = true;
+  networking.wireless = {
+    enable = true;
+    networks = {
+      "FTTH_IH5728" = {
+        psk = "Garshud7Drew";
+      };
+    };
   };
 
   programs.nix-ld.enable = true;
@@ -98,22 +105,19 @@
   # accidentally delete configuration.nix.
   # system.copySystemConfiguration = true;
 
-  system.stateVersion = "23.11"; # Did you read the comment?
+  system.stateVersion = "24.11"; # Did you read the comment?
 
   lollypops.deployment = {
-    local-evaluation = true;
-    # Where on the remote the configuration (system flake) is placed
     config-dir = "/etc/nixos";
+    ssh.host = "pisces.local";
+  };
 
-    # SSH connection parameters
-    ssh.host = "${config.networking.hostName}.local";
-    ssh.user = "raspi";
-    ssh.command = "ssh";
-    ssh.opts = [];
+  boot.kernel.sysctl = {
+    "vm.swappiness" = 10; # Reduce swapping
+  };
 
-    # sudo options
-    sudo.enable = false;
-    sudo.command = "sudo";
-    sudo.opts = [];
+  zramSwap = {
+    enable = true;
+    algorithm = "zstd";
   };
 }

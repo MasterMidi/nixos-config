@@ -240,6 +240,8 @@
         };
 
         # TODO: turn into bluetooth speaker device
+        # TODO: make this a log aggregator for all systems
+        # TODO: Make this a dns-sinkhole
         # envpi = {
         #   system = "aarch64-linux";
         #   modules = [
@@ -249,14 +251,16 @@
         #   ];
         # };
 
-        # TODO: make this a log aggregator for all systems
-        # TODO: Make this a dns-sinkhole
-        nixpi = {
+        pisces = {
           system = "aarch64-linux";
           modules = [
-            ./hosts/servers/nixpi
+            "${inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
+            ./hosts/servers/pisces
             ./hosts/servers/shared/core
+            ./hosts/shared/networking
+            inputs.nixos-facter-modules.nixosModules.facter
             inputs.nixos-hardware.nixosModules.raspberry-pi-3
+            nixosModules.services.otbr
           ];
         };
 
@@ -304,7 +308,7 @@
       images = {
         polaris = self.nixosConfigurations.polaris.config.system.build.sdImage;
         envpi = self.nixosConfigurations.envpi.config.system.build.sdImage;
-        nixpi = self.nixosConfigurations.nixpi.config.system.build.sdImage;
+        pisces = self.nixosConfigurations.pisces.config.system.build.sdImage;
       };
 
       deploy.nodes.andromeda = {

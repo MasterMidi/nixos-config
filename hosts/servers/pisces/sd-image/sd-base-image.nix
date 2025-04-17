@@ -18,7 +18,7 @@
   sdImage.compressImage = false;
   # put your own configuration here, for example ssh keys:
   networking.networkmanager.enable = true;
-  networking.hostName = "nixpi";
+  networking.hostName = "pisces";
   services.openssh.enable = true;
 
   # Enable sudo for wheel group

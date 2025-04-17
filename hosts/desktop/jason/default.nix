@@ -40,7 +40,6 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    qbitmanage
     easyeffects # Audio equalizer and effects
     barrier # Software KVM
     gparted # has to be a systempackage or it wont open
@@ -108,5 +107,9 @@
 
   users.groups.media = {
     gid = 500;
+  };
+
+  lollypops.deployment = {
+    config-dir = "/etc/nix";
   };
 }

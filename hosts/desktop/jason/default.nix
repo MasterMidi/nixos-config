@@ -113,10 +113,10 @@
     config-dir = "/etc/nix";
   };
 
-	 services.nix-serve = {
+  services.nix-serve = {
     enable = true;
-		package = pkgs.nix-serve-ng;
-		openFirewall = true;
-		secretKeyFile = "/etc/nixos/hosts/destop/jason/cache-private-key.pem";
+    package = pkgs.nix-serve-ng;
+    openFirewall = true;
+    secretKeyFile = "/etc/nixos/hosts/desktop/jason/cache-private-key.pem";
   };
 }

@@ -15,7 +15,7 @@
   };
 
   # Set default shell to dash instead of bash
-  environment.binsh = "${pkgs.dash}/bin/dash";
+  # environment.binsh = "${pkgs.dash}/bin/dash";
 
   # Set time zone.
   time.timeZone = "Europe/Copenhagen";

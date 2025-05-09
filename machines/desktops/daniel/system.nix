@@ -4,17 +4,16 @@
 
   # Set kernel package
   boot.kernelPackages = pkgs.linuxPackages_zen;
-  # boot.kernelPackages = pkgs.linuxPackages_xanmod_latest;
-  # boot.kernelPackages = pkgs.linuxKernel.packages.linux_lqx;
-  # boot.kernelPackages = pkgs.linuxKernel.packages.linux_zen;
 
   # Bootloader
-  boot.loader.systemd-boot = {
-    enable = true;
-    editor = false;
-    configurationLimit = 5;
+  boot.loader = {
+    efi.canTouchEfiVariables = true;
+    systemd-boot = {
+      enable = true;
+      editor = false;
+      configurationLimit = 5;
+    };
   };
-  boot.loader.efi.canTouchEfiVariables = true;
 
   boot.plymouth = {
     enable = true;
@@ -30,20 +29,19 @@
   # Set your time zone.
   time.timeZone = "Europe/Copenhagen";
 
-  # Select internationalisation properties.
-  i18n.defaultLocale = "en_DK.UTF-8";
-
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "da_DK.UTF-8";
-    LC_IDENTIFICATION = "da_DK.UTF-8";
-    LC_MEASUREMENT = "da_DK.UTF-8";
-    LC_MONETARY = "da_DK.UTF-8";
-    LC_NAME = "da_DK.UTF-8";
-    LC_NUMERIC = "da_DK.UTF-8";
-    LC_PAPER = "da_DK.UTF-8";
-    LC_TELEPHONE = "da_DK.UTF-8";
-    LC_TIME = "da_DK.UTF-8";
-  };
-
+  # Power management
   powerManagement.cpuFreqGovernor = "schedutil";
+  services.auto-cpufreq = {
+    enable = true;
+    settings = {
+      battery = {
+        governor = "Powersave";
+        turbo = "never";
+      };
+      charger = {
+        governor = "performance";
+        turbo = "auto";
+      };
+    };
+  };
 }

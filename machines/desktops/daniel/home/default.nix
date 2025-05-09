@@ -4,5 +4,6 @@
 
   home-manager.users.michael.imports = [
     ./home.nix
+    ./hyprland.nix
   ];
 }

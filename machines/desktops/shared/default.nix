@@ -1,6 +1,7 @@
 {...}: {
   imports = [
-    ./sops.nix
+    ./home
+    ./secrets.nix
     ./ssh-keys.nix
   ];
 }

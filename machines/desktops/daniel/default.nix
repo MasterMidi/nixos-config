@@ -9,6 +9,7 @@
   imports = [
     ./development
     ./filesystem
+		./hardware
     ./home
     ./hardware.nix
     ./networking.nix
@@ -32,7 +33,7 @@
   # services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  
+
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget

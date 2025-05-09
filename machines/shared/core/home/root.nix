@@ -1,8 +1,13 @@
 {
+  pkgs,
   inputs,
   osConfig,
   ...
 }: {
+  imports = [
+    ./programs
+  ];
+
   colorScheme = inputs.nix-colors.colorSchemes.gruvbox-material-dark-medium;
 
   home.username = "root";

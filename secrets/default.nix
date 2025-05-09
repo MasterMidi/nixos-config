@@ -1,9 +1,10 @@
-{...}: {
+{inputs, ...}: {
+  imports = [inputs.sops-nix.nixosModules.sops];
   sops = {
     # This will add secrets.yml to the nix store
     # You can avoid this by adding a string to the full path instead, i.e.
     # sops.defaultSopsFile = "/root/.sops/secrets/example.yaml";
-    defaultSopsFile = ./secrets.sops.yaml;
+    defaultSopsFile = ./secrets.yaml;
     age = {
       # This will automatically import SSH keys as age keys
       sshKeyPaths = ["/etc/ssh/ssh_host_ed25519_key"];

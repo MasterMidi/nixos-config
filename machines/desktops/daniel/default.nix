@@ -47,15 +47,12 @@
 
   services.tailscale.enable = true;
 
-  services.mullvad-vpn.enable = true;
-  services.resolved.enable = true; # Needed for mullvad to work: https://discourse.nixos.org/t/connected-to-mullvadvpn-but-no-internet-connection/35803/8
-
   programs = {
     seahorse.enable = true;
     dconf.enable = true;
   };
 
-  services.gvfs.enable = true; # for nautlius to work with ttrash and network shares
+  services.gvfs.enable = true; # for nautlius to work with trash and network shares
   programs.mtr.enable = true;
   programs.gnupg.agent = {
     enable = true;

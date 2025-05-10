@@ -37,7 +37,7 @@
       };
     };
   };
-  # hardware.pulseaudio.extraConfig = "unload-module module-role-cork"; # Disable mute of audio streams when using phone stream (e.g. teamspeak)
+  # services.pulseaudio.extraConfig = "unload-module module-role-cork"; # Disable mute of audio streams when using phone stream (e.g. teamspeak)
 
   services.blueman.enable = true;
   hardware.bluetooth = {

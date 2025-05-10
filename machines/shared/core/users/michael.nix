@@ -11,4 +11,9 @@
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILFj+oDZwuwmlh7dx9LYlSSMBZ29ejGJ5BFVD4ILx6aN home@michael-graversen.dk"
     ];
   };
+
+  home-manager.users.michael = {
+    home.username = "michael";
+    home.homeDirectory = "/home/michael";
+  };
 }

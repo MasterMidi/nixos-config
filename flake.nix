@@ -12,6 +12,7 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions"; # All vscode extensions
 
     # Development tools
     rust-overlay = {
@@ -26,6 +27,18 @@
 
     # Theming and customization
     nix-colors.url = "github:misterio77/nix-colors"; # Theming in nix configuration
+    betterfox = {
+      url = "github:yokoffing/Betterfox"; # Firefox settings
+      flake = false;
+    };
+    firefox-gnome-theme = {
+      url = "github:rafaelmardojai/firefox-gnome-theme";
+      flake = false;
+    };
+    thunderbird-gnome-theme = {
+      url = "github:rafaelmardojai/thunderbird-gnome-theme";
+      flake = false;
+    };
 
     # nix/flake utilities
     devshell.url = "github:numtide/devshell";
@@ -49,8 +62,9 @@
           modules = nixosModules;
         };
         modules = [
-          {nixpkgs.config.allowUnfree = true;}
+          inputs.home-manager.nixosModules.home-manager
           ./machines/desktops/daniel
+          ./machines/desktops/shared
           ./machines/shared/core
           ./machines/shared/avahi.nix
           ./secrets
@@ -93,6 +107,7 @@
           modules = [
             ({...}: {nixpkgs.pkgs = tmpPkgs;})
             inputs.nixos-hardware.nixosModules.raspberry-pi-3
+            inputs.home-manager.nixosModules.home-manager
             ./machines/servers/pisces
             ./machines/shared/core
             ./machines/shared/avahi.nix

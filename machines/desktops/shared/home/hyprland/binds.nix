@@ -4,6 +4,18 @@
   ...
 }: let
   mainMod = "SUPER";
+
+  showDesktopScript = pkgs.writeShellApplication {
+    name = "hypr-show-desktop";
+    text = builtins.readFile ./hypr-show-desktop.sh;
+    # List runtime dependencies. Their 'bin' directories will be added to the script's PATH.
+    runtimeInputs = [
+      pkgs.hyprland
+      pkgs.jq
+      pkgs.gnused # Use gnused for consistency/features if needed, though pkgs.sed usually works
+      pkgs.bash # Explicitly list bash as a dependency
+    ];
+  };
 in {
   wayland.windowManager.hyprland.settings = {
     bind = [
@@ -40,6 +52,7 @@ in {
       "${mainMod}, up, movefocus, u"
       "${mainMod}, down, movefocus, d"
       "${mainMod} SHIFT, F, fullscreen, 0"
+      # "${mainMod}, D, exec, ${showDesktopScript}"
 
       # Media keys
       "${mainMod} SHIFT, S, exec, ${pkgs.grimblast}/bin/grimblast --freeze copy area" # Screenshots

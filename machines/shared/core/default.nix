@@ -1,11 +1,12 @@
 {...}: {
   imports = [
-    ./home
+    ./users
     ./deployment.nix
     ./nix.nix
     ./packages.nix
+    ./system.nix
     ./secrets.nix
-    ./users.nix
+    ./virtualization.nix
     # ./vpn.nix
   ];
 }

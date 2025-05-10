@@ -6,6 +6,22 @@
 }: {
   imports = [
     ./discord
+		./mpv
+		./rofi
+		./vscodium
+		./waybar
+		./wlogout
+		./bashmount.nix
+		./firefox.nix
+		./fzf.nix
+		./git.nix
+		./hyprlock.nix
+		./kitty.nix
+		./lazygit.nix
+		./ripgrep.nix
+		./spotify.nix
+		./thunderbird.nix
+		./zathura.nix
   ];
 
   fonts.fontconfig = {

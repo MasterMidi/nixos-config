@@ -1,6 +1,7 @@
 {...}: {
   imports = [
-		./dotnet.nix
+    ./android.nix
+    ./dotnet.nix
     ./rust.nix
   ];
 }

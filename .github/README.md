@@ -47,11 +47,11 @@ nixos
 |- .editorconfig # standardised configuration for editor options
 |- .envrc #
 |- machines
-  |- 
+  |-
 ```
 
 # Development tools
 
 these is a shell.nix provided that contains tools for working with the configurations. The shell nix can be used with direnv, with the `.envrc` file
 
-
+More names for future machines: https://www.reddit.com/r/namenerds/comments/1e4ot95/space_themed_names/

@@ -6,6 +6,7 @@
       ./services
       ./theme
       ./default-apps.nix
+			./secrets.nix
     ];
 
     services.mpris-proxy.enable = true; # media player mpris proxy
@@ -29,7 +30,7 @@
       }))
 
       # Tools
-      ventoy-full
+      # ventoy-full
       xdg-utils
       envsubst
       jq
@@ -38,6 +39,10 @@
       libnotify
       magic-wormhole-rs
       trash-cli
+
+			# Fonts
+			nerd-fonts.jetbrains-mono
+			inter
     ];
   };
 }

@@ -5,6 +5,7 @@
     shellOptions = [
       "cdspell"
       "dirspell"
+			"direxpand"
       "histappend"
       "checkwinsize"
       "extglob"

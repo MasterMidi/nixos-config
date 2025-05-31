@@ -7,7 +7,7 @@
 	};
 in{
   wayland.windowManager.hyprland.settings = {
-    monitor = ["eDP-1, ${monitor.width |> toString}x${monitor.width |> toString}@${monitor.vertical_frequency |> toString}, 0x0, 1"];
+    monitor = ["eDP-1, ${monitor.width |> toString}x${monitor.height |> toString}@${monitor.vertical_frequency |> toString}, 0x0, 1"];
     bind = [
       ",XF86AudioMute, exec, ${pkgs.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ toggle"
       ",XF86AudioVolumeDown, exec, ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ -5%"

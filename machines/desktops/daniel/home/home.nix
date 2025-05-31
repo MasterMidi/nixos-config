@@ -1,7 +1,5 @@
-{inputs, ...}: {
+{...}: {
   home.stateVersion = "23.11";
-
-  colorScheme = inputs.nix-colors.colorSchemes.gruvbox-material-dark-medium;
 
   services = {
     swayosd = {

@@ -38,7 +38,7 @@ in {
     };
 
     sdkVersion = lib.mkOption {
-      type = lib.types.nullOr lib.types.str;
+      type = lib.types.nullOr lib.types.str; # Take a package directly instead
       default = null;
       description = ''
         Specifies the .NET SDK version to install from pkgs.dotnetCorePackages.

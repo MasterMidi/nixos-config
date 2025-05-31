@@ -1,5 +1,7 @@
 {...}: {
-  sops.secrets = {
-    TAILSCALE_KEY = {};
+  sops = {
+    secrets = {
+      TAILSCALE_KEY = {};
+    };
   };
 }

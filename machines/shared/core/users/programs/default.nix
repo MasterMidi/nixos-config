@@ -3,9 +3,11 @@
     ./bat
     ./btop
     ./atuin.nix
-		./bash.nix
+    ./bash.nix
     ./direnv.nix
     ./eza.nix
+    ./ssh-agent.nix
     ./starship.nix
+		./zoxide.nix
   ];
 }

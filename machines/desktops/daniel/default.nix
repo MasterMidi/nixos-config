@@ -9,7 +9,7 @@
   imports = [
     ./development
     ./filesystem
-		./hardware
+    ./hardware
     ./home
     ./hardware.nix
     ./networking.nix
@@ -33,7 +33,6 @@
   # services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -71,6 +70,12 @@
   # };
 
   # List services that you want to enable:
+
+  qt = {
+    enable = true;
+    platformTheme = "qt5ct";
+    style = "kvantum";
+  };
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;

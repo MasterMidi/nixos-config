@@ -17,39 +17,38 @@
 {config, ...}: {
   services.mako = with config.colorScheme.palette; {
     enable = true;
-    defaultTimeout = 3000;
-    ignoreTimeout = false; # set to true to only use defaut timeout
-    sort = "-time";
-    layer = "overlay";
-    backgroundColor = "#${base00}";
-    width = 300;
-    height = 100;
-    borderSize = 2;
-    borderColor = "#${base03}";
-    borderRadius = 17;
-    icons = true;
-    maxIconSize = 64;
-    font = "${builtins.head config.fonts.fontconfig.defaultFonts.monospace} 10";
-    anchor = "top-right";
-    markup = true;
+    settings = with config.colorScheme.palette; {
+      default-timeout = 3000;
+      ignore-timeout = false;
+      sort = "-time";
+      layer = "overlay";
+      background-color = "#${base00}";
+      width = 300;
+      height = 100;
+      border-size = 2;
+      border-color = "#${base03}"; # Main border color
+      border-radius = 17;
+      icons = true;
+      max-icon-size = 64;
+      font = "${builtins.head config.fonts.fontconfig.defaultFonts.monospace} 10";
+      anchor = "top-right";
+      markup = true;
+      actions = true; # As per new example, often a good default
 
-    # TODO add urgencies like mako.urgency.low.borderColor = "#...";
-    # TODO make custom override to set this in a nix fasion
-    # like mako.category.<name>.defaultTimeout = 20000;
-    extraConfig = ''
-      [urgency=low]
-      border-color=#${base07}
-
-      [urgency=normal]
-      border-color=#${base09}
-
-      [urgency=high]
-      border-color=#${base08}
-      default-timeout=0
-
-      [category=mpd]
-      default-timeout=20000
-      group-by=category
-    '';
+      "urgency=low" = {
+        border-color = "#${base07}";
+      };
+      "urgency=normal" = {
+        border-color = "#${base09}";
+      };
+      "urgency=high" = {
+        border-color = "#${base08}";
+        default-timeout = 0; # This will make high urgency notifications sticky
+      };
+      "category=mpd1" = {
+        default-timeout = 20000;
+        group-by = "category"; # In mako config this is a string, not a list.
+      };
+    };
   };
 }

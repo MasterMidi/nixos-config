@@ -16,7 +16,7 @@
           TZ = config.time.timeZone;
           UMASK = "002";
 
-          QBT_SCHEDULE = "30";
+          QBT_SCHEDULE = "360";
           QBT_WIDTH = "150";
         };
         volumes = [
@@ -117,11 +117,9 @@
       };
 
       nohardlinks = {
-        keep = {
-          exclude_tags = [
-            "keep"
-          ];
-        };
+        prowlarr = {};
+        radarr = {};
+        sonarr = {};
       };
 
       share_limits = {
@@ -223,7 +221,7 @@
       };
 
       recyclebin = {
-        enabled = false;
+        enabled = true;
         empty_after_x_days = 30;
         save_torrents = false;
         split_by_category = false;

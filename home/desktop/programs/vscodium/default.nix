@@ -83,14 +83,14 @@
         stylelint.vscode-stylelint
         naumovs.color-highlight
         mcu-debug.debug-tracker-vscode
-        ms-vscode-remote.remote-containers
+        # ms-vscode-remote.remote-containers
         mkhl.direnv
-        ms-azuretools.vscode-docker
+        # ms-azuretools.vscode-docker
         p1c2u.docker-compose
         mikestead.dotenv
         editorconfig.editorconfig
         usernamehw.errorlens
-        github.copilot
+        # github.copilot
         bierner.markdown-preview-github-styles
         bierner.markdown-mermaid
         github.remotehub
@@ -121,7 +121,7 @@
         serayuzgur.crates
         tamasfe.even-better-toml
         github.vscode-github-actions
-        github.copilot-chat
+        # github.copilot-chat
         github.vscode-pull-request-github
         mcu-debug.memory-view
         dustypomerleau.rust-syntax
@@ -132,6 +132,7 @@
         # espressif.esp-idf-extension
         # vscodevim.vim
         redhat.vscode-yaml
+        ruschaaf.extended-embedded-languages
       ]
       ++ (with inputs.nix-vscode-extensions.extensions.x86_64-linux.open-vsx; [
         jeanp413.open-remote-ssh

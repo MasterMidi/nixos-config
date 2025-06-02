@@ -135,6 +135,9 @@ in {
         "noinitialfocus,class:^(kdePackages.xwaylandvideobridge)$"
         "maxsize 1 1,class:^(kdePackages.xwaylandvideobridge)$"
         "noblur,class:^(kdePackages.xwaylandvideobridge)$"
+
+        "float,class:^(jetbrains-.*)$,title:^(win[0-9]+)$"
+        "nofocus,class:^(jetbrains-.*)$,title:^(win[0-9]+)$"
       ];
     };
   };

@@ -28,7 +28,7 @@
   };
 
   nixpkgs.config = {
-    allowUnfree = true;
+    allowUnfree = lib.mkForce true;
     extra-substituters = [
       "https://cache.nixos.org"
       "https://nix-community.cachix.org"
@@ -81,7 +81,7 @@
 
       access-tokens = "github=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";
 
-      system-features = ["big-parallel" "recursive-nix" "uid-range"];
+      system-features = ["big-parallel" "recursive-nix" "uid-range" "nixos-test" "benchmark" "kvm"];
 
       # Free up to 1GiB whenever there is less than 100MiB left.
       min-free = 512 * 1024 * 1024;

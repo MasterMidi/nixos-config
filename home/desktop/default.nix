@@ -142,7 +142,9 @@
     # dotnet-sdk_8
     dotnetCorePackages.sdk_9_0
     jetbrains.rider
+    jetbrains.rust-rover
     hoppscotch
+    dbeaver-bin
 
     # Fonts
     nerd-fonts.jetbrains-mono

@@ -10,8 +10,6 @@
   services.home-assistant = {
     enable = true;
     openFirewall = true;
-    # Use the latest stable release
-    package = pkgs.home-assistant;
 
     # Basic configuration
     config = {
@@ -37,31 +35,6 @@
       "automation ui" = "!include automations.yaml";
       "scene ui" = "!include scenes.yaml";
       "script ui" = "!include scripts.yaml";
-
-      # Matter integration TODO: not supporte anymore!
-      # matter = {
-      #   server_url = "ws://localhost:5540/ws";
-      # };
-
-      # Thread integration
-      # thread = {
-      #   border_router = [
-      #     {
-      #       url = "http://localhost:8080";
-      #       dataset = "auto";
-      #     }
-      #   ];
-      # };
-
-      # MQTT configuration
-      # mqtt = {
-      #   broker = "localhost";
-      #   port = 1883;
-      #   username = "homeassistant";
-      #   password = "!secret mqtt_password"; # Use secrets.yaml
-      #   discovery = true;
-      #   discovery_prefix = "homeassistant";
-      # };
     };
 
     # Automatically add the default Lovelace dashboard

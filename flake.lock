@@ -1072,6 +1072,7 @@
         "nixvim": "nixvim",
         "nur": "nur",
         "raspberry-pi-nix": "raspberry-pi-nix",
+        "rust-overlay": "rust-overlay_2",
         "solaar": "solaar",
         "sops-nix": "sops-nix",
         "spicetify-nix": "spicetify-nix",
@@ -1179,6 +1180,26 @@
         "owner": "oxalica",
         "repo": "rust-overlay",
         "rev": "1d569430326b0a7807ccffdb2a188b814091976c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "type": "github"
+      }
+    },
+    "rust-overlay_2": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1746498961,
+        "narHash": "sha256-rp+oh/N88JKHu7ySPuGiA3lBUVIsrOtHbN2eWJdYCgk=",
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "rev": "24b00064cdd1d7ba25200c4a8565dc455dc732ba",
         "type": "github"
       },
       "original": {

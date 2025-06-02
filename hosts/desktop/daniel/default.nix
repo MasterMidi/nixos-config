@@ -3,6 +3,7 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 {
   pkgs,
+  config,
   inputs,
   ...
 }: {
@@ -12,7 +13,7 @@
     ./sound.nix
     ./secrets
     ./development
-    ./home-assistant.nix
+    # ./home-assistant.nix
     # ./testing.nix
   ];
 
@@ -158,7 +159,7 @@
     };
     # theme = "breeze";
     theme = "angular_alt";
-    themePackages = [(pkgs.adi1090x-plymouth-themes.override {selected_themes = ["angular_alt"];})];
+    themePackages = [(pkgs.adi1090x-plymouth-themes.override {selected_themes = [config.boot.plymouth.theme];})];
   };
 
   # List packages installed in system profile. To search, run:
@@ -170,7 +171,16 @@
     (git.override {withLibsecret = true;})
     git-credential-manager
     # mullvad-vpn
+    rpi-imager
+    vdhcoapp
+    chromium
   ];
+
+  qt = {
+    enable = true;
+    platformTheme = "qt5ct"; # Or "qt5ct" for Qt5
+    style = "kvantum";
+  };
 
   services.tailscale.enable = true;
 
@@ -221,5 +231,12 @@
 
   lollypops.deployment = {
     config-dir = "/etc/nixos/";
+  };
+
+  services.nix-serve = {
+    enable = true;
+    # package = pkgs.nix-serve-ng;
+    openFirewall = true;
+    secretKeyFile = "/etc/nixos/hosts/desktop/daniel/cache-private-key.pem";
   };
 }

@@ -44,6 +44,10 @@
       url = "github:Svenum/Solaar-Flake/main";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    rust-overlay = {
+      url = "github:oxalica/rust-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # Theming and customization
     nix-colors.url = "github:misterio77/nix-colors"; # Theming in nix configuration
@@ -99,6 +103,7 @@
       sharedOverlays = [
         inputs.nur.overlays.default
         inputs.devshell.overlays.default
+        inputs.rust-overlay.overlays.default
         overlays.additions
         overlays.modifications
         overlays.packages
@@ -107,7 +112,7 @@
 
       # Custom packages and modifications, exported as overlays
       overlays = import ./overlays {inherit inputs;};
-      nixosModules = import ./modules; # Maybe overlay the modules instead of importing them individually
+      nixosModules = import ./modules;
 
       hostDefaults = {
         specialArgs = {inherit inputs;};

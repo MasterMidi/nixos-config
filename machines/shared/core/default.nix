@@ -1,4 +1,5 @@
-{...}: {
+{ ... }:
+{
   imports = [
     ./users
     ./deployment.nix
@@ -7,6 +8,6 @@
     ./system.nix
     ./secrets.nix
     ./virtualization.nix
-    # ./vpn.nix
+    ./vpn.nix
   ];
 }

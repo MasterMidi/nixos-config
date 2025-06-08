@@ -6,7 +6,7 @@
       ./services
       ./theme
       ./default-apps.nix
-			./secrets.nix
+      ./secrets.nix
     ];
 
     services.mpris-proxy.enable = true; # media player mpris proxy
@@ -14,20 +14,6 @@
 
     home.packages = with pkgs; [
       playerctl
-
-      # gnome
-      nautilus-open-any-terminal
-      sushi
-      file-roller # GNOME archive manager
-      nautilus-python
-      (nautilus.overrideAttrs (super: {
-        buildInputs =
-          super.buildInputs
-          ++ (with gst_all_1; [
-            gst-plugins-good
-            gst-plugins-bad
-          ]);
-      }))
 
       # Tools
       # ventoy-full
@@ -37,12 +23,17 @@
       tldr
       hyprpicker
       libnotify
-      magic-wormhole-rs
       trash-cli
+      pix
+      xfce.mousepad
+      obsidian
 
-			# Fonts
-			nerd-fonts.jetbrains-mono
-			inter
+      # misc
+      pipes-rs
+
+      # Fonts
+      nerd-fonts.jetbrains-mono
+      inter
     ];
   };
 }

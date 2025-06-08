@@ -11,6 +11,9 @@
   environment.systemPackages = with pkgs; [
     gdu # Inspect files and their sizes
     duf # Filesystem usages overview
+    magic-wormhole-rs # send files between systems
+    trash-cli # manage trash files
+    lazygit # TUI git client
   ];
 
   home-manager = {

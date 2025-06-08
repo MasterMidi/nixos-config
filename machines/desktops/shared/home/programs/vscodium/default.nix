@@ -71,7 +71,6 @@
       extensions = with inputs.nix-vscode-extensions.extensions.x86_64-linux.vscode-marketplace;
         [
           sndst00m.vscode-native-svg-preview
-          kamadorueda.alejandra
           mads-hartmann.bash-ide-vscode
           mkhl.shfmt
           rogalmic.bash-debug

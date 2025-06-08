@@ -7,6 +7,7 @@
   imports = [
     ./discord
 		./mpv
+		./nautilus
 		./rofi
 		./vscodium
 		./waybar

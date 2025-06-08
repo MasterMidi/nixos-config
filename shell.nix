@@ -48,7 +48,7 @@ pkgs.devshell.mkShell {
       name = "dply";
       category = "deploy";
       help = "deploy to remote server";
-      command = "nix run . -- $1";
+      command = "nix run .#deploy -- $1";
     }
 
     {

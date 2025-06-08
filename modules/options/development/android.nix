@@ -8,9 +8,11 @@
 
   # Define options for the Flutter setup
   flutterOptions = {
-    enable = lib.mkEnableOption "Enables Flutter SDK and related tools (Dart)";
-    # You could add more Flutter-specific options here later if needed,
-    # e.g., specific Flutter channel or version.
+    options = {
+      enable = lib.mkEnableOption "Enables Flutter SDK and related tools (Dart)";
+      # You could add more Flutter-specific options here later if needed,
+      # e.g., specific Flutter channel or version.
+    };
   };
 in {
   options.development.android = {

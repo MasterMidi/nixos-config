@@ -8,6 +8,11 @@
     # Premade modules
     nixos-hardware.url = "github:NixOS/nixos-hardware/master"; # Hardware specific setup modules
     nixos-facter-modules.url = "github:numtide/nixos-facter-modules"; # Alternativ to nix hardware-configuration
+    disko = {
+      # Declarative disk configuration
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -102,6 +107,21 @@
             ./machines/servers/andromeda
             ./machines/shared/core
             ./machines/shared/avahi.nix
+            ./secrets
+          ];
+        };
+
+        nova = inputs.nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = {
+            inherit inputs;
+            modules = nixosModules;
+          };
+          modules = [
+            inputs.home-manager.nixosModules.home-manager
+            inputs.disko.nixosModules.disko
+            ./machines/servers/nova
+            ./machines/shared/core
             ./secrets
           ];
         };

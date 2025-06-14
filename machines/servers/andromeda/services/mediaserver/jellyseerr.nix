@@ -6,7 +6,8 @@
   virtualisation.oci-containers.compose.mediaserver = {
     containers = {
       jellyseerr = {
-        image = "ghcr.io/fallenbagel/jellyseerr:develop";
+        # image = "ghcr.io/fallenbagel/jellyseerr:develop";
+				image = "docker.io/fallenbagel/jellyseerr:preview-OIDC";
         autoUpdate = "registry";
         networking = {
           networks = ["default"];

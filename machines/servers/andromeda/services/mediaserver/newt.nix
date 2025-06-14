@@ -1,9 +1,10 @@
-{config,...}: {
+{ config, ... }:
+{
   virtualisation.oci-containers.compose.mediaserver.containers.newt = {
-    image = "fosrl/newt";
+    image = "fosrl/newt:1.2.1";
     networking = {
-      networks = ["default"];
-      aliases = ["newt"];
+      networks = [ "default" ];
+      aliases = [ "newt" ];
     };
     environment = {
       PANGOLIN_ENDPOINT = "https://tunnel.mgrlab.dk";

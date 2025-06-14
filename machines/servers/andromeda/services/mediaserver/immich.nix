@@ -1,19 +1,26 @@
 # Based on https://github.com/immich-app/immich/blob/main/docker/docker-compose.yml
-{config, ...}: {
+{ config, ... }:
+let
+  immichVersion = "v1.134.0";
+in
+{
   services.cloudflared.tunnels.andromeda.ingress = {
     # "immich.mgrlab.dk" = "http://localhost:${toString config.virtualisation.oci-containers.compose.mediaserver.containers.traefik.networking.ports.local.host}";
     "immich.mgrlab.dk" = "http://localhost:2283";
   };
 
   virtualisation.oci-containers.compose.mediaserver = {
-    networks.immich = {};
+    networks.immich = { };
     containers = rec {
       immich-server = rec {
-        image = "ghcr.io/immich-app/immich-server:v1.124.2";
+        image = "ghcr.io/immich-app/immich-server:${immichVersion}";
         # user = "1000:100";
         networking = {
-          networks = ["default" "immich"];
-          aliases = ["immich-server"];
+          networks = [
+            "default"
+            "immich"
+          ];
+          aliases = [ "immich-server" ];
           ports = {
             webui = {
               host = 2283;
@@ -53,17 +60,17 @@
           "immich-postgres"
           "immich-redis"
         ];
-        devices = ["/dev/dri"];
+        devices = [ "/dev/dri" ];
         extraOptions = [
           "--gpus=all"
           "--device=nvidia.com/gpu=all"
         ];
       };
       immich-machine-learning = {
-        image = "ghcr.io/immich-app/immich-machine-learning:v1.124.2-cuda"; # -cuda for Nvidia GPU support
+        image = "ghcr.io/immich-app/immich-machine-learning:${immichVersion}-cuda"; # -cuda for Nvidia GPU support
         networking = {
-          networks = ["immich"];
-          aliases = ["immich-ml"];
+          networks = [ "immich" ];
+          aliases = [ "immich-ml" ];
         };
         environment = {
           TZ = config.time.timeZone;
@@ -73,7 +80,7 @@
           "immich-postgres"
           "immich-redis"
         ];
-        devices = ["/dev/dri"];
+        devices = [ "/dev/dri" ];
         extraOptions = [
           "--gpus=all"
           "--device=nvidia.com/gpu=all"
@@ -83,11 +90,11 @@
         ];
       };
       immich-postgres = {
-        image = "docker.io/tensorchord/pgvecto-rs:pg14-v0.2.0@sha256:90724186f0a3517cf6914295b5ab410db9ce23190a2d9d0b9dd6463e3fa298f0";
+        image = "ghcr.io/immich-app/postgres:14-vectorchord0.3.0-pgvectors0.2.0@sha256:fa4f6e0971f454cd95fec5a9aaed2ed93d8f46725cc6bc61e0698e97dba96da1";
         # user = "1000:100";
         networking = {
-          networks = ["immich"];
-          aliases = [immich-server.environment.DB_HOSTNAME];
+          networks = [ "immich" ];
+          aliases = [ immich-server.environment.DB_HOSTNAME ];
         };
         environment = {
           POSTGRES_DB = "immich";
@@ -101,39 +108,18 @@
         volumes = [
           "/mnt/ssd/services/immich/postgres:/var/lib/postgresql/data:rw"
         ];
-        #         healthcheck = {
-        #           cmd = [''
-        # pg_isready --dbname="$''${POSTGRES_DB}" --username="$''${POSTGRES_USER}" || exit 1;
-        # Chksum="$$(psql --dbname="$''${POSTGRES_DB}" --username="$''${POSTGRES_USER}" --tuples-only --no-align
-        # --command='SELECT COALESCE(SUM(checksum_failures), 0) FROM pg_stat_database')";
-        # echo "checksum failure count is $$Chksum";
-        # [ "$$Chksum" = '0' ] || exit 1
-        #           ''];
-        #           startPeriod = "5m";
-        #           interval = "5m";
-        #           timeout = "3s";
-        #         };
-        # commands = [
-        #   "postgres"
-        #   "-c shared_preload_libraries=vectors.so"
-        #   ''-c 'search_path="$$user", public, vectors' ''
-        #   "-c logging_collector=on"
-        #   "-c max_wal_size=2GB"
-        #   "-c shared_buffers=512MB"
-        #   "-c wal_compression=on"
-        # ];
       };
       immich-redis = {
-        image = "docker.io/redis:6.2-alpine@sha256:905c4ee67b8e0aa955331960d2aa745781e6bd89afc44a8584bfd13bc890f0ae";
+        image = "docker.io/valkey/valkey:8-bookworm@sha256:ff21bc0f8194dc9c105b769aeabf9585fea6a8ed649c0781caeac5cb3c247884";
         networking = {
-          networks = ["immich"];
-          aliases = [immich-server.environment.REDIS_HOSTNAME];
+          networks = [ "immich" ];
+          aliases = [ immich-server.environment.REDIS_HOSTNAME ];
         };
-        healthcheck.cmd = ["redis-cli ping || exit 1"];
+        healthcheck.cmd = [ "redis-cli ping || exit 1" ];
       };
     };
   };
 
   hardware.nvidia-container-toolkit.enable = true; # Enable NVIDIA GPU support
-  services.xserver.videoDrivers = ["nvidia"];
+  services.xserver.videoDrivers = [ "nvidia" ];
 }

@@ -15,7 +15,7 @@
     ./jdupes.nix
     ./jellyfin
     ./jellyseerr.nix
-    # ./mealie.nix
+    ./mealie.nix
     ./newt.nix
     ./paperless.nix
     ./pocketid.nix

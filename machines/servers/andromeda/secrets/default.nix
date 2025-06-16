@@ -1,4 +1,5 @@
-{config, ...}: {
+{ config, ... }:
+{
   sops.secrets = {
     SONARR_API_KEY = {
       owner = config.services.prometheus.exporters.exportarr-sonarr.user;
@@ -23,7 +24,7 @@
     JELLYFIN_TCM_API_KEY = {
       owner = config.users.users.michael.name;
       group = config.users.groups.users.name;
-      restartUnits = [];
+      restartUnits = [ ];
       sopsFile = ./secrets.sops.yaml;
     };
     CLOUDFLARED_CRED_FILE = {
@@ -129,6 +130,11 @@
       sopsFile = ./secrets.sops.yaml;
     };
     PANGOLIN_NEWT_SECRET = {
+      owner = config.users.users.michael.name;
+      group = config.users.groups.users.name;
+      sopsFile = ./secrets.sops.yaml;
+    };
+    PAPERLESS_POCKETID_CLIENT_SECRET = {
       owner = config.users.users.michael.name;
       group = config.users.groups.users.name;
       sopsFile = ./secrets.sops.yaml;

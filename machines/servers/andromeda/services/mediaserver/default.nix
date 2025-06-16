@@ -17,6 +17,8 @@
     ./jellyseerr.nix
     # ./mealie.nix
     ./newt.nix
+    ./paperless.nix
+    ./pocketid.nix
     ./prowlarr.nix
     ./qbit
     ./radarr.nix

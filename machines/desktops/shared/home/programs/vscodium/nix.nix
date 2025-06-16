@@ -6,8 +6,9 @@
   ...
 }:
 let
-  vscodeExtension =
-    inputs.nix-vscode-extensions.extensions.${osConfig.nixpkgs.hostPlatform.system}.vscode-marketplace;
+  # vscodeExtension =
+  #   inputs.nix-vscode-extensions.extensions.${osConfig.nixpkgs.hostPlatform.system}.vscode-marketplace;
+  vscodeExtension = inputs.nix-vscode-extensions.extensions.x86_64-linux.vscode-marketplace;
 in
 {
   programs.vscode.profiles.default = {
@@ -21,8 +22,8 @@ in
             nixpkgs.expr = "import (builtins.getFlake \"/etc/nixos\").inputs.nixpkgs { }";
             formatting.command = "${pkgs.nixfmt-rfc-style}/bin/nixfmt";
             options = {
-              nixos.expr = "(builtins.getFlake \"/etc/nixos/flake.nix\").nixosConfigurations.${osConfig.networking.hostName}.options";
-              home-manager.expr = "(builtins.getFlake (builtins.toString ./.)).nixosConfigurations.${config.home.username}.options.home-manager.users.type.getSubOptions []";
+              nixos.expr = "(builtins.getFlake (builtins.toString ./.)).nixosConfigurations.${osConfig.networking.hostName}.options";
+              home-manager.expr = "(builtins.getFlake (builtins.toString ./.)).nixosConfigurations.${osConfig.networking.hostName}.options.home-manager.users.type.getSubOptions []";
             };
           };
         };

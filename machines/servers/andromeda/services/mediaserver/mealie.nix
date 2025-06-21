@@ -24,6 +24,13 @@
           POSTGRES_USER = "mealie";
           TZ = config.time.timeZone;
           WEB_CONCURRENCY = "1";
+
+          OIDC_AUTH_ENABLED = "True";
+          OIDC_SIGNUP_ENABLED = "True";
+          OIDC_CONFIGURATION_URL = "https://oidc.mgrlab.dk/.well-known/openid-configuration";
+          OIDC_CLIENT_ID = "a4603e9d-fb60-439e-b545-8e6db4cac96e";
+          OIDC_CLIENT_SECRET = "TGFcb26qWOX70kvBtYdfO0fXHEhkJ4TG";
+          OIDC_ADMIN_GROUP = "admin";
         };
         volumes = [
           # The module uses the backend's volume management.

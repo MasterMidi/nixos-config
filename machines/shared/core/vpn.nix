@@ -2,18 +2,19 @@
   config,
   modules,
   ...
-}: {
-  imports = [modules.services.tailscale-autoconnect];
+}:
+{
+  imports = [ modules.services.tailscale-autoconnect ];
 
   networking.firewall = {
-    trustedInterfaces = ["tailscale0"];
+    trustedInterfaces = [ "tailscale0" ];
     # required to connect to Tailscale exit nodes
     checkReversePath = "loose";
   };
 
   # inter-machine VPN
   services.tailscale = {
-    enable = true;
+    enable = false;
     openFirewall = true;
     autoConnect = {
       enable = true;

@@ -1,11 +1,13 @@
-{config,...}:{
+{ config, ... }:
+{
   virtualisation.oci-containers.compose.mediaserver = {
     containers = {
-      scrutiny={
-        image= "ghcr.io/analogj/scrutiny:master-omnibus";
+      scrutiny = {
+        image = "ghcr.io/analogj/scrutiny:master-omnibus";
         autoUpdate = "registry";
-        networking= {
-            networks = ["default"];
+        networking = {
+          networks = [ "default" ];
+          aliases = [ "scrutiny" ];
           ports = {
             webui = {
               host = 8888;
@@ -17,12 +19,12 @@
             };
           };
         };
-        volumes=[
+        volumes = [
           "/mnt/ssd/services/scrutiny/config:/opt/scrutiny/config"
           "/mnt/ssd/services/scrutiny/data:/opt/scrutiny/influxdb"
           "/run/udev:/run/udev:ro"
         ];
-        environment={
+        environment = {
           TZ = config.time.timeZone;
         };
         devices = [

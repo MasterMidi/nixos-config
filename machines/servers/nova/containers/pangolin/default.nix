@@ -65,6 +65,12 @@ let
           };
         };
       };
+
+      # For email server
+      tcp-25.address = ":25/tcp";
+      tcp-587.address = ":587/tcp";
+      tcp-465.address = ":465/tcp";
+      tcp-993.address = ":993/tcp";
     };
 
     serversTransport = {
@@ -147,14 +153,82 @@ let
       };
     };
   };
+
+  pangolingConfig = (pkgs.formats.yaml { }).generate "pangolin_config.yml" {
+    app = {
+      dashboard_url = "https://tunnel.mgrlab.dk";
+      log_failed_attempts = true;
+      log_level = "debug";
+      save_logs = false;
+    };
+
+    server = {
+      external_port = 3000;
+      internal_port = 3001;
+      next_port = 3002;
+      internal_hostname = "pangolin";
+      session_cookie_name = "p_session_token";
+      resource_access_token_param = "p_token";
+      resource_session_request_param = "p_session_request";
+      secret = "72Jbir3AbMB8uZpi3RCqfEEyW6dYqPEIlsXkcpOs1uMKdegDT4146h2z2M0aF67L";
+    };
+
+    domains = {
+      mgrlab = {
+        base_domain = "mgrlab.dk";
+        cert_resolver = "letsencrypt";
+        prefer_wildcard_cert = true;
+      };
+    };
+
+    traefik = {
+      http_entrypoint = "web";
+      https_entrypoint = "websecure";
+    };
+
+    gerbil = {
+      start_port = 51820;
+      base_endpoint = "tunnel.mgrlab.dk";
+      use_subdomain = false;
+      block_size = 24;
+      site_block_size = 30;
+      subnet_group = "100.89.137.0/20";
+    };
+
+    rate_limits = {
+      global = {
+        window_minutes = 1;
+        max_requests = 100;
+      };
+    };
+
+    users = {
+      server_admin = {
+        email = "home@michael-graversen.dk";
+        password = config.sops.placeholder.PANGOLING_ADMIN_PASSWORD;
+      };
+    };
+
+    flags = {
+      require_email_verification = true;
+      disable_signup_without_invite = true;
+      disable_user_create_org = true;
+      allow_raw_resources = true;
+      allow_base_domain_resources = true;
+    };
+  };
 in
 {
+  imports = [
+    # ./stalwart.nix
+  ];
+
   virtualisation.oci-containers.compose.tunnel = {
     enable = true;
     networks.default = { };
     containers = {
       pangolin = {
-        image = "fosrl/pangolin:1.5.1";
+        image = "fosrl/pangolin:1.4.0";
         networking = {
           networks = [ "default" ];
           aliases = [ "pangolin" ];
@@ -176,7 +250,7 @@ in
         };
       };
       gerbil = {
-        image = "fosrl/gerbil:1.0.0-beta.3";
+        image = "fosrl/gerbil:1.0.0";
         networking = {
           networks = [ "default" ];
           aliases = [ "gerbil" ];
@@ -196,6 +270,28 @@ in
               internal = 51820;
               protocol = "udp";
             };
+
+            # For email server
+            smtp = {
+              host = 25;
+              internal = 25;
+              protocol = "tcp";
+            };
+            submission = {
+              host = 587;
+              internal = 587;
+              protocol = "tcp";
+            };
+            submissions = {
+              host = 465;
+              internal = 465;
+              protocol = "tcp";
+            };
+            imaptls = {
+              host = 993;
+              internal = 993;
+              protocol = "tcp";
+            };
           };
         };
         dependsOn = [ "pangolin" ];
@@ -214,7 +310,7 @@ in
         ];
       };
       traefik = {
-        image = "traefik:v3.3.3";
+        image = "traefik:v3.4.0";
         networking = {
           networks = [ "container:gerbil" ];
         };
@@ -227,79 +323,16 @@ in
           "/containers/pangolin/config/letsencrypt:/letsencrypt"
         ];
         environment = {
-          # CLOUDFLARE_DNS_API_TOKEN = "T0mPP0farwApQcWV0ijHlTI5Olo8Up2M42aJCBT2";
-          CF_API_KEY = "35c72073040b7ff45c4beee2fa30decc5f336";
           CF_API_EMAIL = "home@michael-graversen.dk";
         };
+        secrets.env.CF_API_KEY.path = config.sops.secrets.CLOUDFLARE_GLOBAL_API_KEY.path;
       };
     };
   };
 
   sops.templates.PANGOLIN_CONFIG = {
     restartUnits = [ config.virtualisation.oci-containers.compose.tunnel.containers.pangolin.unitName ];
-    # mode = "0600";
-    content = lib.generators.toYAML { } {
-      app = {
-        dashboard_url = "https://tunnel.mgrlab.dk";
-        base_domain = "mgrlab.dk";
-        log_level = "info";
-        save_logs = false;
-      };
-
-      server = {
-        external_port = 3000;
-        internal_port = 3001;
-        next_port = 3002;
-        internal_hostname = "pangolin";
-        session_cookie_name = "p_session_token";
-        resource_access_token_param = "p_token";
-        resource_session_request_param = "p_session_request";
-        secret = "72Jbir3AbMB8uZpi3RCqfEEyW6dYqPEIlsXkcpOs1uMKdegDT4146h2z2M0aF67L";
-      };
-
-      domains = {
-        mgrlab = {
-          base_domain = "mgrlab.dk";
-          cert_resolver = "letsencrypt";
-          prefer_wildcard_cert = true;
-        };
-      };
-
-      traefik = {
-        http_entrypoint = "web";
-        https_entrypoint = "websecure";
-      };
-
-      gerbil = {
-        start_port = 51820;
-        base_endpoint = "tunnel.mgrlab.dk";
-        use_subdomain = false;
-        block_size = 24;
-        site_block_size = 30;
-        subnet_group = "138.199.154.0/24";
-      };
-
-      rate_limits = {
-        global = {
-          window_minutes = 1;
-          max_requests = 100;
-        };
-      };
-
-      users = {
-        server_admin = {
-          email = "home@michael-graversen.dk";
-          password = config.sops.placeholder.PANGOLING_ADMIN_PASSWORD;
-        };
-      };
-
-      flags = {
-        require_email_verification = true;
-        disable_signup_without_invite = true;
-        disable_user_create_org = true;
-        allow_raw_resources = true;
-        allow_base_domain_resources = true;
-      };
-    };
+    mode = "0600";
+    file = pangolingConfig;
   };
 }

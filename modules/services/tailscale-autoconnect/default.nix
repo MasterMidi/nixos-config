@@ -3,11 +3,13 @@
   config,
   pkgs,
   ...
-}: let
+}:
+let
   cfg = config.services.tailscale.autoConnect;
-	package = config.services.tailscale.package;
-in {
-  meta.maintainers = with lib.maintainers; [mrene];
+  package = config.services.tailscale.package;
+in
+{
+  meta.maintainers = with lib.maintainers; [ mrene ];
 
   options.services.tailscale.autoConnect = {
     enable = lib.mkEnableOption "the OpenThread Border Router";
@@ -19,15 +21,21 @@ in {
     };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (cfg.enable && config.services.tailscale.enable) {
     # create a oneshot job to authenticate to Tailscale
     systemd.services.tailscale-autoconnect = {
       description = "Automatic connection to Tailscale";
 
       # make sure tailscale is running before trying to connect to tailscale
-      after = ["network-pre.target" "tailscale.service"];
-      wants = ["network-pre.target" "tailscale.service"];
-      wantedBy = ["multi-user.target"];
+      after = [
+        "network-pre.target"
+        "tailscale.service"
+      ];
+      wants = [
+        "network-pre.target"
+        "tailscale.service"
+      ];
+      wantedBy = [ "multi-user.target" ];
 
       # set this service as a oneshot job
       serviceConfig.Type = "oneshot";

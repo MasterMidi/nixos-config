@@ -9,5 +9,8 @@
     #   owner = config.users.users.stalwart-mail.name;
     #   group = config.users.groups.stalwart-mail.name;
     # };
+    CLOUDFLARE_GLOBAL_API_KEY = {
+      sopsFile = ./secrets.sops.yaml;
+    };
   };
 }

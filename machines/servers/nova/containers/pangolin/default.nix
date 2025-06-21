@@ -295,10 +295,9 @@ in
           "/containers/pangolin/config/letsencrypt:/letsencrypt"
         ];
         environment = {
-          # CLOUDFLARE_DNS_API_TOKEN = "T0mPP0farwApQcWV0ijHlTI5Olo8Up2M42aJCBT2";
-          CF_API_KEY = "35c72073040b7ff45c4beee2fa30decc5f336";
-          CF_API_EMAIL = "home@michael-graversen.dk";
+                    CF_API_EMAIL = "home@michael-graversen.dk";
         };
+secrets.env.CF_API_KEY.path = config.sops.secrets.CLOUDFLARE_GLOBAL_API_KEY.path;
       };
     };
   };

@@ -65,6 +65,12 @@ let
           };
         };
       };
+
+      # For email server
+      tcp-25.address = ":25/tcp";
+      tcp-587.address = ":587/tcp";
+      tcp-465.address = ":465/tcp";
+      tcp-993.address = ":993/tcp";
     };
 
     serversTransport = {
@@ -264,6 +270,28 @@ in
               internal = 51820;
               protocol = "udp";
             };
+
+            # For email server
+            smtp = {
+              host = 25;
+              internal = 25;
+              protocol = "tcp";
+            };
+            submission = {
+              host = 587;
+              internal = 587;
+              protocol = "tcp";
+            };
+            submissions = {
+              host = 465;
+              internal = 465;
+              protocol = "tcp";
+            };
+            imaptls = {
+              host = 993;
+              internal = 993;
+              protocol = "tcp";
+            };
           };
         };
         dependsOn = [ "pangolin" ];
@@ -295,9 +323,9 @@ in
           "/containers/pangolin/config/letsencrypt:/letsencrypt"
         ];
         environment = {
-                    CF_API_EMAIL = "home@michael-graversen.dk";
+          CF_API_EMAIL = "home@michael-graversen.dk";
         };
-secrets.env.CF_API_KEY.path = config.sops.secrets.CLOUDFLARE_GLOBAL_API_KEY.path;
+        secrets.env.CF_API_KEY.path = config.sops.secrets.CLOUDFLARE_GLOBAL_API_KEY.path;
       };
     };
   };

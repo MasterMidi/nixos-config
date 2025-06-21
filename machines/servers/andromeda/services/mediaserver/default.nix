@@ -26,7 +26,7 @@
     ./scrutiny.nix
     ./searxng.nix
     ./sonarr.nix
-    # ./sterling-pdf.nix
+    ./sterling-pdf.nix
     # ./title-card-maker.nix
     # ./traefik.nix
     ./uptime-kuma.nix

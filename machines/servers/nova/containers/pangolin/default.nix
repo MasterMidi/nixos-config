@@ -25,7 +25,7 @@ let
       plugins = {
         badger = {
           moduleName = "github.com/fosrl/badger";
-          version = "v1.0.0-beta.3";
+          version = "v1.2.0";
         };
       };
     };

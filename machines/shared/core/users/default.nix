@@ -2,7 +2,8 @@
   pkgs,
   inputs,
   ...
-}: {
+}:
+{
   imports = [
     ./michael.nix
     ./root.nix
@@ -18,20 +19,11 @@
 
   home-manager = {
     useUserPackages = true;
-    extraSpecialArgs = {inherit inputs;};
+    extraSpecialArgs = { inherit inputs; };
+    backupFileExtension = "backup";
     sharedModules = [
-      ({
-        lib,
-        inputs,
-        osConfig,
-        ...
-      }: {
-        nixpkgs.config.allowUnfree = true;
-
-        colorScheme = inputs.nix-colors.colorSchemes.gruvbox-material-dark-medium;
-        home.stateVersion = lib.mkDefault osConfig.system.stateVersion;
-      })
       inputs.nix-colors.homeManagerModules.default
+      ./base.nix
       ./programs
     ];
   };

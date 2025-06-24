@@ -18,6 +18,7 @@
     ./mealie.nix
     ./newt.nix
     ./paperless.nix
+    ./penpot.nix
     ./pocketid.nix
     ./prowlarr.nix
     ./qbit

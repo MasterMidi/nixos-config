@@ -93,10 +93,10 @@
               "10.0.0.0/8"
             ];
           };
-          sieve = {
-            bind = [ "[::]:4190" ];
-            protocol = "managesieve";
-          };
+          # sieve = {
+          #   bind = [ "[::]:4190" ];
+          #   protocol = "managesieve";
+          # };
           http = {
             bind = [ "[::]:8080" ];
             protocol = "http";
@@ -112,6 +112,9 @@
           permissive-cors = false;
           url = "protocol + '://' + config_get('server.hostname') + ':' + local_port";
           use-x-forwarded = true;
+        };
+        allowed-ip = {
+          "10.89.0.98" = "";
         };
       };
 

@@ -51,9 +51,11 @@ let
     entryPoints = {
       web = {
         address = ":80";
+        http3 = { };
       };
       websecure = {
         address = ":443";
+        http3 = { };
         transport = {
           respondingTimeouts = {
             readTimeout = "30m";
@@ -64,6 +66,14 @@ let
             certResolver = "letsencrypt";
           };
         };
+				forwardedHeaders.trustedIPs = [
+          # localhost
+          "127.0.0.0/8"
+          "::1"
+
+          # podman network
+          "10.0.0.0/8"
+        ];
       };
 
       # For email server

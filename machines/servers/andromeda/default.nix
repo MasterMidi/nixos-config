@@ -9,6 +9,7 @@
     ./home
     ./secrets
     ./services
+    ./networking.nix
   ];
 
   # Bootloader.
@@ -18,8 +19,6 @@
     configurationLimit = 5;
   };
   boot.loader.efi.canTouchEfiVariables = true;
-
-  networking.hostName = "andromeda";
 
   # Set your time zone.
   time.timeZone = "Europe/Copenhagen";
@@ -59,9 +58,6 @@
   powerManagement.cpuFreqGovernor = "schedutil";
 
   services.fstrim.enable = true;
-
-  # Enable networking
-  networking.networkmanager.enable = true;
 
   users.users.michael = {
     isNormalUser = true;

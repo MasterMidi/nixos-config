@@ -25,7 +25,7 @@ let
       plugins = {
         badger = {
           moduleName = "github.com/fosrl/badger";
-          version = "v1.0.0-beta.3";
+          version = "v1.2.0";
         };
       };
     };
@@ -51,9 +51,11 @@ let
     entryPoints = {
       web = {
         address = ":80";
+        http3 = { };
       };
       websecure = {
         address = ":443";
+        http3 = { };
         transport = {
           respondingTimeouts = {
             readTimeout = "30m";
@@ -64,13 +66,61 @@ let
             certResolver = "letsencrypt";
           };
         };
+				forwardedHeaders.trustedIPs = [
+          # localhost
+          "127.0.0.0/8"
+          "::1"
+
+          # podman network
+          "10.0.0.0/8"
+        ];
       };
 
       # For email server
-      tcp-25.address = ":25/tcp";
-      tcp-587.address = ":587/tcp";
-      tcp-465.address = ":465/tcp";
-      tcp-993.address = ":993/tcp";
+      tcp-25 = {
+        address = ":25/tcp";
+        proxyProtocol.trustedIPs = [
+          # localhost
+          "127.0.0.0/8"
+          "::1"
+
+          # podman network
+          "10.0.0.0/8"
+        ];
+      };
+      tcp-587 = {
+        address = ":587/tcp";
+        proxyProtocol.trustedIPs = [
+          # localhost
+          "127.0.0.0/8"
+          "::1"
+
+          # podman network
+          "10.0.0.0/8"
+        ];
+      };
+      tcp-465 = {
+        address = ":465/tcp";
+        proxyProtocol.trustedIPs = [
+          # localhost
+          "127.0.0.0/8"
+          "::1"
+
+          # podman network
+          "10.0.0.0/8"
+        ];
+      };
+      tcp-993 = {
+        address = ":993/tcp";
+        proxyProtocol.trustedIPs = [
+          # localhost
+          "127.0.0.0/8"
+          "::1"
+
+          # podman network
+          "10.0.0.0/8"
+        ];
+      };
     };
 
     serversTransport = {
@@ -220,7 +270,7 @@ let
 in
 {
   imports = [
-    # ./stalwart.nix
+    ./stalwart.nix
   ];
 
   virtualisation.oci-containers.compose.tunnel = {

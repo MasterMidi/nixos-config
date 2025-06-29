@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   hardware.enableRedistributableFirmware = true;
   # Firmware updates - fwupd
   services.fwupd.enable = true;
@@ -31,4 +32,6 @@
 
   # Configure console keymap
   console.keyMap = "dk-latin1";
+
+  systemd.network.wait-online.anyInterface = true; # just need any connection, not all. Might help with the systemd unit failing
 }

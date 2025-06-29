@@ -1,16 +1,16 @@
-{modulesPath, ...}: {
+{ modulesPath, ... }:
+{
   imports = [
     (modulesPath + "/installer/sd-card/sd-image-aarch64.nix")
     ./hardware
     ./home-automation
+    ./networking.nix
   ];
 
   # Use the extlinux boot loader. (NixOS wants to enable GRUB by default)
   boot.loader.grub.enable = false;
   # Enables the generation of /boot/extlinux/extlinux.conf for u-boot support
   boot.loader.generic-extlinux-compatible.enable = true;
-
-  networking.hostName = "pisces";
 
   # Set your time zone.
   time.timeZone = "Europe/Copenhagen";
@@ -20,7 +20,10 @@
   users.users.raspi = {
     isNormalUser = true;
     description = "Raspberry Pi 3B v1.2";
-    extraGroups = ["networkmanager" "wheel"];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+    ];
     hashedPassword = "$y$j9T$gGYH3.06eDEcKfalPhHPb.$ioKMb3Nw3jtFPvlrYpwkaH7HR4V2.o5mHgq.b9lmx30";
   };
   users.users.root = {
@@ -45,7 +48,7 @@
   };
 
   hardware.enableRedistributableFirmware = true;
-  networking.networkmanager.enable = true; # Easiest to use and most distros use this by default.
+
   # networking.wireless = {
   #   enable = true;
   #   networks = {

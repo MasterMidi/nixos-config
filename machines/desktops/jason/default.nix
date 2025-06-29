@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   imports = [
     ./filesystem
     ./hardware
@@ -51,8 +52,6 @@
     devenv
   ];
 
-  services.tailscale.enable = true;
-
   services.mullvad-vpn.enable = true;
   services.resolved.enable = true;
 
@@ -68,7 +67,7 @@
     enableSSHSupport = true;
     # pinentryPackage = pkgs.pinentry-gnome3;
   };
-  services.dbus.packages = [pkgs.gcr];
+  services.dbus.packages = [ pkgs.gcr ];
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;

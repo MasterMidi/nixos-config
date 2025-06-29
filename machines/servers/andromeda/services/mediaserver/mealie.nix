@@ -11,19 +11,21 @@
         # PUID and PGID are now handled by the user and group options.
         user = "1000";
         group = "1000";
+				# https://docs.mealie.io/documentation/getting-started/installation/backend-config/
         environment = {
-          ALLOW_SIGNUP = "true";
-          # The BASE_URL should be set here if you use a reverse proxy.
+          TZ = config.time.timeZone;
           BASE_URL = "https://mealie.mgrlab.dk";
-          DB_ENGINE = "postgres";
           MAX_WORKERS = "1";
+          WEB_CONCURRENCY = "1";
+          ALLOW_SIGNUP = "true";
+          ALLOW_PASSWORD_LOGIN = "false"; # Since i only use OIDC
+
+          DB_ENGINE = "postgres";
           POSTGRES_DB = "mealie";
           POSTGRES_PASSWORD = "mealie";
           POSTGRES_PORT = "5432";
           POSTGRES_SERVER = "postgres"; # This works due to the network alias of the postgres container.
           POSTGRES_USER = "mealie";
-          TZ = config.time.timeZone;
-          WEB_CONCURRENCY = "1";
 
           OIDC_AUTH_ENABLED = "True";
           OIDC_SIGNUP_ENABLED = "True";
@@ -31,6 +33,11 @@
           OIDC_CLIENT_ID = "a4603e9d-fb60-439e-b545-8e6db4cac96e";
           OIDC_CLIENT_SECRET = "TGFcb26qWOX70kvBtYdfO0fXHEhkJ4TG";
           OIDC_ADMIN_GROUP = "admin";
+          OIDC_PROVIDER_NAME = "Pocket ID";
+          OIDC_SCOPES_OVERRIDE = "openid profile email groups";
+          OIDC_REMEMBER_ME = "True";
+          OIDC_USER_GROUP = "everyone";
+          OIDC_AUTO_REDIRECT = "True";
         };
         volumes = [
           # The module uses the backend's volume management.

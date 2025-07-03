@@ -126,57 +126,57 @@
           ];
         };
 
-        pisces =
-          let
-            tmpPkgs = import inputs.nixpkgs {
-              system = "aarch64-linux";
-              overlays = [ overlays.additions ];
-              nixpkgs.config = {
-                allowUnfree = true;
-                extra-substituters = [
-                  "https://cache.nixos.org"
-                  "https://nix-community.cachix.org"
-                  "https://cache.garnix.io"
-                  "https://numtide.cachix.org"
-                  "https://raspberry-pi-nix.cachix.org"
-                  "https://nix-gaming.cachix.org"
-                  "https://cuda-maintainers.cachix.org"
-                ];
-                extra-trusted-public-keys = [
-                  "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-                  "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-                  "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
-                  "numtide.cachix.org-1:2ps1kLBUWjxIneOy1Ik6cQjb41X0iXVXeHigGmycPPE="
-                  "raspberry-pi-nix.cachix.org-1:WmV2rdSangxW0rZjY/tBvBDSaNFQ3DyEQsVw8EvHn9o="
-                  "nix-gaming.cachix.org-1:nbjlureqMbRAxR1gJ/f3hxemL9svXaZF/Ees8vCUUs4="
-                  "cuda-maintainers.cachix.org-1:0dq3bujKpuEPMCX6U4WylrUDZ9JyUG0VpVZa7CNfq5E="
-                ];
-              };
-            };
-          in
-          inputs.nixpkgs.lib.nixosSystem {
-            system = "aarch64-linux";
-            specialArgs = {
-              inherit inputs;
-              modules = nixosModules;
-            };
-            modules = [
-              (
-                { ... }:
-                {
-                  nixpkgs.pkgs = tmpPkgs;
-                }
-              )
-              inputs.nixos-hardware.nixosModules.raspberry-pi-3
-              inputs.home-manager.nixosModules.home-manager
-              ./machines/servers/pisces
-              ./machines/shared/core
-              ./machines/shared/avahi.nix
-              ./secrets
-              # Add any deploy-rs specific system configurations here if needed in the future,
-              # but typically none are required for basic deployment.
-            ];
-          };
+        # pisces =
+        #   let
+        #     tmpPkgs = import inputs.nixpkgs {
+        #       system = "aarch64-linux";
+        #       overlays = [ overlays.additions ];
+        #       nixpkgs.config = {
+        #         allowUnfree = true;
+        #         extra-substituters = [
+        #           "https://cache.nixos.org"
+        #           "https://nix-community.cachix.org"
+        #           "https://cache.garnix.io"
+        #           "https://numtide.cachix.org"
+        #           "https://raspberry-pi-nix.cachix.org"
+        #           "https://nix-gaming.cachix.org"
+        #           "https://cuda-maintainers.cachix.org"
+        #         ];
+        #         extra-trusted-public-keys = [
+        #           "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+        #           "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+        #           "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
+        #           "numtide.cachix.org-1:2ps1kLBUWjxIneOy1Ik6cQjb41X0iXVXeHigGmycPPE="
+        #           "raspberry-pi-nix.cachix.org-1:WmV2rdSangxW0rZjY/tBvBDSaNFQ3DyEQsVw8EvHn9o="
+        #           "nix-gaming.cachix.org-1:nbjlureqMbRAxR1gJ/f3hxemL9svXaZF/Ees8vCUUs4="
+        #           "cuda-maintainers.cachix.org-1:0dq3bujKpuEPMCX6U4WylrUDZ9JyUG0VpVZa7CNfq5E="
+        #         ];
+        #       };
+        #     };
+        #   in
+        #   inputs.nixpkgs.lib.nixosSystem {
+        #     system = "aarch64-linux";
+        #     specialArgs = {
+        #       inherit inputs;
+        #       modules = nixosModules;
+        #     };
+        #     modules = [
+        #       (
+        #         { ... }:
+        #         {
+        #           nixpkgs.pkgs = tmpPkgs;
+        #         }
+        #       )
+        #       inputs.nixos-hardware.nixosModules.raspberry-pi-3
+        #       inputs.home-manager.nixosModules.home-manager
+        #       ./machines/servers/pisces
+        #       ./machines/shared/core
+        #       ./machines/shared/avahi.nix
+        #       ./secrets
+        #       # Add any deploy-rs specific system configurations here if needed in the future,
+        #       # but typically none are required for basic deployment.
+        #     ];
+        #   };
       };
 
       images = {

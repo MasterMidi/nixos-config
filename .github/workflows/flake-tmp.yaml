@@ -16,16 +16,15 @@ jobs:
   # A separate job to handle updating the flake.lock file
   update-lock-file:
     runs-on: ubuntu-latest
+    # Grant permissions for this job to create a pull request
     permissions:
       contents: write
-      id-token: write
-      issues: write
       pull-requests: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@v12
+        uses: DeterminateSystems/determinate-nix-action@v3
       - name: Update flake lock
         uses: DeterminateSystems/update-flake-lock@v27
         with:

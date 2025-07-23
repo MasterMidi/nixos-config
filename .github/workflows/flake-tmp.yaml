@@ -8,8 +8,8 @@ on:
   # Allow manual triggering from the GitHub UI
   workflow_dispatch:
   # Run on a schedule (e.g., daily at 06:00 UTC)
-  # schedule:
-  #  - cron: '0 6 * * *'
+  schedule:
+   - cron: '0 6 * * *'
 
 jobs:
   # A separate job to handle updating the flake.lock file

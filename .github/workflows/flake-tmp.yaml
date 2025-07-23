@@ -1,43 +1,30 @@
-# This is a basic workflow to help you get started with Actions
+name: Build and Cache Flakes
 
-name: Build 
-
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
+  # Run on pushes to the main branch
   push:
-    branches: [ "refactor/*" ]
-  pull_request:
-    branches: [ "refactor/*" ]
-
-  # Allows you to run this workflow manually from the Actions tab
+    branches:
+      - main
+  # Allow manual triggering from the GitHub UI
   workflow_dispatch:
+  # Run on a schedule (e.g., daily at 06:00 UTC)
+  # schedule:
+  #  - cron: '0 6 * * *'
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  # A separate job to handle updating the flake.lock file
+  update-lock-file:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
-
-      - name: Install Nix On Runner
-        uses: cachix/install-nix-action@v31
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@v12
+      - name: Update flake lock
+        uses: DeterminateSystems/update-flake-lock@v27
         with:
-          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+          # You can customize the commit message for the lock file update
+          commit-msg: "chore(deps): update flake.lock"
+          pr-title: "chore(deps): update flake.lock"
+          pr-body: "Automated dependency update via GitHub Actions."
 
-      - run: nix flake check --extra-experimental-features pipe-operators
-
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: nix run nixpkgs#hello
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.

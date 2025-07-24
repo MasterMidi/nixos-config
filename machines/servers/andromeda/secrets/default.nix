@@ -79,17 +79,17 @@
       group = config.users.groups.users.name;
       sopsFile = ./secrets.sops.yaml;
     };
-    HOARDER_SECRET = {
+    KARAKEEP_SECRET = {
       owner = config.users.users.michael.name;
       group = config.users.groups.users.name;
       sopsFile = ./secrets.sops.yaml;
     };
-    HOARDER_AUTHENTIK_OAUTH_CLIENT_SECRET = {
+    KARAKEEP_OAUTH_CLIENT_SECRET = {
       owner = config.users.users.michael.name;
       group = config.users.groups.users.name;
       sopsFile = ./secrets.sops.yaml;
     };
-    HOARDER_MEILISEARCH_MASTER_KEY = {
+    KARAKEEP_MEILISEARCH_MASTER_KEY = {
       owner = config.users.users.michael.name;
       group = config.users.groups.users.name;
       sopsFile = ./secrets.sops.yaml;

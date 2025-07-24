@@ -9,12 +9,12 @@
     ./bitmagnet.nix
     ./glance.nix
     ./gotify.nix
-    ./hoarder.nix
     ./homarr.nix
     ./immich.nix
     ./jdupes.nix
     ./jellyfin
     ./jellyseerr.nix
+    ./karakeep.nix
     ./mealie.nix
     ./newt.nix
     ./paperless.nix

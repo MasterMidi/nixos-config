@@ -1,5 +1,7 @@
-{config, ...}: {
+{ config, ... }:
+{
   imports = [
+    ./aura.nix
     ./fonts.nix
     ./jellysearch.nix
   ];
@@ -10,8 +12,8 @@
         image = "lscr.io/linuxserver/jellyfin:latest";
         autoUpdate = "registry";
         networking = {
-          networks = ["default"];
-          aliases = ["jellyfin"];
+          networks = [ "default" ];
+          aliases = [ "jellyfin" ];
           ports = {
             webui = {
               host = 8096;
@@ -27,12 +29,11 @@
         };
         volumes = [
           "/mnt/hdd/media:/storage/media:rw"
-          "/mnt/hdd/tmp/media:/cold/media:rw"
           "/mnt/ssd/services/jellyfin/config:/config:rw"
           "/mnt/ssd/services/jellyfin/transcodes:/transcodes:rw"
           # "/mnt/ssd/services/jellyfin/web:/usr/share/jellyfin/web:rw"
         ];
-        devices = ["/dev/dri"];
+        devices = [ "/dev/dri" ];
         labels = [
           # Reverse Proxy
           ## Enable Traefik for this service
@@ -69,9 +70,9 @@
   };
 
   hardware.nvidia-container-toolkit.enable = true; # Enable NVIDIA GPU support
-  services.xserver.videoDrivers = ["nvidia"];
+  services.xserver.videoDrivers = [ "nvidia" ];
 
   users.users.michael = {
-    extraGroups = ["media"];
+    extraGroups = [ "media" ];
   };
 }

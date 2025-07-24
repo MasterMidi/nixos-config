@@ -3,8 +3,9 @@
   config,
   lib,
   ...
-}: {
-  imports = [inputs.lollypops.nixosModules.lollypops];
+}:
+{
+  imports = [ inputs.lollypops.nixosModules.lollypops ];
 
   lollypops.deployment = {
     local-evaluation = lib.mkDefault true;
@@ -16,15 +17,8 @@
     ssh.host = lib.mkDefault config.networking.hostName;
     ssh.user = lib.mkDefault "root";
     ssh.command = lib.mkDefault "ssh";
-    ssh.opts = [];
-
-    # sudo options
-    sudo.enable = lib.mkDefault true;
-    sudo.command = lib.mkDefault "sudo";
-    sudo.opts = [];
+    ssh.opts = [ ];
   };
-
-  systemd.tmpfiles.rules = ["d ${config.lollypops.deployment.config-dir} 1777 ${config.lollypops.deployment.ssh.user} ${config.lollypops.deployment.ssh.user} -"];
 
   # Add the my public SSH key to the authorized_keys of the root user
   users.users.root.openssh.authorizedKeys.keys = [
@@ -32,6 +26,5 @@
   ];
 
   # Allow to ssh into deployment user (root)
-  # TODO: create a dedicated deployment user
-  services.openssh.settings.PermitRootLogin = "yes";
+  # services.openssh.settings.PermitRootLogin = "prohibit-password";
 }

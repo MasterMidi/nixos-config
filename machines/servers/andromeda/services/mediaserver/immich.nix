@@ -1,7 +1,7 @@
 # Based on https://github.com/immich-app/immich/blob/main/docker/docker-compose.yml
 { config, ... }:
 let
-  immichVersion = "v1.134.0";
+  immichVersion = "v1.135.3";
 in
 {
   services.cloudflared.tunnels.andromeda.ingress = {
@@ -90,7 +90,7 @@ in
         ];
       };
       immich-postgres = {
-        image = "ghcr.io/immich-app/postgres:14-vectorchord0.3.0-pgvectors0.2.0@sha256:fa4f6e0971f454cd95fec5a9aaed2ed93d8f46725cc6bc61e0698e97dba96da1";
+        image = "ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0@sha256:5f6a838e4e44c8e0e019d0ebfe3ee8952b69afc2809b2c25f7b0119641978e91";
         # user = "1000:100";
         networking = {
           networks = [ "immich" ];
@@ -110,7 +110,7 @@ in
         ];
       };
       immich-redis = {
-        image = "docker.io/valkey/valkey:8-bookworm@sha256:ff21bc0f8194dc9c105b769aeabf9585fea6a8ed649c0781caeac5cb3c247884";
+        image = "docker.io/valkey/valkey:8-bookworm@sha256:facc1d2c3462975c34e10fccb167bfa92b0e0dbd992fc282c29a61c3243afb11";
         networking = {
           networks = [ "immich" ];
           aliases = [ immich-server.environment.REDIS_HOSTNAME ];

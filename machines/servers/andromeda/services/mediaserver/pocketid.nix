@@ -1,7 +1,7 @@
 { ... }:
 {
   virtualisation.oci-containers.compose.mediaserver.containers.pocket-id = rec {
-    image = "ghcr.io/pocket-id/pocket-id";
+    image = "ghcr.io/pocket-id/pocket-id:v1.6.2";
     networking = {
       networks = [ "default" ];
       aliases = [ "pocket-id" ];

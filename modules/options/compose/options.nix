@@ -315,7 +315,7 @@ in
                   };
                 }
               );
-              default = [ "default" ];
+              # default = [ "default" ];
               description = "Networks to create for this compose service.";
             };
           };

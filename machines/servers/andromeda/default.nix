@@ -72,9 +72,13 @@
 
   environment.systemPackages = with pkgs; [
     kitty.terminfo
+
+		# From https://superuser.com/questions/168749/is-there-a-way-to-see-any-tar-progress-per-file
     (writeShellScriptBin "zip" ''
       ${pkgs.gnutar}/bin/tar cf - $1 -P | ${pkgs.pv}/bin/pv -s $(${pkgs.coreutils}/bin/du -sb $1 | ${pkgs.gawk}/bin/awk '{print $1}') | ${pkgs.gzip}/bin/gzip > $2.tar.gz
     '')
+
+		# From https://stackoverflow.com/questions/19372373/how-to-add-progress-bar-to-a-somearchive-tar-xz-extract
     (writeShellScriptBin "uzip" ''
       ${pkgs.pv}/bin/pv $1 | ${pkgs.gnutar}/bin/tar -x
     '')

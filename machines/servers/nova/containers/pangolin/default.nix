@@ -35,6 +35,10 @@ let
       format = "common";
     };
 
+    accessLog = {
+      format = "common";
+    };
+
     certificatesResolvers = {
       letsencrypt = {
         acme = {
@@ -52,10 +56,12 @@ let
       web = {
         address = ":80";
         http3 = { };
+        observability.accessLogs = false;
       };
       websecure = {
         address = ":443";
         http3 = { };
+        observability.accessLogs = false;
         transport = {
           respondingTimeouts = {
             readTimeout = "30m";
@@ -66,60 +72,6 @@ let
             certResolver = "letsencrypt";
           };
         };
-				forwardedHeaders.trustedIPs = [
-          # localhost
-          "127.0.0.0/8"
-          "::1"
-
-          # podman network
-          "10.0.0.0/8"
-        ];
-      };
-
-      # For email server
-      tcp-25 = {
-        address = ":25/tcp";
-        proxyProtocol.trustedIPs = [
-          # localhost
-          "127.0.0.0/8"
-          "::1"
-
-          # podman network
-          "10.0.0.0/8"
-        ];
-      };
-      tcp-587 = {
-        address = ":587/tcp";
-        proxyProtocol.trustedIPs = [
-          # localhost
-          "127.0.0.0/8"
-          "::1"
-
-          # podman network
-          "10.0.0.0/8"
-        ];
-      };
-      tcp-465 = {
-        address = ":465/tcp";
-        proxyProtocol.trustedIPs = [
-          # localhost
-          "127.0.0.0/8"
-          "::1"
-
-          # podman network
-          "10.0.0.0/8"
-        ];
-      };
-      tcp-993 = {
-        address = ":993/tcp";
-        proxyProtocol.trustedIPs = [
-          # localhost
-          "127.0.0.0/8"
-          "::1"
-
-          # podman network
-          "10.0.0.0/8"
-        ];
       };
     };
 
@@ -262,10 +214,6 @@ let
   };
 in
 {
-  imports = [
-    ./stalwart.nix
-  ];
-
   virtualisation.oci-containers.compose.tunnel = {
     enable = true;
     networks.default = { };

@@ -4,6 +4,7 @@
     modules.options.compose
     modules.services.podman-auto-update
     ./pangolin
+    ./vaultwarden.nix
   ];
 
   # Runtime

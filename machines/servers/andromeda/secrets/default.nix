@@ -132,5 +132,10 @@
       group = config.users.groups.users.name;
       sopsFile = ./secrets.sops.yaml;
     };
+    MEALIE_OIDC_CLIENT_SECRET = {
+      owner = config.users.users.michael.name;
+      group = config.users.groups.users.name;
+      sopsFile = ./secrets.sops.yaml;
+    };
   };
 }

@@ -5,13 +5,17 @@
 {
   # Enable your custom compose module for oci-containers
   virtualisation.oci-containers.compose.mediaserver = {
+    networks.mealie = {
+      subnets = [ "10.89.50.0/24" ];
+      gateways = [ "10.89.50.1" ];
+    };
     containers = {
       mealie = {
         image = "ghcr.io/mealie-recipes/mealie:nightly";
         # PUID and PGID are now handled by the user and group options.
         user = "1000";
         group = "1000";
-				# https://docs.mealie.io/documentation/getting-started/installation/backend-config/
+        # https://docs.mealie.io/documentation/getting-started/installation/backend-config/
         environment = {
           TZ = config.time.timeZone;
           BASE_URL = "https://mealie.mgrlab.dk";
@@ -31,13 +35,19 @@
           OIDC_SIGNUP_ENABLED = "True";
           OIDC_CONFIGURATION_URL = "https://oidc.mgrlab.dk/.well-known/openid-configuration";
           OIDC_CLIENT_ID = "a4603e9d-fb60-439e-b545-8e6db4cac96e";
-          OIDC_CLIENT_SECRET = "TGFcb26qWOX70kvBtYdfO0fXHEhkJ4TG";
           OIDC_ADMIN_GROUP = "admin";
           OIDC_PROVIDER_NAME = "Pocket ID";
           OIDC_SCOPES_OVERRIDE = "openid profile email groups";
           OIDC_REMEMBER_ME = "True";
           OIDC_USER_GROUP = "everyone";
           OIDC_AUTO_REDIRECT = "True";
+
+          OPENAI_BASE_URL = "http://jason:11434";
+          OPENAI_API_KEY = "my-nonexitent-api-key";
+          OPENAI_MODEL = "gemma3:12b";
+        };
+        secrets.env = {
+          OIDC_CLIENT_SECRET.path = config.sops.secrets.MEALIE_OIDC_CLIENT_SECRET.path;
         };
         volumes = [
           # The module uses the backend's volume management.
@@ -64,6 +74,7 @@
         };
         extraOptions = [
           "--memory=1048576000b"
+          # "--add-host=jason:100.109.203.141"
         ];
       };
 

@@ -3,7 +3,6 @@
   imports = [
     modules.options.compose
 
-    ./authentik.nix
     ./autobrr.nix
     ./bazarr.nix
     ./bitmagnet.nix

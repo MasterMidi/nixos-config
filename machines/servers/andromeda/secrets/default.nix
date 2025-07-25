@@ -27,18 +27,6 @@
       restartUnits = [ ];
       sopsFile = ./secrets.sops.yaml;
     };
-    CLOUDFLARED_CRED_FILE = {
-      owner = config.users.users.michael.name;
-      group = config.users.groups.users.name;
-      #   restartUnits = ["podman-mediaserver-gluetun-secret-OPENVPN_USER.service"];
-      sopsFile = ./secrets.sops.yaml;
-    };
-    CLOUDFLARED_CERT = {
-      owner = config.users.users.michael.name;
-      group = config.users.groups.users.name;
-      #   restartUnits = ["podman-mediaserver-gluetun-secret-OPENVPN_USER.service"];
-      sopsFile = ./secrets.sops.yaml;
-    };
     AIRVPN_WIREGUARD_PRIVATE_KEY = {
       owner = config.users.users.michael.name;
       group = config.users.groups.users.name;
@@ -135,6 +123,11 @@
       sopsFile = ./secrets.sops.yaml;
     };
     PAPERLESS_POCKETID_CLIENT_SECRET = {
+      owner = config.users.users.michael.name;
+      group = config.users.groups.users.name;
+      sopsFile = ./secrets.sops.yaml;
+    };
+    PREFETCHARR_JELLYFIN_API_KEY = {
       owner = config.users.users.michael.name;
       group = config.users.groups.users.name;
       sopsFile = ./secrets.sops.yaml;

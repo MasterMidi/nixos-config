@@ -20,6 +20,7 @@
     ./paperless.nix
     ./penpot.nix
     ./pocketid.nix
+    ./prefetcher.nix
     ./prowlarr.nix
     ./qbit
     ./radarr.nix

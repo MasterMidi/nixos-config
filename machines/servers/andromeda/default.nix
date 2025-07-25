@@ -100,6 +100,5 @@
 
   lollypops.deployment = {
     config-dir = "/etc/nixos/";
-    ssh.host = "andromeda.router";
   };
 }

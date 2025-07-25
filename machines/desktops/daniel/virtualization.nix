@@ -1,4 +1,5 @@
-{...}: {
-  boot.kernelModules = ["kvm-amd"];
-  boot.binfmt.emulatedSystems = ["aarch64-linux"];
+{ ... }:
+{
+  boot.kernelModules = [ "kvm-amd" ];
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 }

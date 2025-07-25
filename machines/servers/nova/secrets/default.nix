@@ -1,7 +1,7 @@
 { config, ... }:
 {
   sops.secrets = {
-    PANGOLING_ADMIN_PASSWORD = {
+    PANGOLIN_SERVER_SECRET = {
       sopsFile = ./secrets.sops.yaml;
     };
     STALWART_ADMIN_PASSWORD = {

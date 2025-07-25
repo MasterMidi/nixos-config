@@ -220,7 +220,7 @@ let
       session_cookie_name = "p_session_token";
       resource_access_token_param = "p_token";
       resource_session_request_param = "p_session_request";
-      secret = "72Jbir3AbMB8uZpi3RCqfEEyW6dYqPEIlsXkcpOs1uMKdegDT4146h2z2M0aF67L";
+      secret = config.sops.placeholder.PANGOLIN_SERVER_SECRET;
     };
 
     domains = {
@@ -252,13 +252,6 @@ let
       };
     };
 
-    users = {
-      server_admin = {
-        email = "home@michael-graversen.dk";
-        password = config.sops.placeholder.PANGOLING_ADMIN_PASSWORD;
-      };
-    };
-
     flags = {
       require_email_verification = true;
       disable_signup_without_invite = true;
@@ -278,7 +271,7 @@ in
     networks.default = { };
     containers = {
       pangolin = {
-        image = "fosrl/pangolin:1.4.0";
+        image = "fosrl/pangolin:1.7.3";
         networking = {
           networks = [ "default" ];
           aliases = [ "pangolin" ];
@@ -371,6 +364,8 @@ in
           "${traefikConfig}:/etc/traefik/traefik_config.yml:ro"
           "${traefikDynamicConfig}:/etc/traefik/dynamic_config.yml:ro"
           "/containers/pangolin/config/letsencrypt:/letsencrypt"
+
+          "/var/run/podman/podman.sock:/var/run/docker.sock:ro" # to discover other containers with label configs
         ];
         environment = {
           CF_API_EMAIL = "home@michael-graversen.dk";

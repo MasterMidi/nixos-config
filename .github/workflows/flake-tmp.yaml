@@ -1,0 +1,69 @@
+name: Build and Cache Flakes
+
+on:
+  # Run on pushes to the main branch
+  push:
+    branches:
+      - main
+      - refactor/*
+  # Allow manual triggering from the GitHub UI
+  workflow_dispatch:
+  # Run on a schedule (e.g., daily at 06:00 UTC)
+  schedule:
+   - cron: '0 6 * * *'
+
+jobs:
+  # A separate job to handle updating the flake.lock file
+  update-lock-file:
+    runs-on: ubuntu-latest
+    # Grant permissions for this job to create a pull request
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Install Nix
+        uses: DeterminateSystems/determinate-nix-action@v3
+      - name: Update flake lock
+        uses: DeterminateSystems/update-flake-lock@v27
+        with:
+          # You can customize the commit message for the lock file update
+          commit-msg: "chore(deps): update flake.lock"
+          pr-title: "chore(deps): update flake.lock"
+          pr-body: "Automated dependency update via GitHub Actions."
+
+  # This new job dynamically generates the build matrix
+  generate-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      # Define an output named 'matrix'
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@v12
+      - name: Generate machine matrix
+        id: set-matrix
+        # Run the nix eval command and set the output to a JSON string
+        run: |
+          MATRIX=$(nix eval --json --apply 'builtins.attrNames' .#nixosConfigurations)
+          echo "matrix=$MATRIX" >> $GITHUB_OUTPUT
+
+  # This job builds all configurations defined in the dynamically generated matrix
+  build-and-cache:
+    # This job runs only after the matrix has been generated
+    needs: [ generate-matrix, update-lock-file ]
+    runs-on: ubuntu-latest
+    
+    # Define a matrix to build configurations in parallel
+    strategy:
+      # Use the 'fromJSON' function to parse the output from the 'generate-matrix' job
+      matrix:
+        machine: ${{ fromJSON(needs.generate-matrix.outputs.matrix) }}
+      # Don't cancel all jobs if one fails, allowing others to complete
+      fail-fast: false
+
+    steps:
+      - run: echo ${{ matrix.machine }}

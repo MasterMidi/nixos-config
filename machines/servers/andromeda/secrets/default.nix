@@ -137,5 +137,10 @@
       group = config.users.groups.users.name;
       sopsFile = ./secrets.sops.yaml;
     };
+		OPEN_WEBUI_OIDC_CLIENT_SECRET= {
+      owner = config.users.users.michael.name;
+      group = config.users.groups.users.name;
+      sopsFile = ./secrets.sops.yaml;
+    };
   };
 }

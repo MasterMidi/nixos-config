@@ -14,7 +14,11 @@
     services.playerctld.enable = true; # media player control
 
     home.packages = with pkgs; [
+devenv
+
       playerctl
+
+      prusa-slicer
 
       # Tools
       # ventoy-full

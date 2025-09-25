@@ -29,9 +29,21 @@
   ];
 
   users.users.michael.password = "Servurb42";
-  users.users.root.password = "Servurb42";
+
+  services.openssh = {
+    settings = {
+      # PermitRootLogin = "no";
+    };
+
+    listenAddresses = [
+      {
+        addr = "100.98.127.33";
+        port = 22;
+      }
+    ];
+  };
 
   system.stateVersion = "24.11";
 
-  lollypops.deployment.ssh.host = "138.199.154.23";
+  # lollypops.deployment.ssh.host = "138.199.154.23";
 }

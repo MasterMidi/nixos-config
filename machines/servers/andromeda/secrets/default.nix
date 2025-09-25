@@ -11,14 +11,14 @@
       group = config.services.prometheus.exporters.exportarr-radarr.group;
       sopsFile = ./secrets.sops.yaml;
     };
-    BAZARR_API_KEY = {
-      owner = config.services.prometheus.exporters.exportarr-bazarr.user;
-      group = config.services.prometheus.exporters.exportarr-bazarr.group;
-      sopsFile = ./secrets.sops.yaml;
-    };
+    # BAZARR_API_KEY = {
+    #   owner = config.services.prometheus.exporters.exportarr-bazarr.user;
+    #   group = config.services.prometheus.exporters.exportarr-bazarr.group;
+    #   sopsFile = ./secrets.sops.yaml;
+    # };
     PROWLARR_API_KEY = {
-      owner = config.services.prometheus.exporters.exportarr-bazarr.user;
-      group = config.services.prometheus.exporters.exportarr-bazarr.group;
+      owner = config.users.users.michael.name;
+      group = config.users.groups.users.name;
       sopsFile = ./secrets.sops.yaml;
     };
     JELLYFIN_TCM_API_KEY = {
@@ -57,7 +57,7 @@
       group = config.users.groups.users.name;
       sopsFile = ./secrets.sops.yaml;
     };
-    JELLYSEARCH_MEILISEARCH_MASTER_KEY = {
+    JELLYFIN_MEILISEARCH_MASTER_KEY = {
       owner = config.users.users.michael.name;
       group = config.users.groups.users.name;
       sopsFile = ./secrets.sops.yaml;
@@ -137,10 +137,16 @@
       group = config.users.groups.users.name;
       sopsFile = ./secrets.sops.yaml;
     };
-		OPEN_WEBUI_OIDC_CLIENT_SECRET= {
+    OPEN_WEBUI_OIDC_CLIENT_SECRET = {
       owner = config.users.users.michael.name;
       group = config.users.groups.users.name;
       sopsFile = ./secrets.sops.yaml;
+    };
+    ATTIC_SECRET_BASE64 = {
+      # owner = config.services.atticd.user;
+      # group = config.services.atticd.group;
+      format = "dotenv";
+      sopsFile = ./attic.env;
     };
   };
 }

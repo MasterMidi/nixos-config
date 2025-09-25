@@ -1,10 +1,10 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   home.stateVersion = "23.05";
 
   services = {
     swayosd = {
       enable = true;
-      display = "DP-2";
     };
   };
 

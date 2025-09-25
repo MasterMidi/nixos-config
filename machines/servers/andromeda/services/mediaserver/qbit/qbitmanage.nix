@@ -3,29 +3,30 @@
   pkgs,
   lib,
   ...
-}: {
+}:
+{
   virtualisation.oci-containers.compose.mediaserver = {
     containers = rec {
-      qbitmanage = {
-        image = "ghcr.io/hotio/qbitmanage:nightly";
-        autoUpdate = "registry";
-        networking.networks = ["default" "qbit-public"];
-        environment = {
-          PGID = builtins.toString config.users.groups.users.gid;
-          PUID = builtins.toString config.users.users.michael.uid;
-          TZ = config.time.timeZone;
-          UMASK = "002";
+      # qbitmanage = {
+      #   image = "ghcr.io/hotio/qbitmanage:nightly";
+      #   autoUpdate = "registry";
+      #   networking.networks = ["default" "qbit-public"];
+      #   environment = {
+      #     PGID = builtins.toString config.users.groups.users.gid;
+      #     PUID = builtins.toString config.users.users.michael.uid;
+      #     TZ = config.time.timeZone;
+      #     UMASK = "002";
 
-          QBT_SCHEDULE = "30";
-          QBT_WIDTH = "150";
-        };
-        volumes = [
-          "/mnt/ssd/services/qbitmanage/config:/config:rw"
-          "${config.sops.templates.QBITMANAGE_CONFIG.path}:/config/config.yml:rw"
-          "/mnt/hdd/torrents:/storage/torrents:rw"
-        ];
-        dependsOn = ["qbit"];
-      };
+      #     QBT_SCHEDULE = "30";
+      #     QBT_WIDTH = "150";
+      #   };
+      #   volumes = [
+      #     "/mnt/ssd/services/qbitmanage/config:/config:rw"
+      #     "${config.sops.templates.QBITMANAGE_CONFIG.path}:/config/config.yml:rw"
+      #     "/mnt/hdd/torrents:/storage/torrents:rw"
+      #   ];
+      #   dependsOn = ["qbit"];
+      # };
     };
   };
 
@@ -33,8 +34,10 @@
     owner = config.users.users.michael.name;
     group = config.users.groups.users.name;
     mode = "0600";
-    restartUnits = [config.virtualisation.oci-containers.compose.mediaserver.containers.qbitmanage.unitName];
-    content = lib.generators.toYAML {} rec {
+    restartUnits = [
+      # config.virtualisation.oci-containers.compose.mediaserver.containers.qbitmanage.unitName
+    ];
+    content = lib.generators.toYAML { } rec {
       commands = {
         dry_run = false;
         cross_seed = false;

@@ -3,16 +3,17 @@
   pkgs,
   lib,
   ...
-}: {
+}:
+{
   virtualisation.oci-containers.compose.mediaserver = {
-    networks.qbit-public = {};
+    networks.qbit-public = { };
     containers = rec {
       qbit = {
         image = "ghcr.io/hotio/qbittorrent:release-5.0.4";
         autoUpdate = "registry";
         networking = {
-          networks = ["default"]; # dont support multiple networks because of vpn setup it seems
-          aliases = ["qbit"];
+          networks = [ "default" ]; # dont support multiple networks because of vpn setup it seems
+          aliases = [ "qbit" ];
           ports = {
             webui = {
               host = 9060;
@@ -57,36 +58,12 @@
           # "${script}/bin:/scripts/:ro"
           # "/nix/store:/nix/store:ro"
         ];
-        capabilities = ["NET_ADMIN"];
-        devices = ["/dev/net/tun"];
+        capabilities = [ "NET_ADMIN" ];
+        devices = [ "/dev/net/tun" ];
         extraOptions = [
           "--sysctl=net.ipv4.conf.all.src_valid_mark=1"
           # "--add-host=${builtins.head cross-seed-public.networking.aliases}:10.89.1.100" # add cross seed hostname manually because of vpn
           # "--add-host=${builtins.head config.virtualisation.oci-containers.compose.mediaserver.containers.qbit-private.networking.aliases}:10.89.1.90" # add private qbit hostname manually because of vpn
-        ];
-        labels = [
-          # Reverse proxy config. Passed on: https://github.com/qbittorrent/qBittorrent/wiki/Traefik-Reverse-Proxy-for-Web-UI
-          "traefik.enable=true"
-
-          # Router Configuration
-          "traefik.http.routers.qb.entryPoints=local"
-          "traefik.http.routers.qb.rule=Host(`qbit.mgrlab.dk`)"
-
-          # Security Headers
-          "traefik.http.middlewares.qb-headers.headers.customRequestHeaders.X-Frame-Options=SAMEORIGIN"
-          "traefik.http.middlewares.qb-headers.headers.customRequestHeaders.Referer="
-          "traefik.http.middlewares.qb-headers.headers.customRequestHeaders.Origin="
-
-          # Apply headers middleware
-          "traefik.http.routers.qb.middlewares=qb-headers"
-
-          # Service Configuration
-          "traefik.http.services.qb.loadbalancer.server.port=9060"
-          "traefik.http.services.qb.loadbalancer.passHostHeader=false"
-
-          # Monitoring
-          "kuma.qbit.http.name=Qbittorrent"
-          "kuma.qbit.http.url=https://qbit.mgrlab.dk" # TODO: make use of authentication because more fun and challenging
         ];
       };
     };
@@ -99,7 +76,7 @@
       config.virtualisation.oci-containers.compose.mediaserver.containers.qbit.unitName
       # config.virtualisation.oci-containers.compose.mediaserver.containers.qbit-private.unitName
     ];
-    content = lib.generators.toINI {} {
+    content = lib.generators.toINI { } {
       Interface = {
         Address = "10.142.244.184/32,fd7d:76ee:e68f:a993:77f5:2a70:242b:6a1a/128";
         PrivateKey = config.sops.placeholder.AIRVPN_WIREGUARD_PRIVATE_KEY;

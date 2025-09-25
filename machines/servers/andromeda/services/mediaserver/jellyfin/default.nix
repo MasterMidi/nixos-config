@@ -3,7 +3,7 @@
   imports = [
     ./aura.nix
     ./fonts.nix
-    ./jellysearch.nix
+    # ./jellysearch.nix
   ];
 
   virtualisation.oci-containers.compose.mediaserver = {
@@ -59,6 +59,19 @@
         extraOptions = [
           "--gpus=all"
         ];
+      };
+
+      # https://github.com/arnesacnussem/jellyfin-plugin-meilisearch
+      jellyfin-meilisearch = {
+        image = "getmeili/meilisearch:v1.9";
+        networking = {
+          networks = [ "default" ];
+          aliases = [ "jellyfin-meilisearch" ];
+        };
+        volumes = [ "/mnt/ssd/services/jellyfin/meilisearch:/meili_data:rw" ];
+        secrets.env = {
+          MEILI_MASTER_KEY.path = config.sops.secrets.JELLYFIN_MEILISEARCH_MASTER_KEY.path;
+        };
       };
     };
   };

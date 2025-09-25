@@ -5,7 +5,8 @@
   pkgs,
   inputs,
   ...
-}: {
+}:
+{
   imports = [
     ./development
     ./filesystem
@@ -35,7 +36,7 @@
     onlyoffice-bin
     polkit_gnome
     libsecret
-    (git.override {withLibsecret = true;})
+    (git.override { withLibsecret = true; })
     git-credential-manager
   ];
 
@@ -53,7 +54,7 @@
     enableSSHSupport = true;
     # pinentryPackage = pkgs.pinentry-gnome3;
   };
-  services.dbus.packages = [pkgs.gcr];
+  services.dbus.packages = [ pkgs.gcr ];
   services.gnome.gnome-keyring.enable = true;
 
   qt = {

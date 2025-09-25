@@ -4,6 +4,7 @@
     modules.options.compose
     modules.services.podman-auto-update
     ./pangolin
+    # ./headscale.nix
     ./vaultwarden.nix
   ];
 

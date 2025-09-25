@@ -3,33 +3,34 @@
   pkgs,
   inputs,
   ...
-}: {
+}:
+{
   imports = [
     ./discord
-		./mpv
-		./nautilus
-		./rofi
-		./vscodium
-		./waybar
-		./wlogout
-		./bashmount.nix
-		./firefox.nix
-		./fzf.nix
-		./git.nix
-		./hyprlock.nix
-		./kitty.nix
-		./lazygit.nix
-		./ripgrep.nix
-		./spotify.nix
-		./thunderbird.nix
-		./zathura.nix
+    ./mpv
+    ./nautilus
+    ./rofi
+    ./vscodium
+    ./waybar
+    ./wlogout
+    ./bashmount.nix
+    ./firefox.nix
+    ./fzf.nix
+    ./git.nix
+    ./hyprlock.nix
+    ./kitty.nix
+    ./lazygit.nix
+    ./ripgrep.nix
+    ./spotify.nix
+    # ./thunderbird.nix
+    ./zathura.nix
   ];
 
   fonts.fontconfig = {
     enable = true;
     defaultFonts = {
-      monospace = ["JetBrainsMono NF"];
-      sansSerif = ["Inter"];
+      monospace = [ "JetBrainsMono NF" ];
+      sansSerif = [ "Inter" ];
     };
   };
 
@@ -55,6 +56,4 @@
     BROWSER = "firefox";
     FILE_BROWSER = "nautilus";
   };
-
-  programs.thefuck.enable = true;
 }

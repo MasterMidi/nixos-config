@@ -56,11 +56,11 @@
           # For Prowlarr, click on the indexer name and copy the Torznab Url, then
           # append "?apikey=YOUR_PROWLARR_API_KEY".
           torznab = [
-            "http://prowlarr:9696/1/api?apikey=${config.sops.placeholder.PROWLARR_API_KEY}" # bitmagnet
+            "http://prowlarr:9696/23/api?apikey=${config.sops.placeholder.PROWLARR_API_KEY}" # bitmagnet
             "http://prowlarr:9696/9/api?apikey=${config.sops.placeholder.PROWLARR_API_KEY}" # milkie
-            "http://prowlarr:9696/10/api?apikey=${config.sops.placeholder.PROWLARR_API_KEY}" # digitalcore
+            "http://prowlarr:9696/22/api?apikey=${config.sops.placeholder.PROWLARR_API_KEY}" # digitalcore
             "http://prowlarr:9696/21/api?apikey=${config.sops.placeholder.PROWLARR_API_KEY}" # darkpeers
-            # "http://prowlarr:9696/20/api?apikey=${config.sops.placeholder.PROWLARR_API_KEY}" # infinity
+            "http://prowlarr:9696/24/api?apikey=${config.sops.placeholder.PROWLARR_API_KEY}" # rastastugan
           ];
 
           # URL(s) to your Sonarr instance(s)

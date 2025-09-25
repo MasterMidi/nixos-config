@@ -56,7 +56,7 @@ jobs:
     # This job runs only after the matrix has been generated
     needs: [ generate-matrix, update-lock-file ]
     runs-on: ubuntu-latest
-    
+
     # Define a matrix to build configurations in parallel
     strategy:
       # Use the 'fromJSON' function to parse the output from the 'generate-matrix' job
@@ -64,6 +64,51 @@ jobs:
         machine: ${{ fromJSON(needs.generate-matrix.outputs.matrix) }}
       # Don't cancel all jobs if one fails, allowing others to complete
       fail-fast: false
+      # For build and cache, only build and cache one at a time, to make use of created cache in subsequent builds
+      max-parallel: 1
 
     steps:
-      - run: echo ${{ matrix.machine }}
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@v12
+      - name: Build and push ${{ matrix.machine }} to Attic cache
+        uses: ./.github/actions/attic-build-and-cache
+        with:
+          endpoint: "https://cache.mgrlab.dk"
+          cache: "default"
+          token: "${{ secrets.ATTIC_TOKEN }}"
+          flake-output: ".#nixosConfigurations.${{ matrix.machine }}.config.system.build.toplevel"
+
+  # This new job deploys the configurations to the self-hosted machines
+  deploy-configurations:
+    # This job runs after the build job is complete
+    needs: [build-and-cache, generate-matrix]
+    strategy:
+      # Use the same dynamic matrix
+      matrix:
+        machine: ${{ fromJSON(needs.generate-matrix.outputs.matrix) }}
+      fail-fast: false
+
+    # IMPORTANT: This tells the job to not fail the entire workflow if one machine is offline.
+    continue-on-error: true
+    # Set a timeout in case a runner is offline. The job will fail after this duration.
+    timeout-minutes: 5
+
+    # Target a self-hosted runner with a label matching the machine name
+    runs-on: [self-hosted, "${{ matrix.machine }}"]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Deploy NixOS Configuration
+        run: |
+          echo "--- Starting deployment for ${{ matrix.machine }} ---"
+          # This command switches the system to the new configuration from the flake.
+          # It will automatically use the Attic cache if configured on the host machine.
+          #
+          # IMPORTANT: The self-hosted runner user MUST have passwordless sudo permissions
+          # for the 'nixos-rebuild' command for this to work.
+          sudo nixos-rebuild switch --flake .#${{ matrix.machine }}
+          echo "--- Deployment for ${{ matrix.machine }} finished. ---"

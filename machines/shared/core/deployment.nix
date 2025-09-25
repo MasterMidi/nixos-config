@@ -5,7 +5,7 @@
   ...
 }:
 {
-  imports = [ inputs.lollypops.nixosModules.lollypops ];
+  imports = [ inputs.lollypops.nixosModules.default ];
 
   lollypops.deployment = {
     local-evaluation = lib.mkDefault true;

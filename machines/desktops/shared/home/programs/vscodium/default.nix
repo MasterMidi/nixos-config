@@ -4,7 +4,8 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   imports = [
     # ./elixir.nix
     # ./go.nix
@@ -19,7 +20,9 @@
       userSettings = {
         "files.autoSave" = "afterDelay";
         "editor.wordWrap" = "on";
-        "editor.fontFamily" = lib.concatMapStringsSep "," (x: "'${x}'") config.fonts.fontconfig.defaultFonts.monospace;
+        "editor.fontFamily" = lib.concatMapStringsSep "," (
+          x: "'${x}'"
+        ) config.fonts.fontconfig.defaultFonts.monospace;
         "editor.fontLigatures" = true;
         "editor.fontSize" = 14;
         "editor.fontWeight" = "normal";
@@ -28,7 +31,9 @@
         "editor.inlineSuggest.enabled" = true;
         "editor.bracketPairColorization.enabled" = true;
         "editor.guides.bracketPairs" = "active";
-        "terminal.integrated.fontFamily" = lib.concatMapStringsSep "," (x: "'${x}'") config.fonts.fontconfig.defaultFonts.monospace;
+        "terminal.integrated.fontFamily" = lib.concatMapStringsSep "," (
+          x: "'${x}'"
+        ) config.fonts.fontconfig.defaultFonts.monospace;
         "terminal.integrated.fontSize" = 14;
         "terminal.external.linuxExec" = "kitty";
         "terminal.integrated.gpuAcceleration" = "auto";
@@ -68,7 +73,8 @@
           key = "ctrl+shift+[Semicolon]";
         }
       ];
-      extensions = with inputs.nix-vscode-extensions.extensions.x86_64-linux.vscode-marketplace;
+      extensions =
+        with inputs.nix-vscode-extensions.extensions.x86_64-linux.vscode-marketplace;
         [
           sndst00m.vscode-native-svg-preview
           mads-hartmann.bash-ide-vscode
@@ -116,7 +122,7 @@
           hbenl.vscode-test-explorer
           gruntfuggly.todo-tree
           panicbit.cargo
-          vadimcn.vscode-lldb
+          # vadimcn.vscode-lldb
           webfreak.debug
           serayuzgur.crates
           tamasfe.even-better-toml

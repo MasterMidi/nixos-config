@@ -39,4 +39,20 @@
   boot.kernel.sysctl = {
     "fs.inotify.max_user_instances" = 512; # fix a lot of filehandles from qbittorrent and other services simultaneously
   };
+
+  virtualisation.oci-containers.compose.mediaserver.containers.subgen = {
+    image = "docker.io/mccloud/subgen:cpu";
+    autoUpdate = "registry";
+    networking = {
+      networks = [ "default" ];
+      aliases = [ "subgen" ];
+    };
+    environment = {
+      TRANSCRIBE_DEVICE = "cpu";
+      WHISPER_MODEL = "large-v3";
+    };
+    volumes = [
+      "/mnt/ssd/services/subgen/data/models:/subgen/models:rw"
+    ];
+  };
 }

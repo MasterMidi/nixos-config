@@ -120,11 +120,9 @@
       };
 
       nohardlinks = {
-        keep = {
-          exclude_tags = [
-            "keep"
-          ];
-        };
+        prowlarr = {};
+        radarr = {};
+        sonarr = {};
       };
 
       share_limits = {
@@ -226,7 +224,7 @@
       };
 
       recyclebin = {
-        enabled = false;
+        enabled = true;
         empty_after_x_days = 30;
         save_torrents = false;
         split_by_category = false;

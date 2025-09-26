@@ -127,6 +127,8 @@ in {
       windowrulev2 = [
         "monitor 1, class:^(discord|VencordDesktop)$"
         "stayfocused, class:^(pinentry-)" # fix pinentry losing focus
+        "float,class:^(jetbrains-.*)$,title:^(win[0-9]+)$"
+        "nofocus,class:^(jetbrains-.*)$,title:^(win[0-9]+)$"
       ];
     };
   };

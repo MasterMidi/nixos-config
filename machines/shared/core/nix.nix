@@ -24,7 +24,7 @@
   };
 
   nixpkgs.config = {
-    allowUnfree = true;
+    allowUnfree = lib.mkForce true;
     extra-substituters = [
       "https://cache.nixos.org"
       "https://nix-community.cachix.org"

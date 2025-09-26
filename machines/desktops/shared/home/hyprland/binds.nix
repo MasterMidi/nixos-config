@@ -1,0 +1,90 @@
+{
+  pkgs,
+  config,
+  ...
+}: let
+  mainMod = "SUPER";
+
+  showDesktopScript = pkgs.writeShellApplication {
+    name = "hypr-show-desktop";
+    text = builtins.readFile ./hypr-show-desktop.sh;
+    # List runtime dependencies. Their 'bin' directories will be added to the script's PATH.
+    runtimeInputs = [
+      pkgs.hyprland
+      pkgs.jq
+      pkgs.gnused # Use gnused for consistency/features if needed, though pkgs.sed usually works
+      pkgs.bash # Explicitly list bash as a dependency
+    ];
+  };
+in {
+  wayland.windowManager.hyprland.settings = {
+    bind = [
+      # Programs
+      "${mainMod}, Q, exec, kitty" # Terminal
+      "${mainMod}, E, exec, nautilus -w" # File manager
+      "${mainMod}, B, exec, firefox" # Browser
+      "${mainMod} SHIFT, B, exec, firefox --private-window" # Private browser
+      "${mainMod} SHIFT, W, exec, ${pkgs.killall}/bin/killall -q .waybar-wrapped ; waybar" # Restart waybar
+      "${mainMod} SHIFT, A, exec, ${pkgs.killall}/bin/killall -q .ags-wrapped ; ags" # Restart ags
+      "${mainMod} SHIFT, C, exec, hyprpicker -a" # Color picker
+
+      # Rofi menues
+      "${mainMod}, G, exec, rofi-games" # rofi games menu
+      "${mainMod}, W, exec, rofi-wall ${config.home.homeDirectory}/Pictures/wallpapers" # rofi wallpaper menu
+      "${mainMod}, SPACE, exec, pkill rofi || ${config.programs.rofi.package}/bin/rofi -show drun" # Rofi app launcher
+      "${mainMod} CTRL SHIFT, N, exec, pkill rofi-network || rofi-network" # Rofi network menu
+      "${mainMod} CTRL, B, exec, pkill rofi-bluetooth || rofi-bluetooth" # Rofi bluetooth menu
+      "${mainMod} ALT, SPACE, exec, rofi -show run" # Rofi run menu
+      "${mainMod} SHIFT, SPACE, exec, rofi-rbw" # Rofi rbw menu
+      "${mainMod} CTRL, S, exec, rofi-systemd" # Rofi systemd menu
+      "${mainMod} CTRL, SPACE, exec, rofi -show calc -modi calc" # Rofi calculator
+      "${mainMod}, PERIOD, exec, bemoji" # Emoji picker
+      "${mainMod}, V, exec, rofi-clipboard" # Rofi clipboard manager
+
+      # Window management
+      "${mainMod}, L, exec, hyprlock" # Lock screen
+      "${mainMod}, C, killactive," # Close current window
+      "${mainMod}, F, togglefloating," # Toggle floating mode
+      "${mainMod}, P, pseudo," # dwindle
+      "${mainMod}, J, togglesplit," # dwindle
+      "${mainMod}, left, movefocus, l"
+      "${mainMod}, right, movefocus, r"
+      "${mainMod}, up, movefocus, u"
+      "${mainMod}, down, movefocus, d"
+      "${mainMod} SHIFT, F, fullscreen, 0"
+      # "${mainMod}, D, exec, ${showDesktopScript}"
+
+      # Media keys
+      "${mainMod} SHIFT, S, exec, ${pkgs.grimblast}/bin/grimblast --freeze copy area" # Screenshots
+      "${mainMod} CTRL SHIFT, S, exec, ${pkgs.qrtool}/bin/qrtool decode $(${pkgs.grimblast}/bin/grimblast --freeze save area) | ${pkgs.wl-clipboard}/bin/wl-copy" # Scans QR code and copies data to clipboard
+      ",XF86AudioPlay, exec, ${pkgs.playerctl}/bin/playerctl play-pause --player='spotify,spotify_player,%any'" # Play/pause
+      ",XF86AudioNext, exec, ${pkgs.playerctl}/bin/playerctl next --player='spotify,spotify_player,%any'" # Next track
+      ",XF86AudioPrev, exec, ${pkgs.playerctl}/bin/playerctl previous --player='spotify,spotify_player,%any'" # Previous track
+      "${mainMod}, mouse_down, exec, ${pkgs.playerctl}/bin/playerctl volume '0.05+' --player='spotify,spotify_player,%any'" # Volume up
+      "${mainMod}, mouse_up, exec, ${pkgs.playerctl}/bin/playerctl volume '0.05-' --player='spotify,spotify_player,%any'" # Volume down
+      # TODO keybind to activate gamemode (+ add gamemode start from rofi gamelauncher)
+
+      # Example special workspace (scratchpad)
+      # bind = ${mainMod}, S, togglespecialworkspace, magic
+      # bind = ${mainMod} SHIFT, S, movetoworkspace, special:magic
+
+      "${builtins.concatStringsSep "\n" (builtins.genList (
+          x: let
+            ws = let
+              c = (x + 1) / 10;
+            in
+              builtins.toString (x + 1 - (c * 10));
+          in ''
+            bind = ${mainMod}, ${ws}, workspace, ${toString (x + 1)}
+            bind = ${mainMod} SHIFT, ${ws}, movetoworkspace, ${toString (x + 1)}
+          ''
+        )
+        10)}"
+    ];
+
+    bindm = [
+      "${mainMod}, mouse:272, movewindow"
+      "${mainMod}, mouse:273, resizewindow"
+    ];
+  };
+}

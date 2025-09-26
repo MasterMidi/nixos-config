@@ -1,9 +1,6 @@
 # This file defines overlays
 {inputs, ...}: {
   # This one brings our custom packages from the 'pkgs' directory
-  # TODO: find out why the import parts makes callPackage disappear
-  # additions = final: _prev: import ../pkgs {inherit final;};
-  # additions = final: prev: import ../pkgs {pkgs = prev;};
   additions = final: _prev: import ../pkgs final;
 
   # This one contains whatever you want to overlay
@@ -16,9 +13,9 @@
   };
 
   packages = final: _prev: {
-    stable = import inputs.nixpkgs-stable {
-      system = final.system;
-      config.allowUnfree = true;
-    };
+    # stable = import inputs.nixpkgs-stable {
+    #   system = final.system;
+    #   config.allowUnfree = true;
+    # };
   };
 }

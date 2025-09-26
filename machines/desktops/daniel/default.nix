@@ -1,0 +1,70 @@
+# Edit this configuration file to define what should be installed on
+# your system.  Help is available in the configuration.nix(5) man page
+# and in the NixOS manual (accessible by running ‘nixos-help’).
+{
+  pkgs,
+  inputs,
+  ...
+}:
+{
+  imports = [
+    ./development
+    ./filesystem
+    ./hardware
+    ./home
+    ./hardware.nix
+    ./networking.nix
+    ./sound.nix
+    ./system.nix
+    ./user-interface.nix
+    ./virtualization.nix
+  ];
+
+  # Enable CUPS to print documents.
+  services.printing.enable = true;
+
+  security = {
+    rtkit.enable = true;
+    # Polkit for hyprland to get sudo password prompts
+    polkit.enable = true;
+    pam.services.hyprlock.text = "auth include login";
+  };
+
+  # List packages installed in system profile. To search, run:
+  # $ nix search wget
+  environment.systemPackages = with pkgs; [
+    onlyoffice-bin
+    polkit_gnome
+    libsecret
+    (git.override { withLibsecret = true; })
+    git-credential-manager
+  ];
+
+  services.tailscale.enable = true;
+
+  programs = {
+    seahorse.enable = true;
+    dconf.enable = true;
+  };
+
+  services.gvfs.enable = true; # for nautlius to work with trash and network shares
+  programs.mtr.enable = true;
+  programs.gnupg.agent = {
+    enable = true;
+    enableSSHSupport = true;
+    # pinentryPackage = pkgs.pinentry-gnome3;
+  };
+  services.dbus.packages = [ pkgs.gcr ];
+  services.gnome.gnome-keyring.enable = true;
+
+  qt = {
+    enable = true;
+    platformTheme = "qt5ct";
+    style = "kvantum";
+  };
+
+  # Enable the OpenSSH daemon.
+  services.openssh.enable = true;
+
+  system.stateVersion = "23.05";
+}

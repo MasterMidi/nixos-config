@@ -1,0 +1,46 @@
+# .github/actions/build-with-attic/action.yml
+name: 'Build Flake Output and Push to Attic'
+description: 'Builds a given flake output and pushes the result to an Attic cache.'
+
+# Define the inputs the action will accept
+inputs:
+  endpoint:
+    description: 'The URL of the Attic server.'
+    required: true
+  cache:
+    description: 'The name of the Attic cache to use.'
+    required: true
+  token:
+    description: 'The authentication token for Attic.'
+    required: true
+  flake-output:
+    description: 'The flake output to build (e.g., .#nixosConfigurations.machine1...).'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    # This step installs the attic client from nixpkgs
+    - name: Install Attic Client
+      shell: bash
+      run: |
+        nix profile install nixpkgs#attic-client
+
+    # This step uses the provided inputs to log into your Attic server
+    - name: Configure and Login to Attic
+      shell: bash
+      run: |
+        attic login --set-default ${{ inputs.cache }} ${{ inputs.endpoint }} ${{ inputs.token }}
+        attic use ${{ inputs.cache }}
+        echo "Successfully logged into Attic server at ${{ inputs.endpoint }}"
+
+    # This step runs the build and then pushes the result to your cache
+    - name: Build Flake Output and Push
+      shell: bash
+      run: |
+        echo "--- Building ${{ inputs.flake-output }} ---"
+        nix build ${{ inputs.flake-output }} --print-build-logs
+        echo "--- Build finished. Pushing to Attic... ---"
+        attic push ${{ inputs.cache }} ./result
+        echo "--- Push complete. ---"
+

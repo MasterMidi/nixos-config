@@ -1,4 +1,4 @@
 {
-  configs = import ./configs;
+  options = import ./options;
   services = import ./services;
 }

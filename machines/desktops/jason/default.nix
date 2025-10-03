@@ -71,8 +71,4 @@
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
-
-  lollypops.deployment = {
-    config-dir = "/etc/nix";
-  };
 }

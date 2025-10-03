@@ -1,0 +1,110 @@
+name: Task
+description: Create a task to track work that needs to be done
+title: "[TASK]: "
+labels: ["task"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Task Template
+        Please fill out the information below to create a task issue.
+  
+  - type: input
+    id: task-name
+    attributes:
+      label: Brief Task Name
+      description: A short, descriptive name for this task
+      placeholder: ex. Add new feature X
+    validations:
+      required: true
+  
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Provide a detailed description of the task
+      placeholder: Detailed description of what needs to be done
+    validations:
+      required: true
+  
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation
+      description: Why is this task important? What problem does it solve?
+      placeholder: Explain the reasoning and benefits of completing this task
+    validations:
+      required: true
+  
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: List the criteria that must be met for this task to be considered complete
+      placeholder: |
+        - [ ] Criterion 1
+        - [ ] Criterion 2
+        - [ ] Criterion 3
+      value: |
+        - [ ] 
+    validations:
+      required: true
+  
+  - type: textarea
+    id: technical-notes
+    attributes:
+      label: Technical Notes
+      description: Any technical details, links to documentation, or implementation notes
+      placeholder: Add technical details, documentation links, or implementation notes here
+    validations:
+      required: false
+  
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies
+      description: List any tasks that must be completed before this one
+      placeholder: |
+        - [ ] Task or dependency 1
+        - [ ] Task or dependency 2
+    validations:
+      required: false
+  
+  - type: dropdown
+    id: estimated-effort
+    attributes:
+      label: Estimated Effort
+      description: How much time do you estimate this task will take?
+      options:
+        - Small (hours)
+        - Medium (days)
+        - Large (weeks)
+      default: 0
+    validations:
+      required: true
+  
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: What is the priority level of this task?
+      options:
+        - Low
+        - Medium
+        - High
+        - Urgent
+      default: 1
+    validations:
+      required: true
+  
+  - type: textarea
+    id: related-todos
+    attributes:
+      label: Related TODOs
+      description: Links to related TODOs or issues
+      placeholder: |
+        - #123
+        - #456
+    validations:
+      required: false

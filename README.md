@@ -1,198 +1,129 @@
-<div align="center">
-<img src="https://raw.githubusercontent.com/NixOS/nixos-artwork/master/logo/nix-snowflake-colours.svg" width="96px" height="96px" />
+# NixOS Configuration
 
-[![](https://readme-typing-svg.demolab.com/?font=JetBrains+Mono&size=32&duration=3000&pause=1000&color=EBDBB2&center=true&vCenter=true&random=false&width=435&lines=My+NixOS+config)](https://git.io/typing-svg)
+This repository contains my NixOS configuration for multiple machines using Nix flakes.
 
-<img src="https://raw.githubusercontent.com/catppuccin/catppuccin/main/assets/palette/macchiato.png" width="600px" /> <br>
+## 📦 Machines
 
-<!-- spacer -->
-<p></p>
-<a href="https://github.com/MasterMidi/nixos-config/issues">
-<img src="https://img.shields.io/github/issues/MasterMidi/nixos-config?color=d8a657&labelColor=32302f&style=for-the-badge">
-</a>
-<a href="https://github.com/MasterMidi/nixos-config/stargazers">
-<img src="https://img.shields.io/github/stars/MasterMidi/nixos-config?color=d3869b&labelColor=32302f&style=for-the-badge">
-</a>
-<a href="https://github.com/MasterMidi/nixos-config/">
-<img src="https://img.shields.io/github/repo-size/MasterMidi/nixos-config?color=ea999c&labelColor=32302f&style=for-the-badge">
-</a>
-<a href="https://github.com/MasterMidi/nixos-config/blob/main/LICENSE">
-<img src="https://img.shields.io/static/v1.svg?style=for-the-badge&label=License&message=GPL-3&logoColor=d3869b&colorA=313244&colorB=cba6f7"/>
-</a>
-<a href="https://nixos.org">
-<img src="https://img.shields.io/badge/NixOS-unstable-blue.svg?style=for-the-badge&labelColor=32302f&logo=NixOS&logoColor=white&color=7daea3">
-</a>
-<a href="https://nixos.org">
-<img src="https://img.shields.io/github/last-commit/shvedes/dotfiles?style=for-the-badge&color=d8a657&labelColor=32302f">
-</a>
-<br>
-</div>
-
-## 📋 Overview
-
-This repository contains my personal NixOS configurations for multiple machines, managed using Nix flakes. The configuration is structured to support both desktop and server systems with shared modules for common functionality.
-
-### 🖥️ Machines
-
-#### Desktops
-- **jason** - Desktop workstation (x86_64-linux)
-- **daniel** - Desktop workstation (x86_64-linux)
-
-#### Servers
+- **jason** - Desktop (x86_64-linux)
+- **daniel** - Desktop (x86_64-linux)
 - **andromeda** - Server (x86_64-linux)
-- **nova** - Server with declarative disk configuration (x86_64-linux)
-- **pisces** - Raspberry Pi server (aarch64-linux, commented out)
+- **nova** - Server (x86_64-linux)
 
-All configurations use:
-- **NixOS unstable** channel
-- **Home Manager** for user environment management
-- **Flake-based** configuration for reproducibility
-- **Secret management** with sops-nix
+## 🚀 Deployment
 
-## 🚀 Getting Started
+This configuration uses [deploy-rs](https://github.com/serokell/deploy-rs) for remote deployments.
 
 ### Prerequisites
 
-- NixOS installed on your system
-- Nix flakes enabled in your configuration
-- Git for cloning the repository
+- SSH access to the target machine with root privileges
+- The target machine's SSH public key must be in your `~/.ssh/known_hosts`
+- Your SSH public key must be in the target machine's `/root/.ssh/authorized_keys`
 
-### Initial Setup
+### Deploying to a Remote Machine
 
-1. **Clone the repository:**
-   ```sh
-   git clone https://github.com/MasterMidi/nixos-config.git
-   cd nixos-config
-   ```
+To deploy a configuration to a remote machine:
 
-2. **Enter the development shell (optional but recommended):**
-   ```sh
-   nix develop
-   # or if you have direnv installed:
-   direnv allow
-   ```
-
-### Building a Configuration
-
-To build a specific machine configuration:
-
-```sh
-# Build a configuration
-nixos-rebuild build --flake .#<machine-name>
+```bash
+# Deploy to a specific machine
+dply <hostname>
 
 # Examples:
-nixos-rebuild build --flake .#jason
-nixos-rebuild build --flake .#daniel
-nixos-rebuild build --flake .#nova
+dply jason
+dply daniel
+dply andromeda
+dply nova
 ```
 
-### Applying a Configuration
+The `dply` command is a shell alias that runs `deploy .#<hostname>`.
 
-To switch to a new configuration:
+### How Deployment Works
 
-```sh
-# Switch to new configuration
-sudo nixos-rebuild switch --flake .#<machine-name>
+1. **deploy-rs** builds the NixOS configuration locally on your machine
+2. It copies the built system closure to the remote machine via SSH
+3. The remote machine activates the new configuration
+4. If activation fails, deploy-rs automatically rolls back to the previous configuration
 
-# Example:
-sudo nixos-rebuild switch --flake .#jason
+### Manual Deployment
+
+If you prefer not to use the `dply` shell command, you can deploy manually:
+
+```bash
+# Deploy to a specific node
+deploy .#<hostname>
+
+# Deploy to all nodes
+deploy
 ```
 
-### Building SD Card Images (Raspberry Pi)
+### Deploy Configuration
+
+The deploy-rs configuration is defined in `flake.nix` under the `deploy.nodes` attribute. Each node specifies:
+
+- **hostname**: The SSH hostname or IP address
+- **sshUser**: The SSH user (default: root)
+- **profiles.system.user**: The user to activate the system as (default: root)
+- **profiles.system.path**: The system closure to deploy
+
+## 🏗️ Building
+
+### Building SD Card Image (Raspberry Pi)
 
 To build SD card images for Raspberry Pi systems:
 
-```sh
+```bash
 nom build .#images.pisces
 ```
 
-### Deployment to Remote Servers
+## 🛠️ Development
 
-This configuration supports remote deployment using lollypops:
+This repository uses a development shell with various NixOS tools. Enter the shell with:
 
-```sh
-# Deploy to a remote server
-nix run .#deploy -- <machine-name>
+```bash
+# Using direnv (automatically loads with .envrc)
+direnv allow
 
-# Or using the development shell command:
-dply <machine-name>
+# Or manually
+nix develop
 ```
-
-## 📁 Repository Structure
-
-```sh
-.
-├── flake.nix              # Main flake configuration
-├── flake.lock             # Flake lock file
-├── shell.nix              # Development shell
-├── machines/              # Machine-specific configurations
-│   ├── desktops/          # Desktop configurations
-│   │   ├── jason/         # Jason desktop config
-│   │   ├── daniel/        # Daniel desktop config
-│   │   └── shared/        # Shared desktop modules
-│   ├── servers/           # Server configurations
-│   │   ├── andromeda/     # Andromeda server config
-│   │   ├── nova/          # Nova server config
-│   │   └── pisces/        # Pisces Raspberry Pi config
-│   └── shared/            # Shared modules for all machines
-│       ├── core/          # Core system configuration
-│       └── avahi.nix      # Network discovery
-├── modules/               # Custom NixOS modules
-├── overlays/              # Package overlays
-├── pkgs/                  # Custom packages
-├── secrets/               # Secret management (sops)
-└── scripts/               # Utility scripts
-```
-
-## 🛠️ Development Tools
-
-The development shell includes various tools for working with NixOS configurations:
-
-- **nixpkgs-fmt** - Nix code formatter
-- **statix** - Linting and anti-pattern detection
-- **nix-output-monitor (nom)** - Better build output
-- **nix-tree** - Visualize nix store
-- **deploy-rs** - Deployment tool
-- **sops** - Secret management
-- **nixos-generators** - Generate various system images
 
 ### Available Commands
 
-When in the development shell:
+- `dply <hostname>` - Deploy to remote server
+- `evl <hostname>` - Evaluate NixOS configuration
+- `nix-update` - Update dependencies
+- `usops` - Update all SOPS secrets with current keys
 
-```sh
-# Update flake inputs
-nix-update
+## 📁 Configuration Structure
 
-# Deploy to remote server
-dply <machine-name>
+```
+.
+├── flake.nix              # Main flake configuration
+├── shell.nix              # Development shell
+├── machines/              # Machine-specific configurations
+│   ├── desktops/         # Desktop machines
+│   │   ├── jason/
+│   │   ├── daniel/
+│   │   └── shared/       # Shared desktop config
+│   ├── servers/          # Server machines
+│   │   ├── andromeda/
+│   │   ├── nova/
+│   │   └── pisces/
+│   └── shared/           # Shared configurations
+│       └── core/         # Core system config
+├── modules/              # NixOS modules
+├── overlays/             # Nix package overlays
+├── pkgs/                 # Custom packages
+└── secrets/              # SOPS secrets
+```
 
-# Evaluate a configuration
-evl <machine-name>
+## 🔐 Secrets Management
 
-# Update sops secrets
+Secrets are managed using [sops-nix](https://github.com/Mic92/sops-nix). To update secrets:
+
+```bash
 usops
 ```
 
-## 🔐 Secret Management
-
-Secrets are managed using [sops-nix](https://github.com/Mic92/sops-nix). The secrets are encrypted and stored in the `secrets/` directory.
-
-## 🎨 Features
-
-- **Home Manager** integration for user environment
-- **Declarative disk configuration** with disko (nova)
-- **Hardware-specific optimizations** using nixos-hardware and nixos-facter
-- **Custom modules** for development environments (Rust, .NET, Android)
-- **Theming** with nix-colors and custom Firefox/Thunderbird themes
-- **Gaming support** via nix-gaming
-- **Container orchestration** with custom compose module
-- **Network discovery** with Avahi
-
 ## 📝 License
 
-This project is licensed under GPL-3 - see the [LICENSE](LICENSE) file for details.
-
----
-
-*More names for future machines: https://www.reddit.com/r/namenerds/comments/1e4ot95/space_themed_names/*
+GPL-3.0

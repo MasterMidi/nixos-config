@@ -450,6 +450,48 @@ nix flake metadata
 nix flake update && nixos-rebuild dry-build
 ```
 
+## Maintaining This Documentation
+
+### For AI Agents
+
+**IMPORTANT**: This AGENTS.md file must be kept up-to-date with the actual repository structure and conventions.
+
+When working in this repository, you **MUST**:
+
+1. **Update this file when making structural changes**:
+   - Adding/removing/renaming directories
+   - Changing naming conventions
+   - Introducing new patterns or workflows
+   - Modifying the module system or package structure
+   - Updating secrets management approaches
+
+2. **Verify consistency when you detect discrepancies**:
+   - If you find that actual code doesn't match these instructions, determine which is correct
+   - Update this file if the instructions are outdated
+   - Fix the code if it violates documented conventions
+   - Document your findings in commit messages
+
+3. **Document new patterns immediately**:
+   - When introducing a new structural pattern, add it to the relevant section
+   - Include code examples for complex patterns
+   - Update the "Common Patterns" section with reusable examples
+
+4. **Before completing any task**:
+   - Review the changes you made against this documentation
+   - Update any affected sections in AGENTS.md
+   - Ensure examples remain accurate and relevant
+   - Include documentation updates in the same commit as code changes when possible
+
+### Keeping Documentation Accurate
+
+- **Structure changes**: Update the "Directory Structure" section
+- **New conventions**: Update the "Naming Conventions" section  
+- **New modules/packages**: Update relevant development guidelines
+- **Workflow changes**: Update the "Development Workflow" section
+- **New best practices**: Add to the "Best Practices" section
+
+This file is a **living document** - it should evolve with the repository. Outdated documentation is worse than no documentation.
+
 ## Contributing Guidelines
 
 When making changes:
@@ -458,6 +500,7 @@ When making changes:
 3. Update documentation if adding new patterns
 4. Keep commits focused and well-described
 5. Use the dev shell tools for consistency
+6. **Update AGENTS.md if your changes affect repository structure or conventions**
 
 ---
 

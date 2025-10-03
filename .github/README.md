@@ -40,6 +40,15 @@ To build the sd-card images for the raspberry pi systems, there is the images ou
 nom build .#images.pisces
 ```
 
+# Deployment
+
+This configuration uses [deploy-rs](https://github.com/serokell/deploy-rs) for remote deployments. See the [main README](../README.md) for detailed deployment instructions.
+
+Quick deploy:
+```sh
+dply <hostname>  # e.g., dply jason, dply andromeda
+```
+
 # Configuration structure
 
 ```sh

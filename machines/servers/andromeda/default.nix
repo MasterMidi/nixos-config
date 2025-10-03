@@ -101,8 +101,4 @@
   };
 
   system.stateVersion = "24.05";
-
-  lollypops.deployment = {
-    config-dir = "/etc/nixos/";
-  };
 }

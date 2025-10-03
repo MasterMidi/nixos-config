@@ -76,10 +76,6 @@
     # };
   };
 
-  lollypops.deployment = {
-    ssh.host = "192.168.1.120";
-  };
-
   system.stateVersion = "24.11";
 
   # Improve performance

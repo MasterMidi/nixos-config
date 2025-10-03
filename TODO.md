@@ -11,9 +11,9 @@
   - [ ] Add Jason as builder (part 1): [link](https://nix.dev/tutorials/nixos/provisioning-remote-machines)
   - [ ] Add all powerful machines as builders (part 2): [link](https://nix.dev/tutorials/nixos/distributed-builds-setup)
   - [ ] Add caching (store or cachix) (part 3): [link](https://nix.dev/tutorials/nixos/binary-cache-setup)
-- [ ] Switch deployment from lollypops to deploy-rs
+- [x] Switch deployment from lollypops to deploy-rs
+- [x] Improve repo readme for other people to see
 - [ ] Run home-assistant on rpi-5
 - [ ] Run headscale server
   - [ ] Configure tailscale setup service for headscale. None expire key
 - [ ] Improve flake-utils-plus setup (currently messy).
-- [ ] Improve repo readme for other people to see

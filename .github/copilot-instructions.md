@@ -454,7 +454,7 @@ nix flake update && nixos-rebuild dry-build
 
 ### For AI Agents
 
-**IMPORTANT**: This AGENTS.md file must be kept up-to-date with the actual repository structure and conventions.
+**IMPORTANT**: This copilot-instructions.md file must be kept up-to-date with the actual repository structure and conventions.
 
 When working in this repository, you **MUST**:
 
@@ -476,19 +476,26 @@ When working in this repository, you **MUST**:
    - Include code examples for complex patterns
    - Update the "Common Patterns" section with reusable examples
 
-4. **Before completing any task**:
-   - Review the changes you made against this documentation
-   - Update any affected sections in AGENTS.md
-   - Ensure examples remain accurate and relevant
+4. **Update all related documentation**:
+   - **README files**: Update `.github/README.md` and other README files when changes affect repository overview, features, or usage
+   - **TODO.md**: Add or update TODO items when introducing new tasks or completing existing ones
+   - **This file**: Update `.github/copilot-instructions.md` when structural or conventional changes are made
    - Include documentation updates in the same commit as code changes when possible
+
+5. **Before completing any task**:
+   - Review the changes you made against this documentation
+   - Update any affected sections in this file and other documentation
+   - Ensure examples remain accurate and relevant across all documentation
 
 ### Keeping Documentation Accurate
 
-- **Structure changes**: Update the "Directory Structure" section
-- **New conventions**: Update the "Naming Conventions" section  
-- **New modules/packages**: Update relevant development guidelines
-- **Workflow changes**: Update the "Development Workflow" section
-- **New best practices**: Add to the "Best Practices" section
+- **Structure changes**: Update the "Directory Structure" section in this file
+- **New conventions**: Update the "Naming Conventions" section in this file
+- **New modules/packages**: Update relevant development guidelines in this file
+- **Workflow changes**: Update the "Development Workflow" section in this file
+- **New best practices**: Add to the "Best Practices" section in this file
+- **Repository changes**: Update `.github/README.md` when features, structure, or usage changes
+- **Task tracking**: Update `TODO.md` when adding new tasks or completing existing ones
 
 This file is a **living document** - it should evolve with the repository. Outdated documentation is worse than no documentation.
 
@@ -500,7 +507,8 @@ When making changes:
 3. Update documentation if adding new patterns
 4. Keep commits focused and well-described
 5. Use the dev shell tools for consistency
-6. **Update AGENTS.md if your changes affect repository structure or conventions**
+6. **Update `.github/copilot-instructions.md` if your changes affect repository structure or conventions**
+7. **Update other documentation** (README files, TODO.md) when relevant changes are made
 
 ---
 

@@ -477,7 +477,7 @@ When working in this repository, you **MUST**:
    - Update the "Common Patterns" section with reusable examples
 
 4. **Update all related documentation**:
-   - **README files**: Update `.github/README.md` and other README files when changes affect repository overview, features, or usage
+   - **README files**: Update `README.md` and other README files when changes affect repository overview, features, or usage
    - **TODO.md**: Add or update TODO items when introducing new tasks or completing existing ones
    - **This file**: Update `.github/copilot-instructions.md` when structural or conventional changes are made
    - Include documentation updates in the same commit as code changes when possible
@@ -494,7 +494,7 @@ When working in this repository, you **MUST**:
 - **New modules/packages**: Update relevant development guidelines in this file
 - **Workflow changes**: Update the "Development Workflow" section in this file
 - **New best practices**: Add to the "Best Practices" section in this file
-- **Repository changes**: Update `.github/README.md` when features, structure, or usage changes
+- **Repository changes**: Update `README.md` when features, structure, or usage changes
 - **Task tracking**: Update `TODO.md` when adding new tasks or completing existing ones
 
 This file is a **living document** - it should evolve with the repository. Outdated documentation is worse than no documentation.

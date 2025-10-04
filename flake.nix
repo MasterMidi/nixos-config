@@ -183,7 +183,9 @@
         pisces = self.nixosConfigurations.pisces.config.system.build.sdImage;
       };
 
-      apps."x86_64-linux".deploy = inputs.lollypops.apps."x86_64-linux".default { configFlake = self; };
+      packages.x86_64-linux.deploy = inputs.lollypops.packages.x86_64-linux.default.override {
+        configFlake = self;
+      };
 
       devShells."x86_64-linux".default = import ./shell.nix { inherit inputs pkgs; };
 

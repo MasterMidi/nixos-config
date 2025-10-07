@@ -1,7 +1,7 @@
 # Based on https://github.com/immich-app/immich/blob/main/docker/docker-compose.yml
 { config, ... }:
 let
-  immichVersion = "v1.143.1";
+  immichVersion = "v2.0.1";
 in
 {
   services.cloudflared.tunnels.andromeda.ingress = {
@@ -63,7 +63,7 @@ in
         devices = [ "/dev/dri" ];
         extraOptions = [
           "--gpus=all"
-          "--device=nvidia.com/gpu=all"
+          # "--device=nvidia.com/gpu=all"
         ];
       };
       immich-machine-learning = {
@@ -83,7 +83,7 @@ in
         devices = [ "/dev/dri" ];
         extraOptions = [
           "--gpus=all"
-          "--device=nvidia.com/gpu=all"
+          # "--device=nvidia.com/gpu=all"
         ];
         volumes = [
           "/mnt/ssd/services/immich/cache:/cache:rw"

@@ -1,0 +1,66 @@
+name: Task
+description: Create a task to track work that needs to be done
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Task
+        Quick note for future reference
+  
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What needs to be done and why
+      placeholder: Describe what needs to be done and why it's important
+    validations:
+      required: true
+  
+  - type: textarea
+    id: links
+    attributes:
+      label: Links & Resources
+      description: Useful links, documentation, or references
+      placeholder: |
+        * [Description](URL)
+        * [Description](URL)
+    validations:
+      required: false
+  
+  - type: dropdown
+    id: estimated-effort
+    attributes:
+      label: Estimated Effort
+      description: How much time do you estimate this task will take?
+      options:
+        - Small (hours)
+        - Medium (days)
+        - Large (weeks)
+      default: 0
+    validations:
+      required: true
+  
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: What is the priority level of this task?
+      options:
+        - Low
+        - Medium
+        - High
+        - Urgent
+      default: 1
+    validations:
+      required: true
+  
+  - type: textarea
+    id: related-todos
+    attributes:
+      label: Related Issues
+      description: Links to related issues
+      placeholder: |
+        - #123
+    validations:
+      required: false

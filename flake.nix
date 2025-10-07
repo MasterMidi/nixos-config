@@ -4,6 +4,8 @@
   inputs = {
     # Packages
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs-24-11.url = "github:nixos/nixpkgs/nixos-24.11";
+    nixpkgs-wsl.url = "github:nix-community/NixOS-WSL/main";
 
     # Premade modules
     nixos-hardware.url = "github:NixOS/nixos-hardware/master"; # Hardware specific setup modules
@@ -110,6 +112,21 @@
             ./secrets
           ];
         };
+        
+        hyperion = inputs.nixpkgs.lib.nixosSystem {
+           system = "x86_64-linux";
+           specialArgs = {
+            inherit inputs;
+            modules = nixosModules;
+          };
+          modules = [
+            "${inputs.nixpkgs-wsl}/modules"
+            inputs.home-manager.nixosModules.home-manager
+            ./machines/desktops/hyperion
+            ./machines/shared/core
+            ./secrets
+          ];
+        };
 
         nova = inputs.nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
@@ -183,29 +200,44 @@
         pisces = self.nixosConfigurations.pisces.config.system.build.sdImage;
       };
 
-      apps."x86_64-linux".deploy = inputs.lollypops.apps."x86_64-linux".default { configFlake = self; };
-
       devShells."x86_64-linux".default = import ./shell.nix { inherit inputs pkgs; };
 
       # deploy-rs configuration
-      # deploy.nodes = {
-      #   daniel = {
-      #     hostname = "daniel"; # Replace with the actual hostname or IP of daniel
-      #     profiles.system = {
-      #       user = "root"; # Or the user you use for deployment
-      #       path = self.nixosConfigurations.daniel.config.system.build.toplevel;
-      #       magicRollback = true; # Recommended to enable rollback on failure
-      #     };
-      #   };
-      #   pisces = {
-      #     hostname = "192.168.1.120"; # Replace with the actual hostname or IP of pisces
-      #     sshUser = "root";
-      #     profiles.system = {
-      #       user = "root"; # Or the user you use for deployment
-      #       path = inputs.deploy-rs.lib.aarch64-linux.activate.nixos self.nixosConfigurations.pisces;
-      #       magicRollback = true; # Recommended to enable rollback on failure
-      #     };
-      #   };
-      # };
+      deploy.nodes = {
+        jason = {
+          hostname = "jason";
+          profiles.system = {
+            user = "root";
+            path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.jason;
+            sshUser = "root";
+          };
+        };
+        daniel = {
+          hostname = "daniel";
+          profiles.system = {
+            user = "root";
+            path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.daniel;
+            sshUser = "root";
+          };
+        };
+        andromeda = {
+          hostname = "andromeda";
+          profiles.system = {
+            user = "root";
+            path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.andromeda;
+            sshUser = "root";
+          };
+        };
+        nova = {
+          hostname = "nova";
+          profiles.system = {
+            user = "root";
+            path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.nova;
+            sshUser = "root";
+          };
+        };
+      };
+
+      checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) inputs.deploy-rs.lib;
     };
 }

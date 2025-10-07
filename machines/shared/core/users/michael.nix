@@ -2,7 +2,7 @@
   users.users.michael = {
     isNormalUser = true;
     description = "Michael Andreas Graversen";
-    uid = 1000;
+    # uid = 1000;
     group = "users";
     extraGroups = ["wheel"];
 

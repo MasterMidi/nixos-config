@@ -44,6 +44,4 @@
   };
 
   system.stateVersion = "24.11";
-
-  # lollypops.deployment.ssh.host = "138.199.154.23";
 }

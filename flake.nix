@@ -4,6 +4,8 @@
   inputs = {
     # Packages
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs-24-11.url = "github:nixos/nixpkgs/nixos-24.11";
+    nixpkgs-wsl.url = "github:nix-community/NixOS-WSL/main";
 
     # Premade modules
     nixos-hardware.url = "github:NixOS/nixos-hardware/master"; # Hardware specific setup modules
@@ -107,6 +109,21 @@
             ./machines/servers/andromeda
             ./machines/shared/core
             ./machines/shared/avahi.nix
+            ./secrets
+          ];
+        };
+        
+        hyperion = inputs.nixpkgs.lib.nixosSystem {
+           system = "x86_64-linux";
+           specialArgs = {
+            inherit inputs;
+            modules = nixosModules;
+          };
+          modules = [
+            "${inputs.nixpkgs-wsl}/modules"
+            inputs.home-manager.nixosModules.home-manager
+            ./machines/desktops/hyperion
+            ./machines/shared/core
             ./secrets
           ];
         };

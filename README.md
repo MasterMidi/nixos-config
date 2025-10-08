@@ -178,6 +178,27 @@ usops
 
 Secrets are managed using [sops-nix](https://github.com/Mic92/sops-nix). The secrets are encrypted and stored in the `secrets/` directory.
 
+## 🤖 CI/CD & Automation
+
+### Automated Issue Creation
+
+The repository includes automated issue creation from build logs:
+
+- **Flake Check Workflow** runs on every push to main and pull requests
+- **Build Log Analysis** parses JSONL build logs to extract errors and warnings
+- **Automatic Issue Creation** creates GitHub issues for build errors and warnings (main branch only)
+- **Duplicate Prevention** avoids creating duplicate issues using MD5 hashing and existing issue checks
+- **Issue Labels** automatically labels issues as `bug` (errors) or `warning` with `automated` tag
+
+The script can be run manually:
+```sh
+# Process build log and create issues
+scripts/create-issues-from-build-log.sh build-log.jsonl
+
+# Dry run to preview what would be created
+scripts/create-issues-from-build-log.sh build-log.jsonl --dry-run
+```
+
 ## 🎨 Features
 
 - **Home Manager** integration for user environment

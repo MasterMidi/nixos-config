@@ -26,4 +26,4 @@ jobs:
         with:
           commit-msg: "chore(deps): update flake.lock"
           pr-title: "chore(deps): update flake.lock"
-          pr-body: "Automated dependency update via GitHub Actions."
+          pr-reviewers: MasterMidi

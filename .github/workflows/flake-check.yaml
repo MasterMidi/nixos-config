@@ -15,7 +15,6 @@ on:
 jobs:
   flake-check:
     runs-on: ubuntu-latest
-    # Grant permissions for creating issues from build logs
     permissions:
       contents: read
       issues: write
@@ -42,9 +41,21 @@ jobs:
           path: build-log.jsonl
           retention-days: 30
       
-      - name: Create issues from build log
-        if: always() && github.event_name == 'push' && github.ref == 'refs/heads/main'
-        env:
-          GH_TOKEN: ${{ github.token }}
+      - name: Parse build log and create issue templates
+        if: always()
         run: |
-          bash scripts/create-issues-from-build-log.sh build-log.jsonl
+          nix shell nixpkgs#jq -c bash scripts/create-issues-from-build-log.sh build-log.jsonl .github/ISSUE_TEMPLATES
+      
+      - name: Create issues from templates
+        if: always()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ -d ".github/ISSUE_TEMPLATES" ] && [ "$(ls -A .github/ISSUE_TEMPLATES/*.md 2>/dev/null)" ]; then
+            for issue_file in .github/ISSUE_TEMPLATES/*.md; do
+              echo "Creating issue from: $issue_file"
+              npx create-an-issue --filename="$issue_file"
+            done
+          else
+            echo "No issue templates found"
+          fi

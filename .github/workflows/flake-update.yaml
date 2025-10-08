@@ -1,0 +1,29 @@
+name: Update Flake Lock
+
+on:
+  # Allow manual triggering from the GitHub UI
+  workflow_dispatch:
+  # Run on a schedule (each Saturday at 6 AM UTC)
+  schedule:
+    - cron: '0 6 * * 6'
+
+jobs:
+  update-lock-file:
+    runs-on: ubuntu-latest
+    # Grant permissions for this job to create a pull request
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Install Nix
+        uses: DeterminateSystems/determinate-nix-action@v3
+      
+      - name: Update flake lock
+        uses: DeterminateSystems/update-flake-lock@v27
+        with:
+          commit-msg: "chore(deps): update flake.lock"
+          pr-title: "chore(deps): update flake.lock"
+          pr-body: "Automated dependency update via GitHub Actions."

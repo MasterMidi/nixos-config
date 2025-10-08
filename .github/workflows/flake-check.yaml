@@ -1,12 +1,16 @@
 name: Flake Check
 
 on:
-  # Run on pull requests
+  # Run on pull requests to main branch
   pull_request:
+    branches:
+      - main
   # Run on pushes to the main branch
   push:
     branches:
       - main
+  # Allow manual triggering from the GitHub UI
+  workflow_dispatch:
 
 jobs:
   flake-check:
@@ -17,6 +21,9 @@ jobs:
       
       - name: Install Nix
         uses: DeterminateSystems/determinate-nix-action@v3
+        with:
+          extra-conf: |
+            experimental-features = nix-command flakes pipe-operators
       
       - name: Run flake check
         run: |

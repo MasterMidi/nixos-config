@@ -27,6 +27,7 @@ jobs:
       
       - name: Run flake check
         run: |
+          set -o pipefail
           nix flake check --log-format internal-json 2>&1 | sed -u 's/^@nix //' | tee build-log.jsonl
       
       - name: Upload build log

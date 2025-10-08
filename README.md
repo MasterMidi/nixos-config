@@ -185,22 +185,18 @@ Secrets are managed using [sops-nix](https://github.com/Mic92/sops-nix). The sec
 The repository includes automated issue creation from build logs:
 
 - **Flake Check Workflow** runs on every push to main and pull requests
-- **Build Log Analysis** parses JSONL build logs to extract errors and warnings using `nix shell` for jq
-- **Automatic Issue Creation** uses the create-an-issue GitHub Action to create issues for build errors and warnings
-- **Copilot Assignment** issues are automatically assigned to @copilot for automated fixing
-- **Duplicate Prevention** avoids duplicate issues using MD5 hashing
+- **Build Log Analysis** parses JSONL build logs to extract errors and warnings using `nix shell nixpkgs#jq`
+- **Single Issue Creation** uses the dacbd/create-issue-action to create a single issue with all build errors and warnings
+- **Copilot Assignment** issue is automatically assigned to @copilot for automated fixing
+- **Build Log Attached** full build log is attached as an artifact for detailed analysis
 
 When errors or warnings are found:
-- Each error/warning creates a separate GitHub issue
-- Issues are labeled as `bug` (errors) or `warning` with `automated` tag
-- Issues are assigned to @copilot
+- A single GitHub issue is created with all errors and warnings listed
+- Issue is labeled as `automated` and `build-issues`
+- Issue is assigned to @copilot
 - Clear instructions to make changes to the base branch of the flake.lock update PR
 
-The script can be run manually:
-```sh
-# Process build log and create issue templates
-nix shell nixpkgs#jq -c bash scripts/create-issues-from-build-log.sh build-log.jsonl .github/ISSUE_TEMPLATES
-```
+The workflow processes logs inline without any external scripts.
 
 ## 🎨 Features
 

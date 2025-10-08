@@ -41,21 +41,71 @@ jobs:
           path: build-log.jsonl
           retention-days: 30
       
-      - name: Parse build log and create issue templates
+      - name: Parse build log and create issue body
         if: always()
+        id: parse-log
         run: |
-          nix shell nixpkgs#jq -c bash scripts/create-issues-from-build-log.sh build-log.jsonl .github/ISSUE_TEMPLATES
-      
-      - name: Create issues from templates
-        if: always()
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          if [ -d ".github/ISSUE_TEMPLATES" ] && [ "$(ls -A .github/ISSUE_TEMPLATES/*.md 2>/dev/null)" ]; then
-            for issue_file in .github/ISSUE_TEMPLATES/*.md; do
-              echo "Creating issue from: $issue_file"
-              npx create-an-issue --filename="$issue_file"
-            done
-          else
-            echo "No issue templates found"
+          # Use nix shell to provide jq
+          ISSUE_BODY=$(nix shell nixpkgs#jq -c jq -r '
+            select(.level <= 1 and .action == "msg") | 
+            "\(.level)|\(.msg)"
+          ' build-log.jsonl | sort -u)
+          
+          if [ -z "$ISSUE_BODY" ]; then
+            echo "has_issues=false" >> $GITHUB_OUTPUT
+            echo "No errors or warnings found"
+            exit 0
           fi
+          
+          echo "has_issues=true" >> $GITHUB_OUTPUT
+          
+          # Create issue body with all errors and warnings
+          cat > issue-body.md << 'EOF'
+          ## Build Errors and Warnings
+          
+          This issue was automatically created from the flake check build log.
+          
+          **Important for @copilot**: Please make all code changes to the base branch of the flake.lock update PR, not directly to any automated PR.
+          
+          ### Issues Found:
+          
+          EOF
+          
+          ERROR_COUNT=0
+          WARNING_COUNT=0
+          
+          while IFS='|' read -r level msg; do
+            if [ "$level" -eq 0 ]; then
+              ERROR_COUNT=$((ERROR_COUNT + 1))
+              echo "#### Error $ERROR_COUNT" >> issue-body.md
+              echo "" >> issue-body.md
+              echo '```' >> issue-body.md
+              echo "$msg" >> issue-body.md
+              echo '```' >> issue-body.md
+              echo "" >> issue-body.md
+            else
+              WARNING_COUNT=$((WARNING_COUNT + 1))
+              echo "#### Warning $WARNING_COUNT" >> issue-body.md
+              echo "" >> issue-body.md
+              echo '```' >> issue-body.md
+              echo "$msg" >> issue-body.md
+              echo '```' >> issue-body.md
+              echo "" >> issue-body.md
+            fi
+          done <<< "$ISSUE_BODY"
+          
+          # Add summary at the beginning
+          SUMMARY="**Summary**: $ERROR_COUNT error(s), $WARNING_COUNT warning(s)"
+          sed -i "3i\\$SUMMARY\\n" issue-body.md
+          
+          echo "Found $ERROR_COUNT error(s) and $WARNING_COUNT warning(s)"
+      
+      - name: Create GitHub Issue
+        if: always() && steps.parse-log.outputs.has_issues == 'true'
+        uses: dacbd/create-issue-action@main
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: "🚨 Build Errors and Warnings - ${{ github.ref_name }}"
+          body: issue-body.md
+          assignees: copilot
+          labels: automated,build-issues

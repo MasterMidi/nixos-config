@@ -2,4 +2,4 @@ result
 home/programs/rofi/stolen-themes/*
 .direnv/*
 build-log.jsonl
-.github/ISSUE_TEMPLATES/
+issue-body.md

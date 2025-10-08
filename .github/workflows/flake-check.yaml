@@ -46,7 +46,7 @@ jobs:
         id: generate-matrix
         run: |
           nix shell nixpkgs#jq
-          MATRIX=$(jq -s map(select(.level <= 2 and .action == "msg") | {level, msg: (.msg | gsub("\\\u001b\\[\\d*;*\\d*m"; ""))}) build-log.jsonl)
+          MATRIX=$(jq -s 'map(select(.level <= 2 and .action == "msg") | {level, msg: (.msg | gsub("\u001b\\[\\d*;*\\d*m"; ""))})' build-log.jsonl)
           echo "matrix=$MATRIX" >> $GITHUB_OUTPUT
 
   create-issues:

@@ -48,6 +48,8 @@ jobs:
         id: format
         run: |
           jq -r '
+            # Remove duplicates based on msg, then sort by level (warnings=1 first, errors=2 last)
+            unique_by(.msg) | sort_by(.level) |
             .[] |
             " > [!\(if .level == 1 then "WARNING" else "CAUTION" end)]\n> ```nix\n> \(.msg | gsub("\n"; "\n> "))\n> ```\n"
           ' results.json > report-body.md

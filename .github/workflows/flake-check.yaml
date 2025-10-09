@@ -41,25 +41,36 @@ jobs:
           path: build-log.jsonl
           retention-days: 30
 
-      - name: Parse build log and create matrix
+      - name: Parse build log warnings/errors
         if: always()
-        id: generate-matrix
         run: |
-          nix shell nixpkgs#jq
-          MATRIX=$(jq -sc 'map(select(.level <= 2 and .action == "msg") | {level, msg: (.msg | gsub("\u001b\\[\\d*;*\\d*m"; ""))})' build-log.jsonl)
-          echo "matrix=$MATRIX" >> $GITHUB_OUTPUT
+          nix run nixpkgs#jq -- -s 'map(select(.level <= 2 and .action == "msg") | {level, msg: (.msg | gsub("\u001b\\[\\d*;*\\d*m"; ""))})' build-log.jsonl | tee results.json
 
-  create-issues:
-    runs-on: ubuntu-latest
-    needs: [flake-check]
-    if: always()
-    strategy:
-      # Use the 'fromJSON' function to parse the output from the 'generate-matrix' job
-      matrix: ${{ fromJSON(needs.flake-check.outputs.matrix) }}
-      # Don't cancel all jobs if one fails, allowing others to complete
-      fail-fast: false
-    steps:
-      - name: test matrix
+      - name: Format report alerts
+        if: always()
+        id: format
         run: |
-          echo "level: ${{ matrix.level }} message: ${{ matrix.msg }}"
+          REPORT_BODY=$(jq -r '
+            .[] |
+            " > [!\(if .level == 1 then "WARNING" else "CAUTION" end)]\n> ```nix\n> \(.msg | gsub("\n"; "\n> "))\n> ```\n"
+          ' results.json)
+
+          cat <<'EOF' >> $GITHUB_ENV
+          REPORT_BODY<<END_OF_BODY
+          ${REPORT_BODY}
+          END_OF_BODY
+          EOF
+
+      - name: Comment on PR
+        if: always() && env.REPORT_BODY != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          gh pr comment $PR_NUMBER --body-file - <<-EOF
+          @copilot
+          ###  Nix Build Report 📝
+
+          ${{ env.REPORT_BODY }}
+          EOF
         

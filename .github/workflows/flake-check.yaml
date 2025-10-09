@@ -47,27 +47,25 @@ jobs:
         if: always()
         id: format
         run: |
-          REPORT_BODY=$(jq -r '
+          jq -r '
+            # Remove duplicates based on msg, then sort by level (warnings=1 first, errors=2 last)
+            unique_by(.msg) | sort_by(.level) |
             .[] |
             " > [!\(if .level == 1 then "WARNING" else "CAUTION" end)]\n> ```nix\n> \(.msg | gsub("\n"; "\n> "))\n> ```\n"
-          ' results.json)
-
-          cat <<'EOF' >> $GITHUB_ENV
-          REPORT_BODY<<END_OF_BODY
-          ${REPORT_BODY}
-          END_OF_BODY
-          EOF
+          ' results.json > report-body.md
 
       - name: Comment on PR
-        if: always() && env.REPORT_BODY != ''
+        if: always() && hashFiles('report-body.md') != ''
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
-          gh pr comment $PR_NUMBER --body-file - <<-EOF
-          @copilot
-          ###  Nix Build Report 📝
-
-          ${{ env.REPORT_BODY }}
-          EOF
+          if [ -s report-body.md ]; then
+            {
+              echo "###  Nix Build Report 📝"
+              echo ""
+              cat report-body.md
+            } > full-report.md
+            gh pr comment $PR_NUMBER --body-file full-report.md
+          fi
         

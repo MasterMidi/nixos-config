@@ -67,14 +67,4 @@ jobs:
             } > full-report.md
             gh pr comment $PR_NUMBER --body-file full-report.md
           fi
-
-      - name: Upload report files
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: report-files
-          path: |
-            report-body.md
-            full-report.md
-          retention-days: 30
         

@@ -15,9 +15,6 @@ on:
 jobs:
   flake-check:
     runs-on: ubuntu-latest
-    outputs:
-      # Define an output named 'matrix'
-      matrix: ${{ steps.generate-matrix.outputs.matrix }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

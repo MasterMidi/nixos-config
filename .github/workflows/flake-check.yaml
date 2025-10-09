@@ -62,7 +62,6 @@ jobs:
         run: |
           if [ -s report-body.md ]; then
             {
-              echo "@copilot"
               echo "###  Nix Build Report 📝"
               echo ""
               cat report-body.md

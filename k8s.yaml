@@ -1,0 +1,488 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: media-stack
+---
+#################################################################
+# Sonarr (TV)
+#################################################################
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sonarr
+  namespace: media-stack
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sonarr
+  template:
+    metadata:
+      labels:
+        app: sonarr
+    spec:
+      containers:
+        - name: sonarr
+          image: ghcr.io/hotio/sonarr:nightly
+          env:
+            - name: PUID
+              value: "1000" # <-- CHANGE THIS
+            - name: PGID
+              value: "100" # <-- CHANGE THIS
+            - name: TZ
+              value: "Europe/Copenhagen" # <-- CHANGE THIS
+          ports:
+            - containerPort: 8989
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: storage
+              mountPath: /storage # /storage/media and /storage/torrents
+      volumes:
+        - name: config
+          hostPath:
+            path: /mnt/ssd/appdata/sonarr # Configs on SSD
+            type: DirectoryOrCreate
+        - name: storage
+          hostPath:
+            path: /mnt/hdd # Media/Torrents on HDD
+            type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sonarr
+  namespace: media-stack
+spec:
+  ports:
+    - port: 8989
+      targetPort: 8989
+  selector:
+    app: sonarr
+---
+#################################################################
+# Radarr (Movies)
+#################################################################
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: radarr
+  namespace: media-stack
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: radarr
+  template:
+    metadata:
+      labels:
+        app: radarr
+    spec:
+      containers:
+        - name: radarr
+          image: ghcr.io/hotio/radarr:latest
+          env:
+            - name: PUID
+              value: "1000" # <-- CHANGE THIS
+            - name: PGID
+              value: "100" # <-- CHANGE THIS
+            - name: TZ
+              value: "Europe/Copenhagen" # <-- CHANGE THIS
+          ports:
+            - containerPort: 7878
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: storage
+              mountPath: /storage # /storage/media and /storage/torrents
+      volumes:
+        - name: config
+          hostPath:
+            path: /mnt/ssd/appdata/radarr # Configs on SSD
+            type: DirectoryOrCreate
+        - name: storage
+          hostPath:
+            path: /mnt/hdd # Media/Torrents on HDD
+            type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: radarr
+  namespace: media-stack
+spec:
+  ports:
+    - port: 7878
+      targetPort: 7878
+  selector:
+    app: radarr
+---
+#################################################################
+# qBittorrent (Downloads)
+#################################################################
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qbittorrent
+  namespace: media-stack
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qbittorrent
+  template:
+    metadata:
+      labels:
+        app: qbittorrent
+    spec:
+      # This pod-level security context is required for the sysctl
+      securityContext:
+        sysctls:
+          - name: net.ipv4.conf.all.src_valid_mark
+            value: "1"
+      containers:
+        - name: qbittorrent
+          image: "ghcr.io/hotio/qbittorrent:release-5.0.4"
+          # This container-level security context is required for the VPN
+          securityContext:
+            capabilities:
+              add:
+                - NET_ADMIN
+          env:
+            - name: PUID
+              value: "1000" # <-- CHANGE THIS
+            - name: PGID
+              value: "100" # <-- CHANGE THIS
+            - name: TZ
+              value: "Europe/Copenhagen" # <-- CHANGE THIS
+            - name: UMASK
+              value: "002"
+            - name: WEBUI_PORTS
+              value: "9060/tcp,9060/udp"
+
+            # --- VPN Settings ---
+            - name: VPN_ENABLED
+              value: "true"
+            - name: VPN_CONF
+              value: "wg0"
+            - name: VPN_PROVIDER
+              value: "generic"
+            # --- CRITICAL: Added k8s networks so pods can talk ---
+            - name: VPN_LAN_NETWORK
+              value: "192.168.1.0/24"
+            - name: VPN_LAN_LEAK_ENABLED
+              value: "false"
+            # - name: VPN_EXPOSE_PORTS_ON_LAN
+            #   value: 8118/tcp,8118/udp
+            - name: VPN_KEEP_LOCAL_DNS
+              value: "true"
+            - name: VPN_FIREWALL_TYPE
+              value: "auto"
+            - name: VPN_HEALTHCHECK_ENABLED
+              value: "false"
+            - name: PRIVOXY_ENABLED
+              value: "true"
+            - name: UNBOUND_ENABLED
+              value: "false"
+          ports:
+            - name: webui
+              containerPort: 9060
+            - name: torrent-tcp
+              containerPort: 37461
+              protocol: TCP
+            - name: torrent-udp
+              containerPort: 37461
+              protocol: UDP
+            - name: privoxy-tcp
+              containerPort: 8118
+              protocol: TCP
+            - name: privoxy-udp
+              containerPort: 8118
+              protocol: UDP
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: storage
+              mountPath: /storage
+            - name: wg-conf
+              mountPath: /config/wireguard/wg0.conf
+            - name: tun-device
+              mountPath: /dev/net/tun
+      volumes:
+        - name: config
+          hostPath:
+            path: /mnt/ssd/appdata/qbittorrent # Configs on SSD
+            type: DirectoryOrCreate
+        - name: storage
+          hostPath:
+            path: /mnt/hdd # Media/Torrents on HDD
+            type: Directory
+        - name: wg-conf
+          hostPath:
+            path: /var/run/secrets/rendered/WIREGUARD_AIRVPN_CONF # WG config file on host
+            type: File
+        - name: tun-device
+          hostPath:
+            path: /dev/net/tun
+            type: CharDevice
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: qbittorrent
+  namespace: media-stack
+spec:
+  ports:
+    - name: webui
+      port: 9060
+      targetPort: 9060
+    - name: torrent-tcp
+      port: 37461
+      targetPort: 37461
+      protocol: TCP
+    - name: torrent-udp
+      port: 37461
+      targetPort: 37461
+      protocol: UDP
+    - name: privoxy-tcp
+      port: 8118
+      targetPort: 8118
+      protocol: TCP
+    - name: privoxy-udp
+      port: 8118
+      targetPort: 8118
+      protocol: UDP
+  selector:
+    app: qbittorrent
+---
+#################################################################
+# Jellyfin (Media Player) - UPDATED
+#################################################################
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jellyfin
+  namespace: media-stack
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jellyfin
+  template:
+    metadata:
+      labels:
+        app: jellyfin
+    spec:
+      # Add this security context for GPU/transcoding permissions
+      securityContext:
+        supplementalGroups:
+          - 303 # <-- CHANGE THIS to your 'render' group GID
+      containers:
+        - name: jellyfin
+          image: lscr.io/linuxserver/jellyfin:latest
+          env:
+            - name: PUID
+              value: "1000" # <-- Ensure this matches your PUID
+            - name: PGID
+              value: "100" # <-- Ensure this matches your PGID
+            - name: TZ
+              value: "Europe/Copenhagen" # <-- Ensure this matches your Timezone
+          ports:
+            - containerPort: 8096
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: media
+              mountPath: /storage/media # Mounts /mnt/hdd/media
+            - name: transcodes
+              mountPath: /transcodes # Mounts transcode cache
+            - name: dev-dri
+              mountPath: /dev/dri # Mounts GPU device
+      volumes:
+        - name: config
+          hostPath:
+            # Updated path for configs
+            path: /mnt/ssd/appdata/jellyfin/config
+            type: DirectoryOrCreate
+        - name: media
+          hostPath:
+            # Updated path for media
+            path: /mnt/hdd/media
+            type: Directory
+        - name: transcodes
+          hostPath:
+            # New volume for transcodes
+            path: /mnt/ssd/appdata/jellyfin/transcodes
+            type: DirectoryOrCreate
+        - name: dev-dri
+          hostPath:
+            # New volume for GPU
+            path: /dev/dri
+            type: Directory # Mount the /dev/dri directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jellyfin
+  namespace: media-stack
+spec:
+  # This is the ClusterIP service (internal only)
+  ports:
+    - port: 8096
+      targetPort: 8096
+  selector:
+    app: jellyfin
+---
+#################################################################
+# Jellyseerr (Requests)
+#################################################################
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jellyseerr
+  namespace: media-stack
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jellyseerr
+  template:
+    metadata:
+      labels:
+        app: jellyseerr
+    spec:
+      containers:
+        - name: jellyseerr
+          image: "docker.io/fallenbagel/jellyseerr:preview-OIDC"
+          env:
+            - name: PUID
+              value: "1000" # <-- CHANGE THIS
+            - name: PGID
+              value: "100" # <-- CHANGE THIS
+            - name: TZ
+              value: "Europe/Copenhagen" # <-- CHANGE THIS
+            - name: PORT
+              value: "5055"
+          ports:
+            - containerPort: 5055
+          volumeMounts:
+            - name: config
+              mountPath: /app/config
+      volumes:
+        - name: config
+          hostPath:
+            path: /mnt/ssd/appdata/jellyseerr
+            type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jellyseerr
+  namespace: media-stack
+spec:
+  # This is a ClusterIP service (internal only)
+  ports:
+    - port: 5055
+      targetPort: 5055
+  selector:
+    app: jellyseerr
+---
+#################################################################
+# Prowlarr (Indexer Manager)
+#################################################################
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prowlarr
+  namespace: media-stack
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prowlarr
+  template:
+    metadata:
+      labels:
+        app: prowlarr
+    spec:
+      containers:
+        - name: prowlarr
+          image: ghcr.io/hotio/prowlarr:nightly
+          env:
+            - name: PUID
+              value: "1000" # <-- CHANGE THIS
+            - name: PGID
+              value: "100" # <-- CHANGE THIS
+            - name: TZ
+              value: "Europe/Copenhagen" # <-- CHANGE THIS
+          ports:
+            - containerPort: 9696
+          volumeMounts:
+            - name: config
+              mountPath: /config
+      volumes:
+        - name: config
+          hostPath:
+            path: /mnt/ssd/appdata/prowlarr # Configs on SSD
+            type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prowlarr
+  namespace: media-stack
+spec:
+  ports:
+    - port: 9696
+      targetPort: 9696
+  selector:
+    app: prowlarr
+---
+#################################################################
+# Newt Secret
+#################################################################
+apiVersion: v1
+kind: Secret
+metadata:
+  name: newt-secret
+  namespace: media-stack
+stringData:
+  NEWT_SECRET: "2d9zi2ip3g69x6uht3l8hfrbzh0gdcgszvy4hol4lox8zp8j" # <-- PASTE YOUR SECRET HERE
+---
+#################################################################
+# Newt (Pangolin Tunnel Client)
+#################################################################
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: newt
+  namespace: media-stack
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: newt
+  template:
+    metadata:
+      labels:
+        app: newt
+    spec:
+      containers:
+        - name: newt
+          image: "fosrl/newt:1.6.0"
+          env:
+            - name: PANGOLIN_ENDPOINT
+              value: "https://tunnel.mgrlab.dk"
+            - name: NEWT_ID
+              value: "npjvjb7lh3mgr3n"
+            - name: NEWT_SECRET
+              value: "2d9zi2ip3g69x6uht3l8hfrbzh0gdcgszvy4hol4lox8zp8j"
+            - name: NEWT_SECRET2
+              valueFrom:
+                secretKeyRef:
+                  name: newt-secret
+                  key: NEWT_SECRET
+          securityContext:
+            capabilities:
+              add:
+                - NET_ADMIN

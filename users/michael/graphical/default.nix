@@ -1,14 +1,12 @@
 { pkgs, ... }:
 {
   imports = [
-    ./common.nix
+    ../common
   ];
 
   home-manager.users.michael = {
     imports = [
       ./programs
-      ./secrets
-      ./theme
     ];
 
     services.mpris-proxy.enable = true; # media player mpris proxy

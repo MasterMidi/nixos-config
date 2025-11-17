@@ -1,7 +1,7 @@
 { pkgs, ... }:
 {
   imports = [
-    ./personal.nix
+    ../graphical
   ];
 
   home-manager.users.michael = {

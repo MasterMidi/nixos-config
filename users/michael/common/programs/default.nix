@@ -1,33 +1,11 @@
-{
-  config,
-  pkgs,
-  inputs,
-  ...
-}:
+{ ... }:
 {
   imports = [
-    ./discord
-    ./hyprland
-    ./mpv
-    ./nautilus
-    ./rofi
-    ./vscodium
-    ./waybar
-    ./wlogout
     ./bashmount.nix
-    ./firefox.nix
     ./fzf.nix
     ./git.nix
-    ./hyprlock.nix
-    ./kitty.nix
     ./lazygit.nix
     ./ripgrep.nix
-    ./spotify.nix
-    # ./thunderbird.nix
-    ./zathura.nix
-    ./cliphist.nix
-    ./mako.nix
-    ./hypridle.nix
   ];
 
   fonts.fontconfig = {
@@ -56,8 +34,5 @@
 
     # Misc values
     EDITOR = "nano";
-    TERM_PROGRAM = "kitty";
-    BROWSER = "firefox";
-    FILE_BROWSER = "nautilus";
   };
 }

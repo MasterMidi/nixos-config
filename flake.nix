@@ -14,6 +14,10 @@
     # packages
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions"; # All vscode extensions
+    nixos-wsl = {
+      url = "github:nix-community/NixOS-WSL/main";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nixos-raspberrypi.url = "github:nvmd/nixos-raspberrypi/main";
 
     # Core Flake Libraries
@@ -78,10 +82,10 @@
         ./hosts/aether # Hetzner vps
         ./hosts/zenith # Workstation
         ./hosts/callisto # Raspi 5
+        ./hosts/hyperion # wsl work laptop
         # ./hosts/eris # Raspi 3
         # ./hosts/polaris # Old asus laptop
         # ./hosts/altair # spare server
-        # ./hosts/hyperion # wsl work laptop
       ];
 
       systems = [

@@ -32,7 +32,7 @@
 
         # Users
         ../../users/root/common.nix
-        ../../users/michael/zenith.nix
+        ../../users/michael/zenith
       ];
     };
     diskoConfigurations.zenith = import ./disko.nix;

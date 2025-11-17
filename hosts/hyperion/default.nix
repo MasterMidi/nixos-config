@@ -1,20 +1,15 @@
-{
-  inputs,
-  self,
-  ...
-}:
+{ inputs, self, ... }:
 {
   flake = {
-    nixosConfigurations.andromeda = inputs.nixpkgs.lib.nixosSystem {
+    nixosConfigurations.hyperion = inputs.nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = {
         inherit inputs self;
       };
       modules = [
+        inputs.nixos-wsl.nixosModules.default
+
         ./configuration.nix
-        ./containers
-        ./hardware.nix
-        ./secrets
 
         # profiles
         ../../profiles/common.nix
@@ -23,22 +18,14 @@
         ../../profiles/mdns.nix
         ../../profiles/nix.nix
         ../../profiles/secrets.nix
+        ../../profiles/sound.nix
+        ../../profiles/splash-screen.nix
         ../../profiles/vpn.nix
 
         # Users
         ../../users/root/common.nix
-        ../../users/michael/server
+        ../../users/michael/graphical
       ];
-    };
-
-  };
-
-  deploy.nodes.andromeda = {
-    hostname = "andromeda";
-    profiles.system = {
-      sshUser = "root";
-      path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.andromeda;
-      remoteBuild = true;
     };
   };
 }

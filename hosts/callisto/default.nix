@@ -33,7 +33,7 @@
 
         # Users
         ../../users/root/common.nix
-        ../../users/michael/server.nix
+        ../../users/michael/server
       ];
     };
   };

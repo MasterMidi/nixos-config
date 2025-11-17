@@ -1,7 +1,7 @@
 { pkgs, inputs, ... }:
 {
   imports = [
-    ../common
+    ../../common
   ];
 
   users.users.michael = {
@@ -23,5 +23,10 @@
   home-manager.users.michael = {
     home.username = "michael";
     home.homeDirectory = "/home/michael";
+    imports = [
+      ./programs
+      ./secrets
+      ./theme
+    ];
   };
 }

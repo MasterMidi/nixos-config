@@ -28,7 +28,7 @@
 
         # Users
         ../../users/root/common.nix
-        ../../users/michael/meridian.nix
+        ../../users/michael/meridian
       ];
     };
     # diskoConfigurations = import ./disko.nix;

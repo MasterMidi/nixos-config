@@ -1,7 +1,7 @@
 { pkgs, ... }:
 {
   imports = [
-    ./personal.nix
+    ../graphical
   ];
 
   users.users.michael.extraGroups = [ "dialout" ];

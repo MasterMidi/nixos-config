@@ -124,7 +124,7 @@
           panicbit.cargo
           # vadimcn.vscode-lldb
           webfreak.debug
-          serayuzgur.crates
+          # fill-labs.dependi
           tamasfe.even-better-toml
           github.vscode-github-actions
           # github.copilot-chat

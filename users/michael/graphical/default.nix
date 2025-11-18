@@ -9,6 +9,14 @@
       ./programs
     ];
 
+    fonts.fontconfig = {
+      enable = true;
+      defaultFonts = {
+        monospace = [ "JetBrainsMono NF" ];
+        sansSerif = [ "Inter" ];
+      };
+    };
+
     services.mpris-proxy.enable = true; # media player mpris proxy
     services.playerctld.enable = true; # media player control
 

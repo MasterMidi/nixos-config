@@ -8,9 +8,11 @@
     nixosConfigurations.callisto = inputs.nixos-raspberrypi.lib.nixosSystem {
       specialArgs = {
         inherit inputs self;
+        inherit (inputs) nixos-raspberrypi;
       };
       modules = [
         ./configuration.nix
+        ./config.nix
         {
           # Hardware specific configuration, see section below for a more complete
           # list of modules

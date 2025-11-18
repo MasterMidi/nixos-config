@@ -8,14 +8,6 @@
     ./ripgrep.nix
   ];
 
-  fonts.fontconfig = {
-    enable = true;
-    defaultFonts = {
-      monospace = [ "JetBrainsMono NF" ];
-      sansSerif = [ "Inter" ];
-    };
-  };
-
   home.sessionVariables = {
     # Setup XDG
     XDG_CACHE_HOME = "$HOME/.cache";

@@ -1,10 +1,14 @@
 {
   config,
   pkgs,
-  lib,
+  modulesPath,
   ...
 }:
 {
+  imports = [
+    (modulesPath + "/installer/sd-card/sd-image-aarch64.nix")
+  ];
+
   networking.hostName = "callisto";
 
   system.stateVersion = "25.05";

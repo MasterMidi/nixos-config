@@ -2,18 +2,27 @@
   description = "A dendritic NixOS configuration for all my machines.";
 
   nixConfig = {
+    allowUnfree = true;
     extra-substituters = [
       "https://nixos-raspberrypi.cachix.org"
+      "https://install.determinate.systems" # determinate nix
     ];
     extra-trusted-public-keys = [
       "nixos-raspberrypi.cachix.org-1:4iMO9LXa8BqhU+Rpg6LQKiGa2lsNh/j2oiYLNOQ5sPI="
+      "cache.flakehub.com-3:hJuILl5sVK4iKm86JzgdXW12Y2Hwd5G07qKtHTOcDCM=" # determinate nix
     ];
   };
 
   inputs = {
     # packages
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions"; # All vscode extensions
+    determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/*";
+
+    # All vscode extensions
+    nix-vscode-extensions = {
+      url = "github:nix-community/nix-vscode-extensions";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nixos-wsl = {
       url = "github:nix-community/NixOS-WSL/main";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -24,7 +33,10 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
 
     # nix/flake utilities
-    devshell.url = "github:numtide/devshell";
+    devshell = {
+      url = "github:numtide/devshell";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # Home Manager
     home-manager = {
@@ -49,10 +61,18 @@
     nix-gaming.url = "github:fufexan/nix-gaming";
 
     # deployment & secret tools
-    sops-nix.url = "github:Mic92/sops-nix";
-    # deploy-rs.url = "github:serokell/deploy-rs/master";
-    deploy-rs.url = "github:XYenon/deploy-rs/fix/nix-2-32";
-    kubenix.url = "github:hall/kubenix";
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    deploy-rs = {
+      url = "github:serokell/deploy-rs/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    kubenix = {
+      url = "github:hall/kubenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # Theming and customization
     nix-colors.url = "github:misterio77/nix-colors"; # Theming in nix configuration

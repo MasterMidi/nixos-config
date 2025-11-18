@@ -6,6 +6,8 @@
   ...
 }:
 {
+  imports = [ inputs.determinate.nixosModules.default ];
+
   documentation = {
     enable = true;
     doc.enable = false;
@@ -47,7 +49,7 @@
   };
 
   nix = {
-    package = pkgs.nixVersions.nix_2_31;
+    # package = pkgs.nixVersions.nix_2_31;
 
     # pin the registry to avoid downloading and evaling a new nixpkgs version every time using 'nix shell nixpkgs#...'
     registry = lib.mapAttrs (_: f: { flake = f; }) inputs;

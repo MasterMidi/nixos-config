@@ -8,7 +8,7 @@ keys:
       - &andromeda age1lz59a9hcx9wfknc2p4lv9hej4exjqawsx04g82e8d7e8fkhqegkqpmegu9
       - &aether age13mlxtvdznjlh9tafmtsamus4zsu905rwn5mzdhjcehuqs0p92qwq0tvuuh
       - &pisces age190my2e4fa9y9utvd947rhzu3tl22ndkzgp2kxqhsv4c7d800cc4slzgq2v
-      - &hyperion age15m0kpul982ntfgvv0sqsjulzsxr4vusxshcvu303xf3np65y4fnq5nv3s2
+      - &hyperion age1lg4e7rxq944fezdtqsrrhjzxarq2f5e0a804juyrrhdynkxmqg9qlkadk7
 creation_rules:
   - path_regex: .*(secrets)/.*\.(yml|yaml|json|env|ini|conf)$
     key_groups:

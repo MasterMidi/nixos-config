@@ -2,8 +2,8 @@
 {
   imports = [ inputs.sops-nix.homeManagerModules.sops ];
   sops = {
-    age.keyFile = "/home/michael/.config/sops/age/keys.txt";
     defaultSopsFile = ./secrets.yaml;
+    age.keyFile = "${config.xdg.configHome}/sops/age/keys.txt";
     secrets = {
       SSH_KEY = {
         mode = "0600";

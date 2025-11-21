@@ -26,7 +26,6 @@
     imports = [
       ./programs
       ./secrets
-      ./theme
     ];
   };
 }

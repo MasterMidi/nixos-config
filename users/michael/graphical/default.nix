@@ -4,9 +4,12 @@
     ../common
   ];
 
+  environment.pathsToLink = [ "/share/applications" "/share/xdg-desktop-portal" ];
+
   home-manager.users.michael = {
     imports = [
       ./programs
+      ./theme
     ];
 
     fonts.fontconfig = {

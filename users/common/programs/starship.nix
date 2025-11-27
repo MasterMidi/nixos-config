@@ -44,7 +44,7 @@ in {
       # format = "($nix_shell$shlvl[](fg:${shell} bg:${pc-info}))$os$username$hostname$localip$sudo[](fg:${pc-info} bg:${path})$directory[](fg:${path} bg:${git-module})$git_branch$git_commit$git_state$git_status[](fg:${git-module} bg:${package-module})$package[](fg:${package-module} bg:${code-module})$container$kubernetes$docker_context$nodejs$rust$golang$php[](fg:${code-module})$cmd_duration\n$character";
       format = builtins.concatStringsSep "" [
         (section ["$os" "$username" "$hostname" "$sudo"] "" pc-info network)
-        (section ["$localip"] "" network path)
+        (section ["\${custom.ssh_host_ip}"] "" network path)
         (section ["$directory"] "" path git-module)
         (section ["$git_branch" "$git_commit" "$git_state$" "git_status"] "" git-module shell)
         (ifSection ["$nix_shell" "$direnv" "$shlvl"] "" shell package-module)
@@ -138,6 +138,19 @@ in {
         style = "italic fg:${dark-text} bg:${network}";
         disabled = false;
         ssh_only = true;
+      };
+
+      custom.ssh_host_ip = {
+        description = "Shows IP and Interface when connected via SSH";
+        command = ''
+IP=$(echo $SSH_CONNECTION | awk '{print $3}')
+IF=$(ip -o addr show to "$IP" | awk '{print $2}')
+echo "$IP ($IF)"
+'';
+        when = "test -n \"$SSH_CONNECTION\"";
+        format = "[ $output]($style)";
+        #symbol = "󰌘 ";
+        style = "italic fg:${dark-text} bg:${network}";
       };
 
       git_branch = {

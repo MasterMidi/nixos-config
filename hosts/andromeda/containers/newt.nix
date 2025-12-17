@@ -1,7 +1,7 @@
 { config, ... }:
 {
   virtualisation.oci-containers.compose.mediaserver.containers.newt = rec {
-    image = "fosrl/newt:1.3.4";
+    image = "fosrl/newt:1.7.0";
     networking = {
       networks = [ "default" ];
       aliases = [ "newt" ];

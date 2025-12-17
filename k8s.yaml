@@ -469,7 +469,7 @@ spec:
     spec:
       containers:
         - name: newt
-          image: "fosrl/newt:1.6.0"
+          image: "fosrl/newt:1.7.0"
           env:
             - name: PANGOLIN_ENDPOINT
               value: "https://tunnel.mgrlab.dk"

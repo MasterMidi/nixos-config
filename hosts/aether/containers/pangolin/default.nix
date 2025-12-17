@@ -219,7 +219,7 @@ in
     networks.default = { };
     containers = {
       pangolin = {
-        image = "fosrl/pangolin:1.12.1";
+        image = "fosrl/pangolin:1.13.1";
         networking = {
           networks = [ "default" ];
           aliases = [ "pangolin" ];
@@ -241,7 +241,7 @@ in
         # };
       };
       gerbil = {
-        image = "fosrl/gerbil:1.2.2";
+        image = "fosrl/gerbil:1.3.0";
         networking = {
           networks = [ "default" ];
           aliases = [ "gerbil" ];

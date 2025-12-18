@@ -1,7 +1,7 @@
 # Based on https://github.com/immich-app/immich/blob/main/docker/docker-compose.yml
 { config, ... }:
 let
-  immichVersion = "v2.0.1";
+  immichVersion = "v2.3.1";
 in
 {
   services.cloudflared.tunnels.andromeda.ingress = {

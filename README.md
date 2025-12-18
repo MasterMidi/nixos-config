@@ -7,24 +7,14 @@
 
 <!-- spacer -->
 <p></p>
-<a href="https://github.com/MasterMidi/nixos-config/issues">
-<img src="https://img.shields.io/github/issues/MasterMidi/nixos-config?color=d8a657&labelColor=32302f&style=for-the-badge">
-</a>
-<a href="https://github.com/MasterMidi/nixos-config/stargazers">
-<img src="https://img.shields.io/github/stars/MasterMidi/nixos-config?color=d3869b&labelColor=32302f&style=for-the-badge">
-</a>
-<a href="https://github.com/MasterMidi/nixos-config/">
-<img src="https://img.shields.io/github/repo-size/MasterMidi/nixos-config?color=ea999c&labelColor=32302f&style=for-the-badge">
-</a>
-<a href="https://github.com/MasterMidi/nixos-config/blob/main/.github/LICENSE">
-<img src="https://img.shields.io/static/v1.svg?style=for-the-badge&label=License&message=GLWTS&logoColor=d3869b&colorA=313244&colorB=cba6f7"/>
-</a>
-<a href="https://nixos.org">
-<img src="https://img.shields.io/badge/NixOS-unstable-blue.svg?style=for-the-badge&labelColor=32302f&logo=NixOS&logoColor=white&color=7daea3">
-</a>
-<a href="https://nixos.org">
-<img src="https://img.shields.io/github/last-commit/shvedes/dotfiles?style=for-the-badge&color=d8a657&labelColor=32302f">
-</a>
+
+[![](https://img.shields.io/github/issues/MasterMidi/nixos-config?color=d8a657&labelColor=32302f&style=for-the-badge)](https://github.com/MasterMidi/nixos-config/issues)
+[![](https://img.shields.io/github/stars/MasterMidi/nixos-config?color=d3869b&labelColor=32302f&style=for-the-badge)](https://github.com/MasterMidi/nixos-config/stargazers)
+[![](https://img.shields.io/github/repo-size/MasterMidi/nixos-config?color=ea999c&labelColor=32302f&style=for-the-badge)](https://github.com/MasterMidi/nixos-config)
+[![](https://img.shields.io/static/v1.svg?style=for-the-badge&label=License&message=GLWTS&logoColor=d3869b&colorA=313244&colorB=cba6f7)](https://github.com/MasterMidi/nixos-config/blob/main/.github/LICENSE)
+[![](https://img.shields.io/badge/NixOS-unstable-blue.svg?style=for-the-badge&labelColor=32302f&logo=NixOS&logoColor=white&color=7daea3)]()
+[![](https://img.shields.io/github/last-commit/MasterMidi/nixos-config?style=for-the-badge&color=d8a657&labelColor=32302f)]()
+
 <br>
 </div>
 

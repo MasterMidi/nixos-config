@@ -20,6 +20,7 @@
         ../../profiles/common.nix
         ../../profiles/bare-metal.nix
         ../../profiles/k3s.nix
+        ../../profiles/k3s/gpu-nvidia.nix
         ../../profiles/mdns.nix
         ../../profiles/nix.nix
         ../../profiles/secrets.nix
@@ -39,6 +40,8 @@
       sshUser = "root";
       path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.andromeda;
       remoteBuild = true;
+      magicRollback = false;
+      autoRollback = false;
     };
   };
 }

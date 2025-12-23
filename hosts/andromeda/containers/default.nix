@@ -14,7 +14,7 @@
     ./jellyfin
     # ./jellyseerr.nix
     # ./karakeep.nix
-    # ./mealie.nix
+    ./mealie.nix
     ./newt.nix
     # ./open-webui.nix
     ./paperless.nix

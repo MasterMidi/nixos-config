@@ -13,4 +13,6 @@
       configurationLimit = 5;
     };
   };
+
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 }

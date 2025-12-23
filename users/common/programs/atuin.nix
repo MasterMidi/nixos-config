@@ -4,6 +4,6 @@
   programs.atuin = {
     enable = true;
     enableBashIntegration = config.programs.bash.enable;
-    daemon.enable = false;
+    daemon.enable = true;
   };
 }

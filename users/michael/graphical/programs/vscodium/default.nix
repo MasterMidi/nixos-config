@@ -76,6 +76,7 @@
       extensions =
         with inputs.nix-vscode-extensions.extensions.x86_64-linux.vscode-marketplace;
         [
+          expo.vscode-expo-tools
           sndst00m.vscode-native-svg-preview
           mads-hartmann.bash-ide-vscode
           mkhl.shfmt

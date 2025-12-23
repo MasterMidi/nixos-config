@@ -14,6 +14,7 @@
         ./power-management.nix
         ./system.nix
         ./user-interface.nix
+        ./home-assistant.nix
 
         # profiles
         ../../profiles/common.nix

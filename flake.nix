@@ -16,7 +16,7 @@
   inputs = {
     # packages
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/*";
+    determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/=3.11.2"; # Deploy-rs is still broken for me with version nix version 2.32. This is latest determinate nix with version 2.31
 
     # All vscode extensions
     nix-vscode-extensions = {
@@ -103,6 +103,7 @@
         ./hosts/zenith # Workstation
         ./hosts/callisto # Raspi 5
         ./hosts/hyperion # wsl work laptop
+        ./hosts/voyager
         # ./hosts/eris # Raspi 3
         # ./hosts/polaris # Old asus laptop
         # ./hosts/altair # spare server

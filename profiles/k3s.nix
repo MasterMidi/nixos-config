@@ -21,7 +21,7 @@
   services.k3s = {
     enable = true;
     role = "server";
-    extraFlags = builtins.toString [
+    extraFlags = [
       "--debug"
       "--kubelet-arg=allowed-unsafe-sysctls=net.ipv4.conf.all.src_valid_mark"
       # "--container-runtime-endpoint unix:///run/containerd/containerd.sock"

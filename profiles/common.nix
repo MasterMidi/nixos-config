@@ -4,7 +4,7 @@
 
   services.openssh = {
     enable = true;
-    openFirewall = false;
+    openFirewall = true;
   };
 
   environment.systemPackages = with pkgs; [

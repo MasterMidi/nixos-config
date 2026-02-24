@@ -4,12 +4,10 @@
   inputs,
   config,
   ...
-}: {
+}:
+{
   programs.firefox = {
     enable = true;
-    nativeMessagingHosts = with pkgs; [
-      vdhcoapp
-    ];
     profiles.default = {
       name = "Default";
       path = "nix.default";
@@ -41,5 +39,6 @@
     };
   };
 
-  home.file.".mozilla/firefox/${config.programs.firefox.profiles.default.path}/chrome/firefox-gnome-theme".source = inputs.firefox-gnome-theme;
+  home.file.".mozilla/firefox/${config.programs.firefox.profiles.default.path}/chrome/firefox-gnome-theme".source =
+    inputs.firefox-gnome-theme;
 }

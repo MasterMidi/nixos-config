@@ -2,7 +2,7 @@
 {
   imports = [ inputs.devshell.flakeModule ];
   perSystem =
-    { pkgs, ... }:
+    { pkgs, lib, ... }:
     {
       devshells.default = {
         devshell = {
@@ -58,21 +58,18 @@
           '';
         };
 
-        commands = [
-          {
-            name = "dply";
+        commands = lib.mapAttrsToList (name: value: value // { name = name; }) {
+          dply = {
             category = "deploy";
             help = "deploy to remote server";
-            command = "deploy \"$@\" -- --log-format internal-json -v 2>&1 | nom --json";
-          }
-          {
-            name = "evl";
+            command = "deploy -s \"$@\" -- --log-format internal-json -v 2>&1 | nom --json";
+          };
+          evl = {
             category = "nixos";
             help = "evaluate nixos configuration";
             command = "nix eval --impure .#nixosConfigurations.$1";
-          }
-          {
-            name = "usops";
+          };
+          usops = {
             category = "secrets";
             help = "updates all sops secrets with the current keys in .sops.yaml";
             command = ''
@@ -93,8 +90,8 @@
 
               echo "✅ All secrets updated successfully!"
             '';
-          }
-        ];
+          };
+        };
       };
     };
 }

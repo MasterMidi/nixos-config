@@ -19,7 +19,7 @@
     # ./open-webui.nix
     ./paperless.nix
     # ./penpot.nix
-    ./pocketid.nix
+    # ./pocketid.nix
     ./prefetcher.nix
     # ./prowlarr.nix
     ./qbit

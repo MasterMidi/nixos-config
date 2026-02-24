@@ -10,17 +10,19 @@ in
       handler = "nvidia";
     };
     ConfigMap.${confMap} = {
-      data."config.yaml" = ''
-        version: v1
-        flags:
-          deviceDiscoveryStrategy: nvml
-        sharing:
-          timeSlicing:
-            renameByDefault: false
-            resources:
-            - name: nvidia.com/gpu
-              replicas: 10
-      '';
+      data."config.yaml" = builtins.toJSON {
+        version = "v1";
+        flags.deviceDiscoveryStrategy = "nvml";
+        sharing.timeSlicing = {
+          renameByDefault = false;
+          resources = [
+            {
+              name = "nvidia.com/gpu";
+              replicas = 10;
+            }
+          ];
+        };
+      };
     };
     DaemonSet.${daemonSet} = {
       spec = {

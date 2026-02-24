@@ -6,6 +6,7 @@
     # ./linkwarden.nix
     ./newt.nix
     ./nvidia-device-plugin.nix
+    ./pocketid.nix
     ./prowlarr.nix
     ./qbittorrent.nix
     ./qui.nix

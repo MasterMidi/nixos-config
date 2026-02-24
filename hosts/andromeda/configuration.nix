@@ -84,4 +84,9 @@
   services.resolved.enable = true;
 
   networking.firewall.allowedTCPPorts = [ 30089 ];
+
+  services.k3s.extraFlags = [
+    # Allow the others to verify the cert when connecting to "andromeda"
+    "--tls-san andromeda"
+  ];
 }

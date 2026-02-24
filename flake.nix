@@ -73,6 +73,10 @@
       url = "github:hall/kubenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    easykubenix = {
+      url = "github:lillecarl/easykubenix";
+      flake = false;
+    };
 
     # Theming and customization
     nix-colors.url = "github:misterio77/nix-colors"; # Theming in nix configuration
@@ -115,146 +119,52 @@
       ];
 
       perSystem =
-        { system, ... }:
         {
-          packages.k8s =
-            (inputs.kubenix.evalModules.${system} {
-              module =
-                { kubenix, ... }:
-                {
-                  imports = [ kubenix.modules.k8s ];
-                  kubernetes.resources.pods.example.spec.containers.nginx.image = "nginx";
+          system,
+          pkgs,
+          lib,
+          ...
+        }:
+        let
+          # 1. Instantiate easykubenix with your configuration
+          eknBuild = import inputs.easykubenix {
+            inherit pkgs;
+            modules = [
+              ./k8s
+              # You can add more modules here
+            ];
+          };
+        in
+        {
+          packages.openthread-border-router = pkgs.callPackage ./pkgs/openthread-border-router { };
 
-                  kubernetes.resources = {
-                    deployments.sonarr = {
-                      apiVersion = "apps/v1";
-                      kind = "Deployment";
-                      metadata = {
-                        name = "sonarr";
-                        labels = {
-                          app = "sonarr";
-                        };
-                      };
-                      spec = {
-                        replicas = 1;
-                        selector = {
-                          matchLabels = {
-                            app = "sonarr";
-                          };
-                        };
-                        template = {
-                          metadata = {
-                            labels = {
-                              app = "sonarr";
-                            };
-                          };
-                          spec = {
-                            containers = [
-                              {
-                                name = "sonarr";
-                                image = "ghcr.io/hotio/sonarr:latest";
-                                ports = [
-                                  {
-                                    containerPort = 8989;
-                                    name = "http";
-                                  }
-                                ];
-                                env = [
-                                  {
-                                    name = "PUID";
-                                    value = "1000";
-                                  }
-                                  {
-                                    name = "PGID";
-                                    value = "100";
-                                  }
-                                  {
-                                    name = "TZ";
-                                    value = "Europe/Copenhagen";
-                                  }
-                                ];
-                                volumeMounts = [
-                                  {
-                                    name = "sonarr-config";
-                                    mountPath = "/config";
-                                  }
-                                  {
-                                    name = "sonarr-media";
-                                    mountPath = "/data";
-                                  }
-                                ];
-                              }
-                            ];
-                            volumes = [
-                              {
-                                name = "sonarr-config";
-                                hostPath = {
-                                  path = "/home/michael/.testing/k3s/sonarr-config";
-                                  type = "DirectoryOrCreate";
-                                };
-                              }
-                              {
-                                name = "sonarr-media";
-                                hostPath = {
-                                  path = "/home/michael/.testing/k3s/sonarr-media";
-                                  type = "Directory";
-                                };
-                              }
-                            ];
-                          };
-                        };
-                      };
-                    };
-                    persistentVolumes = {
-                      apiVersion = "v1";
-                      kind = "PersistentVolume";
-                      metadata = {
-                        name = "jellyfin-videos";
-                      };
-                      spec = {
-                        capacity = {
-                          storage = "400Gi";
+          packages.k8s-manifests = eknBuild.manifestYAMLFile;
 
-                        };
-                        accessModes = [ "ReadWriteOnce" ];
-                        nfs = {
-                          path = "/volume1/server/k3s/media";
-                          server = "storage.merox.cloud";
+          apps.validate = {
+            type = "app";
+            program = lib.getExe eknBuild.validationScript;
+          };
 
-                        };
-                        persistentVolumeReclaimPolicy = "Retain";
-                        mountOptions = [
-                          "hard"
-                          "nfsvers=3"
+          apps.deploy = {
+            type = "app";
+            program = (
+              pkgs.writeShellScriptBin "deploy-safe" ''
+                set -e # Exit immediately if validation fails
 
-                        ];
-                        storageClassName = "";
-                      };
-                    };
+                echo "🔍 Starting Pre-flight Validation..."
+                ${lib.getExe eknBuild.validationScript}
 
-                    persistentVolumeClaims = {
-                      apiVersion = "v1";
-                      kind = "PersistentVolumeClaim";
-                      metadata = {
-                        name = "jellyfin-videos";
-                        namespace = "media";
-                      };
-                      spec = {
-                        accessModes = [
-                          "ReadWriteOnce"
-
-                        ];
-                        resources.requests.storage = "400Gi";
-                        volumeName = "jellyfin-videos";
-                        storageClassName = "";
-
-                      };
-
-                    };
-                  };
-                };
-            }).config.kubernetes.result;
+                echo "✅ Validation successful!"
+                echo "🚀 Starting Deployment..."
+                ${lib.getExe eknBuild.deploymentScript}
+              ''
+            );
+          };
         };
+
+      flake.overlays.default = final: prev: {
+        openthread-border-router = prev.callPackage ./pkgs/openthread-border-router { };
+      };
 
       flake.checks = builtins.mapAttrs (
         system: deployLib: deployLib.deployChecks self.deploy

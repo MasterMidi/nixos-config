@@ -18,12 +18,18 @@
   # This is essential for routing traffic from pods
   boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
 
+  # ensure we have cgroups
+  # boot.kernelParams = [
+  #   "cgroup_memory=1"
+  #   "cgroup_enable=memory"
+  # ];
+
   services.k3s = {
     enable = true;
     role = "server";
     extraFlags = [
       "--debug"
-      "--kubelet-arg=allowed-unsafe-sysctls=net.ipv4.conf.all.src_valid_mark"
+      "--kubelet-arg=allowed-unsafe-sysctls=net.ipv4.ip_forward,net.ipv6.conf.all.forwarding,net.ipv4.conf.all.src_valid_mark"
       # "--container-runtime-endpoint unix:///run/containerd/containerd.sock"
     ];
   };

@@ -18,7 +18,7 @@
     openFirewall = true;
     autoConnect = {
       enable = false;
-      apiKeyFile = ""; # config.sops.secrets.TAILSCALE_KEY.path;
+      # apiKeyFile = config.sops.secrets.TAILSCALE_KEY.path;
     };
   };
 }

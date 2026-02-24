@@ -1,58 +1,58 @@
 # Add this to your NixOS configuration (usually in configuration.nix)
+{ self, ... }:
 {
-  config,
-  lib,
-  pkgs,
-  ...
-}: let
-  program-files = "/var/lib/jdupes";
-  extensions = [
-    "mkv"
-    "mp4"
-    "avi"
-  ];
-in {
-  # Ensure jdupes is installed
-  environment.systemPackages = with pkgs; [
-    jdupes
-  ];
+  imports = [ self.modules.nixos.jdupes ];
+  services.jdupes = {
+    enable = true;
+    jobs.torrent-deduplication = {
+      directories = [ "/mnt/hdd/torrents" ];
+      recursive = true;
+      action = "dedupe";
+      # filters = [ "onlyext:mkv,mp4,avi" ];
+      hashDatabase = true;
+      interval = "*-*-01 00:00:00"; # 1st of month
 
-  # Create tmpfiles definition to ensure directories exist
-  systemd.tmpfiles.rules = [
-    "d ${program-files} 0755 root root - -" # Create main directory
-  ];
+      extraServiceConfig = {
+        IOSchedulingClass = "best-effort";
+        IOSchedulingPriority = 7;
+        CPUSchedulingPolicy = "batch";
+        Nice = 10;
+      };
 
-  # Create the systemd service and timer
-  systemd.services.media-deduplication = {
-    description = "Monthly media file deduplication";
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = ''
-        ${pkgs.jdupes}/bin/jdupes --recurse --link-hard \
-        --ext-filter=onlyext:${builtins.concatStringsSep "," extensions} \
-        --hash-db=${program-files}/hashdb.txt \
-        /mnt/hdd
-      '';
-      User = "root"; # Change this if you want another user to run the service
-
-      # More balanced resource settings
-      IOSchedulingClass = "best-effort"; # Default class but with lower priority
-      IOSchedulingPriority = 7; # Range is 0-7, with 7 being lowest priority
-      CPUSchedulingPolicy = "batch"; # Better for background CPU-intensive jobs
-      Nice = 10; # Medium-low priority (not as extreme as 19)
+      extraTimerConfig = {
+        RandomizedDelaySec = "30m";
+        Persistent = true;
+      };
     };
-  };
+    jobs.media-deduplication = {
+      directories = [
+        "/mnt/hdd/torrents"
+        "/mnt/hdd/media"
+      ];
 
-  # Configure the timer to run on the first day of each month
-  # with a random start time within 30 minutes after midnight
-  systemd.timers.media-deduplication = {
-    description = "Run media deduplication on the 1st day of each month";
-    wantedBy = ["timers.target"];
-    timerConfig = {
-      OnCalendar = "*-*-01 00:00:00"; # First day of each month at midnight
-      RandomizedDelaySec = "30m"; # Add a random delay of up to 30 minutes
-      Persistent = true; # Run immediately if system was off during scheduled time
-      Unit = config.systemd.services.media-deduplication.name;
+      # This forces jdupes to keep the file from the first directory (torrents)
+      # and link the file from the second directory (media) to it.
+      paramOrder = true;
+
+      # This prevents matching two files that are BOTH in torrents
+      # or BOTH in media. Matches only occur BETWEEN them.
+      isolate = true;
+      recursive = true;
+      action = "hardlink";
+      hashDatabase = true;
+      interval = "*-*-01 00:00:00"; # 1st of month
+
+      extraServiceConfig = {
+        IOSchedulingClass = "best-effort";
+        IOSchedulingPriority = 7;
+        CPUSchedulingPolicy = "batch";
+        Nice = 10;
+      };
+
+      extraTimerConfig = {
+        RandomizedDelaySec = "30m";
+        Persistent = true;
+      };
     };
   };
 }

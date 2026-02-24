@@ -15,6 +15,7 @@
         ./containers
         ./hardware.nix
         ./secrets
+        ./home-assistant.nix
 
         # profiles
         ../../profiles/common.nix

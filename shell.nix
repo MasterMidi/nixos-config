@@ -31,6 +31,31 @@
 
             nixos-facter
           ];
+
+          interactive.dply-completion.text = ''
+            _dply_completions() {
+              # $2 is the standard bash completion argument for the current word
+              local cur="$2"
+
+              # CACHING: Only run 'nix eval' the very first time you press TAB.
+              # This prevents the terminal from hanging on subsequent tab presses.
+              if [ -z "''${_DPLY_NODES_CACHE-}" ]; then
+                _DPLY_NODES_CACHE=$(${pkgs.nix}/bin/nix eval --json .#deploy.nodes --apply builtins.attrNames 2>/dev/null | ${pkgs.jq}/bin/jq -r '.[]' 2>/dev/null)
+              fi
+
+              # Build the list of options prefixed with .#
+              local opts=""
+              for n in $_DPLY_NODES_CACHE; do
+                opts="$opts .#$n"
+              done
+
+              # Let compgen filter the cached options based on what the user typed
+              COMPREPLY=( $(compgen -W "$opts" -- "$cur") )
+            }
+
+            # Register the function to the dply command
+            complete -F _dply_completions "dply .#"
+          '';
         };
 
         commands = [
@@ -51,7 +76,7 @@
             name = "dply";
             category = "deploy";
             help = "deploy to remote server";
-            command = "nix run .#deploy -- $1";
+            command = "deploy \"$@\" -- --log-format internal-json -v 2>&1 | nom --json";
           }
 
           {
@@ -61,12 +86,12 @@
             command = "nix eval --impure .#nixosConfigurations.$1";
           }
 
-          # {
-          #   name = "usops";
-          #   category = "secrets";
-          #   help = "updates all sops secrets with the current keys in .sops.yaml";
-          #   command = "${./scripts/update-sops-keys.sh}";
-          # }
+          {
+            name = "update-secrets";
+            category = "secrets";
+            help = "updates all sops secrets with the current keys in .sops.yaml";
+            command = ''grep -rEl '(mac: ENC\[|"mac": "ENC\[|sops_mac=ENC\[)' . | xargs -I {} sops updatekeys -y {}'';
+          }
         ];
       };
     };

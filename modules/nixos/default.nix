@@ -6,6 +6,7 @@
     refind = ./refind;
     compose = ./compose;
     development = ./development;
+		jdupes = ./jdupes;
     openthread-border-router = ./openthread-border-router;
     podman-auto-update = ./podman-auto-update;
     tailscale-autoconnect = ./tailscale-autoconnect;

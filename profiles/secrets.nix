@@ -14,5 +14,9 @@
       # This will generate a new key if the key specified above does not exist
       generateKey = true;
     };
+
+    secrets.TAILSCALE_KEY = {
+      sopsFile = ./secrets.yaml;
+    };
   };
 }

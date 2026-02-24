@@ -3,7 +3,9 @@
   config,
   pkgs,
   ...
-}: let
+}:
+
+let
   cfg = config.services.openthread-border-router;
   logLevelMappings = {
     "emerg" = 0;
@@ -16,19 +18,14 @@
     "debug" = 7;
   };
   logLevel = lib.getAttr cfg.logLevel logLevelMappings;
-in {
-  meta.maintainers = with lib.maintainers; [mrene];
+in
+{
+  meta.maintainers = with lib.maintainers; [ mrene ];
 
   options.services.openthread-border-router = {
     enable = lib.mkEnableOption "the OpenThread Border Router";
 
-    package = lib.mkPackageOption pkgs "openthread-border-router" {};
-
-    radioDevice = lib.mkOption {
-      type = lib.types.str;
-      default = "/dev/ttyUSB0";
-      description = "The device name of the serial port of the radio device";
-    };
+    package = lib.mkPackageOption pkgs "openthread-border-router" { };
 
     backboneInterface = lib.mkOption {
       type = lib.types.str;
@@ -43,16 +40,7 @@ in {
     };
 
     logLevel = lib.mkOption {
-      type = lib.types.enum [
-        "emerg"
-        "alert"
-        "crit"
-        "err"
-        "warning"
-        "notice"
-        "info"
-        "debug"
-      ];
+      type = lib.types.enum (lib.attrNames logLevelMappings);
       default = "err";
       description = "The level to use when logging messages";
     };
@@ -60,7 +48,7 @@ in {
     rest = {
       listenAddress = lib.mkOption {
         type = lib.types.str;
-        default = "::";
+        default = "127.0.0.1";
         description = "The address on which to listen for REST API requests";
         example = "::";
       };
@@ -68,7 +56,7 @@ in {
       listenPort = lib.mkOption {
         type = lib.types.port;
         default = 8081;
-        description = "The port on which to listen for REST API requests";
+        description = "The port on which to listen for REST API requests. Warning: the web interface relie on this value being set to 8081";
       };
     };
 
@@ -76,7 +64,7 @@ in {
       enable = lib.mkEnableOption "the web interface";
       listenAddress = lib.mkOption {
         type = lib.types.str;
-        default = "::";
+        default = "127.0.0.1";
         description = "The address on which the web interface should listen";
         example = "::";
       };
@@ -91,8 +79,7 @@ in {
     radio = {
       device = lib.mkOption {
         type = lib.types.path;
-        default = "/dev/ttyUSB0";
-        description = "The device name of the serial port of the radio device. Ignored if services.openthread-border-router.radio.url is set.";
+        description = "The device name of the serial port of the radio device. Ignored if {option}`services.openthread-border-router.radio.url` is set.";
       };
 
       baudRate = lib.mkOption {
@@ -122,38 +109,36 @@ in {
 
       extraDevices = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [];
+        default = [ ];
         description = "Extra devices to add to the radio device";
-        example = "[ \"trel://eth0\" ]";
+        example = [ "trel://eth0" ];
       };
     };
   };
 
   config = lib.mkIf cfg.enable {
+    warnings = (lib.optional (cfg.web.enable && cfg.rest.listenPort != 8081)) ''
+      The openthread-border-router web interface is hardcoded to talk to the REST API on port 8081, but its
+      port has been changed to ${toString cfg.rest.listenPort}. Some features will be broken.
+    '';
+
     services.openthread-border-router.radio.url = lib.mkDefault (
       "spinel+hdlc+uart://${cfg.radio.device}?"
       + lib.concatStringsSep "&" (
-        ["uart-baudrate=${toString cfg.radio.baudRate}"]
+        [ "uart-baudrate=${toString cfg.radio.baudRate}" ]
         ++ lib.optional cfg.radio.flowControl "uart-flow-control"
         ++ lib.optional (cfg.radio.urlQueryString != "") cfg.radio.urlQueryString
       )
     );
 
     # ot-ctl can be used to query the router instance
-    environment.systemPackages = [cfg.package];
+    environment.systemPackages = [ cfg.package ];
 
     # Make sure we have ipv6 support, and that forwarding is enabled
     networking.enableIPv6 = true;
     boot.kernel.sysctl = {
       "net.ipv4.conf.all.forwarding" = 1;
-      "net.ipv6.ip_forward" = 1;
-
-      # Ensure forwarding is off on all interfaces unless needed
-      "net.ipv6.conf.all.forwarding" = 0;
-
-      # For all interfaces (e.g. if you want to accept RA on all):
-      "net.ipv6.conf.all.accept_ra" = lib.mkForce "1";
-      "net.ipv6.conf.all.accept_ra_rt_info_max_plen" = lib.mkForce "64";
+      "net.ipv6.conf.all.forwarding" = 1;
 
       # Make sure we accept IPv6 router advertisements from the local network interface
       "net.ipv6.conf.${cfg.backboneInterface}.accept_ra" = 2;
@@ -176,10 +161,9 @@ in {
       # The agent keeps its local state in /var/lib/thread
       otbr-agent = {
         description = "OpenThread Border Router Agent";
-        wantedBy = ["multi-user.target"];
-        requires = ["dbus.socket"];
-        wants = ["network-online.target"];
-        after = ["dbus.socket" "network-online.target"];
+        wantedBy = [ "multi-user.target" ];
+        requires = [ "network-online.target" ];
+        after = [ "network-online.target" ];
         environment = {
           THREAD_IF = cfg.interfaceName;
         };
@@ -187,17 +171,19 @@ in {
           ExecStartPre = "${lib.getExe' cfg.package "otbr-firewall"} start";
           ExecStart = (
             lib.concatStringsSep " " (
-              [(lib.getExe' cfg.package "otbr-agent")]
-              ++ [
-                "--verbose"
-                "--backbone-ifname ${cfg.backboneInterface}"
-                "--thread-ifname ${cfg.interfaceName}"
-                "--debug-level ${toString logLevel}"
+              lib.concatLists [
+                [
+                  (lib.getExe' cfg.package "otbr-agent")
+                  "--verbose"
+                  "--backbone-ifname ${cfg.backboneInterface}"
+                  "--thread-ifname ${cfg.interfaceName}"
+                  "--debug-level ${toString logLevel}"
+                ]
+                (lib.optional (cfg.rest.listenPort != 0) "--rest-listen-port ${toString cfg.rest.listenPort}")
+                (lib.optional (cfg.rest.listenAddress != "") "--rest-listen-address ${cfg.rest.listenAddress}")
+                [ cfg.radio.url ]
+                cfg.radio.extraDevices
               ]
-              ++ lib.optional (cfg.rest.listenPort != 0) "--rest-listen-port ${toString cfg.rest.listenPort}"
-              ++ lib.optional (cfg.rest.listenAddress != "") "--rest-listen-address ${cfg.rest.listenAddress}"
-              ++ [cfg.radio.url]
-              ++ cfg.radio.extraDevices
             )
           );
           ExecStopPost = "${lib.getExe' cfg.package "otbr-firewall"} stop";
@@ -205,6 +191,24 @@ in {
           Restart = "on-failure";
           RestartSec = 5;
           RestartPreventExitStatus = "SIGKILL";
+
+          # Hardening options (not present in upstream service definitions)
+          StateDirectory = "thread";
+          ProtectSystem = "strict";
+          ProtectHome = true;
+          PrivateTmp = true;
+          ProtectKernelLogs = true;
+          ProtectControlGroups = true;
+          NoNewPrivileges = true;
+          LockPersonality = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          SystemCallArchitectures = "native";
+
+          CapabilityBoundingSet = [
+            "CAP_NET_ADMIN"
+            "CAP_NET_RAW"
+          ];
         };
         path = [
           pkgs.ipset
@@ -213,24 +217,48 @@ in {
       };
 
       # Sync with: src/web/otbr-web.service.in
-      otbr-web = {
-        description = "OpenThread Border Router Web";
-        after = ["otbr-agent.service"];
-        wantedBy = ["multi-user.target"];
+      otbr-web = lib.mkIf cfg.web.enable {
+        description = "OpenThread Border Router Web Interface";
+        after = [ "otbr-agent.service" ];
+        wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           ExecStart = (
             lib.concatStringsSep " " (
-              [
-                (lib.getExe' cfg.package "otbr-web")
-                "-I"
-                "${cfg.interfaceName}"
-                "-d"
-                "${toString logLevel}"
+              lib.concatLists [
+                [
+                  (lib.getExe' cfg.package "otbr-web")
+                  "-I"
+                  "${cfg.interfaceName}"
+                  "-d"
+                  "${toString logLevel}"
+                ]
+                (lib.optional (cfg.web.listenAddress != "") "-a ${cfg.web.listenAddress}")
+                (lib.optional (cfg.web.listenPort != 0) "-p ${toString cfg.web.listenPort}")
               ]
-              ++ lib.optional (cfg.web.listenAddress != "") "-a ${cfg.web.listenAddress}"
-              ++ lib.optional (cfg.web.listenPort != 0) "-p ${toString cfg.web.listenPort}"
             )
           );
+
+          # Hardening options (not present in upstream service definitions)
+          ProtectSystem = "strict";
+          ProtectHome = true;
+          PrivateTmp = true;
+          PrivateDevices = true;
+          ProtectKernelLogs = true;
+          ProtectKernelTunables = true;
+          ProtectKernelModules = true;
+          ProtectControlGroups = true;
+          NoNewPrivileges = true;
+          LockPersonality = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          RestrictNamespaces = true;
+          SystemCallArchitectures = "native";
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+            "AF_UNIX"
+          ];
+          CapabilityBoundingSet = "";
         };
       };
     };

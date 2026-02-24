@@ -23,21 +23,9 @@
       config.boot.kernelPackages.kernel.version
     ];
 
-  networking = {
-    # Enable wireless support (WPA Supplicant)
-    wireless = {
-      enable = true;
-      # The interface name is usually wlan0 on Pi 3, but explicitly stating it helps
-      interfaces = [ "wlan0" ];
+  # 1. Allow you to log in as root with a password "nixos" (change this later!)
+  users.users.root.initialPassword = "nixos";
 
-      networks = {
-        "McDonald's McWifi" = {
-          psk = "lady121205";
-        };
-      };
-    };
-
-    # Ensure conflict with NetworkManager is avoided
-    networkmanager.enable = false;
-  };
+  # 2. Allow your user 'michael' to log in with "nixos"
+  users.users.michael.initialPassword = "nixos";
 }

@@ -59,38 +59,40 @@
         };
 
         commands = [
-          # {
-          #   name = git.pname;
-          #   help = git.meta.description;
-          #   category = "vcs";
-          #   package = git;
-          # }
-          # {
-          #   name = "nix-update";
-          #   category = "nixos";
-          #   help = "good luck newb";
-          #   command = "${./scripts/update.sh}";
-          # }
-
           {
             name = "dply";
             category = "deploy";
             help = "deploy to remote server";
             command = "deploy \"$@\" -- --log-format internal-json -v 2>&1 | nom --json";
           }
-
           {
             name = "evl";
             category = "nixos";
             help = "evaluate nixos configuration";
             command = "nix eval --impure .#nixosConfigurations.$1";
           }
-
           {
-            name = "update-secrets";
+            name = "usops";
             category = "secrets";
             help = "updates all sops secrets with the current keys in .sops.yaml";
-            command = ''grep -rEl '(mac: ENC\[|"mac": "ENC\[|sops_mac=ENC\[)' . | xargs -I {} sops updatekeys -y {}'';
+            command = ''
+              echo "🔍 Searching for SOPS encrypted files..."
+
+              # Find files containing SOPS MAC signatures (YAML, JSON, and ENV formats)
+              files=$(${pkgs.gnugrep}/bin/grep -rEl '(mac: ENC\[|"mac": "ENC\[|sops_mac=ENC\[)' .)
+
+              if [ -z "$files" ]; then
+                echo "No SOPS encrypted files found."
+                exit 0
+              fi
+
+              for file in $files; do
+                echo "🔑 Updating keys for: $file"
+                ${pkgs.sops}/bin/sops updatekeys -y "$file"
+              done
+
+              echo "✅ All secrets updated successfully!"
+            '';
           }
         ];
       };

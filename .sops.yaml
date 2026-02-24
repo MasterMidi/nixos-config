@@ -1,38 +1,77 @@
 keys:
-- users:
-  - &michael age1chvcefkzfesskrs2vf7sp9fjktpx5z8qc4ggksuwfn483fwpjvxsv88jpa
-- hosts:
-  - &meridian age1tsfvlywtu7c9aux8y9efscqak3nvmz85zanyv5q2qvwthphf5u7qa499tl
-  - &zenith age1mslxutmqu56fhl0rgk7flysyacyxks3evnmfckzzykh3wcvzc5tqx9q6dd
-  - &david age1x3tjqh5n09yzmtlgdw7gxdavpxqtktvgavf4gdv6mw5qcq49uypqq34rqq
-  - &andromeda age1lz59a9hcx9wfknc2p4lv9hej4exjqawsx04g82e8d7e8fkhqegkqpmegu9
-  - &aether age13mlxtvdznjlh9tafmtsamus4zsu905rwn5mzdhjcehuqs0p92qwq0tvuuh
-  - &pisces age190my2e4fa9y9utvd947rhzu3tl22ndkzgp2kxqhsv4c7d800cc4slzgq2v
-  - &hyperion age1lg4e7rxq944fezdtqsrrhjzxarq2f5e0a804juyrrhdynkxmqg9qlkadk7
+  - users:
+    - &michael age1chvcefkzfesskrs2vf7sp9fjktpx5z8qc4ggksuwfn483fwpjvxsv88jpa
+  - hosts:
+    - &meridian age1tsfvlywtu7c9aux8y9efscqak3nvmz85zanyv5q2qvwthphf5u7qa499tl
+    - &zenith age1mslxutmqu56fhl0rgk7flysyacyxks3evnmfckzzykh3wcvzc5tqx9q6dd
+    - &david age1x3tjqh5n09yzmtlgdw7gxdavpxqtktvgavf4gdv6mw5qcq49uypqq34rqq
+    - &andromeda age1d9pwzf8uh946mardsysua9lcefzqcwtpdk7j6zxpwz4cyuzrmcpsfz5wc8
+    - &aether age13mlxtvdznjlh9tafmtsamus4zsu905rwn5mzdhjcehuqs0p92qwq0tvuuh
+    - &pisces age190my2e4fa9y9utvd947rhzu3tl22ndkzgp2kxqhsv4c7d800cc4slzgq2v
+    - &hyperion age1lg4e7rxq944fezdtqsrrhjzxarq2f5e0a804juyrrhdynkxmqg9qlkadk7
+
 creation_rules:
-- path_regex: .*\/k8s\/.*\.(yml|yaml|json|env|ini|conf)$
-  key_groups:
-  - age:
-    - *michael
-    - *meridian
-    - *zenith
-    - *hyperion
-- path_regex: .*hosts\/aether\/secrets\/.*\.(yml|yaml|json|env|ini|conf)$
-  key_groups:
-  - age:
-    - *aether
-- path_regex: .*hosts\/andromeda\/secrets\/.*\.(yml|yaml|json|env|ini|conf)$
-  key_groups:
-  - age:
-    - *andromeda
-- path_regex: .*\.(yml|yaml|json|env|ini|conf)$
-  key_groups:
-  - age:
-    - *michael
-    - *meridian
-    - *zenith
-    - *david
-    - *andromeda
-    - *aether
-    - *pisces
-    - *hyperion
+  # Kubernetes Secrets (Specific Hosts + Admin)
+  - path_regex: k8s\/.*\.(yml|yaml|json|env|ini|conf)$
+    key_groups:
+    - age:
+      - *michael
+      - *meridian
+      - *zenith
+      - *hyperion
+
+  # Host-Specific Secrets (Only that Host + Admin)
+  - path_regex: hosts\/meridian\/secrets\/.*\.(yml|yaml|json|env|ini|conf)$
+    key_groups:
+    - age:
+      - *michael
+      - *meridian
+
+  - path_regex: hosts\/zenith\/secrets\/.*\.(yml|yaml|json|env|ini|conf)$
+    key_groups:
+    - age:
+      - *michael
+      - *zenith
+
+  - path_regex: hosts\/david\/secrets\/.*\.(yml|yaml|json|env|ini|conf)$
+    key_groups:
+    - age:
+      - *michael
+      - *david
+
+  - path_regex: hosts\/andromeda\/secrets\/.*\.(yml|yaml|json|env|ini|conf)$
+    key_groups:
+    - age:
+      - *michael
+      - *andromeda
+
+  - path_regex: hosts\/aether\/secrets\/.*\.(yml|yaml|json|env|ini|conf)$
+    key_groups:
+    - age:
+      - *michael
+      - *aether
+
+  - path_regex: hosts\/pisces\/secrets\/.*\.(yml|yaml|json|env|ini|conf)$
+    key_groups:
+    - age:
+      - *michael
+      - *pisces
+
+  - path_regex: hosts\/hyperion\/secrets\/.*\.(yml|yaml|json|env|ini|conf)$
+    key_groups:
+    - age:
+      - *michael
+      - *hyperion
+
+  # Shared Secets (All Hosts + Admin)
+  - path_regex: secrets\/.*\.(yml|yaml|json|env|ini|conf)$
+    key_groups:
+    - age:
+      - *michael
+      - *meridian
+      - *zenith
+      - *david
+      - *andromeda
+      - *aether
+      - *pisces
+      - *hyperion

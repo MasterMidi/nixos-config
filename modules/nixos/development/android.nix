@@ -30,9 +30,6 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    # Enable Android Debug Bridge (ADB) program
-    programs.adb.enable = true;
-
     # Add user 'michael' to necessary groups for hardware access (KVM, ADB, UDEV)
     # Note: Replace 'michael' with your actual username if different.
     users.users.michael.extraGroups = ["kvm" "adbusers" "udev"];

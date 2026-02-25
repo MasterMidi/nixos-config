@@ -4,11 +4,15 @@
     ../common
   ];
 
-  environment.pathsToLink = [ "/share/applications" "/share/xdg-desktop-portal" ];
+  environment.pathsToLink = [
+    "/share/applications"
+    "/share/xdg-desktop-portal"
+  ];
 
   home-manager.users.michael = {
     imports = [
       ./programs
+      ./services
       ./theme
     ];
 

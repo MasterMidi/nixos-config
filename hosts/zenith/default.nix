@@ -24,6 +24,7 @@
         ../../profiles/bare-metal.nix
         ../../profiles/k3s.nix
         ../../profiles/mdns.nix
+        ../../profiles/monitor-control.nix
         ../../profiles/nix.nix
         ../../profiles/secrets.nix
         ../../profiles/sound.nix

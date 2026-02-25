@@ -3,7 +3,8 @@
   config,
   lib,
   ...
-}: let
+}:
+let
   cfg = config.development.dotnet;
 
   # Define options for the JetBrains Rider IDE
@@ -19,21 +20,23 @@
   # Determines which dotnetCorePackages SDK to install based on the sdkVersion option
   # Defaults to a recent stable version if null, but it's better practice
   # to explicitly set the version you want.
-  dotnetSdkPackage = with pkgs.dotnetCorePackages;
-    if cfg.sdkVersion != null
-    then # If a specific version is set, use that (e.g., "sdk_9_0")
+  dotnetSdkPackage =
+    with pkgs.dotnetCorePackages;
+    if cfg.sdkVersion != null then # If a specific version is set, use that (e.g., "sdk_9_0")
       lib.getAttr cfg.sdkVersion pkgs.dotnetCorePackages
-    else # Otherwise, you might fall back to a default or require the user to set it.
+    # Otherwise, you might fall back to a default or require the user to set it.
+    else
       # Requiring the user to set it is often safer for SDKs to avoid unexpected upgrades.
       # For this example, we'll default to a common recent one, but you can change this.
       sdk_9_0; # Defaulting to 9.0 as per your current setup
-in {
+in
+{
   options.development.dotnet = {
     enable = lib.mkEnableOption "Add development tools for .NET";
 
     rider = lib.mkOption {
       type = lib.types.submodule riderOptions;
-      default = {};
+      default = { };
       description = "Options for configuring the JetBrains Rider IDE.";
     };
 
@@ -70,10 +73,12 @@ in {
     # --- Conditional Hyprland Configuration ---
     # Only apply Hyprland rules if Rider and its Hyprland compatibility are enabled
     # Note: These rules apply to any jetbrains-.* class, which is suitable for Rider too.
-    home-manager.users.michael.wayland.windowManager.hyprland.settings.windowrulev2 = lib.mkIf (cfg.rider.enable && cfg.rider.addHyprlandCompat) [
-      # Fix jetbrains IDE's tooltip hover issues
-      "float,class:^(jetbrains-.*)$,title:^(win[0-9]+)$"
-      "nofocus,class:^(jetbrains-.*)$,title:^(win[0-9]+)$"
-    ];
+    home-manager.users.michael.wayland.windowManager.hyprland.settings.windowrule =
+      lib.mkIf (cfg.rider.enable && cfg.rider.addHyprlandCompat)
+        [
+          # Fix jetbrains IDE's tooltip hover issues
+          "match:class ^(jetbrains-.*)$, match:title ^(win[0-9]+)$, float 1"
+          "match:class ^(jetbrains-.*)$, match:title ^(win[0-9]+)$, no_focus 1"
+        ];
   };
 }

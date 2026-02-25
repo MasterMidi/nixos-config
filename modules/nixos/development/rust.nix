@@ -6,7 +6,8 @@
   lib,
   inputs,
   ...
-}: let
+}:
+let
   cfg = config.development.rust;
 
   # Define options for the JetBrains Rust IDE (RustRover)
@@ -21,19 +22,20 @@
   # --- Rust Package Selection Logic ---
   # Determines which rust-bin package to install based on version or channel
   rustPackage =
-    if cfg.version != null
-    then # If a specific version is set, use that
+    if cfg.version != null then # If a specific version is set, use that
       pkgs.rust-bin.${cfg.version}.${cfg.profile}
-    else # Otherwise, use the latest from the specified channel
+    # Otherwise, use the latest from the specified channel
+    else
       pkgs.rust-bin.${cfg.channel}.latest.${cfg.profile};
-in {
+in
+{
   options.development.rust = {
     enable = lib.mkEnableOption "Add development tools for rust";
 
     # Renamed from 'rider' to 'rustRover' for clarity and consistency with package
     rustRover = lib.mkOption {
       type = lib.types.submodule rustRoverOptions;
-      default = {};
+      default = { };
       description = "Options for configuring the JetBrains RustRover IDE.";
     };
 
@@ -44,20 +46,27 @@ in {
     };
 
     channel = lib.mkOption {
-      type = lib.types.enum ["stable" "beta" "nightly"];
+      type = lib.types.enum [
+        "stable"
+        "beta"
+        "nightly"
+      ];
       default = "stable";
       description = "Specifies the Rust release channel to use if 'version' is not set.";
     };
 
     profile = lib.mkOption {
-      type = lib.types.enum ["default" "minimal"];
+      type = lib.types.enum [
+        "default"
+        "minimal"
+      ];
       default = "default";
       description = "Specifies the installation profile for the Rust toolchain.";
     };
   };
 
   config = lib.mkIf cfg.enable {
-    nixpkgs.overlays = [inputs.rust-overlay.overlays.default];
+    nixpkgs.overlays = [ inputs.rust-overlay.overlays.default ];
 
     environment.systemPackages = with pkgs; [
       # Install the selected Rust toolchain globally
@@ -76,11 +85,13 @@ in {
 
     # --- Conditional Hyprland Configuration ---
     # Only apply Hyprland rules if RustRover and its Hyprland compatibility are enabled
-    home-manager.users.michael.wayland.windowManager.hyprland.settings.windowrulev2 = lib.mkIf (cfg.rustRover.enable && cfg.rustRover.addHyprlandCompat) [
-      # Fix jetbrains IDE's tooltip hover issues (apply to any jetbrains-.* class)
-      "float,class:^(jetbrains-.*)$,title:^(win[0-9]+)$"
-      "nofocus,class:^(jetbrains-.*)$,title:^(win[0-9]+)$"
-    ];
+    home-manager.users.michael.wayland.windowManager.hyprland.settings.windowrule =
+      lib.mkIf (cfg.rustRover.enable && cfg.rustRover.addHyprlandCompat)
+        [
+          # Fix jetbrains IDE's tooltip hover issues (apply to any jetbrains-.* class)
+          "match:class ^(jetbrains-.*)$, match:title ^(win[0-9]+)$, float 1"
+          "match:class ^(jetbrains-.*)$, match:title ^(win[0-9]+)$, no_focus 1"
+        ];
 
     # patch global rustrover settings for the std lib location of rust
     # https://intellij-support.jetbrains.com/hc/en-us/articles/206544519-Directories-used-by-the-IDE-to-store-settings-caches-plugins-and-logs

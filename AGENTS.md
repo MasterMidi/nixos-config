@@ -11,16 +11,42 @@ When first starting work on this repository:
 3. **Review `flake.nix`** - Understand the host configurations
 4. **Use `nixfmt` (`pkgs.nixfmt`)** - For all Nix code formatting (`nixfmt-rfc-style` is now an alias for `pkgs.nixfmt`)
 5. **Test with `nixos-rebuild dry-build`** - Before any changes
+6. **Verify with NixOS MCP** - Always check package names and options via the MCP server (channel: `unstable`) before writing Nix code
 
 ## 🔒 Critical Rules (Never Break These)
 
 1. **Formatting**: Use `pkgs.nixfmt` exclusively - never use other formatters (`nixfmt-rfc-style` is now an alias for `pkgs.nixfmt`)
 2. **Indentation**: Use tabs (size 2) as defined in `.editorconfig`
-3. **Testing**: Always run `nixos-rebuild dry-build --flake .#<hostname>` before applying changes
+3. **Testing**: Always run `git add -A && nixos-rebuild dry-build --flake .#<hostname>` before applying changes — `git add` is required because Nix flakes only evaluate git-tracked (committed or staged) files; new untracked files are silently ignored
 4. **Secrets**: Never commit unencrypted secrets - use SOPS with age encryption
 5. **Documentation**: Update relevant docs (this file, README.md) when making structural changes
 6. **Self-review**: After completing any task, always evaluate whether AGENTS.md instructions need updating to reflect new patterns, deprecations, or conventions discovered
 7. **Consistency**: Follow existing patterns in the codebase
+8. **Verify packages and options with MCP**: Before using any package name or NixOS/Home Manager option, always verify it using the NixOS MCP server (see the section below). Never guess package or option names.
+
+## 🔎 Using the NixOS MCP Server
+
+**Always use the NixOS MCP server** before writing Nix code to verify package names, option paths, and Home Manager module availability. This prevents errors from renamed, removed, or misspelled attributes.
+
+### nixpkgs channel
+
+This repository tracks **nixpkgs unstable**. Always pass `channel: "unstable"` when querying the MCP server.
+
+### Common queries
+
+| Goal | MCP action |
+|---|---|
+| Verify a package name exists | `action: "info", query: "<name>", source: "nixos", type: "packages", channel: "unstable"` |
+| Search for packages by keyword | `action: "search", query: "<keyword>", source: "nixos", type: "packages", channel: "unstable"` |
+| Check Home Manager options for a program | `action: "search", query: "<program>", source: "home-manager", type: "options"` |
+| Check NixOS module options | `action: "search", query: "<option prefix>", source: "nixos", type: "options", channel: "unstable"` |
+
+### Rules
+
+- **Always verify package names** before using them in `pkgs.<name>` or `environment.systemPackages`
+- **Always check Home Manager options** before configuring `programs.<name>.*` — options change between releases
+- **Prefer Home Manager modules** over raw `home.packages` when a `programs.<name>` module exists
+- If a build returns a rename/alias warning for a package, look up the correct name with MCP before fixing it
 
 ## 📚 Technology Stack
 
@@ -373,22 +399,35 @@ direnv allow
 
 ### Testing Changes
 
-Before applying any configuration changes:
+Nix flakes only include **git-tracked files** (committed or staged). New files that haven't been added to git will be silently ignored, causing confusing "file not found" import errors.
 
-1. **Dry build** (check for errors):
+**Always stage new files before building:**
+
+```bash
+# Stage any new or modified files first
+git add -A   # or: git add <specific-file>
+
+# Then dry-build to verify
+nixos-rebuild dry-build --flake .#<hostname>
+```
+
+This does **not** require committing — staging alone is sufficient for the flake evaluator to see the files.
+
+Full verification workflow:
+
+1. **Stage changes** (required for new files):
+   ```bash
+   git add -A
+   ```
+
+2. **Dry build** (check for errors):
    ```bash
    nixos-rebuild dry-build --flake .#<hostname>
    ```
 
-2. **Build without switching** (create result symlink):
+3. **Build without switching** (create result symlink):
    ```bash
    nixos-rebuild build --flake .#<hostname>
-   ```
-
-3. **Test in VM** (if possible):
-   ```bash
-   nixos-rebuild build-vm --flake .#<hostname>
-   ./result/bin/run-*-vm
    ```
 
 4. **Evaluate specific options**:
@@ -551,16 +590,17 @@ Pattern for creating systemd services:
 
 1. Make changes to configuration files
 2. Format with `nixfmt <file>`
-3. Test build: `nixos-rebuild dry-build --flake .#<hostname>`
-4. Review changes carefully
-5. Apply: `sudo nixos-rebuild switch --flake .#<hostname>`
-6. Verify system is working correctly
-7. Commit changes to git
+3. Stage changes: `git add -A` (required — flakes only see git-tracked files)
+4. Test build: `nixos-rebuild dry-build --flake .#<hostname>`
+5. Review changes carefully
+6. Apply: `sudo nixos-rebuild switch --flake .#<hostname>`
+7. Verify system is working correctly
+8. Commit changes to git
 
 ### Remote Deployment Workflow
 
 1. Make changes locally
-2. Test build locally: `nixos-rebuild dry-build --flake .#<hostname>`
+2. Stage and test: `git add -A && nixos-rebuild dry-build --flake .#<hostname>`
 3. Commit changes to git
 4. Deploy: `dply .#<hostname>`
 5. Monitor deployment output

@@ -30,6 +30,44 @@
             deploy-rs # deploy nixos to remote servers
 
             nixos-facter
+
+            (pkgs.writeTextDir "share/bash-completion/completions/dply" ''
+        _dply_completion() {
+          local cur prev flakeref target_prefix nodes completions
+          
+          cur="''${COMP_WORDS[COMP_CWORD]}"
+          prev="''${COMP_WORDS[COMP_CWORD-1]}"
+
+          if [[ COMP_CWORD -eq 1 ]]; then
+            if [[ "$cur" == *#* ]]; then
+              flakeref="''${cur%%#*}"
+              target_prefix="''${cur##*#}"
+
+              if [[ -z "$flakeref" ]]; then
+                flakeref="."
+              fi
+
+              nodes=$(nix eval --json "$flakeref#deploy.nodes" --apply 'builtins.attrNames' 2>/dev/null | ${pkgs.jq}/bin/jq -r '.[]' 2>/dev/null)
+
+              if [[ -n "$nodes" ]]; then
+                for node in $nodes; do
+                  completions="$completions ''${flakeref}#''${node}"
+                done
+                COMPREPLY=( $(compgen -W "$completions" -- "$cur") )
+              else
+                COMPREPLY=()
+              fi
+            else
+              COMPREPLY=( $(compgen -f -- "$cur") )
+            fi
+          else
+            COMPREPLY=( $(compgen -f -- "$cur") )
+          fi
+        }
+
+        # Bind the function to the command
+        complete -o default -o bashdefault -F _dply_completion dply
+      '')
           ];
 
           interactive.dply-completion.text = ''

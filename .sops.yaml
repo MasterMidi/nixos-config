@@ -75,3 +75,16 @@ creation_rules:
       - *aether
       - *pisces
       - *hyperion
+
+  # Catch-all Random Secrets
+  - path_regex: .*\.(yml|yaml|json|env|ini|conf)$
+    key_groups:
+    - age:
+      - *michael
+      - *meridian
+      - *zenith
+      - *david
+      - *andromeda
+      - *aether
+      - *pisces
+      - *hyperion

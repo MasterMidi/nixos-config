@@ -37,7 +37,7 @@
       libnotify
       trash-cli
       pix
-      xfce.mousepad
+      mousepad
       obsidian
 
       # misc

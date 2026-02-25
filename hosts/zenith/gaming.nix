@@ -13,7 +13,7 @@
     protonup-qt
     protontricks
     winetricks
-    wineWowPackages.waylandFull
+    wineWow64Packages.waylandFull
     (lutris.override {
       extraPkgs = pkgs: [
         libnghttp2

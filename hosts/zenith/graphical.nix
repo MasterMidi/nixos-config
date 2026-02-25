@@ -8,7 +8,7 @@
   services.xserver.enable = true;
 
   # Enable the GNOME Display manager.
-  services.xserver.displayManager.gdm = {
+  services.displayManager.gdm = {
     enable = true;
     autoSuspend = false;
   };

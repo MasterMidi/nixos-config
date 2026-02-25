@@ -20,7 +20,7 @@ in
           # https://github.com/nix-community/nixd/blob/main/nixd/docs/configuration.md
           nixd = {
             nixpkgs.expr = "import (builtins.getFlake \"/etc/nixos\").inputs.nixpkgs { }";
-            formatting.command = "${pkgs.nixfmt-rfc-style}/bin/nixfmt";
+            formatting.command = "${pkgs.nixfmt}/bin/nixfmt";
             options = {
               nixos.expr = "(builtins.getFlake (builtins.toString ./.)).nixosConfigurations.${osConfig.networking.hostName}.options";
               home-manager.expr = "(builtins.getFlake (builtins.toString ./.)).nixosConfigurations.${osConfig.networking.hostName}.options.home-manager.users.type.getSubOptions []";
@@ -43,6 +43,6 @@ in
   home.packages = with pkgs; [
     # Nix tools
     nixd
-    nixfmt-rfc-style
+    nixfmt
   ];
 }

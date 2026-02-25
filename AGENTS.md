@@ -9,17 +9,18 @@ When first starting work on this repository:
 1. **Read this file completely** - Understand the structure and rules
 2. **Check `.editorconfig`** - Follow formatting standards (tabs, size 2)
 3. **Review `flake.nix`** - Understand the host configurations
-4. **Use `nixfmt-rfc-style`** - For all Nix code formatting
+4. **Use `nixfmt` (`pkgs.nixfmt`)** - For all Nix code formatting (`nixfmt-rfc-style` is now an alias for `pkgs.nixfmt`)
 5. **Test with `nixos-rebuild dry-build`** - Before any changes
 
 ## 🔒 Critical Rules (Never Break These)
 
-1. **Formatting**: Use `nixfmt-rfc-style` exclusively - never use other formatters
+1. **Formatting**: Use `pkgs.nixfmt` exclusively - never use other formatters (`nixfmt-rfc-style` is now an alias for `pkgs.nixfmt`)
 2. **Indentation**: Use tabs (size 2) as defined in `.editorconfig`
 3. **Testing**: Always run `nixos-rebuild dry-build --flake .#<hostname>` before applying changes
 4. **Secrets**: Never commit unencrypted secrets - use SOPS with age encryption
 5. **Documentation**: Update relevant docs (this file, README.md) when making structural changes
-6. **Consistency**: Follow existing patterns in the codebase
+6. **Self-review**: After completing any task, always evaluate whether AGENTS.md instructions need updating to reflect new patterns, deprecations, or conventions discovered
+7. **Consistency**: Follow existing patterns in the codebase
 
 ## 📚 Technology Stack
 
@@ -352,7 +353,7 @@ direnv allow
 
 **Nix Utilities:**
 - `nixpkgs-fmt` - Nix formatter
-- `nixfmt-rfc-style` - RFC-style Nix formatter (preferred)
+- `nixfmt` (`pkgs.nixfmt`) - RFC-style Nix formatter (preferred, `nixfmt-rfc-style` is now an alias)
 - `statix` - Linter for anti-patterns
 - `nix-output-monitor` (nom) - Better build output
 - `nix-tree` - Visualize dependency trees
@@ -549,7 +550,7 @@ Pattern for creating systemd services:
 ### Local Development Workflow
 
 1. Make changes to configuration files
-2. Format with `nixfmt-rfc-style <file>`
+2. Format with `nixfmt <file>`
 3. Test build: `nixos-rebuild dry-build --flake .#<hostname>`
 4. Review changes carefully
 5. Apply: `sudo nixos-rebuild switch --flake .#<hostname>`
@@ -633,7 +634,7 @@ nix flake show
 
 When reviewing changes (for AI agents or humans):
 
-- [ ] Code is formatted with `nixfmt-rfc-style`
+- [ ] Code is formatted with `nixfmt` (`pkgs.nixfmt`)
 - [ ] Indentation uses tabs (size 2)
 - [ ] No syntax errors: `nix flake check`
 - [ ] Builds successfully: `nixos-rebuild dry-build --flake .#<hostname>`

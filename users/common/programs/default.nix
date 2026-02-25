@@ -10,6 +10,7 @@
     ./eza.nix
     ./ssh-agent.nix
     ./starship.nix
+    ./yazi.nix
     ./zoxide.nix
   ];
 }

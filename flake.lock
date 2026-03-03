@@ -549,6 +549,7 @@
       "inputs": {
         "argononed": "argononed",
         "flake-compat": "flake-compat_4",
+        "flake-compat": "flake-compat_4",
         "nixos-images": "nixos-images",
         "nixpkgs": "nixpkgs_4"
       },
@@ -569,6 +570,7 @@
     },
     "nixos-wsl": {
       "inputs": {
+        "flake-compat": "flake-compat_5",
         "flake-compat": "flake-compat_5",
         "nixpkgs": [
           "nixpkgs"

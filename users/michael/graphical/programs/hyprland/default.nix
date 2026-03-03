@@ -123,11 +123,11 @@ in
         focus_on_activate = true;
       };
 
-      windowrulev2 = [
-        "monitor 1, class:^(discord|VencordDesktop)$"
-        "stayfocused, class:^(pinentry-)" # fix pinentry losing focus
-        "float,class:^(jetbrains-.*)$,title:^(win[0-9]+)$"
-        "nofocus,class:^(jetbrains-.*)$,title:^(win[0-9]+)$"
+      windowrule = [
+        "match:class ^(discord|VencordDesktop)$, monitor 1"
+        "match:class ^(pinentry-)$, stay_focused 1" # fix pinentry losing focus
+        "match:class ^(jetbrains-.*)$, match:title ^(win[0-9]+)$, float 1"
+        "match:class ^(jetbrains-.*)$, match:title ^(win[0-9]+)$, no_focus 1"
       ];
     };
   };

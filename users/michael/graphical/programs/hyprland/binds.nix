@@ -2,7 +2,8 @@
   pkgs,
   config,
   ...
-}: let
+}:
+let
   mainMod = "SUPER";
 
   showDesktopScript = pkgs.writeShellApplication {
@@ -16,7 +17,8 @@
       pkgs.bash # Explicitly list bash as a dependency
     ];
   };
-in {
+in
+{
   wayland.windowManager.hyprland.settings = {
     bind = [
       # Programs
@@ -68,23 +70,32 @@ in {
       # bind = ${mainMod}, S, togglespecialworkspace, magic
       # bind = ${mainMod} SHIFT, S, movetoworkspace, special:magic
 
-      "${builtins.concatStringsSep "\n" (builtins.genList (
-          x: let
-            ws = let
-              c = (x + 1) / 10;
-            in
+      "${builtins.concatStringsSep "\n" (
+        builtins.genList (
+          x:
+          let
+            ws =
+              let
+                c = (x + 1) / 10;
+              in
               builtins.toString (x + 1 - (c * 10));
-          in ''
+          in
+          ''
             bind = ${mainMod}, ${ws}, workspace, ${toString (x + 1)}
             bind = ${mainMod} SHIFT, ${ws}, movetoworkspace, ${toString (x + 1)}
           ''
-        )
-        10)}"
+        ) 10
+      )}"
     ];
 
     bindm = [
       "${mainMod}, mouse:272, movewindow"
       "${mainMod}, mouse:273, resizewindow"
+    ];
+
+    bindel = [
+      "${mainMod}, F5, exec, swayosd-client --brightness raise"
+      "${mainMod}, F6, exec, swayosd-client --brightness lower"
     ];
   };
 }

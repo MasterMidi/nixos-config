@@ -27,7 +27,7 @@ in
             containers = {
               _namedlist = true;
               qui = {
-                image = "ghcr.io/autobrr/qui:v1.13";
+                image = "ghcr.io/autobrr/qui:v1.14.1";
                 ports = {
                   _namedlist = true;
                   http.containerPort = 7476;

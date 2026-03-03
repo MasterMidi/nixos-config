@@ -111,7 +111,10 @@
       builders-use-substitutes = true;
       max-jobs = "auto";
 
-      trusted-users = [ "@wheel" ]; # allow wheel group to run nix commands
+      trusted-users = [
+        "root"
+        "@wheel"
+      ];
     };
   };
 

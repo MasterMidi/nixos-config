@@ -219,7 +219,7 @@ in
     networks.default = { };
     containers = {
       pangolin = {
-        image = "fosrl/pangolin:1.13.1";
+        image = "fosrl/pangolin:1.15.4";
         networking = {
           networks = [ "default" ];
           aliases = [ "pangolin" ];

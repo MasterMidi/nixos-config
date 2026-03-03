@@ -7,6 +7,12 @@
   home-manager.users.michael = {
     home.stateVersion = "23.11";
 
+    home.packages = with pkgs; [
+      mkvtoolnix
+      subtitleedit
+      subtitlecomposer
+    ];
+
     wayland.windowManager.hyprland.settings =
       let
         # monitor = config.facter.report.hardware.monitor |> builtins.head |> lib.findFirst (x: x.type == "monitor") {};

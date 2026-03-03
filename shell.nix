@@ -114,7 +114,7 @@
               echo "🔍 Searching for SOPS encrypted files..."
 
               # Find files containing SOPS MAC signatures (YAML, JSON, and ENV formats)
-              files=$(${pkgs.gnugrep}/bin/grep -rEl  --exclude-dir='.*' '(mac: ENC\[|"mac": "ENC\[|sops_mac=ENC\[)')
+              files=$(${pkgs.ripgrep}/bin/rg -l '(mac: ENC\[|"mac": "ENC\[|sops_mac=ENC\[)')
 
               if [ -z "$files" ]; then
                 echo "No SOPS encrypted files found."

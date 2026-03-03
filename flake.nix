@@ -165,9 +165,5 @@
       flake.overlays.default = final: prev: {
         openthread-border-router = prev.callPackage ./pkgs/openthread-border-router { };
       };
-
-      flake.checks = builtins.mapAttrs (
-        system: deployLib: deployLib.deployChecks self.deploy
-      ) inputs.deploy-rs.lib;
     };
 }

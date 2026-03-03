@@ -4,7 +4,7 @@
     inputs.flake-parts.flakeModules.flakeModules
     ./deploy-rs
   ];
-  flake.flakeModule = {
+  flake.flakeModules = {
     deploy-rs = ./deploy-rs;
   };
 

@@ -1,12 +1,14 @@
 { pkgs, ... }:
 {
   services.ollama = {
-    enable = false;
+    enable = true;
     port = 11434;
     host = "0.0.0.0"; # TODO: only listen on localhost and tailscale network
     openFirewall = true;
-    package = pkgs.ollama-rocm;
+    package = pkgs.ollama-vulkan;
   };
+
+  environment.systemPackages = [ pkgs.rocmPackages.rocm-smi ];
 
   systemd.tmpfiles.rules =
     let

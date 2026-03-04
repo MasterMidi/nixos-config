@@ -16,9 +16,6 @@ creation_rules:
     key_groups:
     - age:
       - *michael
-      - *meridian
-      - *zenith
-      - *hyperion
 
   # Host-Specific Secrets (Only that Host + Admin)
   - path_regex: hosts\/meridian\/secrets\/.*\.(yml|yaml|json|env|ini|conf)$

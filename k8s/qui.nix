@@ -4,6 +4,11 @@ let
 in
 {
   kubernetes.resources.media-stack = {
+    Secret."${app}-secret" = {
+      stringData = {
+        QUI_OIDC_CLIENT_SECRET = "{{ secrets.qui_oidc_client_secret }}";
+      };
+    };
     Service.${app} = {
       spec = {
         ports = {
@@ -31,6 +36,17 @@ in
                 ports = {
                   _namedlist = true;
                   http.containerPort = 7476;
+                };
+                env = {
+                  _namedlist = true;
+                  QUI__OIDC_ENABLED.value = "true";
+                  QUI__OIDC_ISSUER.value = "https://oidc.mgrlab.dk";
+                  QUI__OIDC_CLIENT_ID.value = "680fb325-335c-45fc-844e-a6acfc7b18b5";
+                  QUI__OIDC_CLIENT_SECRET.valueFrom.secretKeyRef = {
+                    name = "${app}-secret";
+                    key = "QUI_OIDC_CLIENT_SECRET";
+                  };
+                  QUI__OIDC_REDIRECT_URL.value = "https://qbit.mgrlab.dk/api/auth/oidc/callback";
                 };
                 volumeMounts = {
                   _namedlist = true;

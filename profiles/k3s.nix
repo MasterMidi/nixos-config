@@ -30,6 +30,12 @@
     extraFlags = [
       "--debug"
       "--kubelet-arg=allowed-unsafe-sysctls=net.ipv4.ip_forward,net.ipv6.conf.all.forwarding,net.ipv4.conf.all.src_valid_mark"
+
+      # Authentication
+      "--kube-apiserver-arg=oidc-issuer-url=https://oidc.mgrlab.dk"
+      "--kube-apiserver-arg=oidc-client-id=3299125f-7187-4c2e-b5ba-ab0280f18f6c"
+      "--kube-apiserver-arg=oidc-username-claim=preferred_username"
+      "--kube-apiserver-arg=oidc-groups-claim=groups"
       # "--container-runtime-endpoint unix:///run/containerd/containerd.sock"
     ];
   };

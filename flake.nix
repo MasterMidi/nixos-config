@@ -31,6 +31,7 @@
 
     # Core Flake Libraries
     flake-parts.url = "github:hercules-ci/flake-parts";
+    import-tree.url = "github:vic/import-tree";
 
     # nix/flake utilities
     devshell = {
@@ -91,15 +92,21 @@
   };
 
   outputs =
-    inputs@{ flake-parts, self, ... }:
+    inputs@{ flake-parts, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
       imports = [
+        # Enable builtin and external modules
+        inputs.flake-parts.flakeModules.flakeModules
+        inputs.flake-parts.flakeModules.modules
+        inputs.home-manager.flakeModules.home-manager
         inputs.disko.flakeModules.default
+
+        (inputs.import-tree ./dendritic-modules)
 
         ./shell.nix
 
         ./modules/nixos
-        ./modules/flakes
+        # ./modules/flakes
 
         ./hosts/meridian # Laptop
         ./hosts/andromeda # Nas / Server
@@ -108,6 +115,7 @@
         ./hosts/callisto # Raspi 5
         ./hosts/hyperion # wsl work laptop
         ./hosts/voyager
+
         # ./hosts/eris # Raspi 3
         # ./hosts/polaris # Old asus laptop
         # ./hosts/altair # spare server

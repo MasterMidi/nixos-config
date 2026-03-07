@@ -1,5 +1,5 @@
 { inputs, self, ... }:
-{
+rec {
   # imports = [ self.flake.flakeModules.deploy-rs ];
   flake = {
     nixosConfigurations.zenith = inputs.nixpkgs.lib.nixosSystem {
@@ -8,6 +8,8 @@
         inherit inputs self;
       };
       modules = [
+        self.nixosModules.builder
+
         ./services
         ./configuration.nix
         ./development.nix
@@ -43,7 +45,7 @@
     hostname = "zenith";
     profiles.system = {
       sshUser = "root";
-      path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.zenith;
+      path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos flake.nixosConfigurations.zenith;
       remoteBuild = true;
     };
   };

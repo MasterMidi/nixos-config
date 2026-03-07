@@ -1,0 +1,39 @@
+name: Flake Check
+
+on:
+  # Run on pull requests to main branch
+  pull_request:
+    branches:
+      - main
+  # Run on pushes to the main branch
+  push:
+    branches:
+      - main
+  # Allow manual triggering from the GitHub UI
+  workflow_dispatch:
+
+jobs:
+  flake-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Install Nix
+        uses: DeterminateSystems/determinate-nix-action@v3
+        with:
+          extra-conf: |
+            experimental-features = nix-command flakes pipe-operators
+      
+      - name: Run flake check
+        run: |
+          set -o pipefail
+          nix flake check --keep-going --quiet --log-format internal-json 2>&1 | sed -u 's/^@nix //' | tee build-log.jsonl
+      
+      - name: Upload build log
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: build-log
+          path: build-log.jsonl
+          retention-days: 30

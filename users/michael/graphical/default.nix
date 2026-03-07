@@ -1,0 +1,55 @@
+{ pkgs, ... }:
+{
+  imports = [
+    ../common
+  ];
+
+  environment.pathsToLink = [
+    "/share/applications"
+    "/share/xdg-desktop-portal"
+  ];
+
+  home-manager.users.michael = {
+    imports = [
+      ./programs
+      ./services
+      ./theme
+    ];
+
+    fonts.fontconfig = {
+      enable = true;
+      defaultFonts = {
+        monospace = [ "JetBrainsMono NF" ];
+        sansSerif = [ "Inter" ];
+      };
+    };
+
+    services.mpris-proxy.enable = true; # media player mpris proxy
+    services.playerctld.enable = true; # media player control
+
+    home.packages = with pkgs; [
+      devenv
+
+      prusa-slicer
+
+      # Tools
+      xdg-utils
+      envsubst
+      jq
+      tldr
+      hyprpicker
+      libnotify
+      trash-cli
+      pix
+      mousepad
+      obsidian
+
+      # misc
+      pipes-rs
+
+      # Fonts
+      nerd-fonts.jetbrains-mono
+      inter
+    ];
+  };
+}

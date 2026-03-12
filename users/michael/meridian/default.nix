@@ -11,6 +11,8 @@
       mkvtoolnix
       subtitleedit
       subtitlecomposer
+
+      orca-slicer
     ];
 
     wayland.windowManager.hyprland.settings =

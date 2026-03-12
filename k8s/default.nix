@@ -4,6 +4,7 @@
     ./bitmagnet.nix
     ./jellyfin.nix
     # ./linkwarden.nix
+    ./longhorn.nix
     ./newt.nix
     ./nvidia-device-plugin.nix
     ./pocketid.nix

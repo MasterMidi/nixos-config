@@ -11,6 +11,7 @@
         inherit inputs self;
       };
       modules = [
+        self.nixosModules.k8s-longhorn
         ./configuration.nix
         ./containers
         ./hardware.nix

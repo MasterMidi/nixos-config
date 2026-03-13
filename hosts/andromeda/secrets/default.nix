@@ -1,7 +1,7 @@
 { config, ... }:
 {
   sops = {
-    defaultSopsFile = ./secrets.sops.yaml;
+    defaultSopsFile = ./secrets.yaml;
     secrets = {
       SONARR_API_KEY = {
         # owner = config.services.prometheus.exporters.exportarr-sonarr.user;

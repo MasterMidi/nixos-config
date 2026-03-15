@@ -19,7 +19,6 @@
         # profiles
         ../../profiles/common.nix
         ../../profiles/bare-metal.nix
-        ../../profiles/k3s.nix
         ../../profiles/mdns.nix
         ../../profiles/nix.nix
         ../../profiles/secrets.nix
@@ -30,6 +29,11 @@
         # Users
         ../../users/root/common.nix
         ../../users/michael/meridian
+        {
+          home-manager.users.michael.imports = [
+            self.homeModules.k8s-cluster-administration
+          ];
+        }
       ];
     };
     # diskoConfigurations = import ./disko.nix;

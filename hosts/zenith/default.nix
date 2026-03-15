@@ -9,6 +9,7 @@ rec {
       };
       modules = [
         self.nixosModules.builder
+        self.nixosModules.k3s-node-agent
 
         ./services
         ./configuration.nix
@@ -24,7 +25,6 @@ rec {
         # profiles
         ../../profiles/common.nix
         ../../profiles/bare-metal.nix
-        ../../profiles/k3s.nix
         ../../profiles/mdns.nix
         ../../profiles/monitor-control.nix
         ../../profiles/nix.nix

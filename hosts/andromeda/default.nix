@@ -12,6 +12,9 @@
       };
       modules = [
         self.nixosModules.k8s-longhorn
+        self.nixosModules.k3s-node-server
+        self.nixosModules.k3s-gpu-nvidia
+
         ./configuration.nix
         ./containers
         ./hardware.nix
@@ -21,8 +24,6 @@
         # profiles
         ../../profiles/common.nix
         ../../profiles/bare-metal.nix
-        ../../profiles/k3s.nix
-        ../../profiles/k3s/gpu-nvidia.nix
         ../../profiles/mdns.nix
         ../../profiles/nix.nix
         ../../profiles/secrets.nix

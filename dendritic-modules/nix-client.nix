@@ -1,6 +1,6 @@
 { ... }:
 {
-  flake.nixosModules.client =
+  flake.nixosModules.nix-client =
     { ... }:
     {
       nix = {

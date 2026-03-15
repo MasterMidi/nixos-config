@@ -1,12 +1,9 @@
 { ... }:
 {
-  flake.nixosModules.builder =
+  flake.nixosModules.nix-builder =
     { ... }:
     {
-      # 1. Enable QEMU emulation for aarch64-linux.
-      boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
-
-      # 2. Create a dedicated user for incoming build requests
+      # Create a dedicated user for incoming build requests
       users.users.nix-builder = {
         isNormalUser = true;
         description = "Dedicated user for Nix remote builds";
@@ -15,11 +12,11 @@
         ];
       };
 
-      # 3. Ensure the Nix daemon trusts this user.
+      # Ensure the Nix daemon trusts this user.
       # Without this, the builder cannot substitute outputs from its own binary cache.
       nix.settings.trusted-users = [ "nix-builder" ];
 
-      # 4. Ensure the SSH daemon is running and allows the connection
+      # Ensure the SSH daemon is running and allows the connection
       services.openssh.enable = true;
     };
 }

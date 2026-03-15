@@ -40,45 +40,7 @@
     variant = "nodeadkeys";
   };
 
-  # Enable Hyprland window manager
-  programs.hyprland = {
-    enable = true;
-  };
-
-  xdg.portal = {
-    enable = true;
-    xdgOpenUsePortal = false; # DON'T EVER SET THIS TRUE WILL RUIN XDG-OPEN FUNCTIONALITY
-    extraPortals = with pkgs; [
-      xdg-desktop-portal-gtk
-      xdg-desktop-portal-hyprland
-    ];
-    config = {
-      hyprland.default = [
-        "hyprland"
-        "gtk"
-      ];
-    };
-  };
-
   services.gvfs.enable = true; # for nautlius to work with ttrash and network shares
 
-  environment.variables = {
-    NIXOS_OZONE_WL = "1"; # Force electron to use wayland
-  };
-
-  # fonts
-  fonts = {
-    enableDefaultPackages = true;
-
-    packages = with pkgs; [
-      corefonts
-      noto-fonts
-      noto-fonts-cjk-sans # To fix weird font rendering for cjk characters
-      unifont
-    ];
-
-    fontconfig = {
-      antialias = true;
-    };
-  };
+  
 }

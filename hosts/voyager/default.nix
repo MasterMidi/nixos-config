@@ -7,7 +7,7 @@
   flake = {
     nixosConfigurations.voyager = inputs.nixos-raspberrypi.lib.nixosSystem {
       specialArgs = {
-        inherit inputs self;
+        inherit inputs;
         inherit (inputs) nixos-raspberrypi;
       };
       modules = [

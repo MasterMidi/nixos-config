@@ -8,7 +8,8 @@
         devshell = {
           name = "nixos-config";
           packages = with pkgs; [
-            nixpkgs-fmt
+            nixfmt
+            nixfmt-tree
             nerdfix # fix nerdfont symbols in text files
             nurl
             nix-prefetch # prefetch urls to get hash
@@ -32,42 +33,42 @@
             nixos-facter
 
             (pkgs.writeTextDir "share/bash-completion/completions/dply" ''
-        _dply_completion() {
-          local cur prev flakeref target_prefix nodes completions
-          
-          cur="''${COMP_WORDS[COMP_CWORD]}"
-          prev="''${COMP_WORDS[COMP_CWORD-1]}"
+              _dply_completion() {
+                local cur prev flakeref target_prefix nodes completions
 
-          if [[ COMP_CWORD -eq 1 ]]; then
-            if [[ "$cur" == *#* ]]; then
-              flakeref="''${cur%%#*}"
-              target_prefix="''${cur##*#}"
+                cur="''${COMP_WORDS[COMP_CWORD]}"
+                prev="''${COMP_WORDS[COMP_CWORD-1]}"
 
-              if [[ -z "$flakeref" ]]; then
-                flakeref="."
-              fi
+                if [[ COMP_CWORD -eq 1 ]]; then
+                  if [[ "$cur" == *#* ]]; then
+                    flakeref="''${cur%%#*}"
+                    target_prefix="''${cur##*#}"
 
-              nodes=$(nix eval --json "$flakeref#deploy.nodes" --apply 'builtins.attrNames' 2>/dev/null | ${pkgs.jq}/bin/jq -r '.[]' 2>/dev/null)
+                    if [[ -z "$flakeref" ]]; then
+                      flakeref="."
+                    fi
 
-              if [[ -n "$nodes" ]]; then
-                for node in $nodes; do
-                  completions="$completions ''${flakeref}#''${node}"
-                done
-                COMPREPLY=( $(compgen -W "$completions" -- "$cur") )
-              else
-                COMPREPLY=()
-              fi
-            else
-              COMPREPLY=( $(compgen -f -- "$cur") )
-            fi
-          else
-            COMPREPLY=( $(compgen -f -- "$cur") )
-          fi
-        }
+                    nodes=$(nix eval --json "$flakeref#deploy.nodes" --apply 'builtins.attrNames' 2>/dev/null | ${pkgs.jq}/bin/jq -r '.[]' 2>/dev/null)
 
-        # Bind the function to the command
-        complete -o default -o bashdefault -F _dply_completion dply
-      '')
+                    if [[ -n "$nodes" ]]; then
+                      for node in $nodes; do
+                        completions="$completions ''${flakeref}#''${node}"
+                      done
+                      COMPREPLY=( $(compgen -W "$completions" -- "$cur") )
+                    else
+                      COMPREPLY=()
+                    fi
+                  else
+                    COMPREPLY=( $(compgen -f -- "$cur") )
+                  fi
+                else
+                  COMPREPLY=( $(compgen -f -- "$cur") )
+                fi
+              }
+
+              # Bind the function to the command
+              complete -o default -o bashdefault -F _dply_completion dply
+            '')
           ];
 
           interactive.dply-completion.text = ''

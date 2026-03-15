@@ -7,9 +7,6 @@
 
   security = {
     rtkit.enable = true;
-    # Polkit for hyprland to get sudo password prompts
-    polkit.enable = true;
-    pam.services.hyprlock.text = "auth include login";
   };
 
   # List packages installed in system profile. To search, run:

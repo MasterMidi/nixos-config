@@ -2,7 +2,6 @@
 {
   imports = [
     ./discord
-    ./hyprland
     ./mpv
     ./nautilus
     ./rofi

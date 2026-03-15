@@ -8,8 +8,9 @@ rec {
         inherit inputs self;
       };
       modules = [
-        self.nixosModules.builder
+        self.nixosModules.nix-builder
         self.nixosModules.k3s-node-agent
+        self.nixosModules.hyprland
 
         ./services
         ./configuration.nix
@@ -36,6 +37,12 @@ rec {
         # Users
         ../../users/root/common.nix
         ../../users/michael/zenith
+        {
+          home-manager.users.michael.imports = [
+            self.homeModules.k8s-cluster-administration
+            self.homeModules.hyprland
+          ];
+        }
       ];
     };
     diskoConfigurations.zenith = import ./disko.nix;

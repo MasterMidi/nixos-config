@@ -7,7 +7,8 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.boot.loader.refind;
 
   efi = config.boot.loader.efi;
@@ -17,21 +18,23 @@ with lib; let
   installPath = "${efi.efiSysMountPoint}/efi/refind";
 
   # Function to convert structured settings into extraConfig strings
-  settingsToConfig = settings: concatStringsSep "\n" (mapAttrsToList (name: value: "${name} ${toString value}") settings);
+  settingsToConfig =
+    settings:
+    concatStringsSep "\n" (mapAttrsToList (name: value: "${name} ${toString value}") settings);
 
   # Function to handle includes separately
-  includesToConfig = includes: concatStringsSep "\n" (map (include: "include ${toString include}") includes);
+  includesToConfig =
+    includes: concatStringsSep "\n" (map (include: "include ${toString include}") includes);
 
   # Assuming theme provides a 'theme.conf' at its root
-  defaultThemeInclude =
-    if theme != null
-    then ["themes/${theme.pname}/theme.conf"]
-    else [];
+  defaultThemeInclude = if theme != null then [ "themes/${theme.pname}/theme.conf" ] else [ ];
 
   # Function to assemble extraConfig with newlines between sections
-  assembleExtraConfig = parts: let
-    filteredParts = filter (part: part != "") parts; # Remove empty parts
-  in
+  assembleExtraConfig =
+    parts:
+    let
+      filteredParts = filter (part: part != "") parts; # Remove empty parts
+    in
     concatStringsSep "\n" filteredParts;
 
   copyThemeScript = pkgs.writeScriptBin "copy-refind-theme" ''
@@ -60,10 +63,7 @@ with lib; let
 
     nix = config.nix.package.out;
 
-    timeout =
-      if config.boot.loader.timeout != null
-      then config.boot.loader.timeout
-      else "";
+    timeout = if config.boot.loader.timeout != null then config.boot.loader.timeout else "";
 
     # Merge settings and includes into extraConfig
     extraConfig = assembleExtraConfig [
@@ -72,16 +72,23 @@ with lib; let
       cfg.extraConfig
     ];
 
-    extraIcons =
-      if cfg.extraIcons != null
-      then cfg.extraIcons
-      else "";
+    extraIcons = if cfg.extraIcons != null then cfg.extraIcons else "";
 
-    inherit (pkgs) refind efibootmgr coreutils gnugrep gnused gawk utillinux findutils;
+    inherit (pkgs)
+      refind
+      efibootmgr
+      coreutils
+      gnugrep
+      gnused
+      gawk
+      utillinux
+      findutils
+      ;
 
     inherit (efi) efiSysMountPoint canTouchEfiVariables;
   };
-in {
+in
+{
   options.boot.loader.refind = {
     enable = mkOption {
       default = false;
@@ -103,7 +110,7 @@ in {
 
     settings = mkOption {
       type = types.attrs;
-      default = {};
+      default = { };
       example = {
         resolution = "3440 1440";
         big_icon_size = 128;
@@ -114,8 +121,11 @@ in {
 
     include = mkOption {
       type = types.listOf (types.either types.path types.str);
-      default = [];
-      example = [./theme.conf "/path/to/another/config.conf"];
+      default = [ ];
+      example = [
+        ./theme.conf
+        "/path/to/another/config.conf"
+      ];
       description = "List of external configuration files to include";
     };
 
@@ -130,14 +140,14 @@ in {
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = (config.boot.kernelPackages.kernel.features or {efiBootStub = true;}) ? efiBootStub;
+        assertion = (config.boot.kernelPackages.kernel.features or { efiBootStub = true; }) ? efiBootStub;
 
         message = "This kernel does not support the EFI boot stub";
       }
     ];
 
     # Configuration that uses the theme
-    environment.systemPackages = [pkgs.refind] ++ lib.optional (theme != null) theme;
+    environment.systemPackages = [ pkgs.refind ] ++ lib.optional (theme != null) theme;
 
     boot.loader.grub.enable = mkDefault false;
 

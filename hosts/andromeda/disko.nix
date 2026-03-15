@@ -10,7 +10,7 @@
           partitions = {
             ESP = {
               size = "512M";
-              type = "EF00";  # EFI System Partition
+              type = "EF00"; # EFI System Partition
               content = {
                 type = "filesystem";
                 format = "vfat";
@@ -37,7 +37,7 @@
           type = "gpt";
           partitions = {
             main = {
-              size = "90%";  # Leaving 10% for SSD performance
+              size = "90%"; # Leaving 10% for SSD performance
               content = {
                 type = "filesystem";
                 format = "xfs";

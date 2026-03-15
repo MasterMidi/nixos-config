@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   # Login manager
   services.displayManager.gdm.enable = true;
 

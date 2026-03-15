@@ -3,7 +3,8 @@
   lib,
   config,
   ...
-}: let
+}:
+let
   cfg = config.virtualisation.vfio;
 
   # AMD Radeon RX 7800 XT
@@ -11,7 +12,8 @@
     "1002:747e" # Graphics
     "1002:ab30" # Audio
   ];
-in {
+in
+{
   imports = [
     ./kvmfr-options.nix
   ];
@@ -63,7 +65,7 @@ in {
       qemu = {
         swtpm.enable = true;
         ovmf.enable = true;
-        ovmf.packages = with pkgs; [OVMFFull.fd];
+        ovmf.packages = with pkgs; [ OVMFFull.fd ];
         # verbatimConfig = ''
         #   log_filters="1:qemu"
         #   log_outputs="1:file:/var/log/libvirt/libvirtd.log"
@@ -169,19 +171,21 @@ in {
     ];
 
     systemd.services.libvirtd = {
-      path = let
-        env = pkgs.buildEnv {
-          name = "qemu-hook-env";
-          paths = with pkgs; [
-            bash
-            libvirt
-            kmod
-            systemd
-            ripgrep
-            sd
-          ];
-        };
-      in [env];
+      path =
+        let
+          env = pkgs.buildEnv {
+            name = "qemu-hook-env";
+            paths = with pkgs; [
+              bash
+              libvirt
+              kmod
+              systemd
+              ripgrep
+              sd
+            ];
+          };
+        in
+        [ env ];
     };
 
     systemd.tmpfiles.rules = [

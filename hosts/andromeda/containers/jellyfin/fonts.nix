@@ -1,4 +1,5 @@
-{pkgs, ...}: let
+{ pkgs, ... }:
+let
   # Create a package for the subtitle fonts
   subtitle-fonts = pkgs.stdenv.mkDerivation {
     name = "subtitle-fonts";
@@ -22,7 +23,8 @@
       find . -name "*.otf" -o -name "*.OTF" -exec cp {} $out/share/fonts/opentype/ \;
     '';
   };
-in {
+in
+{
   fonts = {
     fontDir.enable = true;
     enableDefaultPackages = true;

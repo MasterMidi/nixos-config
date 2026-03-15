@@ -2,7 +2,8 @@
   pkgs,
   config,
   ...
-}: {
+}:
+{
   programs.mpv = {
     enable = true;
 
@@ -30,7 +31,8 @@
       "Ctrl+t" = "cycle ontop";
       "Ctrl+r" = "cycle-values video-rotate '90' '180' '270' '0'";
       "b" = "cycle-values deband 'yes' 'no'";
-      "B" = "cycle-values deband-iterations '1' '2' '3'; cycle-values deband-threshold '35' '60' '100'; cycle-values deband-range '16' '20' '25'; cycle-values deband-grain '5' '24' '48'; show-text 'Deband: \${deband-iterations}:\${deband-threshold}:\${deband-range}:\${deband-grain}'";
+      "B" =
+        "cycle-values deband-iterations '1' '2' '3'; cycle-values deband-threshold '35' '60' '100'; cycle-values deband-range '16' '20' '25'; cycle-values deband-grain '5' '24' '48'; show-text 'Deband: \${deband-iterations}:\${deband-threshold}:\${deband-range}:\${deband-grain}'";
       h = "cycle-values hr-seek 'default' 'yes'";
       x = "apply-profile hq; show-text 'Profile: HQ'";
       X = "apply-profile hq restore; show-text 'Profile: Default'";
@@ -93,7 +95,10 @@
       demuxer-mkv-subtitle-preroll = true; # Try to correctly show embedded subs when seeking
       sub-margin-y = 5;
       stretch-image-subs-to-screen = true;
-      slang = builtins.concatStringsSep "," ["eng" "en"]; # Prioritise which subtitle language to use
+      slang = builtins.concatStringsSep "," [
+        "eng"
+        "en"
+      ]; # Prioritise which subtitle language to use
       sub-pos = 100;
 
       # Screenshots
@@ -179,7 +184,38 @@
         filename_replace = "";
 
         #filetypes to search from directory
-        loadfiles_filetypes = builtins.concatStringsSep "," ["jpg" "jpeg" "png" "tif" "tiff" "gif" "webp" "svg" "bmp" "mp3" "wav" "ogm" "flac" "m4a" "wma" "ogg" "opus" "mkv" "avi" "mp4" "ogv" "webm" "rmvb" "flv" "wmv" "mpeg" "mpg" "m4v" "3gp" "ivf"];
+        loadfiles_filetypes = builtins.concatStringsSep "," [
+          "jpg"
+          "jpeg"
+          "png"
+          "tif"
+          "tiff"
+          "gif"
+          "webp"
+          "svg"
+          "bmp"
+          "mp3"
+          "wav"
+          "ogm"
+          "flac"
+          "m4a"
+          "wma"
+          "ogg"
+          "opus"
+          "mkv"
+          "avi"
+          "mp4"
+          "ogv"
+          "webm"
+          "rmvb"
+          "flv"
+          "wmv"
+          "mpeg"
+          "mpg"
+          "m4v"
+          "3gp"
+          "ivf"
+        ];
 
         #loadfiles at startup if 1 or more items in playlist
         loadfiles_on_start = false;

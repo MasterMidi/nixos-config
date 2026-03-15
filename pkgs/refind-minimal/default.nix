@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     description = "A minimal theme for rEFInd";
     homepage = "https://github.com/evanpurkhiser/rEFInd-minimal";
     license = licenses.mit;
-    maintainers = with maintainers; []; # Add your maintainer name here if you wish
+    maintainers = with maintainers; [ ]; # Add your maintainer name here if you wish
   };
 }

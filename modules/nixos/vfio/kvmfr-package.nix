@@ -1,5 +1,13 @@
 # https://gist.github.com/j-brn/716a03822d256bc5bf5d77b951c7915c
-{ stdenv, lib, fetchFromGitHub, kernel, kmod, looking-glass-client, ... }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  kernel,
+  kmod,
+  looking-glass-client,
+  ...
+}:
 
 stdenv.mkDerivation rec {
   pname = "kvmfr-${version}-${kernel.version}";
@@ -7,7 +15,10 @@ stdenv.mkDerivation rec {
 
   src = looking-glass-client.src;
   sourceRoot = "source/module";
-  hardeningDisable = [ "pic" "format" ];
+  hardeningDisable = [
+    "pic"
+    "format"
+  ];
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
   makeFlags = [

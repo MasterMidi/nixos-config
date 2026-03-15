@@ -3,7 +3,8 @@
   pkgs,
   lib,
   ...
-}: {
+}:
+{
   imports = [
     inputs.nix-gaming.nixosModules.platformOptimizations
   ];

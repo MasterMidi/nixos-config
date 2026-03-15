@@ -2,40 +2,47 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   services.cloudflared.tunnels.andromeda.ingress = {
-    "bitmagnet.mgrlab.dk" = "http://localhost:${toString config.virtualisation.oci-containers.compose.mediaserver.containers.traefik.networking.ports.local.host}";
+    "bitmagnet.mgrlab.dk" =
+      "http://localhost:${toString config.virtualisation.oci-containers.compose.mediaserver.containers.traefik.networking.ports.local.host}";
   };
 
   virtualisation.oci-containers.compose.mediaserver = {
     networks.bitmagnet = {
-      subnets = ["10.89.100.0/24"];
-      gateways = ["10.89.100.1"];
+      subnets = [ "10.89.100.0/24" ];
+      gateways = [ "10.89.100.1" ];
     };
     containers = rec {
       bitmagnetgluetun = rec {
         image = "qmcgaw/gluetun:latest";
         networking = {
-          networks = ["default" "bitmagnet"];
-          aliases = ["bitmagnet"];
-          ports = let
-            dht-port = lib.toInt bitmagnet.environment.DHT_SERVER_PORT;
-          in {
-            webui = {
-              host = 3333;
-              internal = 3333;
+          networks = [
+            "default"
+            "bitmagnet"
+          ];
+          aliases = [ "bitmagnet" ];
+          ports =
+            let
+              dht-port = lib.toInt bitmagnet.environment.DHT_SERVER_PORT;
+            in
+            {
+              webui = {
+                host = 3333;
+                internal = 3333;
+              };
+              crawler-tcp = {
+                host = dht-port;
+                internal = dht-port;
+                protocol = "tcp";
+              };
+              crawler-udp = {
+                host = dht-port;
+                internal = dht-port;
+                protocol = "udp";
+              };
             };
-            crawler-tcp = {
-              host = dht-port;
-              internal = dht-port;
-              protocol = "tcp";
-            };
-            crawler-udp = {
-              host = dht-port;
-              internal = dht-port;
-              protocol = "udp";
-            };
-          };
         };
         environment = {
           FIREWALL_VPN_INPUT_PORTS = bitmagnet.environment.DHT_SERVER_PORT;
@@ -49,8 +56,8 @@
           WIREGUARD_PRIVATE_KEY.path = config.sops.secrets.AIRVPN_WIREGUARD_PRIVATE_KEY.path;
           WIREGUARD_PRESHARED_KEY.path = config.sops.secrets.AIRVPN_WIREGUARD_PRESHARED_KEY.path;
         };
-        capabilities = ["NET_ADMIN"];
-        devices = ["/dev/net/tun"];
+        capabilities = [ "NET_ADMIN" ];
+        devices = [ "/dev/net/tun" ];
         extraOptions = [
           "--add-host=${builtins.head bitmagnet-postgres.networking.aliases}:10.89.100.5"
         ];
@@ -66,7 +73,7 @@
       bitmagnet = rec {
         image = "ghcr.io/bitmagnet-io/bitmagnet:v0.10.0";
         networking = {
-          networks = ["container:bitmagnetgluetun"];
+          networks = [ "container:bitmagnetgluetun" ];
           # aliases = ["bitmagnet"];
           # ports = {
           #   # TODO make this possible
@@ -98,14 +105,17 @@
           # disable the next line to run without DHT crawler
           "--keys=dht_crawler"
         ];
-        dependsOn = ["bitmagnet-postgres" "bitmagnetgluetun"];
+        dependsOn = [
+          "bitmagnet-postgres"
+          "bitmagnetgluetun"
+        ];
       };
 
       bitmagnet-postgres = {
         image = "postgres:16-alpine";
         networking = {
-          networks = ["bitmagnet:ip=10.89.100.5"];
-          aliases = ["bitmagnet-postgres"];
+          networks = [ "bitmagnet:ip=10.89.100.5" ];
+          aliases = [ "bitmagnet-postgres" ];
         };
         volumes = [
           "/mnt/ssd/services/bitmagnet/data:/var/lib/postgresql/data:rw"
@@ -117,7 +127,7 @@
         secrets.env = {
           POSTGRES_PASSWORD.path = config.sops.secrets.BITMAGNET_POSTGRES_PASSWORD.path;
         };
-        extraOptions = ["--shm-size=1g"];
+        extraOptions = [ "--shm-size=1g" ];
       };
     };
   };

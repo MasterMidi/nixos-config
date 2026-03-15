@@ -42,5 +42,4 @@
 
   services.gvfs.enable = true; # for nautlius to work with ttrash and network shares
 
-  
 }

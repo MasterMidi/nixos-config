@@ -1,17 +1,19 @@
-{config,...}:{
+{ config, ... }:
+{
   services.cloudflared.tunnels.andromeda.ingress = {
-    "jellyseerr.mgrlab.dk" = "http://localhost:${toString config.virtualisation.oci-containers.compose.mediaserver.containers.traefik.networking.ports.local.host}";
+    "jellyseerr.mgrlab.dk" =
+      "http://localhost:${toString config.virtualisation.oci-containers.compose.mediaserver.containers.traefik.networking.ports.local.host}";
   };
 
   virtualisation.oci-containers.compose.mediaserver = {
     containers = {
       jellyseerr = {
         # image = "ghcr.io/fallenbagel/jellyseerr:develop";
-				image = "docker.io/fallenbagel/jellyseerr:preview-OIDC";
+        image = "docker.io/fallenbagel/jellyseerr:preview-OIDC";
         autoUpdate = "registry";
         networking = {
-          networks = ["default"];
-          aliases = ["jellyseerr"];
+          networks = [ "default" ];
+          aliases = [ "jellyseerr" ];
           ports = {
             webui = {
               host = 5055;

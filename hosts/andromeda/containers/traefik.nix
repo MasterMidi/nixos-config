@@ -1,11 +1,12 @@
-{config, ...}: {
+{ config, ... }:
+{
   virtualisation.oci-containers.compose.mediaserver = {
     containers = {
       traefik = {
         image = "traefik:v3.2";
         networking = {
-          networks = ["default"];
-          aliases = ["traefik"];
+          networks = [ "default" ];
+          aliases = [ "traefik" ];
           ports = {
             dashboard = {
               host = 8081;

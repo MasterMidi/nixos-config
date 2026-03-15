@@ -1,4 +1,5 @@
-{config, ...}: {
+{ config, ... }:
+{
   "custom/launcher" = {
     format = "";
     # on-click = "$TERM_PROGRAM -e '$FILE_BROWSER'";
@@ -67,7 +68,18 @@
     on-click = "activate";
     on-click-middle = "close";
     on-click-right = "minimize";
-    ignore-list = ["thunar" "Cavalier" "Tilix" "Character Map" "Settings" "GNOME Tweaks" "Terminal" "Calculator" "conky (arch1)" "blackbox"];
+    ignore-list = [
+      "thunar"
+      "Cavalier"
+      "Tilix"
+      "Character Map"
+      "Settings"
+      "GNOME Tweaks"
+      "Terminal"
+      "Calculator"
+      "conky (arch1)"
+      "blackbox"
+    ];
   };
 
   clock = {
@@ -101,7 +113,13 @@
     critical-threshold = 80;
     format-critical = "<span color='#bf616a'>{icon} {temperatureC}°C</span>";
     format = "{icon} {temperatureC}°C";
-    format-icons = ["" "" "" "" ""];
+    format-icons = [
+      ""
+      ""
+      ""
+      ""
+      ""
+    ];
     tooltip = false;
     interval = 2;
   };
@@ -188,7 +206,11 @@
       phone = "";
       portable = "";
       car = "";
-      default = ["" "" ""];
+      default = [
+        ""
+        ""
+        ""
+      ];
     };
     on-click = "pactl set-sink-mute @DEFAULT_SINK@ toggle";
     on-click-right = "pavucontrol";
@@ -203,7 +225,13 @@
     format-charging = "  {capacity}%";
     format-plugged = "  {capacity}%";
     format-alt = "{icon}  {time}";
-    format-icons = [" " " " " " " " " "];
+    format-icons = [
+      " "
+      " "
+      " "
+      " "
+      " "
+    ];
   };
 
   "custom/wlogout" = {

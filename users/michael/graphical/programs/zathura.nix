@@ -1,4 +1,5 @@
-{config, ...}: {
+{ config, ... }:
+{
   programs.zathura = {
     enable = true;
     options = with config.colorScheme.palette; {

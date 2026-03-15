@@ -1,4 +1,5 @@
-{ inputs, self, ... }: {
+{ inputs, self, ... }:
+{
   flake.nixosConfigurations.hyperionV2 = inputs.nixpkgs.lib.nixosSystem {
     modules = [
       inputs.nixos-wsl.nixosModules.default
@@ -6,7 +7,9 @@
     ];
   };
 
-  flake.nixosModules.hyperionModule = { pkgs, ... }: {
-    
-  };
+  flake.nixosModules.hyperionModule =
+    { pkgs, ... }:
+    {
+
+    };
 }

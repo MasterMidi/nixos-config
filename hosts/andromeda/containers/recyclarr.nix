@@ -2,13 +2,16 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   virtualisation.oci-containers.compose.mediaserver = {
     containers = {
       recyclarr = {
         image = "ghcr.io/recyclarr/recyclarr";
         autoUpdate = "registry";
-        networking = {networks = ["default"];};
+        networking = {
+          networks = [ "default" ];
+        };
         user = "root";
         volumes = [
           "/mnt/ssd/services/recyclarr/config:/config"
@@ -26,8 +29,10 @@
     RECYCLARR_CONF = {
       owner = config.users.users.michael.name;
       group = config.users.groups.users.name;
-      restartUnits = [config.virtualisation.oci-containers.compose.mediaserver.containers.recyclarr.unitName];
-      content = lib.generators.toYAML {} {
+      restartUnits = [
+        config.virtualisation.oci-containers.compose.mediaserver.containers.recyclarr.unitName
+      ];
+      content = lib.generators.toYAML { } {
         radarr = {
           radarr = {
             api_key = config.sops.placeholder.RADARR_API_KEY;
@@ -598,8 +603,10 @@
     RECYCLARR_SETTINGS = {
       owner = config.users.users.michael.name;
       group = config.users.groups.users.name;
-      restartUnits = [config.virtualisation.oci-containers.compose.mediaserver.containers.recyclarr.unitName];
-      content = lib.generators.toYAML {} {
+      restartUnits = [
+        config.virtualisation.oci-containers.compose.mediaserver.containers.recyclarr.unitName
+      ];
+      content = lib.generators.toYAML { } {
         notifications = {
           apprise = {
             mode = "stateful";

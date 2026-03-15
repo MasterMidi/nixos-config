@@ -42,7 +42,7 @@ in
 {
   options.virtualisation.oci-containers.compose = lib.mkOption {
     description = "Compose-like configuration for OCI containers.";
-    example = '''';
+    example = "";
     default = { };
     type = lib.types.attrsOf (
       lib.types.submodule (

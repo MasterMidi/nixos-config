@@ -1,17 +1,18 @@
-{config,lib,...}:{
+{ config, lib, ... }:
+{
   virtualisation.oci-containers.compose.mediaserver = {
     containers = {
       title-card-maker = {
         image = "collinheist/titlecardmaker:develop";
         # autoUpdate = "registry";
         networking = {
-          networks = ["default"];
+          networks = [ "default" ];
           # aliases = ["titleCardMaker"];
         };
         environment = {
-          TCM_MISSING="/config/missing.yml";
-          TCM_RUNTIME="22:00" ;
-          TCM_FREQUENCY="12h";
+          TCM_MISSING = "/config/missing.yml";
+          TCM_RUNTIME = "22:00";
+          TCM_FREQUENCY = "12h";
         };
         volumes = [
           "/mnt/ssd/services/titleCardMaker/config:/config:rw"
@@ -26,10 +27,12 @@
   sops.templates.TCM_CONF = {
     owner = config.users.users.michael.name;
     group = config.users.groups.users.name;
-    restartUnits = [config.virtualisation.oci-containers.compose.mediaserver.containers.title-card-maker.unitName];
-    content = lib.generators.toYAML {} {
+    restartUnits = [
+      config.virtualisation.oci-containers.compose.mediaserver.containers.title-card-maker.unitName
+    ];
+    content = lib.generators.toYAML { } {
       options = {
-        source = "/config/source/";3
+        source = "/config/source/";
         series = [
           "/config/yaml/sonarr_sync_tv.yml"
           "/config/yaml/sonarr_sync_anime.yml"
@@ -98,5 +101,7 @@
   };
 }
 
-
-python /maker/mini_maker.py --movie-poster "/Media/animated-movies/Treasure Planet (2002) [imdbid-tt0133240]/folder.jpg" "/Media/animated-movies/Treasure Planet (2002) [imdbid-tt0133240]/poster.tcm.jpg" --movie-logo "/Media/animated-movies/Treasure Planet (2002) [imdbid-tt0133240]/logo.png"
+  python
+  /maker/mini_maker.py
+- -movie-poster "/Media/animated-movies/Treasure Planet (2002) [imdbid-tt0133240]/folder.jpg" "/Media/animated-movies/Treasure Planet (2002) [imdbid-tt0133240]/poster.tcm.jpg"
+- -movie-logo "/Media/animated-movies/Treasure Planet (2002) [imdbid-tt0133240]/logo.png"

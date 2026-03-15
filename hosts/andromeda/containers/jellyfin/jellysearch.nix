@@ -1,16 +1,21 @@
-{config,...}:{
+{ config, ... }:
+{
   services.cloudflared.tunnels.andromeda.ingress = {
-    "homarr.mgrlab.dk" = "http://localhost:${toString config.virtualisation.oci-containers.compose.mediaserver.containers.traefik.networking.ports.local.host}";
+    "homarr.mgrlab.dk" =
+      "http://localhost:${toString config.virtualisation.oci-containers.compose.mediaserver.containers.traefik.networking.ports.local.host}";
   };
 
   virtualisation.oci-containers.compose.mediaserver = {
-    networks.jellysearch = {};
+    networks.jellysearch = { };
     containers = rec {
       jellysearch = {
         image = "domistyle/jellysearch";
         user = "1000:100";
         networking = {
-          networks = ["default" "jellysearch"];
+          networks = [
+            "default"
+            "jellysearch"
+          ];
         };
         environment = {
           JELLYFIN_URL = "http://jellyfin:8096";
@@ -30,16 +35,16 @@
           "traefik.http.services.jellysearch.loadbalancer.server.port=5000"
           "traefik.http.routers.jellysearch.rule=Host(`jellyfin.mgrlab.dk`) && (QueryRegexp(`searchTerm`, `(.*?)`) || QueryRegexp(`SearchTerm`, `(.*?)`))"
         ];
-        dependsOn = ["jellysearch-meilisearch"];
+        dependsOn = [ "jellysearch-meilisearch" ];
       };
 
       jellysearch-meilisearch = {
         image = "getmeili/meilisearch:v1.9";
         networking = {
-          networks = ["jellysearch"];
-          aliases = ["index"];
+          networks = [ "jellysearch" ];
+          aliases = [ "index" ];
         };
-        volumes = ["/mnt/ssd/services/jellysearch/meilisearch:/meili_data:rw"];
+        volumes = [ "/mnt/ssd/services/jellysearch/meilisearch:/meili_data:rw" ];
         secrets.env = {
           MEILI_MASTER_KEY.path = config.sops.secrets.JELLYSEARCH_MEILISEARCH_MASTER_KEY.path;
         };

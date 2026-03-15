@@ -1,4 +1,5 @@
-{config, ...}: let
+{ config, ... }:
+let
   inherit (config.lib.formats.rasi) mkLiteral;
 
   border-colour = mkLiteral "var(selected)";
@@ -24,7 +25,8 @@
   alternate-urgent-foreground = mkLiteral "var(background)";
   alternate-active-background = mkLiteral "var(active)";
   alternate-active-foreground = mkLiteral "var(background)";
-in {
+in
+{
   "@import" = "colors.rasi";
 
   # Main Window
@@ -47,7 +49,10 @@ in {
 
   mainbox = {
     enabled = true;
-    children = map mkLiteral ["inputbar" "listview"];
+    children = map mkLiteral [
+      "inputbar"
+      "listview"
+    ];
     background-color = background-colour;
   };
 
@@ -64,7 +69,10 @@ in {
     border-color = border-colour;
     background-color = alternate-background;
     text-color = foreground-colour;
-    children = map mkLiteral ["textbox-prompt-colon" "entry"];
+    children = map mkLiteral [
+      "textbox-prompt-colon"
+      "entry"
+    ];
   };
 
   prompt = {
@@ -106,9 +114,7 @@ in {
     cycle = true;
     dynamic = true;
     scrollbar = false;
-    /*
-    TODO= make it vertical scroll
-    */
+    # TODO= make it vertical scroll
     layout = mkLiteral "vertical";
     reverse = true;
     fixed-height = true;

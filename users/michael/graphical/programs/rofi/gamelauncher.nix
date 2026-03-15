@@ -2,7 +2,8 @@
   pkgs,
   config,
   ...
-}: {
+}:
+{
   home.packages = with pkgs; [
     (writeShellScriptBin "rofi-games" ''
       # set variables

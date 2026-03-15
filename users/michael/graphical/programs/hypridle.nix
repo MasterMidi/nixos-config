@@ -2,9 +2,11 @@
   pkgs,
   inputs,
   ...
-}: let
+}:
+let
   brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl";
-in {
+in
+{
   # imports = [inputs.hypridle.homeManagerModules.default];
 
   services.hypridle = {

@@ -4,6 +4,7 @@
   perSystem =
     { pkgs, lib, ... }:
     {
+      formatter = pkgs.nixfmt-tree;
       devshells.default = {
         devshell = {
           name = "nixos-config";

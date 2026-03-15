@@ -1,11 +1,12 @@
-{...}: {
+{ ... }:
+{
   programs.bash = {
     enable = true;
     enableCompletion = true;
     shellOptions = [
       "cdspell"
       "dirspell"
-			"direxpand"
+      "direxpand"
       "histappend"
       "checkwinsize"
       "extglob"

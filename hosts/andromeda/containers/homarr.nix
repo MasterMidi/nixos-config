@@ -1,6 +1,8 @@
-{config,...}:{
+{ config, ... }:
+{
   services.cloudflared.tunnels.andromeda.ingress = {
-    "homarr.mgrlab.dk" = "http://localhost:${toString config.virtualisation.oci-containers.compose.mediaserver.containers.traefik.networking.ports.local.host}";
+    "homarr.mgrlab.dk" =
+      "http://localhost:${toString config.virtualisation.oci-containers.compose.mediaserver.containers.traefik.networking.ports.local.host}";
   };
 
   virtualisation.oci-containers.compose.mediaserver = {
@@ -9,8 +11,8 @@
         image = "ghcr.io/ajnart/homarr:latest";
         autoUpdate = "registry";
         networking = {
-          networks = ["default"];
-          aliases = ["homarr"];
+          networks = [ "default" ];
+          aliases = [ "homarr" ];
           ports = {
             webui = {
               host = 9000;

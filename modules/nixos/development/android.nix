@@ -3,7 +3,8 @@
   config,
   lib,
   ...
-}: let
+}:
+let
   cfg = config.development.android;
 
   # Define options for the Flutter setup
@@ -14,14 +15,15 @@
       # e.g., specific Flutter channel or version.
     };
   };
-in {
+in
+{
   options.development.android = {
     enable = lib.mkEnableOption "Add development tools for Android";
 
     # Option to enable the Flutter environment
     flutter = lib.mkOption {
       type = lib.types.submodule flutterOptions;
-      default = {};
+      default = { };
       description = "Options for configuring the Flutter development environment.";
     };
 
@@ -32,7 +34,11 @@ in {
   config = lib.mkIf cfg.enable {
     # Add user 'michael' to necessary groups for hardware access (KVM, ADB, UDEV)
     # Note: Replace 'michael' with your actual username if different.
-    users.users.michael.extraGroups = ["kvm" "adbusers" "udev"];
+    users.users.michael.extraGroups = [
+      "kvm"
+      "adbusers"
+      "udev"
+    ];
 
     # Install core Android and potentially Flutter packages
     environment.systemPackages = with pkgs; [

@@ -1,7 +1,10 @@
-{config,...}:{
+{ config, ... }:
+{
   services.cloudflared.tunnels.andromeda.ingress = {
-    "kuma.mgrlab.dk" = "http://localhost:${toString config.virtualisation.oci-containers.compose.mediaserver.containers.traefik.networking.ports.local.host}";
-    "status.mgrlab.dk" = "http://localhost:${toString config.virtualisation.oci-containers.compose.mediaserver.containers.traefik.networking.ports.local.host}";
+    "kuma.mgrlab.dk" =
+      "http://localhost:${toString config.virtualisation.oci-containers.compose.mediaserver.containers.traefik.networking.ports.local.host}";
+    "status.mgrlab.dk" =
+      "http://localhost:${toString config.virtualisation.oci-containers.compose.mediaserver.containers.traefik.networking.ports.local.host}";
   };
 
   virtualisation.oci-containers.compose.mediaserver = {
@@ -10,8 +13,8 @@
         image = "docker.io/louislam/uptime-kuma";
         autoUpdate = "registry";
         networking = {
-          networks = ["default"];
-          aliases = ["kuma"];
+          networks = [ "default" ];
+          aliases = [ "kuma" ];
           ports = {
             webui = {
               host = 3001;
@@ -33,19 +36,19 @@
 
       autokuma = {
         image = "ghcr.io/bigboot/autokuma:latest";
-        dependsOn = ["uptime-kuma"];
+        dependsOn = [ "uptime-kuma" ];
         environment = {
           AUTOKUMA__KUMA__URL = "http://kuma:${toString uptime-kuma.networking.ports.webui.internal}";
-          AUTOKUMA__KUMA__USERNAME = "admin"; 
+          AUTOKUMA__KUMA__USERNAME = "admin";
           # AUTOKUMA__KUMA__CALL_TIMEOUT: 5
           # AUTOKUMA__KUMA__CONNECT_TIMEOUT: 5
           # AUTOKUMA__TAG_NAME = "AutoKuma";
           # AUTOKUMA__TAG_COLOR: "#42C0FB"
-          # AUTOKUMA__DEFAULT_SETTINGS: |- 
+          # AUTOKUMA__DEFAULT_SETTINGS: |-
           #    docker.docker_container: {{container_name}}
           #    http.max_redirects: 10
           #    \*.max_retries: 3
-          # AUTOKUMA__SNIPPETS__WEB: |- 
+          # AUTOKUMA__SNIPPETS__WEB: |-
           #    {{container_name}}_http.http.name: {{container_name}} HTTP
           #    {{container_name}}_http.http.url: https://{{@0}}:{{@1}}
           #    {{container_name}}_docker.docker.name: {{container_name}} Docker

@@ -14,7 +14,8 @@
 # base0D = "#83A598";
 # base0E = "#D3869B";
 # base0F = "#D65D0E";
-{config, ...}: {
+{ config, ... }:
+{
   services.mako = {
     enable = true;
     settings = with config.colorScheme.palette; {

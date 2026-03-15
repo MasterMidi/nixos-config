@@ -4,8 +4,7 @@
 #
 # These instructions only work for Vencord.
 # Consult your client mods docs if you don't use Vencord.
-theme:
-with theme; ''
+theme: with theme; ''
   :root {
     --background-primary: #${base00};
     --background-secondary: #${base00};

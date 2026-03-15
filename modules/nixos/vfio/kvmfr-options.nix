@@ -4,9 +4,11 @@
   config,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.virtualisation.kvmfr;
-in {
+in
+{
   options.virtualisation.kvmfr = {
     enable = mkEnableOption "Kvmfr";
 
@@ -41,10 +43,10 @@ in {
     #   pkgs.linuxPackages_zen.kvmfr
     # ];
     boot.extraModulePackages = with config.boot.kernelPackages; [
-      (pkgs.callPackage ./kvmfr-package.nix {inherit kernel;})
+      (pkgs.callPackage ./kvmfr-package.nix { inherit kernel; })
     ];
 
-    boot.initrd.kernelModules = ["kvmfr"];
+    boot.initrd.kernelModules = [ "kvmfr" ];
 
     boot.kernelParams = optionals cfg.shm.enable [
       "kvmfr.static_size_mb=${toString cfg.shm.size}"

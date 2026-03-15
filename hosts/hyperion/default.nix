@@ -13,7 +13,7 @@
 
         # profiles
         ../../profiles/common.nix
-#        ../../profiles/k3s.nix
+        #        ../../profiles/k3s.nix
         ../../profiles/k3s/kubectl.nix
         ../../profiles/nix.nix
         ../../profiles/secrets.nix

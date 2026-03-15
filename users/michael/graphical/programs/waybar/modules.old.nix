@@ -169,7 +169,13 @@
       "children-class" = "not-memory";
       "transition-left-to-right" = false;
     };
-    "modules" = [ "custom/system" "disk" "cpu" "memory" "hyprland/language" ];
+    "modules" = [
+      "custom/system"
+      "disk"
+      "cpu"
+      "memory"
+      "hyprland/language"
+    ];
   };
   "group/settings" = {
     "orientation" = "inherit";
@@ -178,11 +184,18 @@
       "children-class" = "not-memory";
       "transition-left-to-right" = false;
     };
-    "modules" = [ "custom/settings" "custom/waybarthemes" "custom/wallpaper" ];
+    "modules" = [
+      "custom/settings"
+      "custom/waybarthemes"
+      "custom/wallpaper"
+    ];
   };
   "group/quicklinks" = {
     "orientation" = "horizontal";
-    "modules" = [ "custom/filemanager" "custom/browser" ];
+    "modules" = [
+      "custom/filemanager"
+      "custom/browser"
+    ];
   };
   "network" = {
     "format" = "{ifname}";
@@ -210,7 +223,11 @@
       "phone" = "";
       "portable" = "";
       "car" = "";
-      "default" = [ "" " " " " ];
+      "default" = [
+        ""
+        " "
+        " "
+      ];
     };
     "on-click" = "pavucontrol";
   };

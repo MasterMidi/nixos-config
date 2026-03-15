@@ -1,6 +1,8 @@
-{config, ...}: let
+{ config, ... }:
+let
   inherit (config.lib.formats.rasi) mkLiteral;
-in {
+in
+{
   "*" = with config.colorScheme.palette; {
     background = mkLiteral "#${base00}";
     background-alt = mkLiteral "#${base01}";

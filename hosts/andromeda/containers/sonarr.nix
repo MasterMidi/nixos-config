@@ -1,6 +1,8 @@
-{config,...}:{
+{ config, ... }:
+{
   services.cloudflared.tunnels.andromeda.ingress = {
-    "sonarr.mgrlab.dk" = "http://localhost:${toString config.virtualisation.oci-containers.compose.mediaserver.containers.traefik.networking.ports.local.host}";
+    "sonarr.mgrlab.dk" =
+      "http://localhost:${toString config.virtualisation.oci-containers.compose.mediaserver.containers.traefik.networking.ports.local.host}";
     # "sonarr.mgrlab.dk" = "http://localhost:${toString config.virtualisation.oci-containers.compose.mediaserver.containers.authentik-server.networking.ports.http.host}";
   };
 
@@ -10,14 +12,14 @@
         image = "ghcr.io/hotio/sonarr:nightly";
         autoUpdate = "registry";
         networking = {
-          networks = ["default"];
-          aliases = ["sonarr"];
+          networks = [ "default" ];
+          aliases = [ "sonarr" ];
           ports = {
             webui = {
               host = 9040;
               internal = 8989;
               protocol = "tcp";
-          	};
+            };
           };
         };
         environment = {
@@ -69,10 +71,15 @@
       enable = true;
       user = "michael";
       group = "users";
-      url = "http://localhost:${config.virtualisation.oci-containers.compose.mediaserver.containers.sonarr.networking.ports.webui.host |> builtins.toString}";
+      url = "http://localhost:${
+        config.virtualisation.oci-containers.compose.mediaserver.containers.sonarr.networking.ports.webui.host
+        |> builtins.toString
+      }";
       openFirewall = true;
       apiKeyFile = config.sops.secrets.SONARR_API_KEY.path;
-      port = config.virtualisation.oci-containers.compose.mediaserver.containers.sonarr.networking.ports.webui.host + 1;
+      port =
+        config.virtualisation.oci-containers.compose.mediaserver.containers.sonarr.networking.ports.webui.host
+        + 1;
     };
   };
 }

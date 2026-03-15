@@ -1,6 +1,8 @@
-{config,...}:{
+{ config, ... }:
+{
   services.cloudflared.tunnels.andromeda.ingress = {
-    "radarr.mgrlab.dk" = "http://localhost:${toString config.virtualisation.oci-containers.compose.mediaserver.containers.traefik.networking.ports.local.host}";
+    "radarr.mgrlab.dk" =
+      "http://localhost:${toString config.virtualisation.oci-containers.compose.mediaserver.containers.traefik.networking.ports.local.host}";
   };
 
   virtualisation.oci-containers.compose.mediaserver = {
@@ -9,8 +11,8 @@
         image = "lscr.io/linuxserver/radarr:latest";
         autoUpdate = "registry";
         networking = {
-          networks = ["default"];
-          aliases = ["radarr"];
+          networks = [ "default" ];
+          aliases = [ "radarr" ];
           ports = {
             webui = {
               host = 9030;
@@ -50,7 +52,10 @@
       enable = true;
       user = "michael";
       group = "users";
-      url = "http://localhost:${config.virtualisation.oci-containers.compose.mediaserver.containers.radarr.networking.ports.webui.host |> builtins.toString}";
+      url = "http://localhost:${
+        config.virtualisation.oci-containers.compose.mediaserver.containers.radarr.networking.ports.webui.host
+        |> builtins.toString
+      }";
       openFirewall = true;
       apiKeyFile = config.sops.secrets.RADARR_API_KEY.path;
       port = 9031;

@@ -1,12 +1,13 @@
-{config,...}:{
+{ config, ... }:
+{
   virtualisation.oci-containers.compose.mediaserver = {
     containers = {
       searxng = {
         image = "searxng/searxng";
         # autoUpdate = "registry";
         networking = {
-          networks = ["default"];
-          aliases = ["searxng"];
+          networks = [ "default" ];
+          aliases = [ "searxng" ];
           ports = {
             webui = {
               host = 4848;
@@ -16,8 +17,8 @@
           };
         };
         environment = {
-          INSTANCE_NAME="searxng";
-          BASE_URL="https://search.mgrlab.dk";
+          INSTANCE_NAME = "searxng";
+          BASE_URL = "https://search.mgrlab.dk";
         };
         volumes = [
           "/mnt/ssd/services/searxng:/etc/searxng:rw"

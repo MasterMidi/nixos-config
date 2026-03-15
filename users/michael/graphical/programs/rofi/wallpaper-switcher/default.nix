@@ -4,62 +4,84 @@
   pkgs,
   ...
 }:
-with lib; let
-  mkValueString = value:
-    if isBool value
-    then
-      if value
-      then "true"
-      else "false"
-    else if isInt value
-    then toString value
-    else if (value._type or "") == "literal"
-    then value.value
-    else if isString value
-    then ''"${value}"''
-    else if isList value
-    then "[ ${strings.concatStringsSep "," (map mkValueString value)} ]"
-    else abort "Unhandled value type ${builtins.typeOf value}";
+with lib;
+let
+  mkValueString =
+    value:
+    if isBool value then
+      if value then "true" else "false"
+    else if isInt value then
+      toString value
+    else if (value._type or "") == "literal" then
+      value.value
+    else if isString value then
+      ''"${value}"''
+    else if isList value then
+      "[ ${strings.concatStringsSep "," (map mkValueString value)} ]"
+    else
+      abort "Unhandled value type ${builtins.typeOf value}";
 
-  mkKeyValue = {
-    sep ? ": ",
-    end ? ";",
-  }: name: value: "${name}${sep}${mkValueString value}${end}";
+  mkKeyValue =
+    {
+      sep ? ": ",
+      end ? ";",
+    }:
+    name: value: "${name}${sep}${mkValueString value}${end}";
 
-  mkRasiSection = name: value:
-    if isAttrs value
-    then let
-      toRasiKeyValue = generators.toKeyValue {mkKeyValue = mkKeyValue {};};
-      # Remove null values so the resulting config does not have empty lines
-      configStr = toRasiKeyValue (filterAttrs (_: v: v != null) value);
-    in ''
-      ${name} {
-      ${configStr}}
-    ''
+  mkRasiSection =
+    name: value:
+    if isAttrs value then
+      let
+        toRasiKeyValue = generators.toKeyValue { mkKeyValue = mkKeyValue { }; };
+        # Remove null values so the resulting config does not have empty lines
+        configStr = toRasiKeyValue (filterAttrs (_: v: v != null) value);
+      in
+      ''
+        ${name} {
+        ${configStr}}
+      ''
     else
       (mkKeyValue {
-          sep = " ";
-          end = "";
-        }
-        name
-        value)
+        sep = " ";
+        end = "";
+      } name value)
       + "\n";
 
-  toRasi = attrs:
-    concatStringsSep "\n" (concatMap (mapAttrsToList mkRasiSection) [
-      (filterAttrs (n: _: n == "@theme") attrs)
-      (filterAttrs (n: _: n == "@import") attrs)
-      (removeAttrs attrs ["@theme" "@import"])
-    ]);
+  toRasi =
+    attrs:
+    concatStringsSep "\n" (
+      concatMap (mapAttrsToList mkRasiSection) [
+        (filterAttrs (n: _: n == "@theme") attrs)
+        (filterAttrs (n: _: n == "@import") attrs)
+        (removeAttrs attrs [
+          "@theme"
+          "@import"
+        ])
+      ]
+    );
 
-  allowedFileFormats = ["jpeg" "jpg" "png" "gif" "pnm" "tga" "tiff" "webp" "bmp" "farbfeld"];
-in {
+  allowedFileFormats = [
+    "jpeg"
+    "jpg"
+    "png"
+    "gif"
+    "pnm"
+    "tga"
+    "tiff"
+    "webp"
+    "bmp"
+    "farbfeld"
+  ];
+in
+{
   home.packages = [
     (pkgs.writeShellScriptBin "rofi-wall" ''
       # Set some variables
       wallDir=$1 # NOTE: symlinked folder needs "/" at the end, this is accounted for elsewhere in the script
       cacheDir="$HOME/.cache/wallpapers/"
-      rofiCommand="${config.programs.rofi.package}/bin/rofi -dmenu -i -theme ${config.home.homeDirectory}/${config.xdg.configFile."rofi/wallpaper-switcher.rasi".target}"
+      rofiCommand="${config.programs.rofi.package}/bin/rofi -dmenu -i -theme ${config.home.homeDirectory}/${
+        config.xdg.configFile."rofi/wallpaper-switcher.rasi".target
+      }"
 
       # Create cache dir if not exists
       if [ ! -d "$cacheDir" ]; then
@@ -78,7 +100,9 @@ in {
       done
 
       # Launch rofi
-      wall_selection=$(${pkgs.findutils}/bin/find "$wallDir" -maxdepth 1 -type f \( ${lib.concatMapStringsSep " -o " (x: ''-iname "*.${x}"'') allowedFileFormats} \) -exec basename {} \; | sort | while read -r A; do echo -en "$A\x00icon\x1f""$cacheDir"/"$A\n"; done | $rofiCommand)
+      wall_selection=$(${pkgs.findutils}/bin/find "$wallDir" -maxdepth 1 -type f \( ${
+        lib.concatMapStringsSep " -o " (x: ''-iname "*.${x}"'') allowedFileFormats
+      } \) -exec basename {} \; | sort | while read -r A; do echo -en "$A\x00icon\x1f""$cacheDir"/"$A\n"; done | $rofiCommand)
 
       # output information
       OUTPUT_DISPLAY=$(${config.wayland.windowManager.hyprland.package}/bin/hyprctl activeworkspace -j | ${pkgs.jq}/bin/jq -r '.monitor')
@@ -105,5 +129,5 @@ in {
         sort = true;
       };
     }
-    + (toRasi (import ./theme.nix {inherit config;}));
+    + (toRasi (import ./theme.nix { inherit config; }));
 }

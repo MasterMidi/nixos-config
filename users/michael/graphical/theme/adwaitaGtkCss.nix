@@ -2,8 +2,7 @@
 #
 # gtk.gtk3.extraCss = myTheme.adwaitaGtkCss;
 # gtk.gtk4.extraCss = myTheme.adwaitaGtkCss;
-colorScheme:
-with colorScheme.palette; ''
+colorScheme: with colorScheme.palette; ''
   @define-color accent_color #${base0A};
   @define-color accent_bg_color #${base0A};
   @define-color accent_fg_color #${base00};

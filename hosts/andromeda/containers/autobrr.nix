@@ -1,6 +1,8 @@
-{config,...}:{
+{ config, ... }:
+{
   services.cloudflared.tunnels.andromeda.ingress = {
-    "autobrr.mgrlab.dk" = "http://localhost:${toString config.virtualisation.oci-containers.compose.mediaserver.containers.traefik.networking.ports.local.host}";
+    "autobrr.mgrlab.dk" =
+      "http://localhost:${toString config.virtualisation.oci-containers.compose.mediaserver.containers.traefik.networking.ports.local.host}";
   };
 
   virtualisation.oci-containers.compose.mediaserver = {
@@ -10,8 +12,8 @@
         autoUpdate = "registry";
         # user = "1000:100";
         networking = {
-          networks = ["default"];
-          aliases = ["autobrr"];
+          networks = [ "default" ];
+          aliases = [ "autobrr" ];
           ports = {
             webui = {
               host = 7474;

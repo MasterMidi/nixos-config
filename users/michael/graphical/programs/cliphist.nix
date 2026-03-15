@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   services.cliphist.enable = true; # clipboard support
 
   wayland.windowManager.hyprland.settings.exec-once = [

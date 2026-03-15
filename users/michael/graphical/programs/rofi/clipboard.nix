@@ -2,7 +2,8 @@
   pkgs,
   config,
   ...
-}: {
+}:
+{
   # TODO: update script only copy to clipboard if an item is selected in rofi
   home.packages = with pkgs; [
     (writeShellScriptBin "rofi-clipboard" ''

@@ -1,4 +1,10 @@
-{ self, pkgs, config, lib, ... }:
+{
+  self,
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 {
   environment.systemPackages = with pkgs; [ kubectl ];
 
@@ -8,7 +14,7 @@
   };
 
   sops.secrets = {
-    K3S_ANDROMEDA_CA.sopsFile = ./secrets/k3s.yaml; 
+    K3S_ANDROMEDA_CA.sopsFile = ./secrets/k3s.yaml;
     K3S_ANDROMEDA_CERT.sopsFile = ./secrets/k3s.yaml;
     K3S_ANDROMEDA_KEY.sopsFile = ./secrets/k3s.yaml;
   };
@@ -16,7 +22,7 @@
   sops.templates.kubeconfig-andromeda = {
     owner = "michael";
     mode = "0600";
-    file = (pkgs.formats.yaml {}).generate "kubeconfig-andromeda.yaml" {
+    file = (pkgs.formats.yaml { }).generate "kubeconfig-andromeda.yaml" {
       apiVersion = "v1";
       kind = "Config";
       clusters = [
@@ -47,5 +53,5 @@
         }
       ];
     };
-  };  
+  };
 }

@@ -1,4 +1,5 @@
-{config, ...}: {
+{ config, ... }:
+{
   services.stalwart-mail = {
     enable = false;
     openFirewall = true; # sits behind reverse proxy instead
@@ -6,33 +7,33 @@
       server = {
         listener = {
           smtp = {
-            bind = ["[::]:25"];
+            bind = [ "[::]:25" ];
             protocol = "smtp";
           };
           submission = {
-            bind = ["[::]:587"];
+            bind = [ "[::]:587" ];
             protocol = "smtp";
           };
           submissions = {
-            bind = ["[::]:465"];
+            bind = [ "[::]:465" ];
             protocol = "smtp";
             tls.implicit = true;
           };
           imap = {
-            bind = ["[::]:143"];
+            bind = [ "[::]:143" ];
             protocol = "imap";
           };
           imaptls = {
-            bind = ["[::]:993"];
+            bind = [ "[::]:993" ];
             protocol = "imap";
             # tls.implicit = true;
           };
           http = {
-            bind = ["[::]:4848"];
+            bind = [ "[::]:4848" ];
             protocol = "http";
           };
           https = {
-            bind = ["[::]:4949"];
+            bind = [ "[::]:4949" ];
             protocol = "http";
           };
         };
@@ -72,6 +73,8 @@
         # };
       };
     };
-    credentials = {user_admin_password = config.sops.secrets.STALWART_ADMIN_PASSWORD.path;};
+    credentials = {
+      user_admin_password = config.sops.secrets.STALWART_ADMIN_PASSWORD.path;
+    };
   };
 }

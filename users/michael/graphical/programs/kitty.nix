@@ -1,4 +1,5 @@
-{config, ...}: {
+{ config, ... }:
+{
   programs.kitty = {
     enable = true;
     shellIntegration.enableBashIntegration = false; # When true, makes starship fail on first load for some reason

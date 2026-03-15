@@ -1,5 +1,6 @@
-{config, ...}:
-with config.colorScheme.palette; let
+{ config, ... }:
+with config.colorScheme.palette;
+let
   inherit (config.lib.formats.rasi) mkLiteral;
 
   border-colour = mkLiteral "var(selected)";
@@ -25,7 +26,8 @@ with config.colorScheme.palette; let
   alternate-urgent-foreground = mkLiteral "var(background)";
   alternate-active-background = mkLiteral "var(active)";
   alternate-active-foreground = mkLiteral "var(background)";
-in {
+in
+{
   "@import" = "colors.rasi";
   # Main Window
   window = {
@@ -53,7 +55,7 @@ in {
     padding = "4px";
     border-radius = mkLiteral "11px";
     background-image = mkLiteral "linear-gradient(45, #${base0D}, #${base0B})";
-    children = map mkLiteral ["borderbox"];
+    children = map mkLiteral [ "borderbox" ];
   };
 
   borderbox = {
@@ -64,7 +66,11 @@ in {
     border-radius = mkLiteral "10px";
     border-color = mkLiteral "transparent";
     background-color = background-colour;
-    children = map mkLiteral ["inputbar" "message" "custombox"];
+    children = map mkLiteral [
+      "inputbar"
+      "message"
+      "custombox"
+    ];
   };
 
   # A Custom Box
@@ -73,7 +79,10 @@ in {
     background-color = background-colour;
     text-color = foreground-colour;
     orientation = mkLiteral "horizontal";
-    children = map mkLiteral ["mode-switcher" "listview"];
+    children = map mkLiteral [
+      "mode-switcher"
+      "listview"
+    ];
   };
 
   # Inputbar
@@ -87,7 +96,10 @@ in {
     border-color = border-colour;
     background-color = alternate-background;
     text-color = foreground-colour;
-    children = map mkLiteral ["textbox-prompt-colon" "entry"];
+    children = map mkLiteral [
+      "textbox-prompt-colon"
+      "entry"
+    ];
   };
 
   prompt = {

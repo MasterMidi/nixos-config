@@ -16,8 +16,9 @@
 # base0F = "#D65D0E";
 #9EB5D5
 #1D2021
-{config, ...}:
-with config.colorScheme.palette; let
+{ config, ... }:
+with config.colorScheme.palette;
+let
   dark-text = "#${base00}";
   light-text = "#${base07}";
   error = "#${base08}";
@@ -31,9 +32,14 @@ with config.colorScheme.palette; let
   package-module = "#${base0C}";
   code-module = "#${base0A}";
 
-  section = elems: sep: fg: bg: "${builtins.concatStringsSep "" elems}[${sep}](fg:${fg} bg:${bg})";
-  ifSection = elems: sep: fg: bg: "(${builtins.concatStringsSep "" elems}[${sep}](fg:${fg} bg:${bg}))";
-in {
+  section =
+    elems: sep: fg: bg:
+    "${builtins.concatStringsSep "" elems}[${sep}](fg:${fg} bg:${bg})";
+  ifSection =
+    elems: sep: fg: bg:
+    "(${builtins.concatStringsSep "" elems}[${sep}](fg:${fg} bg:${bg}))";
+in
+{
   programs.starship = {
     enable = true;
     enableBashIntegration = true;
@@ -43,13 +49,13 @@ in {
 
       # format = "($nix_shell$shlvl[](fg:${shell} bg:${pc-info}))$os$username$hostname$localip$sudo[](fg:${pc-info} bg:${path})$directory[](fg:${path} bg:${git-module})$git_branch$git_commit$git_state$git_status[](fg:${git-module} bg:${package-module})$package[](fg:${package-module} bg:${code-module})$container$kubernetes$docker_context$nodejs$rust$golang$php[](fg:${code-module})$cmd_duration\n$character";
       format = builtins.concatStringsSep "" [
-        (section ["$os" "$username" "$hostname" "$sudo"] "" pc-info network)
-        (section ["\${custom.ssh_host_ip}"] "" network path)
-        (section ["$directory"] "" path git-module)
-        (section ["$git_branch" "$git_commit" "$git_state$" "git_status"] "" git-module shell)
-        (ifSection ["$nix_shell" "$direnv" "$shlvl"] "" shell package-module)
-        (section ["$package" "$container" "$kubernetes" "$docker_context"] "" package-module code-module)
-        (section ["$lua" "$nodejs" "$rust" "$golang" "$php"] "" code-module "")
+        (section [ "$os" "$username" "$hostname" "$sudo" ] "" pc-info network)
+        (section [ "\${custom.ssh_host_ip}" ] "" network path)
+        (section [ "$directory" ] "" path git-module)
+        (section [ "$git_branch" "$git_commit" "$git_state$" "git_status" ] "" git-module shell)
+        (ifSection [ "$nix_shell" "$direnv" "$shlvl" ] "" shell package-module)
+        (section [ "$package" "$container" "$kubernetes" "$docker_context" ] "" package-module code-module)
+        (section [ "$lua" "$nodejs" "$rust" "$golang" "$php" ] "" code-module "")
         "$cmd_duration\n$character"
       ];
 
@@ -84,7 +90,7 @@ in {
         disabled = false; # module not usefull for me
         style = "bold bg:${shell} fg:${dark-text}";
         powershell_indicator = " ";
-        bash_indicator = " "; #bash icon
+        bash_indicator = " "; # bash icon
         unknown_indicator = "󱆃 ";
       };
 
@@ -129,7 +135,7 @@ in {
         ssh_only = false;
         format = "[@[$hostname]($style)[$ssh_symbol]($style) ]($style)";
         style = "italic bg:${pc-info} fg:${dark-text}";
-        ssh_symbol = " 󰌘"; #\uf817
+        ssh_symbol = " 󰌘"; # \uf817
         disabled = false;
       };
 
@@ -143,10 +149,10 @@ in {
       custom.ssh_host_ip = {
         description = "Shows IP and Interface when connected via SSH";
         command = ''
-IP=$(echo $SSH_CONNECTION | awk '{print $3}')
-IF=$(ip -o addr show to "$IP" | awk '{print $2}')
-echo "$IP ($IF)"
-'';
+          IP=$(echo $SSH_CONNECTION | awk '{print $3}')
+          IF=$(ip -o addr show to "$IP" | awk '{print $2}')
+          echo "$IP ($IF)"
+        '';
         when = "test -n \"$SSH_CONNECTION\"";
         format = "[ $output]($style)";
         #symbol = "󰌘 ";
@@ -274,7 +280,7 @@ echo "$IP ($IF)"
       kubernetes = {
         format = "[ $symbol ($user on )($cluster in )$context \($namespace\) ]($style)";
         symbol = "󰠳 ";
-        detect_files = ["k8s"];
+        detect_files = [ "k8s" ];
         style = "fg:${light-text} bg:${code-module}";
         disabled = false;
         context_aliases = {

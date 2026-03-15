@@ -3,10 +3,12 @@
   config,
   pkgs,
   ...
-}: let
+}:
+let
   cfg = config.virtualisation.podman.autoUpdate;
-in {
-  meta.maintainers = with lib.maintainers; [mrene];
+in
+{
+  meta.maintainers = with lib.maintainers; [ mrene ];
 
   options.virtualisation.podman.autoUpdate = {
     enable = lib.mkEnableOption "the autoupdate service for podman";
@@ -22,7 +24,7 @@ in {
     # Auto-update service
     systemd.services.podman-auto-update = {
       description = "Podman auto-update service";
-      path = [pkgs.podman];
+      path = [ pkgs.podman ];
       serviceConfig = {
         Type = "oneshot";
         ExecStart = "${pkgs.podman}/bin/podman auto-update";
@@ -31,7 +33,7 @@ in {
     };
 
     systemd.timers.podman-auto-update = {
-      wantedBy = ["timers.target"];
+      wantedBy = [ "timers.target" ];
       timerConfig = {
         OnCalendar = "daily";
         RandomizedDelaySec = "900";

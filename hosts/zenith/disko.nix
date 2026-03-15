@@ -33,14 +33,14 @@
                 resumeDevice = true; # resume from hiberation from this device
               };
             };
-						nix = {
-							size = "100G";
-							content = {
-								type = "filesystem";
-								format = "xfs";
-								mountpoint = "/nix";
-							};
-						};
+            nix = {
+              size = "100G";
+              content = {
+                type = "filesystem";
+                format = "xfs";
+                mountpoint = "/nix";
+              };
+            };
             home = {
               size = "100%";
               content = {

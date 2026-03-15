@@ -2,8 +2,7 @@
 #
 # xdg.configFile."btop/themes/base16.theme".text = theme.btopTheme;
 # programs.btop.settings.color_theme = "base16";
-colorScheme:
-with colorScheme.palette; ''
+colorScheme: with colorScheme.palette; ''
   theme[main_bg]=""
 
   theme[main_fg]="#${base05}"

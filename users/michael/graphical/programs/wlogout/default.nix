@@ -1,6 +1,8 @@
-{pkgs, ...}: let
+{ pkgs, ... }:
+let
   config = ".config/wlogout";
-in {
+in
+{
   programs.wlogout = {
     enable = true;
     package = pkgs.wlogout;

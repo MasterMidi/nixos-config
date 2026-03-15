@@ -2,7 +2,8 @@
   config,
   inputs,
   ...
-}: {
+}:
+{
   programs.thunderbird = {
     enable = true;
     profiles."nix.default" = {
@@ -21,7 +22,10 @@
       '';
     };
   };
-  home.file.".thunderbird/${config.programs.thunderbird.profiles."nix.default".name}/chrome/thunderbird-gnome-theme".source = inputs.thunderbird-gnome-theme;
+  home.file.".thunderbird/${
+    config.programs.thunderbird.profiles."nix.default".name
+  }/chrome/thunderbird-gnome-theme".source =
+    inputs.thunderbird-gnome-theme;
 
   accounts = {
     email.accounts = {
@@ -46,7 +50,7 @@
         };
         thunderbird = {
           enable = true;
-          profiles = ["nix.default"];
+          profiles = [ "nix.default" ];
         };
       };
       "michael-graversen@hotmail.com" = rec {
@@ -60,13 +64,13 @@
         flavor = "outlook.office365.com";
         thunderbird = {
           enable = true;
-          profiles = ["nix.default"];
+          profiles = [ "nix.default" ];
         };
       };
     };
     calendar.accounts = {
       "home@michael-graversen.dk" = {
-				remote = {
+        remote = {
           type = "google_calendar";
           userName = "home@michael-graversen.dk";
           remote = "https://dav.simply.com/calendars/home@michael-graversen.dk/home@michael-graversen.dk/";

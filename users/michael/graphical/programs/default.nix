@@ -9,7 +9,7 @@
     ./waybar
     ./wlogout
     ./firefox.nix
-    ./hyprlock.nix
+    # ./hyprlock.nix
     ./kitty.nix
     ./spotify.nix
     # ./thunderbird.nix

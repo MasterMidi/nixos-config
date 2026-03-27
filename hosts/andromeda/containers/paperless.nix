@@ -40,7 +40,7 @@
     };
 
     paperless-webserver = rec {
-      image = "ghcr.io/paperless-ngx/paperless-ngx:latest";
+      image = "ghcr.io/paperless-ngx/paperless-ngx:2.20";
       dependsOn = [
         "paperless-db"
         "paperless-broker"

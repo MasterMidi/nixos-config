@@ -3,33 +3,33 @@
   imports = [
     self.modules.nixos.compose
 
-    # ./autobrr.nix
+    # # ./autobrr.nix
     ./bazarr.nix
-    # ./bitmagnet.nix
-    # ./glance.nix
-    # ./gotify.nix
-    # ./homarr.nix
+    # # ./bitmagnet.nix
+    # # ./glance.nix
+    # # ./gotify.nix
+    # # ./homarr.nix
     ./immich.nix
     ./jdupes.nix
-    # ./jellyfin
-    # ./jellyseerr.nix
-    # ./karakeep.nix
+    # # ./jellyfin
+    # # ./jellyseerr.nix
+    # # ./karakeep.nix
     ./mealie.nix
     ./newt.nix
-    # ./open-webui.nix
+    # # ./open-webui.nix
     ./paperless.nix
-    # ./penpot.nix
-    # ./pocketid.nix
+    # # ./penpot.nix
+    # # ./pocketid.nix
     ./prefetcher.nix
-    # ./prowlarr.nix
-    ./qbit
-    # ./radarr.nix
-    # ./recyclarr.nix
-    # ./scrutiny.nix
+    # # ./prowlarr.nix
+    # ./qbit
+    # # ./radarr.nix
+    # # ./recyclarr.nix
+    # # ./scrutiny.nix
     ./searxng.nix
-    # ./sonarr.nix
-    # ./sterling-pdf.nix
-    # ./uptime-kuma.nix
+    # # ./sonarr.nix
+    # # ./sterling-pdf.nix
+    # # ./uptime-kuma.nix
   ];
 
   boot.kernel.sysctl = {

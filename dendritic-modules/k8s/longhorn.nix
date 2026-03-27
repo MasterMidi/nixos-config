@@ -16,5 +16,6 @@
       systemd.tmpfiles.rules = [
         "L /usr/bin/mount - - - - /run/current-system/sw/bin/mount"
       ];
+      boot.kernelModules = [ "dm_crypt" ];
     };
 }

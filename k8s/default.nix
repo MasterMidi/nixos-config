@@ -7,6 +7,7 @@
     ./longhorn.nix
     ./newt.nix
     ./nvidia-device-plugin.nix
+    ./obsidian-livesync.nix
     ./pocketid.nix
     ./prowlarr.nix
     ./qbittorrent.nix

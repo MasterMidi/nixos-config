@@ -28,20 +28,20 @@
         NIXOS_OZONE_WL = "1"; # Force electron to use wayland
       };
 
-      fonts = {
-        enableDefaultPackages = true;
+      # fonts = {
+      #   enableDefaultPackages = true;
 
-        packages = with pkgs; [
-          corefonts
-          noto-fonts
-          noto-fonts-cjk-sans # To fix weird font rendering for cjk characters
-          unifont
-        ];
+      #   packages = with pkgs; [
+      #     corefonts
+      #     noto-fonts
+      #     noto-fonts-cjk-sans # To fix weird font rendering for cjk characters
+      #     unifont
+      #   ];
 
-        fontconfig = {
-          antialias = true;
-        };
-      };
+      #   fontconfig = {
+      #     antialias = true;
+      #   };
+      # };
     };
 
   flake.homeModules.hyprland =

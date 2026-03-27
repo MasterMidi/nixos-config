@@ -40,8 +40,17 @@
   };
 
   fileSystems."/var/lib/containers" = {
-    device = "/mnt/data/containers";
-    fsType = "none";
+    device = "/mnt/ssd/containers";
+    options = [ "bind" ];
+  };
+
+  fileSystems."/var/lib/rancher/k3s" = {
+    device = "/mnt/ssd/k3s";
+    options = [ "bind" ];
+  };
+
+  fileSystems."/var/lib/longhorn" = {
+    device = "/mnt/ssd/appdata/longhorn";
     options = [ "bind" ];
   };
 }

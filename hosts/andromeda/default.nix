@@ -14,6 +14,8 @@
         self.nixosModules.k8s-longhorn
         self.nixosModules.k3s-node-server
         self.nixosModules.k3s-gpu-nvidia
+        self.nixosModules.tailscale
+        self.nixosModules.nix-builder
 
         ./configuration.nix
         ./containers
@@ -27,7 +29,6 @@
         ../../profiles/mdns.nix
         ../../profiles/nix.nix
         ../../profiles/secrets.nix
-        ../../profiles/vpn.nix
 
         # Users
         ../../users/root/common.nix

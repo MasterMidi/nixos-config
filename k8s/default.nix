@@ -2,6 +2,7 @@
 {
   imports = [
     ./bitmagnet.nix
+    ./immich.nix
     ./jellyfin.nix
     # ./linkwarden.nix
     ./longhorn.nix

@@ -28,10 +28,12 @@ in
         template = {
           metadata.labels = { inherit app; };
           spec = {
+            runtimeClassName = "nvidia";
             containers = {
               _namedlist = true;
               ${app} = {
                 inherit image;
+                resources.limits."nvidia.com/gpu" = 1;
                 env = {
                   _namedlist = true;
                   PUID.value = PUID;

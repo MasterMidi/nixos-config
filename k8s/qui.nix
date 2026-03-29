@@ -32,7 +32,7 @@ in
             containers = {
               _namedlist = true;
               qui = {
-                image = "ghcr.io/autobrr/qui:v1.14.1";
+                image = "ghcr.io/autobrr/qui:v1.15";
                 ports = {
                   _namedlist = true;
                   http.containerPort = 7476;
@@ -47,6 +47,7 @@ in
                     key = "QUI_OIDC_CLIENT_SECRET";
                   };
                   QUI__OIDC_REDIRECT_URL.value = "https://qbit.mgrlab.dk/api/auth/oidc/callback";
+                  QUI__CORS_ALLOWED_ORIGINS.value = "https://qbit.mgrlab.dk";
                 };
                 volumeMounts = {
                   _namedlist = true;

@@ -19,19 +19,19 @@
     "net.ipv6.conf.enp3s0.accept_ra_rt_info_max_plen" = 64;
 
     # IP forward install
-    "net.ipv6.conf.all.forwarding" = 1;
+    # "net.ipv6.conf.all.forwarding" = 1;
     # "net.ipv4.ip_forward" = 1;
 
     # Custom from Gemini
-    "net.ipv4.conf.all.forwarding" = 1;
+    # "net.ipv4.conf.all.forwarding" = 1;
   };
 
   services.k3s = {
     # Add these flags to force IPv4 and specify the interface
     extraFlags = [
-      "--node-ip=192.168.1.139" # Replace with your actual LAN IP
-      "--flannel-iface=enp3s0" # Replace with your WiFi interface name
-      "--disable-network-policy" # Disables the specific controller that is crashing
+      # "--node-ip=192.168.1.139" # Replace with your actual LAN IP
+      # "--flannel-iface=enp3s0" # Replace with your WiFi interface name
+      # "--disable-network-policy" # Disables the specific controller that is crashing
     ];
   };
 

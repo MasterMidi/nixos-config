@@ -28,8 +28,8 @@
     # Use the NVidia open source kernel module (not to be confused with the
     # independent third-party "nouveau" open source driver).
     # Support is limited to the Turing and later architectures.
-    open = false;
-    nvidiaSettings = false;
+    # open = false;
+    # nvidiaSettings = false;
     package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
 
@@ -87,6 +87,7 @@
 
   services.k3s.extraFlags = [
     # Allow the others to verify the cert when connecting to "andromeda"
-    "--tls-san andromeda"
+    "--tls-san=andromeda"
+    "--data-dir=/mnt/ssd/k3s"
   ];
 }

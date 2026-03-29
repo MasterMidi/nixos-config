@@ -1,8 +1,7 @@
 { pkgs, ... }:
 {
-  kubernetes.resources.longhorn-system.StorageClass.longhorn-database = {
-    apiVersion = "storage.k8s.io/v1";
-    kind = "StorageClass";
+  kubernetes.resources.longhorn-system = {
+    StorageClass.longhorn-database = {
     metadata.annotations.storageclass."kubernetes.io/is-default-class" = false;
     provisioner = "driver.longhorn.io";
     allowVolumeExpansion = true;

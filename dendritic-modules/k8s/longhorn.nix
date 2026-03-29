@@ -4,7 +4,10 @@
   flake.nixosModules.k8s-longhorn =
     { pkgs, config, ... }:
     {
-      environment.systemPackages = [ pkgs.nfs-utils ];
+      environment.systemPackages = with pkgs; [
+        nfs-utils
+        xfsprogs
+      ];
       services.openiscsi = {
         enable = true;
         name = "${config.networking.hostName}-initiatorhost";

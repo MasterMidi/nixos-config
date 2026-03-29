@@ -1,6 +1,35 @@
 { pkgs, ... }:
 {
   kubernetes.resources.longhorn-system = {
+    StorageClass.longhorn = {
+      metadata.annotations.storageclass."kubernetes.io/is-default-class" = true;
+      provisioner = "driver.longhorn.io";
+      allowVolumeExpansion = true;
+      reclaimPolicy = "Retain";
+      volumeBindingMode = "Immediate";
+      parameters = {
+        numberOfReplicas = "1";
+        dataLocality = "best-effort";
+        fsType = "xfs";
+        staleReplicaTimeout = "30";
+        disableRevisionCounter = "true";
+        unmapMarkSnapChainRemoved = "ignored";
+      };
+    };
+
+    StorageClass.longhorn-static = {
+      metadata.annotations.storageclass."kubernetes.io/is-default-class" = true;
+      provisioner = "driver.longhorn.io";
+      allowVolumeExpansion = true;
+      reclaimPolicy = "Delete";
+      volumeBindingMode = "Immediate";
+      parameters = {
+        dataLocality = "best-effort";
+        fsType = "xfs";
+        staleReplicaTimeout = "30";
+      };
+    };
+
     StorageClass.longhorn-database = {
     metadata.annotations.storageclass."kubernetes.io/is-default-class" = false;
     provisioner = "driver.longhorn.io";

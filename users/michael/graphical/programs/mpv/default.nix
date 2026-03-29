@@ -14,7 +14,7 @@
       seekTo
       reload
       visualizer
-      mpv-cheatsheet
+      mpv-cheatsheet-ng
       webtorrent-mpv-hook
       uosc
     ];

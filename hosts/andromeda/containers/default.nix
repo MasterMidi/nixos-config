@@ -14,7 +14,7 @@
     # # ./jellyfin
     # # ./jellyseerr.nix
     # # ./karakeep.nix
-    ./mealie.nix
+    # ./mealie.nix
     ./newt.nix
     # # ./open-webui.nix
     ./paperless.nix
@@ -22,7 +22,7 @@
     # # ./pocketid.nix
     ./prefetcher.nix
     # # ./prowlarr.nix
-    # ./qbit
+    ./qbit
     # # ./radarr.nix
     # # ./recyclarr.nix
     # # ./scrutiny.nix
@@ -41,38 +41,6 @@
     mediainfo
     nvidia-container-toolkit
   ];
-
-  systemd.services.k3s.path = with pkgs; [
-    nvidia-container-toolkit # Provides nvidia-ctk
-    # pkgs.nvidia-container-toolkit.tools # Provides nvidia-container-runtime
-    libnvidia-container # Provides nvidia-container-cli
-    runc
-  ];
-
-  environment.etc."nvidia-container-runtime/config.toml".text = ''
-    disable-require = false
-
-    [nvidia-container-cli]
-    # Point directly to the libnvidia-container package
-    path = "${pkgs.libnvidia-container}/bin/nvidia-container-cli"
-
-    [nvidia-ctk]
-    # Point directly to the default output of the toolkit
-    path = "${pkgs.nvidia-container-toolkit}/bin/nvidia-ctk"
-  '';
-
-  services.k3s.containerdConfigTemplate = ''
-    {{ template "base" . }}
-
-    [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia]
-      privileged_without_host_devices = false
-      runtime_engine = ""
-      runtime_root = ""
-      runtime_type = "io.containerd.runc.v2"
-    [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia.options]
-      BinaryName = "${pkgs.nvidia-container-toolkit.tools}/bin/nvidia-container-runtime"
-      SystemdCgroup = true
-  '';
 
   # virtualisation.oci-containers.compose.mediaserver.containers.subgen = {
   #   image = "docker.io/mccloud/subgen:cpu";

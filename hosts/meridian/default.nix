@@ -13,6 +13,7 @@
         self.nixosModules.hyprlock
         self.nixosModules.tailscale
         self.nixosModules.nix-builder
+        self.nixosModules.laptop-power-management
 
         ./configuration.nix
         ./hardware.nix

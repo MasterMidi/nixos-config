@@ -38,6 +38,4 @@
     device = "/dev/disk/by-uuid/d5ef45f8-c73d-4ea3-9da8-ac169d4eac74";
     fsType = "xfs";
   };
-
-  swapDevices = [ ];
 }

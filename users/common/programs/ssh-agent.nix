@@ -2,7 +2,6 @@
 {
   services.ssh-agent = {
     enable = true;
-    enableBashIntegration = true;
     # Keys live in the agent until the agent dies (reboot).
     # Combined with addKeysToAgent, you enter your passphrase once per boot.
     defaultMaximumIdentityLifetime = 8;

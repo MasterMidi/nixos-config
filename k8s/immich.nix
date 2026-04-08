@@ -2,7 +2,7 @@
 let
   app = "immich";
   namespace = "immich";
-  version = "v2.6.3";
+  version = "v2.7.2";
 
   imageServer = "ghcr.io/immich-app/immich-server:${version}";
   imageML = "ghcr.io/immich-app/immich-machine-learning:${version}-cuda";
@@ -233,7 +233,10 @@ in
               _namedlist = true;
               server = {
                 image = imageServer;
-                env = commonEnv;
+                env = {
+                  IMMICH_HELMET_FILE.value = "true";
+                }
+                // commonEnv;
                 ports = {
                   _namedlist = true;
                   http.containerPort = 2283;

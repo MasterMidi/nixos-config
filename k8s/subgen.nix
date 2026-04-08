@@ -27,6 +27,7 @@ in
         template = {
           metadata.labels = { inherit app; };
           spec = {
+            runtimeClassName = "nvidia";
             containers = lib.mkNamedList {
               ${app} = {
                 inherit image;

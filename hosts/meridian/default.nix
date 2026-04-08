@@ -38,6 +38,7 @@
             self.homeModules.k8s-cluster-administration
             self.homeModules.hyprland
             self.homeModules.hyprlock-meridian
+            self.homeModules.jujutsu
           ];
         }
       ];

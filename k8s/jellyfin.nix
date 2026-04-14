@@ -34,6 +34,7 @@ in
               ${app} = {
                 inherit image;
                 resources.limits."nvidia.com/gpu" = 1;
+                imagePullPolicy = "Always";
                 env = {
                   _namedlist = true;
                   PUID.value = PUID;

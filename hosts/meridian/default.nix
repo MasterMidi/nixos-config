@@ -18,7 +18,6 @@
 
         ./configuration.nix
         ./hardware.nix
-        ./power-management.nix
         ./system.nix
         ./user-interface.nix
 

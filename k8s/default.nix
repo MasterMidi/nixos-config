@@ -1,6 +1,7 @@
 { ... }:
 {
   imports = [
+    ./bazarr.nix
     ./bitmagnet.nix
     ./immich.nix
     ./jellyfin.nix
@@ -16,6 +17,7 @@
     ./radarr.nix
     ./seerr.nix
     ./sonarr.nix
+    ./subgen.nix
   ];
 
   kubernetes.resources.none.Namespace.media-stack = { };

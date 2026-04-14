@@ -1,7 +1,7 @@
 { self, ... }:
 {
   flake.nixosModules.laptop-power-management =
-    { config, lib, ... }:
+    { config, ... }:
     {
       imports = [ self.nixosModules.zswap ];
 
@@ -46,5 +46,25 @@
         # The delay before transitioning from suspend (RAM) to hibernate (Disk)
         HibernateDelaySec = 3600;
       };
+
+      powerManagement.cpuFreqGovernor = "schedutil";
+
+      services.auto-cpufreq = {
+        enable = false;
+        settings = {
+          battery = {
+            governor = "Powersave";
+            turbo = "never";
+          };
+          charger = {
+            governor = "performance";
+            turbo = "auto";
+          };
+        };
+      };
+
+      boot.extraModulePackages = [ config.boot.kernelPackages.acpi_call ];
+      services.acpid.enable = true;
+      services.tlp.enable = false;
     };
 }

@@ -5,11 +5,11 @@
     ./bitmagnet.nix
     ./immich.nix
     ./jellyfin.nix
-    # ./linkwarden.nix
+    # # ./linkwarden.nix
     ./longhorn.nix
     ./newt.nix
     ./nvidia-device-plugin.nix
-    ./obsidian-livesync.nix
+    # ./obsidian-livesync.nix
     ./pocketid.nix
     ./prowlarr.nix
     ./qbittorrent.nix

@@ -1,29 +1,15 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 {
   kubernetes.resources.longhorn-system = {
-    StorageClass.longhorn = {
-      metadata.annotations.storageclass."kubernetes.io/is-default-class" = true;
-      provisioner = "driver.longhorn.io";
-      allowVolumeExpansion = true;
-      reclaimPolicy = "Retain";
-      volumeBindingMode = "Immediate";
-      parameters = {
-        numberOfReplicas = "1";
-        dataLocality = "best-effort";
-        fsType = "xfs";
-        staleReplicaTimeout = "30";
-        disableRevisionCounter = "true";
-        unmapMarkSnapChainRemoved = "ignored";
-      };
-    };
-
     StorageClass.longhorn-static = {
-      metadata.annotations.storageclass."kubernetes.io/is-default-class" = true;
+      metadata.annotations.storageclass."kubernetes.io/is-default-class" = false;
       provisioner = "driver.longhorn.io";
       allowVolumeExpansion = true;
       reclaimPolicy = "Delete";
       volumeBindingMode = "Immediate";
       parameters = {
+        numberOfReplicas = "1";
+        backupTargetName = "hetzner";
         dataLocality = "best-effort";
         fsType = "xfs";
         staleReplicaTimeout = "30";
@@ -38,6 +24,7 @@
       volumeBindingMode = "Immediate";
       parameters = {
         numberOfReplicas = "1";
+        backupTargetName = "hetzner";
         dataLocality = "best-effort";
         fsType = "xfs";
         staleReplicaTimeout = "2880";
@@ -58,6 +45,22 @@
         "nodiratime" # Don't update directory access times
       ];
     };
+
+    Secret.hetzner-storagebox-cifs = {
+      stringData = {
+        CIFS_USERNAME = "u560578";
+        CIFS_PASSWORD = "{{ secrets.hetzner_storage_box_543132_password }}";
+      };
+    };
+
+    BackupTarget.hetzner = {
+      spec = {
+        backupTargetURL = "cifs://u560578.your-storagebox.de/backup";
+        credentialSecret =
+          config.kubernetes.resources.longhorn-system.Secret.hetzner-storagebox-cifs.metadata.name;
+        pollInterval = "5m0s";
+      };
+    };
   };
 
   helm.releases.longhorn = {
@@ -70,9 +73,22 @@
     };
 
     values = {
+      persistence = {
+        defaultClass = true;
+        defaultFsType = "xfs";
+        defaultClassReplicaCount = 1;
+        defaultDataLocality = "best-effort";
+        reclaimPolicy = "Retain";
+        volumeBindingMode = "Immediate";
+        disableRevisionCounter = "true";
+        unmapMarkSnapChainRemoved = "ignored";
+        backupTargetName = "hetzner";
+      };
+
       defaultSettings = {
         defaultReplicaCount = 1;
         replicaSoftAntiAffinity = true;
+        allowRecurringJobWhileVolumeDetached = true;
       };
     };
   };

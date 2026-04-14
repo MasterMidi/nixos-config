@@ -6,6 +6,7 @@
       programs.jujutsu = {
         enable = true;
         settings = {
+          user = { name = "Michael Andreas Graversen"; email = "home@michael-graversen.dk";};
           template-aliases."format_short_id(id)" = "id.shortest()";
         };
       };

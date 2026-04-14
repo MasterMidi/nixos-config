@@ -118,6 +118,7 @@ in
         template = {
           metadata.labels = { inherit app; };
           spec = {
+            resources.requests.cpu = "160m";
             containers = {
               _namedlist = true;
 

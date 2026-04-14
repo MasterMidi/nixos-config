@@ -47,6 +47,7 @@ in
               _namedlist = true;
               "net.ipv4.conf.all.src_valid_mark".value = "1";
             };
+            resources.requests.cpu = "100m";
             containers = {
               _namedlist = true;
               ${app} = {

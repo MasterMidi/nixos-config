@@ -9,7 +9,7 @@
     # # ./glance.nix
     # # ./gotify.nix
     # # ./homarr.nix
-    ./immich.nix
+    # ./immich.nix
     ./jdupes.nix
     # # ./jellyfin
     # # ./jellyseerr.nix

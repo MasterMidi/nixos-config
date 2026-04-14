@@ -4,7 +4,7 @@
     self.modules.nixos.compose
 
     # # ./autobrr.nix
-    ./bazarr.nix
+    # ./bazarr.nix
     # # ./bitmagnet.nix
     # # ./glance.nix
     # # ./gotify.nix

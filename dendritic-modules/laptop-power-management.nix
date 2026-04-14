@@ -11,25 +11,11 @@
       };
 
       boot = {
-        # Define kernel parameters for zswap and hibernation
         kernelParams = [
-          # WARNING: resume_offset is highly specific to the physical location of the swapfile on the disk.
-          # If this flake module is shared across multiple machines, this value MUST be moved to a host-specific file.
-          "resume_offset=24452618"
+          "resume=/dev/disk/by-uuid/b4a62dea-af21-4e0a-92cf-9f7645844568"
         ];
-
-        # The block device that contains the swapfile.
-        resumeDevice = config.fileSystems."/".device;
+        resumeDevice = "/dev/disk/by-uuid/b4a62dea-af21-4e0a-92cf-9f7645844568";
       };
-
-      # Physical swap file configuration
-      swapDevices = [
-        {
-          device = "/var/lib/swapfile";
-          size = 16 * 1024; # 16GB
-          options = [ "discard" ]; # Trims the swap file to improve SSD performance and longevity
-        }
-      ];
 
       powerManagement.enable = true;
       services.power-profiles-daemon.enable = true;

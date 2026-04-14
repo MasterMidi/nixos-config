@@ -1,7 +1,15 @@
 { ... }:
 {
   flake.nixosModules.k3s-node =
-    { ... }:
+    { pkgs, ... }:
+    let
+      flannelSubnetEnv = pkgs.writeText "flannel-subnet.env" ''
+        FLANNEL_NETWORK=10.42.0.0/16
+        FLANNEL_SUBNET=10.42.0.1/24
+        FLANNEL_MTU=1450
+        FLANNEL_IPMASQ=true
+      '';
+    in
     {
       networking.firewall.allowedTCPPorts = [
         6443 # k3s: required so that pods can reach the API server (running on port 6443 by default)
@@ -65,13 +73,8 @@
 
       # Flannel seems to be missing its subnet.env, envestigate why file is missing, but a workaround for now is to create it manually
       systemd.tmpfiles.rules = [
-        "d /run/flannel 0755 root root -"
+        "d /run/flannel 0755 root root - -"
+        "C /run/flannel/subnet.env 0644 root root - ${flannelSubnetEnv}"
       ];
-      # environment."/run/flannel/subnet.env".text = ''
-      # FLANNEL_NETWORK=10.240.0.0/16
-      # FLANNEL_SUBNET=10.240.0.1/24
-      # FLANNEL_MTU=1450
-      # FLANNEL_IPMASQ=true
-      # '';
     };
 }

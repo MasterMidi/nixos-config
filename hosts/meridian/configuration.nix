@@ -18,6 +18,7 @@
     (git.override { withLibsecret = true; })
     git-credential-manager
     whereami # easily find nix store path for executable
+    displaylink
   ];
 
   services.tailscale.enable = true;

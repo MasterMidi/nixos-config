@@ -41,16 +41,19 @@
 
   fileSystems."/var/lib/containers" = {
     device = "/mnt/ssd/containers";
+    fsType = "none";
     options = [ "bind" ];
   };
 
   fileSystems."/var/lib/rancher/k3s" = {
     device = "/mnt/ssd/k3s";
+    fsType = "none";
     options = [ "bind" ];
   };
 
   fileSystems."/var/lib/longhorn" = {
     device = "/mnt/ssd/appdata/longhorn";
+    fsType = "none";
     options = [ "bind" ];
   };
 }

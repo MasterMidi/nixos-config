@@ -8,9 +8,9 @@
     home.stateVersion = "23.11";
 
     home.packages = with pkgs; [
-      mkvtoolnix
-      subtitleedit
-      subtitlecomposer
+      # mkvtoolnix
+      # subtitleedit
+      # subtitlecomposer
 
       orca-slicer
     ];

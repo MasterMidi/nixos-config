@@ -2,7 +2,7 @@
 {
   imports = [
     ./discord
-    ./mpv
+    # ./mpv
     ./nautilus
     ./rofi
     ./vscodium

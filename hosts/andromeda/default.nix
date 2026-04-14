@@ -13,7 +13,7 @@
       modules = [
         self.nixosModules.k8s-longhorn
         self.nixosModules.k3s-node-server
-        self.nixosModules.k3s-gpu-nvidia
+        self.nixosModules.k3s-gpu-nvidia-andromeda
         self.nixosModules.tailscale
         self.nixosModules.nix-builder
 

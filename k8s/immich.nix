@@ -5,9 +5,56 @@ let
   version = "v2.7.2";
 
   imageServer = "ghcr.io/immich-app/immich-server:${version}";
-  imageML = "ghcr.io/immich-app/immich-machine-learning:${version}-cuda";
+  imageML = "ghcr.io/immich-app/immich-machine-learning:${version}";
   imageRedis = "docker.io/valkey/valkey:9@sha256:3eeb09785cd61ec8e3be35f8804c8892080f3ca21934d628abc24ee4ed1698f6";
   imagePostgres = "ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0@sha256:bcf63357191b76a916ae5eb93464d65c07511da41e3bf7a8416db519b40b1c23";
+
+  mkMLDaemonSet =
+    {
+      name,
+      imageType,
+      resourceName,
+      nodeLabel,
+    }:
+    {
+      spec = {
+        selector.matchLabels.app = "${app}-machine-learning";
+        template = {
+          metadata.labels = {
+            app = "${app}-machine-learning";
+            hardware = name;
+          };
+          spec = {
+            # Use the appropriate runtime (e.g., nvidia)
+            runtimeClassName = if name == "nvidia" then "nvidia" else null;
+
+            # Ensure pods only land on nodes with this hardware
+            nodeSelector."${nodeLabel}" = "true";
+
+            containers = {
+              _namedlist = true;
+              machine-learning = {
+                image = "${imageML}-${imageType}";
+                resources.limits."${resourceName}" = 1;
+                env = commonEnv;
+                ports = {
+                  _namedlist = true;
+                  http.containerPort = 3003;
+                };
+                volumeMounts = {
+                  _namedlist = true;
+                  model-cache.mountPath = "/cache";
+                };
+              };
+            };
+            volumes = {
+              _namedlist = true;
+              model-cache.persistentVolumeClaim.claimName = "${app}-model-cache";
+            };
+          };
+        };
+      };
+    };
 
   # Common Env Vars mapped from a typical Immich .env
   commonEnv = {
@@ -171,38 +218,11 @@ in
       };
     };
 
-    Deployment."${app}-machine-learning" = {
-      spec = {
-        replicas = 1;
-        strategy.type = "Recreate";
-        selector.matchLabels.app = "${app}-machine-learning";
-        template = {
-          metadata.labels.app = "${app}-machine-learning";
-          spec = {
-            runtimeClassName = "nvidia";
-            containers = {
-              _namedlist = true;
-              machine-learning = {
-                image = imageML;
-                resources.limits."nvidia.com/gpu" = 1;
-                env = commonEnv;
-                ports = {
-                  _namedlist = true;
-                  http.containerPort = 3003;
-                };
-                volumeMounts = {
-                  _namedlist = true;
-                  model-cache.mountPath = "/cache";
-                };
-              };
-            };
-            volumes = {
-              _namedlist = true;
-              model-cache.persistentVolumeClaim.claimName = "${app}-model-cache";
-            };
-          };
-        };
-      };
+    DaemonSet."${app}-ml-nvidia" = mkMLDaemonSet {
+      name = "nvidia";
+      imageType = "cuda";
+      resourceName = "nvidia.com/gpu";
+      nodeLabel = "nvidia.com/gpu.present"; # Or your specific K3s label
     };
 
     # ==========================================

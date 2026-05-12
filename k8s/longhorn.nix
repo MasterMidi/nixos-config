@@ -65,8 +65,8 @@
     chart = pkgs.fetchHelm {
       repo = "https://charts.longhorn.io";
       chart = "longhorn";
-      version = "1.11.1";
-      sha256 = "sha256-SNioTADFpERPgGtYU3R3simosglVHhORmATH1os1Q/s=";
+      version = "1.11.2";
+      sha256 = "sha256-5a2Kr2xSscWCP0fP+0zB1OCtY463tcTzgZNkoY5Mj1Y=";
     };
 
     values = {

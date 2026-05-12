@@ -40,6 +40,9 @@ in
                   PUID.value = PUID;
                   PGID.value = PGID;
                   TZ.value = TZ;
+
+                  # Return memory to system more aggresively
+                  MALLOC_TRIM_THRESHOLD_.value = "100000";
                 };
                 ports = {
                   _namedlist = true;

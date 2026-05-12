@@ -2,7 +2,7 @@
 let
   app = "immich";
   namespace = "immich";
-  version = "v2.7.2";
+  version = "v2.7.5";
 
   imageServer = "ghcr.io/immich-app/immich-server:${version}";
   imageML = "ghcr.io/immich-app/immich-machine-learning:${version}";

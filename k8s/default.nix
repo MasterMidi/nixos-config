@@ -1,6 +1,7 @@
 { ... }:
 {
   imports = [
+    ./autobrr.nix
     ./bazarr.nix
     ./bitmagnet.nix
     ./immich.nix

@@ -17,6 +17,7 @@
         self.nixosModules.lenovo-yoga-7-14ARH7-power-management
 
         ./configuration.nix
+        ./development.nix
         ./hardware.nix
         ./system.nix
         ./user-interface.nix

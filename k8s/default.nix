@@ -16,6 +16,7 @@
     ./qbittorrent.nix
     ./qui.nix
     ./radarr.nix
+    ./recyclarr.nix
     ./seerr.nix
     ./sonarr.nix
     ./subgen.nix

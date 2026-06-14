@@ -49,7 +49,7 @@ let
             };
             volumes = {
               _namedlist = true;
-              model-cache.persistentVolumeClaim.claimName = "${app}-model-cache";
+              model-cache.emptyDir.sizeLimit = "10Gi";
             };
           };
         };
@@ -97,14 +97,6 @@ in
         accessModes = [ "ReadWriteOnce" ];
         storageClassName = "longhorn";
         resources.requests.storage = "50Gi"; # Adjust based on your photo library size
-      };
-    };
-
-    PersistentVolumeClaim."${app}-model-cache" = {
-      spec = {
-        accessModes = [ "ReadWriteOnce" ];
-        storageClassName = "longhorn";
-        resources.requests.storage = "10Gi";
       };
     };
 

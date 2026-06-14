@@ -142,6 +142,19 @@
               # You can add more modules here
             ];
           };
+          validateScript = pkgs.writeShellScriptBin "validate" ''
+            exec ${lib.getExe eknBuild.validationScript} "$@"
+          '';
+          deployScript = pkgs.writeShellScriptBin "deploy-safe" ''
+            set -e # Exit immediately if validation fails
+
+            echo "🔍 Starting Pre-flight Validation..."
+            ${lib.getExe eknBuild.validationScript}
+
+            echo "✅ Validation successful!"
+            echo "🚀 Starting Deployment..."
+            exec ${lib.getExe eknBuild.deploymentScript} "$@"
+          '';
         in
         {
           packages.openthread-border-router = pkgs.callPackage ./pkgs/openthread-border-router { };
@@ -150,23 +163,12 @@
 
           apps.validate = {
             type = "app";
-            program = lib.getExe eknBuild.validationScript;
+            program = lib.getExe validateScript;
           };
 
           apps.deploy = {
             type = "app";
-            program = (
-              pkgs.writeShellScriptBin "deploy-safe" ''
-                set -e # Exit immediately if validation fails
-
-                echo "🔍 Starting Pre-flight Validation..."
-                ${lib.getExe eknBuild.validationScript}
-
-                echo "✅ Validation successful!"
-                echo "🚀 Starting Deployment..."
-                ${lib.getExe eknBuild.deploymentScript}
-              ''
-            );
+            program = lib.getExe deployScript;
           };
         };
 

@@ -1,7 +1,7 @@
 { ... }:
 let
   app = "pocket-id";
-  image = "ghcr.io/pocket-id/pocket-id:v2.3";
+  image = "ghcr.io/pocket-id/pocket-id:v2.8.0";
   port = 1411;
 in
 {

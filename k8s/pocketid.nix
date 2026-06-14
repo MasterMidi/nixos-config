@@ -13,6 +13,14 @@ in
       };
     };
 
+    PersistentVolumeClaim."${app}-data" = {
+      spec = {
+        accessModes = [ "ReadWriteOnce" ];
+        storageClassName = "longhorn-database";
+        resources.requests.storage = "1Gi";
+      };
+    };
+
     Service.${app} = {
       spec = {
         ports = {
@@ -74,10 +82,7 @@ in
 
             volumes = {
               _namedlist = true;
-              data.hostPath = {
-                path = "/mnt/ssd/appdata/pocket-id";
-                type = "DirectoryOrCreate";
-              };
+              data.persistentVolumeClaim.claimName = "${app}-data";
             };
           };
         };

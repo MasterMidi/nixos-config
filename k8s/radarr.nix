@@ -9,6 +9,14 @@ let
 in
 {
   kubernetes.resources.media-stack = {
+    PersistentVolumeClaim."${app}-config" = {
+      spec = {
+        accessModes = [ "ReadWriteOnce" ];
+        storageClassName = "longhorn-database";
+        resources.requests.storage = "2Gi";
+      };
+    };
+
     Service.${app} = {
       spec = {
         ports = {
@@ -71,10 +79,7 @@ in
             };
             volumes = {
               _namedlist = true;
-              config.hostPath = {
-                path = "/mnt/ssd/appdata/radarr";
-                type = "DirectoryOrCreate";
-              };
+              config.persistentVolumeClaim.claimName = "${app}-config";
               storage.hostPath = {
                 path = "/mnt/hdd";
                 type = "Directory";

@@ -61,6 +61,17 @@
         pollInterval = "5m0s";
       };
     };
+
+    RecurringJob.daily-backup = {
+      spec = {
+        cron = "0 3 * * *";
+        task = "backup";
+        groups = [ "hetzner-backup" ];
+        retain = 7;
+        concurrency = 1;
+        parameters.full-backup-interval = "7";
+      };
+    };
   };
 
   helm.releases.longhorn = {

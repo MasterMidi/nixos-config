@@ -9,6 +9,15 @@ in
         QUI_OIDC_CLIENT_SECRET = "{{ secrets.qui_oidc_client_secret }}";
       };
     };
+
+    PersistentVolumeClaim."${app}-config" = {
+      spec = {
+        accessModes = [ "ReadWriteOnce" ];
+        storageClassName = "longhorn-database";
+        resources.requests.storage = "2Gi";
+      };
+    };
+
     Service.${app} = {
       spec = {
         ports = {
@@ -58,10 +67,7 @@ in
             };
             volumes = {
               _namedlist = true;
-              config.hostPath = {
-                path = "/mnt/ssd/appdata/qui";
-                type = "DirectoryOrCreate";
-              };
+              config.persistentVolumeClaim.claimName = "${app}-config";
               storage.hostPath = {
                 path = "/mnt/hdd";
                 type = "DirectoryOrCreate";

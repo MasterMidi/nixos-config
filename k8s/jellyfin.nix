@@ -8,6 +8,13 @@ let
 in
 {
   kubernetes.resources.media-stack = rec {
+    PersistentVolumeClaim."${app}-config" = {
+      spec = {
+        accessModes = [ "ReadWriteOnce" ];
+        storageClassName = "longhorn-database";
+        resources.requests.storage = "100Gi";
+      };
+    };
     Service.${app} = {
       spec = {
         ports = {
@@ -43,6 +50,8 @@ in
 
                   # Return memory to system more aggresively
                   MALLOC_TRIM_THRESHOLD_.value = "100000";
+
+                  JELLYFIN_LOG_DIR.value = "/logs";
                 };
                 ports = {
                   _namedlist = true;
@@ -53,22 +62,20 @@ in
                   config.mountPath = "/config";
                   media.mountPath = "/storage/media";
                   transcodes.mountPath = "/transcodes";
+                  logs.mountPath = "/logs";
                 };
               };
             };
             volumes = {
               _namedlist = true;
-              config.hostPath = {
-                path = "/mnt/ssd/appdata/jellyfin/config";
-                type = "DirectoryOrCreate";
-              };
+              config.persistentVolumeClaim.claimName = "${app}-config";
               media.hostPath = {
                 path = "/mnt/hdd/media";
                 type = "Directory";
               };
-              transcodes.hostPath = {
-                path = "/mnt/ssd/appdata/jellyfin/transcodes";
-                type = "DirectoryOrCreate";
+              transcodes.emptyDir = { };
+              logs.emptyDir = {
+                sizeLimit = "100Mi";
               };
             };
           };

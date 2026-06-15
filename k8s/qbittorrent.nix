@@ -4,6 +4,14 @@ let
 in
 {
   kubernetes.resources.media-stack = rec {
+    PersistentVolumeClaim."${app}-config" = {
+      spec = {
+        accessModes = [ "ReadWriteOnce" ];
+        storageClassName = "longhorn";
+        resources.requests.storage = "500Mi";
+      };
+    };
+
     Service.${app} = {
       spec = {
         ports = {
@@ -105,10 +113,7 @@ in
             };
             volumes = {
               _namedlist = true;
-              config.hostPath = {
-                path = "/mnt/ssd/appdata/qbittorrent";
-                type = "DirectoryOrCreate";
-              };
+              config.persistentVolumeClaim.claimName = "${app}-config";
               storage.hostPath = {
                 path = "/mnt/hdd";
                 type = "Directory";

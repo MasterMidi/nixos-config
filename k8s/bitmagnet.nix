@@ -8,6 +8,13 @@ let
 in
 {
   kubernetes.resources.media-stack = {
+    PersistentVolumeClaim."${app}-postgres" = {
+      spec = {
+        accessModes = [ "ReadWriteOnce" ];
+        storageClassName = "longhorn-database";
+        resources.requests.storage = "200Gi";
+      };
+    };
     Secret."${app}-secret" = {
       stringData = {
         AIRVPN_WIREGUARD_PRIVATE_KEY = "{{ secrets.airvpn_wireguard_private_key }}";
@@ -94,10 +101,7 @@ in
             };
             volumes = {
               _namedlist = true;
-              data.hostPath = {
-                path = "/mnt/ssd/services/bitmagnet/data";
-                type = "DirectoryOrCreate";
-              };
+              data.persistentVolumeClaim.claimName = "${app}-postgres";
               shm.emptyDir = {
                 medium = "Memory";
                 sizeLimit = "1Gi";

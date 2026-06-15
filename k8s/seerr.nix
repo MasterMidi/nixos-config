@@ -1,6 +1,6 @@
 { ... }:
 let
-  app = "jellyseerr";
+  app = "seerr";
   image = "docker.io/fallenbagel/jellyseerr:preview-OIDC";
   PUID = "1000";
   PGID = "100";
@@ -8,6 +8,13 @@ let
 in
 {
   kubernetes.resources.media-stack = rec {
+    PersistentVolumeClaim."${app}-config" = {
+      spec = {
+        accessModes = [ "ReadWriteOnce" ];
+        storageClassName = "longhorn-database";
+        resources.requests.storage = "500Mi";
+      };
+    };
     Service.${app} = {
       spec = {
         ports = {
@@ -51,10 +58,7 @@ in
             };
             volumes = {
               _namedlist = true;
-              config.hostPath = {
-                path = "/mnt/ssd/appdata/jellyseerr";
-                type = "DirectoryOrCreate";
-              };
+              config.persistentVolumeClaim.claimName = "${app}-config";
             };
           };
         };

@@ -94,6 +94,8 @@
   outputs =
     inputs@{ flake-parts, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
+      debug = true; # needed for nixd options evaluation
+
       imports = [
         # Enable builtin and external modules
         inputs.flake-parts.flakeModules.flakeModules

@@ -1,0 +1,22 @@
+{
+	"lsp": {
+		"nixd": {
+			"settings": {
+				"options": {
+					"home-manager": {
+						"expr": "(builtins.getFlake (builtins.toString ./.)).nixosConfigurations.meridian.options.home-manager.users.type.getSubOptions []",
+					},
+					"nixos": {
+						"expr": "(builtins.getFlake (builtins.toString ./.)).nixosConfigurations.meridian.options",
+					},
+					"flake-parts": {
+						"expr": "(builtins.getFlake (builtins.toString ./.)).debug.options",
+					},
+					"flake-parts-current": {
+						"expr": "(builtins.getFlake (builtins.toString ./.)).currentSystem.options",
+					},
+				},
+			},
+		},
+	},
+}

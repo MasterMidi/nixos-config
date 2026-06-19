@@ -15,6 +15,7 @@
         self.nixosModules.nix-builder
         self.nixosModules.laptop-power-management
         self.nixosModules.lenovo-yoga-7-14ARH7-power-management
+        self.nixosModules.zed
 
         ./configuration.nix
         ./development.nix
@@ -40,6 +41,7 @@
             self.homeModules.hyprland
             self.homeModules.hyprlock-meridian
             self.homeModules.jujutsu
+            self.homeModules.zed
           ];
         }
       ];

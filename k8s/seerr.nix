@@ -1,7 +1,7 @@
 { ... }:
 let
   app = "seerr";
-  image = "docker.io/fallenbagel/jellyseerr:preview-OIDC";
+  image = "ghcr.io/seerr-team/seerr:preview-new-oidc";
   PUID = "1000";
   PGID = "100";
   TZ = "Europe/Copenhagen";

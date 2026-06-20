@@ -8,6 +8,7 @@
 {
   programs.firefox = {
     enable = true;
+    configPath = "${config.xdg.configHome}/mozilla/firefox"; # new default, after 26.05
     profiles.default = {
       name = "Default";
       path = "nix.default";
@@ -39,6 +40,7 @@
     };
   };
 
-  home.file.".mozilla/firefox/${config.programs.firefox.profiles.default.path}/chrome/firefox-gnome-theme".source =
+  home.file.".mozilla/native-messaging-hosts".enable = false;
+  home.file."${config.programs.firefox.configPath}/${config.programs.firefox.profiles.default.path}/chrome/firefox-gnome-theme".source =
     inputs.firefox-gnome-theme;
 }

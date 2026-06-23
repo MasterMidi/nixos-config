@@ -5,9 +5,67 @@ let
   PUID = "1000";
   PGID = "100";
   TZ = "Europe/Copenhagen";
+
+  jellyfinLogging = {
+    Serilog = {
+      Using = [
+        "Serilog.Sinks.Console"
+        "Serilog.Formatting.Compact"
+        "Serilog.Enrichers.Thread"
+      ];
+
+      MinimumLevel = {
+        Default = "Information";
+
+        Override = {
+          "Microsoft" = "Warning";
+          "Microsoft.AspNetCore" = "Warning";
+          "Microsoft.EntityFrameworkCore" = "Warning";
+          "Microsoft.Hosting.Lifetime" = "Information";
+          "System" = "Warning";
+          "System.Net.Http.HttpClient" = "Warning";
+
+          "Jellyfin" = "Information";
+          "MediaBrowser" = "Information";
+          "Emby.Server.Implementations" = "Information";
+
+          # Temporarily enable while debugging:
+          # "MediaBrowser.MediaEncoding" = "Debug";
+          # "Jellyfin.Api" = "Debug";
+          # "Jellyfin.Plugin.Dlna" = "Debug";
+          # "Jellyfin.Plugin.Webhook" = "Debug";
+        };
+      };
+
+      Enrich = [
+        "FromLogContext"
+        "WithThreadId"
+      ];
+
+      Properties = {
+        service = "jellyfin";
+        component = "media-server";
+        log_format = "serilog-rendered-compact-json";
+      };
+
+      WriteTo = [
+        {
+          Name = "Console";
+          Args = {
+            formatter = "Serilog.Formatting.Compact.RenderedCompactJsonFormatter, Serilog.Formatting.Compact";
+          };
+        }
+      ];
+    };
+  };
+
+  loggingJson = builtins.toJSON jellyfinLogging;
+  loggingHash = builtins.hashString "sha256" loggingJson;
 in
 {
   kubernetes.resources.media-stack = rec {
+    ConfigMap.jellyfin-logging.data."logging.json" = loggingJson;
+
     PersistentVolumeClaim."${app}-config" = {
       spec = {
         accessModes = [ "ReadWriteOnce" ];
@@ -34,6 +92,7 @@ in
         selector.matchLabels = { inherit app; };
         template = {
           metadata.labels = { inherit app; };
+          metadata.annotations."checksum/jellyfin-logging" = loggingHash;
           spec = {
             runtimeClassName = "nvidia";
             containers = {
@@ -52,6 +111,7 @@ in
                   MALLOC_TRIM_THRESHOLD_.value = "100000";
 
                   JELLYFIN_LOG_DIR.value = "/logs";
+                  JELLYFIN_CONFIG_DIR.value = "/config";
                 };
                 ports = {
                   _namedlist = true;
@@ -60,6 +120,10 @@ in
                 volumeMounts = {
                   _namedlist = true;
                   config.mountPath = "/config";
+                  jellyfin-logging = {
+                    mountPath = "/config/logging.json";
+                    subPath = "logging.json";
+                  };
                   media.mountPath = "/storage/media";
                   transcodes.mountPath = "/transcodes";
                   logs.mountPath = "/logs";
@@ -69,6 +133,7 @@ in
             volumes = {
               _namedlist = true;
               config.persistentVolumeClaim.claimName = "${app}-config";
+              jellyfin-logging.configMap.name = "jellyfin-logging";
               media.hostPath = {
                 path = "/mnt/hdd/media";
                 type = "Directory";

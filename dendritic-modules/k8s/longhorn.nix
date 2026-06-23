@@ -6,6 +6,7 @@
     {
       environment.systemPackages = with pkgs; [
         nfs-utils
+        util-linux
         xfsprogs
       ];
       services.openiscsi = {
@@ -17,6 +18,7 @@
         BindPaths = "/run/current-system/sw/bin:/bin";
       };
       systemd.tmpfiles.rules = [
+        "L /usr/bin/fstrim - - - - /run/current-system/sw/bin/fstrim"
         "L /usr/bin/mount - - - - /run/current-system/sw/bin/mount"
       ];
       boot.kernelModules = [ "dm_crypt" ];

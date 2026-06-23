@@ -12,7 +12,7 @@ in
       spec = {
         accessModes = [ "ReadWriteOnce" ];
         storageClassName = "longhorn-database";
-        resources.requests.storage = "200Mi";
+        resources.requests.storage = "500Mi";
       };
     };
     Service.${app} = {

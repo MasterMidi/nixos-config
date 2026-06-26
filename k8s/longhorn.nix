@@ -1,21 +1,14 @@
 { pkgs, config, ... }:
+let
+  hetznerRecurringJobSelector = [
+    {
+      name = "hetzner-backup";
+      isGroup = true;
+    }
+  ];
+in
 {
   kubernetes.resources.longhorn-system = {
-    StorageClass.longhorn-static = {
-      metadata.annotations.storageclass."kubernetes.io/is-default-class" = false;
-      provisioner = "driver.longhorn.io";
-      allowVolumeExpansion = true;
-      reclaimPolicy = "Delete";
-      volumeBindingMode = "Immediate";
-      parameters = {
-        numberOfReplicas = "1";
-        backupTargetName = "hetzner";
-        dataLocality = "best-effort";
-        fsType = "xfs";
-        staleReplicaTimeout = "30";
-      };
-    };
-
     StorageClass.longhorn-database = {
       metadata.annotations.storageclass."kubernetes.io/is-default-class" = false;
       provisioner = "driver.longhorn.io";
@@ -28,16 +21,11 @@
         dataLocality = "best-effort";
         fsType = "xfs";
         staleReplicaTimeout = "2880";
-        # fromBackup = "";
         diskSelector = "ssd,fast";
         # mkfsParams = "-I 256 -b 4096 -O ^metadata_csum,^64bit";
-        # backingImage = "bi-test";
-        # backingImageDataSourceType = "download";
-        # backingImageDataSourceParameters = "{\"url\": \"https://backing-image-example.s3-region.amazonaws.com/test-backing-image\"}";
-        # backingImageChecksum = "SHA512 checksum of the backing image";
-        # unmapMarkSnapChainRemoved = "ignored";
+        # unmapMarkSnapChainRemoved = "enabled";
         # nodeSelector = "storage,fast";
-        # recurringJobSelector = "[{\"name\":\"snap-group\", \"isGroup\":true}, {\"name\":\"backup\", \"isGroup\":false}]";
+        recurringJobSelector = builtins.toJSON hetznerRecurringJobSelector;
         # nfsOptions = "soft,timeo=150,retrans=3";
       };
       mountOptions = [
@@ -64,12 +52,30 @@
 
     RecurringJob.daily-backup = {
       spec = {
-        cron = "0 3 * * *";
+        cron = "0 23 * * *";
         task = "backup";
         groups = [ "hetzner-backup" ];
         retain = 7;
         concurrency = 1;
         parameters.full-backup-interval = "7";
+      };
+    };
+
+    RecurringJob.nightly-filesystem-trim = {
+      spec = {
+        cron = "0 7 * * *";
+        task = "filesystem-trim";
+        groups = [ "hetzner-backup" ];
+        concurrency = 1;
+      };
+    };
+
+    RecurringJob.prune-local-snapshots = {
+      spec = {
+        cron = "0 8 * * *";
+        task = "snapshot-cleanup";
+        groups = [ "hetzner-backup" ];
+        concurrency = 1;
       };
     };
   };
@@ -79,8 +85,8 @@
     chart = pkgs.fetchHelm {
       repo = "https://charts.longhorn.io";
       chart = "longhorn";
-      version = "1.11.2";
-      sha256 = "sha256-5a2Kr2xSscWCP0fP+0zB1OCtY463tcTzgZNkoY5Mj1Y=";
+      version = "1.12.0";
+      sha256 = "sha256-42GDSNepI7dkqyuVVh8DPwlUqcTEFRMUYg1qz6ZH7/E=";
     };
 
     values = {
@@ -92,8 +98,12 @@
         reclaimPolicy = "Retain";
         volumeBindingMode = "Immediate";
         disableRevisionCounter = "true";
-        unmapMarkSnapChainRemoved = "ignored";
+        unmapMarkSnapChainRemoved = "enabled";
         backupTargetName = "hetzner";
+        recurringJobSelector = {
+          enable = true;
+          jobList = hetznerRecurringJobSelector;
+        };
       };
 
       defaultSettings = {

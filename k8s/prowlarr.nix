@@ -10,7 +10,7 @@ in
   kubernetes.resources.media-stack = rec {
     PersistentVolumeClaim."${app}-config" = {
       spec = {
-        accessModes = [ "ReadWriteOnce" ];
+        accessModes = [ "ReadWriteOncePod" ];
         storageClassName = "longhorn-database";
         resources.requests.storage = "500Mi";
       };

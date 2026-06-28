@@ -25,7 +25,6 @@
     ./qbit
     # # ./radarr.nix
     # # ./recyclarr.nix
-    # # ./scrutiny.nix
     ./searxng.nix
     # # ./sonarr.nix
     # # ./sterling-pdf.nix

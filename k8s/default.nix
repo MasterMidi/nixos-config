@@ -17,6 +17,7 @@
     ./qui.nix
     ./radarr.nix
     ./recyclarr.nix
+    ./scrutiny.nix
     ./seerr.nix
     ./sonarr.nix
     ./subgen.nix

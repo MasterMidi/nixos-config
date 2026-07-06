@@ -3,15 +3,27 @@
 // Example:
 [
 	{
-		"label": "Nixos: switch",
+		"label": "NixOS: switch",
 		"command": "nh os switch -- --impure",
 		"env": { "NIXPKGS_ALLOW_INSECURE": "1" },
 		"save": "all",
 		"reveal_target": "dock",
 	},
 	{
+		"label": "NixOS: deploy",
+		"command": "nix develop -c deploy -s .#andromeda",
+		"save": "all",
+		"reveal_target": "dock",
+	},
+	{
 		"label": "K8S: deploy",
 		"command": "nix run .#deploy -- -y",
+		"save": "all",
+		"reveal_target": "dock",
+	},
+	{
+		"label": "NixOS: update",
+		"command": "nix flake update",
 		"save": "all",
 		"reveal_target": "dock",
 	},

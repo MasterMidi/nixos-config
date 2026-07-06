@@ -197,7 +197,7 @@
 
           dwindle = {
             # See https://wiki.hyprland.org/Configuring/Dwindle-Layout/ for more
-            pseudotile = "yes"; # master switch for pseudotiling. Enabling is bound to mainMod + P in the keybinds section below
+            # pseudotile = "yes"; # master switch for pseudotiling. Enabling is bound to mainMod + P in the keybinds section below
             preserve_split = "yes"; # you probably want this
           };
 
@@ -211,7 +211,6 @@
           misc = {
             # See https://wiki.hyprland.org/Configuring/Variables/ for more
             force_default_wallpaper = 0; # Set to 0 to disable the anime mascot wallpapers
-            vfr = true;
             focus_on_activate = true;
           };
 
@@ -250,7 +249,7 @@
             "${mainMod}, C, killactive," # Close current window
             "${mainMod}, F, togglefloating," # Toggle floating mode
             "${mainMod}, P, pseudo," # dwindle
-            "${mainMod}, J, togglesplit," # dwindle
+            "${mainMod}, J, layoutmsg, togglesplit," # dwindle
             "${mainMod}, left, movefocus, l"
             "${mainMod}, right, movefocus, r"
             "${mainMod}, up, movefocus, u"

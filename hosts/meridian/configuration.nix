@@ -56,4 +56,7 @@
   # virtualization
   boot.kernelModules = [ "kvm-amd" ];
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+
+  virtualisation.docker.enable = true;
+  virtualisation.docker.storageDriver = "overlay2";
 }

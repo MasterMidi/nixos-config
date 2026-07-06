@@ -2,11 +2,11 @@
 let
   app = "immich";
   namespace = "immich";
-  version = "v2.7.5";
+  version = "v3.0.2";
 
   imageServer = "ghcr.io/immich-app/immich-server:${version}";
   imageML = "ghcr.io/immich-app/immich-machine-learning:${version}";
-  imageRedis = "docker.io/valkey/valkey:9@sha256:3eeb09785cd61ec8e3be35f8804c8892080f3ca21934d628abc24ee4ed1698f6";
+  imageRedis = "docker.io/valkey/valkey:9@sha256:4963247afc4cd33c7d3b2d2816b9f7f8eeebab148d29056c2ca4d7cbc966f2d9";
   imagePostgres = "ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0@sha256:bcf63357191b76a916ae5eb93464d65c07511da41e3bf7a8416db519b40b1c23";
 
   mkMLDaemonSet =

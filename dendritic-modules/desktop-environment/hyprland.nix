@@ -93,7 +93,7 @@
             echo -e "$TMP_ADDRESS" | sed -e '/^$/d' > "$TMP_FILE-$CURRENT_WORKSPACE"
           fi
         '';
-        # List runtime dependencies. Their 'bin' directories will be added to the script's PATH.
+        # List runtime dependencies. Their 'bin' directories will be added to the script's PATH.bumper-flake-module
         runtimeInputs = [
           pkgs.hyprland
           pkgs.jq

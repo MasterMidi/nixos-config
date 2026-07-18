@@ -1,6 +1,7 @@
 { ... }:
 {
   imports = [
+    ./alloy.nix
     ./autobrr.nix
     ./bazarr.nix
     ./bitmagnet.nix

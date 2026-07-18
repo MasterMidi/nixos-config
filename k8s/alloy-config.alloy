@@ -1,0 +1,129 @@
+// Alloy configurations form a graph: components expose outputs such as
+// "targets" or "receiver", and references connect those outputs together.
+
+// Watch the Kubernetes API for Jellyfin pod containers. This discovers pod
+// metadata only; loki.source.kubernetes below opens the actual log streams.
+discovery.kubernetes "jellyfin" {
+	role = "pod"
+
+	// Limit the Kubernetes watch to the namespace containing Jellyfin.
+	namespaces {
+		names = ["media-stack"]
+	}
+
+	// Apply this label selector in the Kubernetes API to avoid discovering
+	// unrelated pods in media-stack.
+	selectors {
+		role  = "pod"
+		label = "app=jellyfin"
+	}
+}
+
+// Filter the discovered targets and turn temporary Kubernetes __meta labels
+// into normal labels that remain attached to each collected log entry.
+discovery.relabel "jellyfin" {
+	targets = discovery.kubernetes.jellyfin.targets
+
+	// A pod may have init containers or sidecars. Keep only Jellyfin itself.
+	rule {
+		action        = "keep"
+		source_labels = ["__meta_kubernetes_pod_container_name"]
+		regex         = "jellyfin"
+	}
+
+	// Copy useful Kubernetes metadata to labels with shorter names.
+	rule {
+		source_labels = ["__meta_kubernetes_namespace"]
+		target_label  = "namespace"
+	}
+
+	// Pod names change on every Deployment rollout. Keeping this label makes it
+	// easy to identify a replica, but creates a new Loki stream for each pod.
+	rule {
+		source_labels = ["__meta_kubernetes_pod_name"]
+		target_label  = "pod"
+	}
+
+	rule {
+		source_labels = ["__meta_kubernetes_pod_container_name"]
+		target_label  = "container"
+	}
+
+	// Add stable labels that do not come from Kubernetes discovery metadata.
+	rule {
+		target_label = "app"
+		replacement  = "jellyfin"
+	}
+
+	rule {
+		target_label = "job"
+		replacement  = "media-stack/jellyfin"
+	}
+}
+
+// Tail the selected container stdout/stderr streams through the Kubernetes
+// pods/log API. No host log mount or privileged Alloy container is required.
+loki.source.kubernetes "jellyfin" {
+	targets    = discovery.relabel.jellyfin.output
+	forward_to = [loki.process.jellyfin.receiver]
+}
+
+// Parse and enrich every Jellyfin entry before forwarding it to a destination.
+loki.process "jellyfin" {
+	forward_to = [loki.echo.jellyfin.receiver]
+
+	// Parse the JSON line and place selected fields in Alloy's extracted-values
+	// map. This does not rewrite the original JSON log line.
+	stage.json {
+		expressions = {
+			timestamp         = "timestamp",
+			level             = "level",
+			template_hash     = "templateHash",
+			source            = "source",
+			thread_id         = "threadId",
+			trace_id          = "traceId",
+			span_id           = "spanId",
+			service           = "properties.service",
+			component         = "properties.component",
+			dotnet_event_id   = "properties.EventId.Id",
+			dotnet_event_name = "properties.EventId.Name",
+		}
+	}
+
+	// Use Jellyfin's event time instead of the time at which Alloy received the
+	// line. Invalid or absent timestamps retain the collection timestamp.
+	stage.timestamp {
+		source            = "timestamp"
+		format            = "RFC3339Nano"
+		action_on_failure = "skip"
+	}
+
+	// Loki indexes labels, so only promote bounded, frequently queried fields.
+	// Avoid putting trace IDs, thread IDs, or arbitrary properties here.
+	stage.labels {
+		values = {
+			level     = "",
+			service   = "",
+			component = "",
+		}
+	}
+
+	// Structured metadata remains searchable with each entry without creating a
+	// separate indexed stream for every high-cardinality value.
+	stage.structured_metadata {
+		values = {
+			template_hash     = "",
+			source            = "",
+			thread_id         = "",
+			trace_id          = "",
+			span_id           = "",
+			dotnet_event_id   = "",
+			dotnet_event_name = "",
+		}
+	}
+}
+
+// Debug-only destination: write processed entries to the Alloy container's
+// stdout. This provides no persistence or querying and should eventually be
+// replaced with a loki.write component.
+loki.echo "jellyfin" { }

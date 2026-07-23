@@ -13,8 +13,7 @@
       alloy.configMap.content = builtins.readFile ./alloy-config.alloy;
 
       controller = {
-        type = "deployment";
-        replicas = 1;
+        type = "daemonset";
       };
 
       crds.create = false;

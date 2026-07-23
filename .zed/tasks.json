@@ -17,7 +17,7 @@
 	},
 	{
 		"label": "K8S: deploy",
-		"command": "nix run .#deploy -- -y",
+		"command": "nix run .#deploy -- -y --prune",
 		"save": "all",
 		"reveal_target": "dock",
 	},

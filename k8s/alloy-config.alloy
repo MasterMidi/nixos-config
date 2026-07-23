@@ -3,37 +3,23 @@
 
 // Watch the Kubernetes API for Jellyfin pod containers. This discovers pod
 // metadata only; loki.source.kubernetes below opens the actual log streams.
-discovery.kubernetes "jellyfin" {
-	role = "pod"
-
-	// Limit the Kubernetes watch to the namespace containing Jellyfin.
-	namespaces {
-		names = ["media-stack"]
-	}
-
-	// Apply this label selector in the Kubernetes API to avoid discovering
-	// unrelated pods in media-stack.
-	selectors {
-		role  = "pod"
-		label = "app=jellyfin"
-	}
+discovery.kubernetes "k8s_pods" {
+  role = "pod"
+  selectors {
+    role = "pod"
+    field = "spec.nodeName=" + coalesce(sys.env("HOSTNAME"), constants.hostname)
+  }
 }
 
 // Filter the discovered targets and turn temporary Kubernetes __meta labels
 // into normal labels that remain attached to each collected log entry.
-discovery.relabel "jellyfin" {
-	targets = discovery.kubernetes.jellyfin.targets
-
-	// A pod may have init containers or sidecars. Keep only Jellyfin itself.
-	rule {
-		action        = "keep"
-		source_labels = ["__meta_kubernetes_pod_container_name"]
-		regex         = "jellyfin"
-	}
+discovery.relabel "pod_logs" {
+	targets = discovery.kubernetes.k8s_pods.targets
 
 	// Copy useful Kubernetes metadata to labels with shorter names.
 	rule {
 		source_labels = ["__meta_kubernetes_namespace"]
+		action = "replace"
 		target_label  = "namespace"
 	}
 
@@ -41,23 +27,36 @@ discovery.relabel "jellyfin" {
 	// easy to identify a replica, but creates a new Loki stream for each pod.
 	rule {
 		source_labels = ["__meta_kubernetes_pod_name"]
+		action = "replace"
 		target_label  = "pod"
 	}
 
 	rule {
 		source_labels = ["__meta_kubernetes_pod_container_name"]
+		action = "replace"
 		target_label  = "container"
 	}
 
-	// Add stable labels that do not come from Kubernetes discovery metadata.
 	rule {
-		target_label = "app"
-		replacement  = "jellyfin"
-	}
+    source_labels = ["__meta_kubernetes_pod_label_app_kubernetes_io_name"]
+    action = "replace"
+    target_label = "app"
+  }
 
+	// rule {
+	// 	target_label = "job"
+	// 	replacement  = "media-stack/jellyfin"
+	// }
+}
+
+discovery.relabel "jellyfin" {
+	targets = discovery.relabel.pod_logs.output
+
+	// A pod may have init containers or sidecars. Keep only Jellyfin itself.
 	rule {
-		target_label = "job"
-		replacement  = "media-stack/jellyfin"
+		source_labels = ["__meta_kubernetes_pod_container_name"]
+		regex         = "jellyfin"
+		action        = "keep"
 	}
 }
 
@@ -70,7 +69,6 @@ loki.source.kubernetes "jellyfin" {
 
 // Parse and enrich every Jellyfin entry before forwarding it to a destination.
 loki.process "jellyfin" {
-	forward_to = [loki.echo.jellyfin.receiver]
 
 	// Parse the JSON line and place selected fields in Alloy's extracted-values
 	// map. This does not rewrite the original JSON log line.

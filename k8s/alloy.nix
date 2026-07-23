@@ -20,11 +20,12 @@
       crds.create = false;
 
       rbac = {
-        namespaces = [ "media-stack" ];
+        # namespaces = [ "media-stack" ];
         rules = [
           {
             apiGroups = [ "" ];
             resources = [
+              "events"
               "pods"
               "pods/log"
             ];

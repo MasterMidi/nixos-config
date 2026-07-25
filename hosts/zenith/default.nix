@@ -11,6 +11,7 @@
         # self.nixosModules.k3s-node-agent
         self.nixosModules.hyprland
         self.nixosModules.tailscale
+        self.nixosModules.zed
 
         ./services
         ./configuration.nix
@@ -40,6 +41,8 @@
           home-manager.users.michael.imports = [
             self.homeModules.k8s-cluster-administration
             self.homeModules.hyprland
+            self.homeModules.jujutsu
+            self.homeModules.zed
           ];
         }
       ];

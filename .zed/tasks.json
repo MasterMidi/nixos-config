@@ -10,8 +10,14 @@
 		"reveal_target": "dock",
 	},
 	{
-		"label": "NixOS: deploy",
+		"label": "NixOS: deploy - Andromeda",
 		"command": "nix develop -c deploy -s .#andromeda",
+		"save": "all",
+		"reveal_target": "dock",
+	},
+	{
+		"label": "NixOS: deploy - Zenith",
+		"command": "nix develop -c deploy -s .#zenith",
 		"save": "all",
 		"reveal_target": "dock",
 	},

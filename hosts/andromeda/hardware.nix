@@ -56,4 +56,17 @@
     fsType = "none";
     options = [ "bind" ];
   };
+
+  fileSystems."/mnt/longhorn" = {
+    device = "/dev/disk/by-label/LHNVME";
+    fsType = "xfs";
+    options = [
+      "noatime"
+    ];
+  };
+
+  systemd.services.k3s = {
+    after = [ "mnt-longhorn.mount" ];
+    requires = [ "mnt-longhorn.mount" ];
+  };
 }

@@ -17,8 +17,8 @@ in
     };
     Secret."${app}-secret" = {
       stringData = {
-        AIRVPN_WIREGUARD_PRIVATE_KEY = "{{ secrets.airvpn_wireguard_private_key }}";
-        AIRVPN_WIREGUARD_PRESHARED_KEY = "{{ secrets.airvpn_wireguard_preshared_key }}";
+        AIRVPN_WIREGUARD_PRIVATE_KEY = "{{ secrets.airvpn_bitmagnet_wg_private_key }}";
+        AIRVPN_WIREGUARD_PRESHARED_KEY = "{{ secrets.airvpn_bitmagnet_wg_preshared_key }}";
         POSTGRES_PASSWORD = "{{ secrets.bitmagnet_postgres_password }}";
         TMDB_API_KEY = "{{ secrets.tmdb_api_key }}";
       };
@@ -31,11 +31,6 @@ in
           webui = {
             port = webuiPort;
             targetPort = webuiPort;
-          };
-          crawler-tcp = {
-            port = dhtPort;
-            targetPort = dhtPort;
-            protocol = "TCP";
           };
           crawler-udp = {
             port = dhtPort;
@@ -137,7 +132,7 @@ in
                   FIREWALL_VPN_INPUT_PORTS.value = toString dhtPort;
                   VPN_SERVICE_PROVIDER.value = "airvpn";
                   VPN_TYPE.value = "wireguard";
-                  WIREGUARD_ADDRESSES.value = "10.142.244.184/32,fd7d:76ee:e68f:a993:77f5:2a70:242b:6a1a/128";
+                  WIREGUARD_ADDRESSES.value = "10.159.34.147/32,fd7d:76ee:e68f:a993:5c6b:e440:73d6:daef/128";
                   SERVER_REGIONS.value = "Europe";
                   DNS_KEEP_NAMESERVER.value = "on";
                   FIREWALL_OUTBOUND_SUBNETS.value = "10.42.0.0/16,10.43.0.0/16,192.168.1.0/24";
@@ -153,10 +148,6 @@ in
                 ports = {
                   _namedlist = true;
                   webui.containerPort = webuiPort;
-                  dht-tcp = {
-                    containerPort = dhtPort;
-                    protocol = "TCP";
-                  };
                   dht-udp = {
                     containerPort = dhtPort;
                     protocol = "UDP";

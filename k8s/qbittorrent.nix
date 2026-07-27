@@ -81,6 +81,12 @@ in
                   VPN_KEEP_LOCAL_DNS.value = "true";
                   VPN_FIREWALL_TYPE.value = "auto";
                   VPN_HEALTHCHECK_ENABLED.value = "false";
+                  
+                  # AirVPN manually allocated forwarded port
+                  VPN_AUTO_PORT_FORWARD.value = "37461";
+                  
+                  # Expose the qBittorrent listening port through wg0
+                  VPN_PORT_REDIRECTS.value = "37461/tcp,37461/udp";
                 };
                 ports = {
                   _namedlist = true;

@@ -22,6 +22,7 @@
     ./seerr.nix
     ./sonarr.nix
     ./subgen.nix
+    ./trek.nix
   ];
 
   kubernetes.resources.none.Namespace.media-stack = { };

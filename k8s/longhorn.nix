@@ -91,7 +91,7 @@ in
 
     values = {
       persistence = {
-        defaultClass = true;
+        defaultClass = false;
         defaultFsType = "xfs";
         defaultClassReplicaCount = 1;
         defaultDataLocality = "best-effort";
@@ -102,7 +102,7 @@ in
         backupTargetName = "hetzner";
         recurringJobSelector = {
           enable = true;
-          jobList = hetznerRecurringJobSelector;
+          jobList = builtins.toJSON hetznerRecurringJobSelector;
         };
       };
 

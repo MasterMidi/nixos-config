@@ -19,6 +19,7 @@
     git-credential-manager
     whereami # easily find nix store path for executable
     displaylink
+    jellyfin-desktop
   ];
 
   services.tailscale.enable = true;

@@ -28,6 +28,12 @@
 		"reveal_target": "dock",
 	},
 	{
+		"label": "K8S: validate",
+		"command": "nix run .#validate",
+		"save": "all",
+		"reveal_target": "dock",
+	},
+	{
 		"label": "NixOS: update",
 		"command": "nix flake update",
 		"save": "all",

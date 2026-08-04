@@ -5,6 +5,7 @@
     ./autobrr.nix
     ./bazarr.nix
     ./bitmagnet.nix
+    ./dawarich.nix
     ./immich.nix
     ./jellyfin.nix
     # # ./linkwarden.nix

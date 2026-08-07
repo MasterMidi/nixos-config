@@ -11,6 +11,8 @@
         inherit inputs self;
       };
       modules = [
+        self.nixosModules.tailscale
+        
         ./configuration.nix
         ./containers
         ./secrets
@@ -20,7 +22,7 @@
         ../../profiles/common.nix
         ../../profiles/nix.nix
         ../../profiles/secrets.nix
-        ../../profiles/vpn.nix
+        # ../../profiles/vpn.nix
 
         # Users
         ../../users/root/common.nix

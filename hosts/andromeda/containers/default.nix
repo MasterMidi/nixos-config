@@ -10,17 +10,17 @@
     # # ./gotify.nix
     # # ./homarr.nix
     # ./immich.nix
-    ./jdupes.nix
+    # ./jdupes.nix
     # # ./jellyfin
     # # ./jellyseerr.nix
     # # ./karakeep.nix
     # ./mealie.nix
     ./newt.nix
     # # ./open-webui.nix
-    ./paperless.nix
+    # ./paperless.nix
     # # ./penpot.nix
     # # ./pocketid.nix
-    ./prefetcher.nix
+    # ./prefetcher.nix
     # # ./prowlarr.nix
     ./qbit
     # # ./radarr.nix

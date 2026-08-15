@@ -152,7 +152,11 @@ in
                 path = "/mnt/hdd/media";
                 type = "Directory";
               };
-              transcodes.emptyDir = { };
+              transcodes.ephemeral.volumeClaimTemplate.spec = {
+                accessModes = [ "ReadWriteOnce" ];
+                storageClassName = "local-path";
+                resources.requests.storage = "50Gi";
+              };
               logs.emptyDir = {
                 sizeLimit = "100Mi";
               };

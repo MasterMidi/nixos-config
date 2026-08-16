@@ -13,6 +13,7 @@
     ./newt.nix
     ./nvidia-device-plugin.nix
     # ./obsidian-livesync.nix
+    ./paperless.nix
     ./pocketid.nix
     ./prowlarr.nix
     ./qbittorrent.nix

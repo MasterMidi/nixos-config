@@ -17,7 +17,6 @@
     # ./mealie.nix
     ./newt.nix
     # # ./open-webui.nix
-    # ./paperless.nix
     # # ./penpot.nix
     # # ./pocketid.nix
     # ./prefetcher.nix

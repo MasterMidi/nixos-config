@@ -60,4 +60,6 @@
 
   virtualisation.docker.enable = true;
   virtualisation.docker.storageDriver = "overlay2";
+
+  users.users.michael.extraGroups = [ "dialout" ];
 }

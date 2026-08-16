@@ -100,10 +100,6 @@
         owner = config.users.users.michael.name;
         group = config.users.groups.users.name;
       };
-      PAPERLESS_POCKETID_CLIENT_SECRET = {
-        owner = config.users.users.michael.name;
-        group = config.users.groups.users.name;
-      };
       PREFETCHARR_JELLYFIN_API_KEY = {
         owner = config.users.users.michael.name;
         group = config.users.groups.users.name;

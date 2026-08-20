@@ -25,6 +25,7 @@
         {
           home-manager.users.michael.imports = [
             self.homeModules.k8s-cluster-administration
+            self.homeModules.opencode
           ];
         }
       ];

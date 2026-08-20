@@ -42,6 +42,7 @@
             self.homeModules.k8s-cluster-administration
             self.homeModules.hyprland
             self.homeModules.jujutsu
+            self.homeModules.opencode
             self.homeModules.zed
           ];
         }

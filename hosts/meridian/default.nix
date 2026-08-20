@@ -41,6 +41,7 @@
             self.homeModules.hyprland
             self.homeModules.hyprlock-meridian
             self.homeModules.jujutsu
+            self.homeModules.opencode
             self.homeModules.zed
           ];
         }

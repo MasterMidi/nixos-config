@@ -19,6 +19,7 @@
         ./gaming.nix
         ./graphical.nix
         ./hardware.nix
+        self.nixosModules.facter
         ./security.nix
         ./sound.nix
         ./system.nix

@@ -19,6 +19,7 @@
 
         ./configuration.nix
         ./development.nix
+        self.nixosModules.facter
         ./hardware.nix
         ./system.nix
         ./user-interface.nix

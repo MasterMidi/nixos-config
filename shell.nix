@@ -131,6 +131,11 @@
               echo "✅ All secrets updated successfully!"
             '';
           };
+          facter-updater = {
+            command = ''
+              ssh root@andromeda 'nix run github:nix-community/nixos-facter/v0.4.4' > /etc/nixos/dendritic-modules/facter/reports/andromeda-facter.json
+            '';
+          };
         };
       };
     };

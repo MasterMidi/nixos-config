@@ -1,14 +1,9 @@
 {
-  inputs,
   lib,
   config,
   ...
 }:
 {
-  imports = [ inputs.nixos-facter-modules.nixosModules.facter ];
-
-  facter.reportPath = ./facter.json;
-
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
   boot.initrd.availableKernelModules = [

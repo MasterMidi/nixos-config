@@ -53,7 +53,6 @@
 
     # modules
     nixos-hardware.url = "github:NixOS/nixos-hardware/master"; # Hardware specific setup modules
-    nixos-facter-modules.url = "github:numtide/nixos-facter-modules"; # Alternativ to nix hardware-configuration
     disko = {
       # Declarative disk configuration
       url = "github:nix-community/disko";

@@ -1,11 +1,5 @@
-{ inputs, ... }:
+{ ... }:
 {
-  imports = [
-    inputs.nixos-facter-modules.nixosModules.facter
-  ];
-
-  facter.reportPath = ./facter.json;
-
   hardware.logitech.wireless = {
     enable = true;
     enableGraphical = true;

@@ -19,6 +19,7 @@
 
         ./configuration.nix
         ./containers
+        self.nixosModules.facter
         ./hardware.nix
         ./secrets
         ./home-assistant.nix

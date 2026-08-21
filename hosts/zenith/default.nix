@@ -32,7 +32,7 @@
         ../../profiles/nix.nix
         ../../profiles/secrets.nix
         ../../profiles/sound.nix
-        ../../profiles/splash-screen.nix
+        self.nixosModules.boot-splash-screen
 
         # Users
         ../../users/root/common.nix

@@ -29,7 +29,9 @@
         ../../profiles/mdns.nix
         ../../profiles/nix.nix
         ../../profiles/secrets.nix
-        ../../profiles/sound.nix
+        self.nixosModules.bluetooth
+        self.nixosModules.sound
+        self.nixosModules.sound-wh-1000xm3
         self.nixosModules.boot-splash-screen
 
         # Users

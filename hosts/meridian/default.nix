@@ -27,7 +27,7 @@
         # profiles
         ../../profiles/common.nix
         ../../profiles/bare-metal.nix
-        ../../profiles/mdns.nix
+        self.nixosModules.avahi
         self.nixosModules.nix-interactive-machine
         self.nixosModules.sops
         self.nixosModules.bluetooth

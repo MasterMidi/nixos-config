@@ -26,7 +26,7 @@
 
         # profiles
         ../../profiles/common.nix
-        ../../profiles/bare-metal.nix
+        self.nixosModules.fw-updates
         self.nixosModules.avahi
         self.nixosModules.nix
         self.nixosModules.sops

@@ -27,7 +27,7 @@
 
         # profiles
         ../../profiles/common.nix
-        ../../profiles/bare-metal.nix
+        self.nixosModules.fw-updates
         self.nixosModules.avahi
         ../../profiles/monitor-control.nix
         self.nixosModules.nix-interactive-machine

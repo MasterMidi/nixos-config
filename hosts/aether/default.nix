@@ -12,7 +12,7 @@
       };
       modules = [
         self.nixosModules.tailscale
-        
+
         ./configuration.nix
         ./containers
         ./secrets
@@ -21,7 +21,7 @@
         # profiles
         ../../profiles/common.nix
         ../../profiles/nix.nix
-        ../../profiles/secrets.nix
+        self.nixosModules.sops
         # ../../profiles/vpn.nix
 
         # Users

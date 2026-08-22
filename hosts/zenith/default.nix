@@ -31,7 +31,7 @@
         ../../profiles/mdns.nix
         ../../profiles/monitor-control.nix
         ../../profiles/nix.nix
-        ../../profiles/secrets.nix
+        self.nixosModules.sops
         self.nixosModules.bluetooth
         self.nixosModules.sound
         self.nixosModules.sound-wh-1000xm3

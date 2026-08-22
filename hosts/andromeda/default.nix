@@ -29,7 +29,7 @@
         ../../profiles/bare-metal.nix
         ../../profiles/mdns.nix
         ../../profiles/nix.nix
-        ../../profiles/secrets.nix
+        self.nixosModules.sops
 
         # Users
         ../../users/root/common.nix

@@ -19,6 +19,7 @@
 
         ./configuration.nix
         ./development.nix
+        ./disko.nix
         self.nixosModules.facter
         ./hardware.nix
         ./system.nix
@@ -50,6 +51,5 @@
         }
       ];
     };
-    # diskoConfigurations = import ./disko.nix;
   };
 }

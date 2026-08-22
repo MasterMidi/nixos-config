@@ -28,7 +28,7 @@
         ../../profiles/common.nix
         ../../profiles/bare-metal.nix
         ../../profiles/mdns.nix
-        ../../profiles/nix.nix
+        self.nixosModules.nix-interactive-machine
         self.nixosModules.sops
         self.nixosModules.bluetooth
         self.nixosModules.sound

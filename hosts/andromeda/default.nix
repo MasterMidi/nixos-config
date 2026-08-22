@@ -28,7 +28,7 @@
         ../../profiles/common.nix
         ../../profiles/bare-metal.nix
         ../../profiles/mdns.nix
-        ../../profiles/nix.nix
+        self.nixosModules.nix
         self.nixosModules.sops
 
         # Users

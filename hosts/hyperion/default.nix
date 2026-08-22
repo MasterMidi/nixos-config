@@ -16,7 +16,7 @@
         ../../profiles/common.nix
         #        ../../profiles/k3s.nix
         ../../profiles/k3s/kubectl.nix
-        ../../profiles/nix.nix
+        self.nixosModules.nix-interactive-machine
         self.nixosModules.sops
 
         # Users

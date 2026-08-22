@@ -88,7 +88,7 @@
 
         # profiles
         ../../profiles/common.nix
-        ../../profiles/nix.nix
+        self.nixosModules.nix
         # self.nixosModules.sops
         ../../profiles/vpn.nix
         # ../../profiles/k3s.nix

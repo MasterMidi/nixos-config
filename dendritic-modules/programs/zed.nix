@@ -23,6 +23,8 @@
           languages.Nix.language_servers = [
             "nixd"
           ];
+          format_on_save = "on";
+          soft_wrap = "editor_width";
         };
 
         extensions = [

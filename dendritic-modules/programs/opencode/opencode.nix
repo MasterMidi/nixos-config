@@ -30,10 +30,11 @@
         enable = true;
         settings = {
           plugin = [ "@slkiser/opencode-quota@4.8.2" ];
+          model = "openai/gpt-5.6-sol";
           default_agent = "learn";
-          agent.explore.permission = {
-            edit = "deny";
-            bash = "deny";
+          agent = {
+            explore.model = "openai/gpt-5.6-terra";
+            general.model = "openai/gpt-5.6-terra";
           };
         };
         tui.plugin = [ "@slkiser/opencode-quota@4.8.2" ];

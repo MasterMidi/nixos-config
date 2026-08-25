@@ -14,6 +14,7 @@
     ./nvidia-device-plugin.nix
     # ./obsidian-livesync.nix
     ./paperless.nix
+    ./pingvin-share-x.nix
     ./pocketid.nix
     ./prowlarr.nix
     ./qbittorrent.nix

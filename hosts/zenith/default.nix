@@ -47,6 +47,7 @@
             self.homeModules.jujutsu
             self.homeModules.opencode
             self.homeModules.zed
+            self.homeModules.devenv
           ];
         }
       ];

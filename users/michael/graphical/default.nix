@@ -28,8 +28,6 @@
     services.playerctld.enable = true; # media player control
 
     home.packages = with pkgs; [
-      devenv
-
       prusa-slicer
 
       # Tools

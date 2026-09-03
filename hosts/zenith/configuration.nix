@@ -34,7 +34,6 @@
     tree
     lm_sensors
     git
-    devenv
   ];
 
   services.mullvad-vpn.enable = true;

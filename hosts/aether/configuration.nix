@@ -20,6 +20,11 @@
     networkmanager.enable = false;
   };
 
+  zramSwap = {
+    enable = true;
+    memoryPercent = 50;
+  };
+
   services.resolved.enable = true;
 
   # virtualisation.qemu.guestAgent.enable = true; # enable hetzner admin password reset

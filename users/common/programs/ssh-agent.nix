@@ -2,9 +2,6 @@
 {
   services.ssh-agent = {
     enable = true;
-    # Keys live in the agent until the agent dies (reboot).
-    # Combined with addKeysToAgent, you enter your passphrase once per boot.
-    defaultMaximumIdentityLifetime = 8;
   };
   programs.ssh = {
     enable = true;

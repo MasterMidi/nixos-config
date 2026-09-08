@@ -54,6 +54,10 @@
 
     # modules
     nixos-hardware.url = "github:NixOS/nixos-hardware/master"; # Hardware specific setup modules
+    srvos = {
+      url = "github:nix-community/srvos";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     disko = {
       # Declarative disk configuration
       url = "github:nix-community/disko";

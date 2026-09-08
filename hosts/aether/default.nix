@@ -11,6 +11,7 @@
         inherit inputs self;
       };
       modules = [
+        inputs.srvos.nixosModules.server
         self.nixosModules.tailscale
 
         ./configuration.nix

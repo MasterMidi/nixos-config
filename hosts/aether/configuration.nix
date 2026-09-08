@@ -1,10 +1,4 @@
-{
-  modulesPath,
-  lib,
-  pkgs,
-  config,
-  ...
-}:
+{ modulesPath, ... }:
 {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
@@ -17,19 +11,6 @@
     efiSupport = true;
     efiInstallAsRemovable = true;
   };
-  services.openssh.enable = true;
-
-  environment.systemPackages = map lib.lowPrio [
-    pkgs.curl
-    pkgs.gitMinimal
-  ];
-
-  services.openssh = {
-    settings = {
-      # PermitRootLogin = "no";
-    };
-  };
-
   system.stateVersion = "24.11";
 
   networking = {

@@ -32,26 +32,16 @@
 
   system.stateVersion = "24.11";
 
-  networking.hostName = "aether";
-
-  networking.useDHCP = lib.mkDefault true;
-  networking.networkmanager.enable = true;
+  networking = {
+    hostName = "aether";
+    useDHCP = true;
+    useNetworkd = true;
+    networkmanager.enable = false;
+  };
 
   services.resolved.enable = true;
 
   # virtualisation.qemu.guestAgent.enable = true; # enable hetzner admin password reset
   services.qemuGuest.enable = true;
 
-  # Allow the michael user to change to root without a configured password
-  security.sudo.extraRules = [
-    {
-      users = [ "michael" ];
-      commands = [
-        {
-          command = "ALL";
-          options = [ "NOPASSWD" ];
-        }
-      ];
-    }
-  ];
 }

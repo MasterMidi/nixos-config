@@ -41,4 +41,17 @@
 
   # virtualisation.qemu.guestAgent.enable = true; # enable hetzner admin password reset
   services.qemuGuest.enable = true;
+
+  # Allow the michael user to change to root without a configured password
+  security.sudo.extraRules = [
+    {
+      users = [ "michael" ];
+      commands = [
+        {
+          command = "ALL";
+          options = [ "NOPASSWD" ];
+        }
+      ];
+    }
+  ];
 }

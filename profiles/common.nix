@@ -2,6 +2,9 @@
 {
   systemd.network.wait-online.anyInterface = true; # just need any connection, not all. Might help with the systemd unit failing
 
+  # Keep declared passwords synchronized during activation.
+  users.mutableUsers = false;
+
   services.openssh = {
     enable = true;
     openFirewall = true;

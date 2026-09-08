@@ -22,6 +22,12 @@
 		"reveal_target": "dock",
 	},
 	{
+		"label": "NixOS: deploy - Aether",
+		"command": "nix develop -c deploy -s .#aether",
+		"save": "all",
+		"reveal_target": "dock",
+	},
+	{
 		"label": "K8S: deploy",
 		"command": "nix run .#deploy -- -y --prune",
 		"save": "all",

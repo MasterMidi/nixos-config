@@ -2,7 +2,7 @@
 {
   virtualisation.oci-containers.compose.tunnel.containers = {
     vaultwarden = {
-      image = "docker.io/vaultwarden/server:latest-alpine";
+      image = "docker.io/vaultwarden/server:1.37.2-alpine";
       autoUpdate = "registry";
       networking = {
         networks = [ "default" ];

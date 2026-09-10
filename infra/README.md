@@ -1,4 +1,39 @@
-# Cloudflare DNS with Terranix
+# Infrastructure with Terranix
+
+## Hetzner Cloud
+
+The `hcloud-aether` configuration adopts all resources currently present in
+the Hetzner Cloud project:
+
+- The existing `Aether` server.
+- Its IPv4 and IPv6 Primary IPs.
+- Their `mail.mgrlab.dk` reverse DNS records.
+- The project SSH public key.
+
+The initial inventory was queried from the Hetzner API on 2026-09-10. The
+project had no firewalls, private networks, volumes, floating IPs, placement
+groups, load balancers, certificates, snapshots, or backups at that time.
+
+All imported resources use OpenTofu `prevent_destroy`. The configuration
+otherwise reproduces the existing Hetzner settings, including disabled remote
+delete protection and Primary IP auto-deletion, so the first import can be a
+no-change operation. Enable Hetzner-side protection in a separate, reviewed
+change.
+
+Run the plan first and reject it if it proposes any update, replacement, or
+deletion:
+
+```sh
+nix run .#hcloud-aether.plan
+nix run .#hcloud-aether
+```
+
+The API token is read from `hcloud_api_token` in
+`infra/secrets/secrets.sops.yaml` unless `HCLOUD_TOKEN` is already set. Local
+state is stored under `infra/.terranix/hcloud-aether/` and must be backed up
+until a remote backend is configured.
+
+## Cloudflare DNS
 
 This Terranix configuration manages the existing DNS records for
 `mgrlab.dk` and `michael-graversen.dk` with OpenTofu and Cloudflare provider

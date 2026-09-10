@@ -2,7 +2,17 @@
 
 ## Status
 
-Proposed. Depends on [remote OpenTofu state](./01-remote-opentofu-state.md).
+Implemented with local state on 2026-09-10. All resources that existed in the
+Hetzner project were imported without remote changes: the `Aether` server, its
+two Primary IPs, both reverse DNS records, and the project SSH key. The
+[remote OpenTofu state](./01-remote-opentofu-state.md) migration remains
+pending.
+
+The implementation proceeded directly through Stage C at the owner's request.
+The staged design below is retained as the original safety and follow-up
+record. OpenTofu `prevent_destroy` guards all imported resources, while the
+server's existing public network block is ignored during updates to avoid an
+unsafe provider attachment cycle during adoption.
 
 ## Goal
 

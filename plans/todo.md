@@ -1,0 +1,9 @@
+- create easykubenix flake-parts module to expose something like `flake.easykubenixModules` and/or `flake.easykubenixConfigurations`, which i can then turn everything under k8s/ into, and have them loaded in the flake with import-tree
+- Move k8s related settings into the same files and mark a node. Like if a node has to run longhorn, it needs the longhorn nixosModule installed, for tools and setup needed for longhorn. So longhorn should only be able to run on nodes, that are marked/labeled/annotaded with longhorn
+- create custom top-level flake output (with flake-parts?) to map common information (metadata?) about all my hosts and general infra. Like having a metadata.hosts.<hostnmae>.publicIP = 1.2.3.4 (could also be null for homelab servers).
+- Use cloud-init + terraform (terranix) + nixos-anywhere (terraform module?) + nixos image?
+- move secrets in with the flake-parts module that uses it?
+- investigate the alternative rust implementation of the user switching for nixos. Was it related to the circus CI project? or the notashelf guy?
+- migrate pangolin to native nixos modules
+- add global agents config to always use jujutsu and never direct git commands (only through jj git ...)
+- add local secret scanner for repo, to prevent secret pushes

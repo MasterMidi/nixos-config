@@ -82,6 +82,10 @@
       url = "github:lillecarl/easykubenix";
       flake = false;
     };
+    terranix = {
+      url = "github:terranix/terranix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # Theming and customization
     nix-colors.url = "github:misterio77/nix-colors"; # Theming in nix configuration
@@ -110,6 +114,7 @@
         (inputs.import-tree ./dendritic-modules)
 
         ./shell.nix
+        ./infra
 
         ./modules/nixos
         # ./modules/flakes

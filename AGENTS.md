@@ -58,6 +58,7 @@ This is a **production NixOS configuration** managing multiple physical and virt
 - **Disko** - Declarative disk partitioning (on some hosts)
 - **nixos-facter** - Hardware detection and configuration generation
 - **deploy-rs** - Remote deployment tooling
+- **Terranix + OpenTofu** - Cloud infrastructure and DNS management
 - **flake-parts** - Modular flake structure
 - **Custom modules** - Reusable configuration abstractions
 
@@ -69,6 +70,7 @@ This is a **production NixOS configuration** managing multiple physical and virt
 - `disko` - Disk configuration
 - `nixos-facter-modules` - Hardware detection
 - `deploy-rs` - Remote deployment
+- `terranix` - Flake-parts integration for OpenTofu configurations
 - `nix-gaming` - Gaming-related packages/patches
 - `rust-overlay` - Rust toolchain management
 
@@ -107,6 +109,7 @@ This is a **production NixOS configuration** managing multiple physical and virt
 │   └── default.nix        # Package registry
 │
 ├── secrets/               # SOPS-encrypted secrets (shared)
+├── infra/                 # Terranix/OpenTofu infrastructure definitions
 ├── k8s/                   # Kubernetes manifests (easykubenix)
 ├── profiles/              # Reusable profile modules
 ├── scripts/               # Utility scripts
@@ -742,7 +745,7 @@ When you encounter unfamiliar patterns:
 
 ---
 
-**Last Updated**: 2026-02-25  
+**Last Updated**: 2026-09-10
 **Maintainer**: Michael  
 **Repository**: https://github.com/MasterMidi/nixos-config
 

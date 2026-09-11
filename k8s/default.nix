@@ -9,6 +9,7 @@
     ./immich.nix
     ./jellyfin.nix
     # # ./linkwarden.nix
+    ./lldap.nix
     ./longhorn.nix
     ./newt.nix
     ./nvidia-device-plugin.nix

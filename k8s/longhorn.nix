@@ -36,14 +36,14 @@ in
 
     Secret.hetzner-storagebox-cifs = {
       stringData = {
-        CIFS_USERNAME = "u560578";
-        CIFS_PASSWORD = "{{ secrets.hetzner_storage_box_543132_password }}";
+        CIFS_USERNAME = "u560578-sub1";
+        CIFS_PASSWORD = "{{ secrets.hetzner_storage_box_543132_sub1_password }}";
       };
     };
 
     BackupTarget.hetzner = {
       spec = {
-        backupTargetURL = "cifs://u560578.your-storagebox.de/backup";
+        backupTargetURL = "cifs://u560578-sub1.your-storagebox.de/u560578-sub1";
         credentialSecret =
           config.kubernetes.resources.longhorn-system.Secret.hetzner-storagebox-cifs.metadata.name;
         pollInterval = "5m0s";

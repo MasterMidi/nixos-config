@@ -33,6 +33,7 @@
   kluctl.deployment.vars = [
     {
       file = ./secrets.yaml;
+      targetPath = "secrets";
     }
   ];
 }

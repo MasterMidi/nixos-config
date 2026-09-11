@@ -1,4 +1,4 @@
-_:
+{ lib, ... }:
 let
   app = "paperless";
   namespace = app;
@@ -149,8 +149,7 @@ in
       spec = {
         clusterIP = "None";
         selector = selectorFor "cache";
-        ports = {
-          _namedlist = true;
+        ports = lib.mkNamedList {
           redis = {
             port = 6379;
             targetPort = 6379;
@@ -163,8 +162,7 @@ in
       spec = {
         clusterIP = "None";
         selector = selectorFor "database";
-        ports = {
-          _namedlist = true;
+        ports = lib.mkNamedList {
           postgres = {
             port = 5432;
             targetPort = 5432;
@@ -176,8 +174,7 @@ in
       metadata.labels = versionedLabelsFor "document-converter" versions.gotenberg;
       spec = {
         selector = selectorFor "document-converter";
-        ports = {
-          _namedlist = true;
+        ports = lib.mkNamedList {
           http = {
             port = 3000;
             targetPort = 3000;
@@ -189,8 +186,7 @@ in
       metadata.labels = versionedLabelsFor "document-parser" versions.tika;
       spec = {
         selector = selectorFor "document-parser";
-        ports = {
-          _namedlist = true;
+        ports = lib.mkNamedList {
           http = {
             port = 9998;
             targetPort = 9998;
@@ -202,8 +198,7 @@ in
       metadata.labels = versionedLabelsFor "web" versions.paperless;
       spec = {
         selector = selectorFor "web";
-        ports = {
-          _namedlist = true;
+        ports = lib.mkNamedList {
           http = {
             port = webPort;
             targetPort = webPort;
@@ -223,8 +218,7 @@ in
           spec = {
             automountServiceAccountToken = false;
             terminationGracePeriodSeconds = 30;
-            containers = {
-              _namedlist = true;
+            containers = lib.mkNamedList {
               redis = {
                 image = images.broker;
                 resources = {
@@ -234,8 +228,7 @@ in
                   };
                   limits.memory = "256Mi";
                 };
-                ports = {
-                  _namedlist = true;
+                ports = lib.mkNamedList {
                   redis.containerPort = 6379;
                 };
                 startupProbe = redisProbe // {
@@ -243,14 +236,12 @@ in
                 };
                 readinessProbe = redisProbe;
                 livenessProbe = redisProbe;
-                volumeMounts = {
-                  _namedlist = true;
+                volumeMounts = lib.mkNamedList {
                   data.mountPath = "/data";
                 };
               };
             };
-            volumes = {
-              _namedlist = true;
+            volumes = lib.mkNamedList {
               data.persistentVolumeClaim.claimName = "${app}-broker-data";
             };
           };
@@ -269,8 +260,7 @@ in
           spec = {
             automountServiceAccountToken = false;
             terminationGracePeriodSeconds = 60;
-            containers = {
-              _namedlist = true;
+            containers = lib.mkNamedList {
               postgres = {
                 image = images.database;
                 resources = {
@@ -280,8 +270,7 @@ in
                   };
                   limits.memory = "1Gi";
                 };
-                env = {
-                  _namedlist = true;
+                env = lib.mkNamedList {
                   POSTGRES_DB.value = "paperless";
                   POSTGRES_USER.value = "paperless";
                   POSTGRES_PASSWORD.valueFrom.secretKeyRef = {
@@ -289,8 +278,7 @@ in
                     key = "POSTGRES_PASSWORD";
                   };
                 };
-                ports = {
-                  _namedlist = true;
+                ports = lib.mkNamedList {
                   postgres.containerPort = 5432;
                 };
                 startupProbe = postgresProbe // {
@@ -298,15 +286,13 @@ in
                 };
                 readinessProbe = postgresProbe;
                 livenessProbe = postgresProbe;
-                volumeMounts = {
-                  _namedlist = true;
+                volumeMounts = lib.mkNamedList {
                   data.mountPath = "/var/lib/postgresql/data";
                   shm.mountPath = "/dev/shm";
                 };
               };
             };
-            volumes = {
-              _namedlist = true;
+            volumes = lib.mkNamedList {
               data.persistentVolumeClaim.claimName = "${app}-database-data";
               shm.emptyDir = {
                 medium = "Memory";
@@ -327,8 +313,7 @@ in
           metadata.labels = versionedLabelsFor "document-converter" versions.gotenberg;
           spec = {
             automountServiceAccountToken = false;
-            containers = {
-              _namedlist = true;
+            containers = lib.mkNamedList {
               gotenberg = {
                 image = images.gotenberg;
                 args = [
@@ -343,8 +328,7 @@ in
                   };
                   limits.memory = "1Gi";
                 };
-                ports = {
-                  _namedlist = true;
+                ports = lib.mkNamedList {
                   http.containerPort = 3000;
                 };
                 startupProbe = {
@@ -385,8 +369,7 @@ in
           metadata.labels = versionedLabelsFor "document-parser" versions.tika;
           spec = {
             automountServiceAccountToken = false;
-            containers = {
-              _namedlist = true;
+            containers = lib.mkNamedList {
               tika = {
                 image = images.tika;
                 resources = {
@@ -396,8 +379,7 @@ in
                   };
                   limits.memory = "1Gi";
                 };
-                ports = {
-                  _namedlist = true;
+                ports = lib.mkNamedList {
                   http.containerPort = 9998;
                 };
                 startupProbe = {
@@ -431,8 +413,7 @@ in
           spec = {
             # automountServiceAccountToken = false;
             # terminationGracePeriodSeconds = 60;
-            containers = {
-              _namedlist = true;
+            containers = lib.mkNamedList {
               paperless = {
                 image = images.paperless;
                 resources = {
@@ -442,8 +423,7 @@ in
                   };
                   limits.memory = "2Gi";
                 };
-                env = {
-                  _namedlist = true;
+                env = lib.mkNamedList {
                   PAPERLESS_PORT.value = toString webPort;
                   PAPERLESS_URL.value = "https://${hostname}";
                   PAPERLESS_REDIS.value = "redis://${app}-broker:6379";
@@ -494,8 +474,7 @@ in
                 #   timeoutSeconds = 5;
                 #   failureThreshold = 5;
                 # };
-                volumeMounts = {
-                  _namedlist = true;
+                volumeMounts = lib.mkNamedList {
                   data.mountPath = "/usr/src/paperless/data";
                   media.mountPath = "/usr/src/paperless/media";
                   export.mountPath = "/usr/src/paperless/export";
@@ -503,8 +482,7 @@ in
                 };
               };
             };
-            volumes = {
-              _namedlist = true;
+            volumes = lib.mkNamedList {
               data.persistentVolumeClaim.claimName = "${app}-data";
               media.persistentVolumeClaim.claimName = "${app}-media";
               export.persistentVolumeClaim.claimName = "${app}-export";

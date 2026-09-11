@@ -1,4 +1,4 @@
-{ ... }:
+{ lib, ... }:
 let
   app = "qbittorrent";
 in
@@ -14,8 +14,7 @@ in
 
     Service.${app} = {
       spec = {
-        ports = {
-          _namedlist = true;
+        ports = lib.mkNamedList {
           webui = {
             port = Deployment.${app}.spec.template.spec.containers.${app}.ports.webui.containerPort;
             targetPort = Deployment.${app}.spec.template.spec.containers.${app}.ports.webui.containerPort;
@@ -51,18 +50,15 @@ in
         template = {
           metadata.labels = { inherit app; };
           spec = {
-            securityContext.sysctls = {
-              _namedlist = true;
+            securityContext.sysctls = lib.mkNamedList {
               "net.ipv4.conf.all.src_valid_mark".value = "1";
             };
             resources.requests.cpu = "100m";
-            containers = {
-              _namedlist = true;
+            containers = lib.mkNamedList {
               ${app} = {
                 image = "ghcr.io/hotio/qbittorrent:release-v5";
                 securityContext.capabilities.add = [ "NET_ADMIN" ];
-                env = {
-                  _namedlist = true;
+                env = lib.mkNamedList {
                   PUID.value = "1000";
                   PGID.value = "100";
                   TZ.value = "Europe/Copenhagen";
@@ -81,15 +77,14 @@ in
                   VPN_KEEP_LOCAL_DNS.value = "true";
                   VPN_FIREWALL_TYPE.value = "auto";
                   VPN_HEALTHCHECK_ENABLED.value = "false";
-                  
+
                   # AirVPN manually allocated forwarded port
                   VPN_AUTO_PORT_FORWARD.value = "37461";
-                  
+
                   # Expose the qBittorrent listening port through wg0
                   VPN_PORT_REDIRECTS.value = "37461/tcp,37461/udp";
                 };
-                ports = {
-                  _namedlist = true;
+                ports = lib.mkNamedList {
                   webui.containerPort = 9060;
                   torrent-tcp = {
                     containerPort = 37461;
@@ -108,8 +103,7 @@ in
                     protocol = "UDP";
                   };
                 };
-                volumeMounts = {
-                  _namedlist = true;
+                volumeMounts = lib.mkNamedList {
                   config.mountPath = "/config";
                   storage.mountPath = "/storage";
                   wg-conf.mountPath = "/config/wireguard/wg0.conf";
@@ -117,8 +111,7 @@ in
                 };
               };
             };
-            volumes = {
-              _namedlist = true;
+            volumes = lib.mkNamedList {
               config.persistentVolumeClaim.claimName = "${app}-config";
               storage.hostPath = {
                 path = "/mnt/hdd";

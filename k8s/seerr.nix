@@ -1,4 +1,4 @@
-{ ... }:
+{ lib, ... }:
 let
   app = "seerr";
   image = "ghcr.io/seerr-team/seerr:preview-new-oidc";
@@ -17,8 +17,7 @@ in
     };
     Service.${app} = {
       spec = {
-        ports = {
-          _namedlist = true;
+        ports = lib.mkNamedList {
           http = {
             port = Deployment.${app}.spec.template.spec.containers.${app}.ports.http.containerPort;
             targetPort = Deployment.${app}.spec.template.spec.containers.${app}.ports.http.containerPort;
@@ -35,29 +34,24 @@ in
         template = {
           metadata.labels = { inherit app; };
           spec = {
-            containers = {
-              _namedlist = true;
+            containers = lib.mkNamedList {
               ${app} = {
                 inherit image;
-                env = {
-                  _namedlist = true;
+                env = lib.mkNamedList {
                   PUID.value = PUID;
                   PGID.value = PGID;
                   TZ.value = TZ;
                   PORT.value = "5055";
                 };
-                ports = {
-                  _namedlist = true;
+                ports = lib.mkNamedList {
                   http.containerPort = 5055;
                 };
-                volumeMounts = {
-                  _namedlist = true;
+                volumeMounts = lib.mkNamedList {
                   config.mountPath = "/app/config";
                 };
               };
             };
-            volumes = {
-              _namedlist = true;
+            volumes = lib.mkNamedList {
               config.persistentVolumeClaim.claimName = "${app}-config";
             };
           };

@@ -1,4 +1,4 @@
-_:
+{ lib, ... }:
 let
   app = "dawarich";
   namespace = app;
@@ -27,8 +27,7 @@ let
     "app.kubernetes.io/component" = component;
   };
 
-  commonAppEnv = {
-    _namedlist = true;
+  commonAppEnv = lib.mkNamedList {
     RAILS_ENV.value = "production";
     REDIS_URL.value = "redis://${app}-redis:6379";
     DATABASE_HOST.value = "${app}-postgres";
@@ -152,8 +151,7 @@ in
       metadata.labels = versionedLabelsFor "cache" redisVersion;
       spec = {
         selector = selectorFor "cache";
-        ports = {
-          _namedlist = true;
+        ports = lib.mkNamedList {
           redis = {
             port = 6379;
             targetPort = 6379;
@@ -165,8 +163,7 @@ in
       metadata.labels = versionedLabelsFor "database" postgisVersion;
       spec = {
         selector = selectorFor "database";
-        ports = {
-          _namedlist = true;
+        ports = lib.mkNamedList {
           postgres = {
             port = 5432;
             targetPort = 5432;
@@ -178,8 +175,7 @@ in
       metadata.labels = versionedLabelsFor "web" dawarichVersion;
       spec = {
         selector = selectorFor "web";
-        ports = {
-          _namedlist = true;
+        ports = lib.mkNamedList {
           http = {
             port = appPort;
             targetPort = appPort;
@@ -196,8 +192,7 @@ in
         selector.matchLabels = selectorFor "cache";
         template = {
           metadata.labels = versionedLabelsFor "cache" redisVersion;
-          spec.containers = {
-            _namedlist = true;
+          spec.containers = lib.mkNamedList {
             redis = {
               image = redisImage;
               args = [
@@ -211,8 +206,7 @@ in
                 "--appendonly"
                 "no"
               ];
-              ports = {
-                _namedlist = true;
+              ports = lib.mkNamedList {
                 redis.containerPort = 6379;
               };
               startupProbe = redisProbe // {
@@ -220,14 +214,12 @@ in
               };
               readinessProbe = redisProbe;
               livenessProbe = redisProbe;
-              volumeMounts = {
-                _namedlist = true;
+              volumeMounts = lib.mkNamedList {
                 shared.mountPath = "/data";
               };
             };
           };
-          spec.volumes = {
-            _namedlist = true;
+          spec.volumes = lib.mkNamedList {
             shared.persistentVolumeClaim.claimName = "${app}-shared";
           };
         };
@@ -243,12 +235,10 @@ in
         template = {
           metadata.labels = versionedLabelsFor "database" postgisVersion;
           spec = {
-            containers = {
-              _namedlist = true;
+            containers = lib.mkNamedList {
               postgres = {
                 image = postgisImage;
-                env = {
-                  _namedlist = true;
+                env = lib.mkNamedList {
                   POSTGRES_USER.value = "postgres";
                   POSTGRES_DB.value = "dawarich_development";
                   POSTGRES_PASSWORD.valueFrom.secretKeyRef = {
@@ -256,8 +246,7 @@ in
                     key = "POSTGRES_PASSWORD";
                   };
                 };
-                ports = {
-                  _namedlist = true;
+                ports = lib.mkNamedList {
                   postgres.containerPort = 5432;
                 };
                 startupProbe = postgresProbe // {
@@ -265,16 +254,14 @@ in
                 };
                 readinessProbe = postgresProbe;
                 livenessProbe = postgresProbe;
-                volumeMounts = {
-                  _namedlist = true;
+                volumeMounts = lib.mkNamedList {
                   data.mountPath = "/var/lib/postgresql/data";
                   shared.mountPath = "/var/shared";
                   shm.mountPath = "/dev/shm";
                 };
               };
             };
-            volumes = {
-              _namedlist = true;
+            volumes = lib.mkNamedList {
               data.persistentVolumeClaim.claimName = "${app}-postgres-data";
               shared.persistentVolumeClaim.claimName = "${app}-shared";
               shm.emptyDir = {
@@ -303,8 +290,7 @@ in
                 topologyKey = "kubernetes.io/hostname";
               }
             ];
-            containers = {
-              _namedlist = true;
+            containers = lib.mkNamedList {
               ${app} = {
                 image = dawarichImage;
                 stdin = true;
@@ -335,8 +321,7 @@ in
                   cpu = "500m";
                   memory = "4Gi";
                 };
-                ports = {
-                  _namedlist = true;
+                ports = lib.mkNamedList {
                   http.containerPort = appPort;
                 };
                 startupProbe = webProbe // {
@@ -344,8 +329,7 @@ in
                 };
                 readinessProbe = webProbe;
                 livenessProbe = webProbe;
-                volumeMounts = {
-                  _namedlist = true;
+                volumeMounts = lib.mkNamedList {
                   public.mountPath = "/var/app/public";
                   watched.mountPath = "/var/app/tmp/imports/watched";
                   storage.mountPath = "/var/app/storage";
@@ -353,8 +337,7 @@ in
                 };
               };
             };
-            volumes = {
-              _namedlist = true;
+            volumes = lib.mkNamedList {
               public.persistentVolumeClaim.claimName = "${app}-public";
               watched.persistentVolumeClaim.claimName = "${app}-watched";
               storage.persistentVolumeClaim.claimName = "${app}-storage";
@@ -374,8 +357,7 @@ in
         template = {
           metadata.labels = versionedLabelsFor "worker" dawarichVersion;
           spec = {
-            containers = {
-              _namedlist = true;
+            containers = lib.mkNamedList {
               sidekiq = {
                 image = dawarichImage;
                 stdin = true;
@@ -390,16 +372,14 @@ in
                 };
                 readinessProbe = sidekiqProbe;
                 livenessProbe = sidekiqProbe;
-                volumeMounts = {
-                  _namedlist = true;
+                volumeMounts = lib.mkNamedList {
                   public.mountPath = "/var/app/public";
                   watched.mountPath = "/var/app/tmp/imports/watched";
                   storage.mountPath = "/var/app/storage";
                 };
               };
             };
-            volumes = {
-              _namedlist = true;
+            volumes = lib.mkNamedList {
               public.persistentVolumeClaim.claimName = "${app}-public";
               watched.persistentVolumeClaim.claimName = "${app}-watched";
               storage.persistentVolumeClaim.claimName = "${app}-storage";

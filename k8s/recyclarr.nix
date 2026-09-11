@@ -1,4 +1,4 @@
-{ ... }:
+{ lib, ... }:
 let
   app = "recyclarr";
   image = "ghcr.io/recyclarr/recyclarr:8.6.0";
@@ -155,8 +155,7 @@ in
         template = {
           metadata.labels = { inherit app; };
           spec = {
-            containers = {
-              _namedlist = true;
+            containers = lib.mkNamedList {
               ${app} = {
                 inherit image;
                 # securityContext = {
@@ -164,13 +163,11 @@ in
                 #   runAsGroup = 3000;
                 #   fsGroup = 3000;
                 # };
-                env = {
-                  _namedlist = true;
+                env = lib.mkNamedList {
                   TZ.value = "Europe/Copenhagen";
                   CRON_SCHEDULE.value = "@daily";
                 };
-                volumeMounts = {
-                  _namedlist = true;
+                volumeMounts = lib.mkNamedList {
                   config.mountPath = "/config";
                   configs = {
                     mountPath = "/config/recyclarr.yml";
@@ -181,8 +178,7 @@ in
                 };
               };
             };
-            volumes = {
-              _namedlist = true;
+            volumes = lib.mkNamedList {
               config.hostPath = {
                 path = "/mnt/ssd/appdata/recyclarr/config";
                 type = "DirectoryOrCreate";

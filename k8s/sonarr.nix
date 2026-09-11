@@ -1,4 +1,4 @@
-{ ... }:
+{ lib, ... }:
 let
   app = "sonarr";
   image = "ghcr.io/hotio/sonarr:nightly";
@@ -19,8 +19,7 @@ in
 
     Service.${app} = {
       spec = {
-        ports = {
-          _namedlist = true;
+        ports = lib.mkNamedList {
           http = {
             inherit port;
             targetPort = port;
@@ -37,12 +36,10 @@ in
         template = {
           metadata.labels = { inherit app; };
           spec = {
-            containers = {
-              _namedlist = true;
+            containers = lib.mkNamedList {
               ${app} = {
                 inherit image;
-                env = {
-                  _namedlist = true;
+                env = lib.mkNamedList {
                   PUID.value = PUID;
                   PGID.value = PGID;
                   TZ.value = TZ;
@@ -66,19 +63,16 @@ in
                   periodSeconds = 10;
                   failureThreshold = 3;
                 };
-                ports = {
-                  _namedlist = true;
+                ports = lib.mkNamedList {
                   http.containerPort = port;
                 };
-                volumeMounts = {
-                  _namedlist = true;
+                volumeMounts = lib.mkNamedList {
                   config.mountPath = "/config";
                   storage.mountPath = "/storage";
                 };
               };
             };
-            volumes = {
-              _namedlist = true;
+            volumes = lib.mkNamedList {
               config.persistentVolumeClaim.claimName = "${app}-config";
               storage.hostPath = {
                 path = "/mnt/hdd";

@@ -1,4 +1,4 @@
-{ ... }:
+{ lib, ... }:
 let
   app = "scrutiny";
   image = "ghcr.io/analogj/scrutiny:master-omnibus";
@@ -36,8 +36,7 @@ in
       metadata.labels = commonLabels;
       spec = {
         selector = { inherit app; };
-        ports = {
-          _namedlist = true;
+        ports = lib.mkNamedList {
           http = {
             port = 8888;
             targetPort = webuiPort;
@@ -60,8 +59,7 @@ in
           metadata.labels = commonLabels;
           spec = {
             nodeSelector."kubernetes.io/hostname" = "andromeda";
-            containers = {
-              _namedlist = true;
+            containers = lib.mkNamedList {
               ${app} = {
                 inherit image;
                 imagePullPolicy = "Always";
@@ -76,12 +74,10 @@ in
                   };
                   limits.memory = "1Gi";
                 };
-                env = {
-                  _namedlist = true;
+                env = lib.mkNamedList {
                   TZ.value = TZ;
                 };
-                ports = {
-                  _namedlist = true;
+                ports = lib.mkNamedList {
                   http.containerPort = webuiPort;
                   influxdb.containerPort = influxdbPort;
                 };
@@ -91,8 +87,7 @@ in
                   initialDelaySeconds = 60;
                   periodSeconds = 30;
                 };
-                volumeMounts = {
-                  _namedlist = true;
+                volumeMounts = lib.mkNamedList {
                   config.mountPath = "/opt/scrutiny/config";
                   data.mountPath = "/opt/scrutiny/influxdb";
                   udev = {
@@ -105,8 +100,7 @@ in
                 };
               };
             };
-            volumes = {
-              _namedlist = true;
+            volumes = lib.mkNamedList {
               config.persistentVolumeClaim.claimName = "${app}-config";
               data.persistentVolumeClaim.claimName = "${app}-data";
               udev.hostPath = {

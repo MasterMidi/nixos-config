@@ -1,4 +1,4 @@
-{ ... }:
+{ lib, ... }:
 let
   daemonSet = "nvidia-device-plugin-daemonset";
   confMap = "nvidia-plugin-configs";
@@ -45,16 +45,14 @@ in
                 effect = "NoSchedule";
               }
             ];
-            containers = {
-              _namedlist = true;
+            containers = lib.mkNamedList {
               ${daemonSet} = {
                 image = "nvcr.io/nvidia/k8s-device-plugin:v0.19.0";
                 args = [
                   "--config-file"
                   "/etc/nvidia-device-plugin/config.yaml"
                 ];
-                env = {
-                  _namedlist = true;
+                env = lib.mkNamedList {
                   NVIDIA_VISIBLE_DEVICES.value = "all";
                   NVIDIA_DRIVER_CAPABILITIES.value = "all";
                 };
@@ -62,16 +60,14 @@ in
                   allowPrivilegeEscalation = false;
                   capabilities.drop = [ "ALL" ];
                 };
-                volumeMounts = {
-                  _namedlist = true;
+                volumeMounts = lib.mkNamedList {
                   device-plugin.mountPath = "/var/lib/kubelet/device-plugins";
                   config.mountPath = "/etc/nvidia-device-plugin";
                   cdi.mountPath = "/var/run/cdi";
                 };
               };
             };
-            volumes = {
-              _namedlist = true;
+            volumes = lib.mkNamedList {
               device-plugin.hostPath.path = "/var/lib/kubelet/device-plugins";
               config.configMap.name = "nvidia-plugin-configs";
               cdi.hostPath.path = "/var/run/cdi";

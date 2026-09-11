@@ -1,4 +1,4 @@
-{ ... }:
+{ lib, ... }:
 let
   app = "jellyfin";
   image = "lscr.io/linuxserver/jellyfin:latest";
@@ -84,8 +84,7 @@ in
     };
     Service.${app} = {
       spec = {
-        ports = {
-          _namedlist = true;
+        ports = lib.mkNamedList {
           http = {
             port = Deployment.${app}.spec.template.spec.containers.${app}.ports.http.containerPort;
             targetPort = Deployment.${app}.spec.template.spec.containers.${app}.ports.http.containerPort;
@@ -104,14 +103,12 @@ in
           metadata.annotations."checksum/jellyfin-logging" = loggingHash;
           spec = {
             runtimeClassName = "nvidia";
-            containers = {
-              _namedlist = true;
+            containers = lib.mkNamedList {
               ${app} = {
                 inherit image;
                 resources.limits."nvidia.com/gpu" = 1;
                 imagePullPolicy = "Always";
-                env = {
-                  _namedlist = true;
+                env = lib.mkNamedList {
                   PUID.value = PUID;
                   PGID.value = PGID;
                   TZ.value = TZ;
@@ -122,12 +119,10 @@ in
                   JELLYFIN_LOG_DIR.value = "/logs";
                   JELLYFIN_CONFIG_DIR.value = "/config";
                 };
-                ports = {
-                  _namedlist = true;
+                ports = lib.mkNamedList {
                   http.containerPort = 8096;
                 };
-                volumeMounts = {
-                  _namedlist = true;
+                volumeMounts = lib.mkNamedList {
                   config.mountPath = "/config";
                   jellyfin-logging-default = {
                     mountPath = "/config/logging.default.json";
@@ -143,8 +138,7 @@ in
                 };
               };
             };
-            volumes = {
-              _namedlist = true;
+            volumes = lib.mkNamedList {
               config.persistentVolumeClaim.claimName = "${app}-config";
               jellyfin-logging-default.configMap.name = "jellyfin-logging";
               jellyfin-logging.configMap.name = "jellyfin-logging";

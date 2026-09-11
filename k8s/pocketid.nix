@@ -1,4 +1,4 @@
-{ ... }:
+{ lib, ... }:
 let
   app = "pocket-id";
   image = "ghcr.io/pocket-id/pocket-id:v2.8.0";
@@ -23,8 +23,7 @@ in
 
     Service.${app} = {
       spec = {
-        ports = {
-          _namedlist = true;
+        ports = lib.mkNamedList {
           http = {
             inherit port;
             targetPort = port;
@@ -42,13 +41,11 @@ in
         template = {
           metadata.labels = { inherit app; };
           spec = {
-            containers = {
-              _namedlist = true;
+            containers = lib.mkNamedList {
               ${app} = {
                 inherit image;
 
-                env = {
-                  _namedlist = true;
+                env = lib.mkNamedList {
                   APP_URL.value = "https://oidc.mgrlab.dk";
                   TRUST_PROXY.value = "true";
                   PUID.value = "1000";
@@ -68,20 +65,17 @@ in
                   };
                 };
 
-                ports = {
-                  _namedlist = true;
+                ports = lib.mkNamedList {
                   http.containerPort = port;
                 };
 
-                volumeMounts = {
-                  _namedlist = true;
+                volumeMounts = lib.mkNamedList {
                   data.mountPath = "/app/data";
                 };
               };
             };
 
-            volumes = {
-              _namedlist = true;
+            volumes = lib.mkNamedList {
               data.persistentVolumeClaim.claimName = "${app}-data";
             };
           };

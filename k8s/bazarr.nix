@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, lib, ... }:
 let
   app = "bazarr";
   image = "lscr.io/linuxserver/bazarr:latest";
@@ -12,8 +12,7 @@ in
   kubernetes.resources.media-stack = {
     Service.${app} = {
       spec = {
-        ports = {
-          _namedlist = true;
+        ports = lib.mkNamedList {
           http = {
             inherit port;
             targetPort = port;
@@ -32,12 +31,10 @@ in
         template = {
           metadata.labels = { inherit app; };
           spec = {
-            containers = {
-              _namedlist = true;
+            containers = lib.mkNamedList {
               ${app} = {
                 inherit image;
-                env = {
-                  _namedlist = true;
+                env = lib.mkNamedList {
                   PUID.value = PUID;
                   PGID.value = PGID;
                   TZ.value = TZ;
@@ -45,21 +42,18 @@ in
                   VERBOSITY.value = "-vv";
                 };
 
-                ports = {
-                  _namedlist = true;
+                ports = lib.mkNamedList {
                   http.containerPort = port;
                 };
 
-                volumeMounts = {
-                  _namedlist = true;
+                volumeMounts = lib.mkNamedList {
                   # Mapping internal /storage/media to your NixOS mount
                   media.mountPath = "/storage/media";
                   config.mountPath = "/config";
                 };
               };
             };
-            volumes = {
-              _namedlist = true;
+            volumes = lib.mkNamedList {
               media.hostPath = {
                 path = "/mnt/hdd/media";
                 type = "Directory";

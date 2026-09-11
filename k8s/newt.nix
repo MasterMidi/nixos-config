@@ -1,4 +1,4 @@
-{ ... }:
+{ lib, ... }:
 {
   kubernetes.resources.default = {
     Secret.newt-secret = {
@@ -13,13 +13,11 @@
         template = {
           metadata.labels.app = "newt";
           spec = {
-            containers = {
-              _namedlist = true;
+            containers = lib.mkNamedList {
               newt = {
                 name = "newt";
                 image = "fosrl/newt:1.8.1";
-                env = {
-                  _namedlist = true;
+                env = lib.mkNamedList {
                   PANGOLIN_ENDPOINT.value = "https://tunnel.mgrlab.dk";
                   NEWT_ID.value = "npjvjb7lh3mgr3n";
                   NEWT_SECRET.valueFrom.secretKeyRef = {

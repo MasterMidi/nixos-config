@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, lib, ... }:
 let
   app = "autobrr";
   image = "ghcr.io/autobrr/autobrr:v1.79";
@@ -12,8 +12,7 @@ in
   kubernetes.resources.media-stack = {
     Service.${app} = {
       spec = {
-        ports = {
-          _namedlist = true;
+        ports = lib.mkNamedList {
           http = {
             inherit port;
             targetPort = port;
@@ -32,30 +31,25 @@ in
         template = {
           metadata.labels = { inherit app; };
           spec = {
-            containers = {
-              _namedlist = true;
+            containers = lib.mkNamedList {
               ${app} = {
                 inherit image;
-                env = {
-                  _namedlist = true;
+                env = lib.mkNamedList {
                   PUID.value = PUID;
                   PGID.value = PGID;
                   TZ.value = TZ;
                 };
 
-                ports = {
-                  _namedlist = true;
+                ports = lib.mkNamedList {
                   http.containerPort = port;
                 };
 
-                volumeMounts = {
-                  _namedlist = true;
+                volumeMounts = lib.mkNamedList {
                   config.mountPath = "/config";
                 };
               };
             };
-            volumes = {
-              _namedlist = true;
+            volumes = lib.mkNamedList {
               config.hostPath = {
                 path = "/mnt/ssd/appdata/autobrr/config";
                 type = "DirectoryOrCreate";

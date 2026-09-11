@@ -1,4 +1,4 @@
-{ ... }:
+{ lib, ... }:
 let
   app = "subgen";
   # We use the base image which supports both CPU and GPU (as per readme)
@@ -9,8 +9,7 @@ in
   kubernetes.resources.media-stack = {
     Service.${app} = {
       spec = {
-        ports = {
-          _namedlist = true;
+        ports = lib.mkNamedList {
           http = {
             inherit port;
             targetPort = port;
@@ -28,15 +27,13 @@ in
         template = {
           metadata.labels = { inherit app; };
           spec = {
-            containers = {
-              _namedlist = true;
+            containers = lib.mkNamedList {
               ${app} = {
                 inherit image;
                 # GPU Resource Request
                 resources.limits."nvidia.com/gpu" = 1;
 
-                env = {
-                  _namedlist = true;
+                env = lib.mkNamedList {
                   # Core GPU & Model Settings
                   TRANSCRIBE_DEVICE.value = "cuda";
                   WHISPER_MODEL.value = "large-v3"; # Better for multi-lang than turbo
@@ -62,20 +59,17 @@ in
                   # DEBUG.value = "True";
                 };
 
-                ports = {
-                  _namedlist = true;
+                ports = lib.mkNamedList {
                   http.containerPort = port;
                 };
 
-                volumeMounts = {
-                  _namedlist = true;
+                volumeMounts = lib.mkNamedList {
                   # media.mountPath = "/storage/media";
                   models.mountPath = "/subgen/models";
                 };
               };
             };
-            volumes = {
-              _namedlist = true;
+            volumes = lib.mkNamedList {
               media.hostPath = {
                 path = "/mnt/hdd/media";
                 type = "Directory";

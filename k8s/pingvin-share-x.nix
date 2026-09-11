@@ -1,4 +1,4 @@
-{ ... }:
+{ lib, ... }:
 let
   app = "pingvin-share-x";
   image = "docker.io/smp46/pingvin-share-x:v1.22.1";
@@ -55,8 +55,7 @@ in
 
     Service.${app} = {
       spec = {
-        ports = {
-          _namedlist = true;
+        ports = lib.mkNamedList {
           http = {
             inherit port;
             targetPort = port;
@@ -74,25 +73,21 @@ in
         template = {
           metadata.labels = { inherit app; };
           spec = {
-            containers = {
-              _namedlist = true;
+            containers = lib.mkNamedList {
               ${app} = {
                 inherit image;
 
-                env = {
-                  _namedlist = true;
+                env = lib.mkNamedList {
                   TRUST_PROXY.value = "true";
                   PUID.value = "1000";
                   PGID.value = "1000";
                 };
 
-                ports = {
-                  _namedlist = true;
+                ports = lib.mkNamedList {
                   http.containerPort = port;
                 };
 
-                volumeMounts = {
-                  _namedlist = true;
+                volumeMounts = lib.mkNamedList {
                   state.mountPath = "/opt/app/backend/data";
                   uploads.mountPath = "/opt/app/backend/data/uploads";
                   images.mountPath = "/opt/app/frontend/public/img";
@@ -105,8 +100,7 @@ in
               };
             };
 
-            volumes = {
-              _namedlist = true;
+            volumes = lib.mkNamedList {
               state.persistentVolumeClaim.claimName = "${app}-state";
               uploads.persistentVolumeClaim.claimName = "${app}-uploads";
               images.persistentVolumeClaim.claimName = "${app}-images";

@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, lib, ... }:
 let
   app = "immich";
   namespace = "immich";
@@ -31,24 +31,20 @@ let
             # Ensure pods only land on nodes with this hardware
             nodeSelector."${nodeLabel}" = "true";
 
-            containers = {
-              _namedlist = true;
+            containers = lib.mkNamedList {
               machine-learning = {
                 image = "${imageML}-${imageType}";
                 resources.limits."${resourceName}" = 1;
                 env = commonEnv;
-                ports = {
-                  _namedlist = true;
+                ports = lib.mkNamedList {
                   http.containerPort = 3003;
                 };
-                volumeMounts = {
-                  _namedlist = true;
+                volumeMounts = lib.mkNamedList {
                   model-cache.mountPath = "/cache";
                 };
               };
             };
-            volumes = {
-              _namedlist = true;
+            volumes = lib.mkNamedList {
               model-cache.emptyDir.sizeLimit = "10Gi";
             };
           };
@@ -57,8 +53,7 @@ let
     };
 
   # Common Env Vars mapped from a typical Immich .env
-  commonEnv = {
-    _namedlist = true;
+  commonEnv = lib.mkNamedList {
     DB_HOSTNAME.value = "${app}-postgres";
     DB_USERNAME.value = "postgres";
     DB_DATABASE_NAME.value = "immich";
@@ -102,8 +97,7 @@ in
 
     Service."${app}-redis" = {
       spec = {
-        ports = {
-          _namedlist = true;
+        ports = lib.mkNamedList {
           tcp-redis = {
             port = 6379;
             targetPort = 6379;
@@ -119,12 +113,10 @@ in
         selector.matchLabels.app = "${app}-redis";
         template = {
           metadata.labels.app = "${app}-redis";
-          spec.containers = {
-            _namedlist = true;
+          spec.containers = lib.mkNamedList {
             redis = {
               image = imageRedis;
-              ports = {
-                _namedlist = true;
+              ports = lib.mkNamedList {
                 tcp-redis.containerPort = 6379;
               };
             };
@@ -135,8 +127,7 @@ in
 
     Service."${app}-postgres" = {
       spec = {
-        ports = {
-          _namedlist = true;
+        ports = lib.mkNamedList {
           tcp-postgresql = {
             port = 5432;
             targetPort = 5432;
@@ -155,12 +146,10 @@ in
         template = {
           metadata.labels.app = "${app}-postgres";
           spec = {
-            containers = {
-              _namedlist = true;
+            containers = lib.mkNamedList {
               postgres = {
                 image = imagePostgres;
-                env = {
-                  _namedlist = true;
+                env = lib.mkNamedList {
                   POSTGRES_USER.value = "postgres";
                   POSTGRES_DB.value = "immich";
                   POSTGRES_INITDB_ARGS.value = "--data-checksums";
@@ -169,19 +158,16 @@ in
                     key = "DB_PASSWORD";
                   };
                 };
-                ports = {
-                  _namedlist = true;
+                ports = lib.mkNamedList {
                   tcp-postgresql.containerPort = 5432;
                 };
-                volumeMounts = {
-                  _namedlist = true;
+                volumeMounts = lib.mkNamedList {
                   pgdata.mountPath = "/var/lib/postgresql/data";
                   dshm.mountPath = "/dev/shm";
                 };
               };
             };
-            volumes = {
-              _namedlist = true;
+            volumes = lib.mkNamedList {
               pgdata.persistentVolumeClaim.claimName = "${app}-postgres-data";
               # Translates docker shm_size: 128mb
               dshm.emptyDir = {
@@ -199,8 +185,7 @@ in
     # ==========================================
     Service."${app}-machine-learning" = {
       spec = {
-        ports = {
-          _namedlist = true;
+        ports = lib.mkNamedList {
           http = {
             port = 3003;
             targetPort = 3003;
@@ -222,8 +207,7 @@ in
     # ==========================================
     Service."${app}-server" = {
       spec = {
-        ports = {
-          _namedlist = true;
+        ports = lib.mkNamedList {
           http = {
             port = 2283;
             targetPort = 2283;
@@ -241,20 +225,17 @@ in
         template = {
           metadata.labels.app = "${app}-server";
           spec = {
-            containers = {
-              _namedlist = true;
+            containers = lib.mkNamedList {
               server = {
                 image = imageServer;
                 env = {
                   IMMICH_HELMET_FILE.value = "true";
                 }
                 // commonEnv;
-                ports = {
-                  _namedlist = true;
+                ports = lib.mkNamedList {
                   http.containerPort = 2283;
                 };
-                volumeMounts = {
-                  _namedlist = true;
+                volumeMounts = lib.mkNamedList {
                   library.mountPath = "/data";
                   localtime = {
                     mountPath = "/etc/localtime";
@@ -263,8 +244,7 @@ in
                 };
               };
             };
-            volumes = {
-              _namedlist = true;
+            volumes = lib.mkNamedList {
               library.persistentVolumeClaim.claimName = "${app}-library-data";
               localtime.hostPath = {
                 path = "/etc/localtime";

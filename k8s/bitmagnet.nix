@@ -1,4 +1,4 @@
-{ ... }:
+{ lib, ... }:
 let
   app = "bitmagnet";
   webuiPort = 3333;
@@ -26,8 +26,7 @@ in
     Service.${app} = {
       spec = {
         selector = { inherit app; };
-        ports = {
-          _namedlist = true;
+        ports = lib.mkNamedList {
           webui = {
             port = webuiPort;
             targetPort = webuiPort;
@@ -46,8 +45,7 @@ in
         selector = {
           app = "${app}-postgres";
         };
-        ports = {
-          _namedlist = true;
+        ports = lib.mkNamedList {
           postgres = {
             port = 5432;
             targetPort = 5432;
@@ -70,12 +68,10 @@ in
             app = "${app}-postgres";
           };
           spec = {
-            containers = {
-              _namedlist = true;
+            containers = lib.mkNamedList {
               postgres = {
                 image = "postgres:16-alpine";
-                env = {
-                  _namedlist = true;
+                env = lib.mkNamedList {
                   POSTGRES_DB.value = postgresDb;
                   PGUSER.value = postgresUser;
                   POSTGRES_PASSWORD.valueFrom.secretKeyRef = {
@@ -83,19 +79,16 @@ in
                     key = "POSTGRES_PASSWORD";
                   };
                 };
-                ports = {
-                  _namedlist = true;
+                ports = lib.mkNamedList {
                   postgres.containerPort = 5432;
                 };
-                volumeMounts = {
-                  _namedlist = true;
+                volumeMounts = lib.mkNamedList {
                   data.mountPath = "/var/lib/postgresql/data";
                   shm.mountPath = "/dev/shm";
                 };
               };
             };
-            volumes = {
-              _namedlist = true;
+            volumes = lib.mkNamedList {
               data.persistentVolumeClaim.claimName = "${app}-postgres";
               shm.emptyDir = {
                 medium = "Memory";
@@ -118,8 +111,7 @@ in
           metadata.labels = { inherit app; };
           spec = {
             resources.requests.cpu = "160m";
-            containers = {
-              _namedlist = true;
+            containers = lib.mkNamedList {
 
               # Container A: The VPN Sidecar
               gluetun = {
@@ -127,8 +119,7 @@ in
                 securityContext = {
                   capabilities.add = [ "NET_ADMIN" ];
                 };
-                env = {
-                  _namedlist = true;
+                env = lib.mkNamedList {
                   FIREWALL_VPN_INPUT_PORTS.value = toString dhtPort;
                   VPN_SERVICE_PROVIDER.value = "airvpn";
                   VPN_TYPE.value = "wireguard";
@@ -145,16 +136,14 @@ in
                     key = "AIRVPN_WIREGUARD_PRESHARED_KEY"; # FIXED
                   };
                 };
-                ports = {
-                  _namedlist = true;
+                ports = lib.mkNamedList {
                   webui.containerPort = webuiPort;
                   dht-udp = {
                     containerPort = dhtPort;
                     protocol = "UDP";
                   };
                 };
-                volumeMounts = {
-                  _namedlist = true;
+                volumeMounts = lib.mkNamedList {
                   tun.mountPath = "/dev/net/tun";
                 };
               };
@@ -169,8 +158,7 @@ in
                   "--keys=queue_server"
                   "--keys=dht_crawler"
                 ];
-                env = {
-                  _namedlist = true;
+                env = lib.mkNamedList {
                   POSTGRES_HOST.value = "${app}-postgres.media-stack.svc.cluster.local";
                   POSTGRES_NAME.value = postgresDb;
                   POSTGRES_USER.value = postgresUser;
@@ -189,8 +177,7 @@ in
                 };
               };
             };
-            volumes = {
-              _namedlist = true;
+            volumes = lib.mkNamedList {
               tun.hostPath = {
                 path = "/dev/net/tun";
                 type = "CharDevice";

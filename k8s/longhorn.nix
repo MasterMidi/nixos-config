@@ -10,7 +10,7 @@ in
 {
   kubernetes.resources.longhorn-system = {
     StorageClass.longhorn-database = {
-      metadata.annotations.storageclass."kubernetes.io/is-default-class" = "false";
+      metadata.annotations."storageclass.kubernetes.io/is-default-class" = "false";
       provisioner = "driver.longhorn.io";
       allowVolumeExpansion = true;
       reclaimPolicy = "Retain";

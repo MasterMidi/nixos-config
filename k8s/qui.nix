@@ -1,4 +1,4 @@
-{ ... }:
+{ lib, ... }:
 let
   app = "qui";
 in
@@ -20,8 +20,7 @@ in
 
     Service.${app} = {
       spec = {
-        ports = {
-          _namedlist = true;
+        ports = lib.mkNamedList {
           http = {
             port = 7476;
             targetPort = 7476;
@@ -38,16 +37,13 @@ in
         template = {
           metadata.labels = { inherit app; };
           spec = {
-            containers = {
-              _namedlist = true;
+            containers = lib.mkNamedList {
               qui = {
                 image = "ghcr.io/autobrr/qui:v1.25.0";
-                ports = {
-                  _namedlist = true;
+                ports = lib.mkNamedList {
                   http.containerPort = 7476;
                 };
-                env = {
-                  _namedlist = true;
+                env = lib.mkNamedList {
                   QUI__OIDC_ENABLED.value = "true";
                   QUI__OIDC_ISSUER.value = "https://oidc.mgrlab.dk";
                   QUI__OIDC_CLIENT_ID.value = "680fb325-335c-45fc-844e-a6acfc7b18b5";
@@ -58,15 +54,13 @@ in
                   QUI__OIDC_REDIRECT_URL.value = "https://qbit.mgrlab.dk/api/auth/oidc/callback";
                   QUI__CORS_ALLOWED_ORIGINS.value = "https://qbit.mgrlab.dk";
                 };
-                volumeMounts = {
-                  _namedlist = true;
+                volumeMounts = lib.mkNamedList {
                   config.mountPath = "/config";
                   storage.mountPath = "/storage";
                 };
               };
             };
-            volumes = {
-              _namedlist = true;
+            volumes = lib.mkNamedList {
               config.persistentVolumeClaim.claimName = "${app}-config";
               storage.hostPath = {
                 path = "/mnt/hdd";

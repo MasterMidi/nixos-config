@@ -1,9 +1,7 @@
 { lib, ... }:
 let
   app = "jellyfin";
-  image = "lscr.io/linuxserver/jellyfin:latest";
-  PUID = "1000";
-  PGID = "100";
+  image = "ghcr.io/jellyfin/jellyfin:12";
   TZ = "Europe/Copenhagen";
 
   jellyfinLogging = {
@@ -103,21 +101,28 @@ in
           metadata.annotations."checksum/jellyfin-logging" = loggingHash;
           spec = {
             runtimeClassName = "nvidia";
+            securityContext = {
+              runAsUser = 1000;
+              runAsGroup = 100;
+              fsGroup = 100;
+              fsGroupChangePolicy = "OnRootMismatch";
+            };
             containers = lib.mkNamedList {
               ${app} = {
                 inherit image;
                 resources.limits."nvidia.com/gpu" = 1;
                 imagePullPolicy = "Always";
                 env = lib.mkNamedList {
-                  PUID.value = PUID;
-                  PGID.value = PGID;
                   TZ.value = TZ;
+                  HOME.value = "/config";
 
                   # Return memory to system more aggresively
                   MALLOC_TRIM_THRESHOLD_.value = "100000";
 
-                  JELLYFIN_LOG_DIR.value = "/logs";
+                  JELLYFIN_DATA_DIR.value = "/config/data";
+                  JELLYFIN_CACHE_DIR.value = "/config/cache";
                   JELLYFIN_CONFIG_DIR.value = "/config";
+                  JELLYFIN_LOG_DIR.value = "/logs";
                 };
                 ports = lib.mkNamedList {
                   http.containerPort = 8096;

@@ -5,6 +5,11 @@ let
 in
 {
   kubernetes.resources.${namespace} = {
+    Secret.trek-secret.stringData = {
+      ENCRYPTION_KEY = "{{ secrets.trek_encryption_key }}";
+      OIDC_CLIENT_SECRET = "{{ secrets.trek_oidc_client_secret }}";
+    };
+
     PersistentVolumeClaim.trek-data = {
       spec = {
         accessModes = [ "ReadWriteOncePod" ];
@@ -42,10 +47,7 @@ in
     ];
 
     values = {
-      secretEnv = {
-        ENCRYPTION_KEY = "7af32d40f9f1168f7730164beee86b269b802e840bb81e7c6369c67766866714";
-        OIDC_CLIENT_SECRET = "uci5k1qf9DRk8D5H61T6qjQ8MC09hEru";
-      };
+      existingSecret = "trek-secret";
 
       env = {
         ALLOW_INTERNAL_NETWORK = "true";

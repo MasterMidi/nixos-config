@@ -150,7 +150,7 @@ in
 
               # Container B: The Main App
               bitmagnet = {
-                image = "ghcr.io/bitmagnet-io/bitmagnet:v0.10.0";
+                image = "ghcr.io/bitmagnet-io/bitmagnet:v0.10.1";
                 args = [
                   "worker"
                   "run"

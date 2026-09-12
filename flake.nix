@@ -79,7 +79,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     easykubenix = {
-      url = "github:lillecarl/easykubenix";
+      url = "github:lillecarl/easykubenix/92d767564608bdbd43fe0ab3a8f8f88d8406cbe0";
       flake = false;
     };
     terranix = {

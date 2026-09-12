@@ -274,16 +274,17 @@
     "easykubenix": {
       "flake": false,
       "locked": {
-        "lastModified": 1787210364,
-        "narHash": "sha256-t8yTl5k3GajVxu5PvcwKF3s8xqgiw7L4O3AE+IE4S2s=",
+        "lastModified": 1783876639,
+        "narHash": "sha256-A50QV7iTsId7SJvA14/Bt3sT5QEEE+8+CC5woeq8qwk=",
         "owner": "lillecarl",
         "repo": "easykubenix",
-        "rev": "50130a88a353856586a119f21364e0ea3c7153db",
+        "rev": "92d767564608bdbd43fe0ab3a8f8f88d8406cbe0",
         "type": "github"
       },
       "original": {
         "owner": "lillecarl",
         "repo": "easykubenix",
+        "rev": "92d767564608bdbd43fe0ab3a8f8f88d8406cbe0",
         "type": "github"
       }
     },

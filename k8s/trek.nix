@@ -28,8 +28,8 @@ in
     chart = pkgs.fetchHelm {
       repo = "https://chart.liketrek.com";
       chart = "trek";
-      version = "3.4.1";
-      sha256 = "sha256-FIwjcnjkrhaqZUtN8TZIqMzIG0N2+VMjSz6OvjIBnw0=";
+      version = "4.2.1";
+      sha256 = "sha256-8kIQAqpFAYLQw24fsK/yCLtHYw7esDjQ+F0z2FAqo7Q=";
     };
 
     overrides = [

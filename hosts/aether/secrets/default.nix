@@ -12,6 +12,9 @@
     CLOUDFLARE_GLOBAL_API_KEY = {
       sopsFile = ./secrets.sops.yaml;
     };
+    VAULTWARDEN_OIDC_CLIENT_SECRET = {
+      sopsFile = ./secrets.sops.yaml;
+    };
     NETBIRD_AUTH_SECRET = {
       sopsFile = ./secrets.sops.yaml;
     };

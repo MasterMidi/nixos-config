@@ -8,6 +8,8 @@ ones.
 2. [Hetzner infrastructure for aether](./02-hetzner-aether-infrastructure.md)
 3. [Infrastructure and deployment bridge](./03-infrastructure-deployment-bridge.md)
 
+Alternative to plan 4: [NetBird VPN mesh only](./04a-netbird-vpn-mesh.md)
+
 The intended ownership boundaries are:
 
 - Terranix provisions resources exposed through external APIs.

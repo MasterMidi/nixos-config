@@ -15,6 +15,7 @@
         self.nixosModules.k3s-node-server
         self.nixosModules.k3s-gpu-nvidia-andromeda
         self.nixosModules.tailscale
+        self.nixosModules.netbird-client
         self.nixosModules.nix-builder
 
         ./configuration.nix

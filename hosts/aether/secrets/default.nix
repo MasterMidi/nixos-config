@@ -12,5 +12,14 @@
     CLOUDFLARE_GLOBAL_API_KEY = {
       sopsFile = ./secrets.sops.yaml;
     };
+    NETBIRD_AUTH_SECRET = {
+      sopsFile = ./secrets.sops.yaml;
+    };
+    NETBIRD_STORE_ENCRYPTION_KEY = {
+      sopsFile = ./secrets.sops.yaml;
+    };
+    NETBIRD_IDP_SESSION_COOKIE_ENCRYPTION_KEY = {
+      sopsFile = ./secrets.sops.yaml;
+    };
   };
 }

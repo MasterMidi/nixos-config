@@ -11,6 +11,7 @@
         # self.nixosModules.k3s-node-agent
         self.nixosModules.hyprland
         self.nixosModules.tailscale
+        self.nixosModules.netbird-client
         self.nixosModules.zed
 
         ./services

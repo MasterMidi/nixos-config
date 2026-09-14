@@ -13,6 +13,8 @@
       modules = [
         inputs.srvos.nixosModules.server
         self.nixosModules.tailscale
+        self.nixosModules.netbird-client
+        self.nixosModules.netbird-server
 
         ./configuration.nix
         ./containers

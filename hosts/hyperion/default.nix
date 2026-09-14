@@ -9,6 +9,7 @@
       modules = [
         inputs.nixos-wsl.nixosModules.default
         self.nixosModules.tailscale
+        self.nixosModules.netbird-client
 
         ./configuration.nix
 

@@ -12,6 +12,7 @@
         self.nixosModules.hyprland
         self.nixosModules.hyprlock
         self.nixosModules.tailscale
+        self.nixosModules.netbird-client
         # self.nixosModules.nix-builder
         self.nixosModules.laptop-power-management
         self.nixosModules.lenovo-yoga-7-14ARH7-power-management

@@ -42,6 +42,8 @@
     ];
   };
 
+  security.sudo.wheelNeedsPassword = false;
+
   home-manager.users.michael = {
     home.username = "michael";
     home.homeDirectory = "/home/michael";

@@ -16,7 +16,7 @@
             containers = lib.mkNamedList {
               newt = {
                 name = "newt";
-                image = "fosrl/newt:1.8.1";
+                image = "fosrl/newt:1.17.0";
                 env = lib.mkNamedList {
                   PANGOLIN_ENDPOINT.value = "https://tunnel.mgrlab.dk";
                   NEWT_ID.value = "npjvjb7lh3mgr3n";

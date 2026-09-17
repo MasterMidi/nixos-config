@@ -18,6 +18,7 @@
 
         ./configuration.nix
         ./containers
+        ./pangolin.nix
         ./secrets
         ./disko.nix
 

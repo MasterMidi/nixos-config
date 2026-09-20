@@ -38,7 +38,6 @@
       url = "github:numtide/devshell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    devenv-2_3.url = "github:cachix/devenv/e0781f7bee573eefcab4a7d2788fd9b455560ca2";
 
     # Home Manager
     home-manager = {

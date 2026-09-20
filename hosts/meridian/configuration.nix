@@ -15,7 +15,7 @@
     onlyoffice-desktopeditors
     polkit_gnome
     libsecret
-    (git.override { withLibsecret = true; })
+    # (git.override { withLibsecret = true; })
     git-credential-manager
     whereami # easily find nix store path for executable
     displaylink
@@ -36,7 +36,7 @@
     enableSSHSupport = true;
     # pinentryPackage = pkgs.pinentry-gnome3;
   };
-  services.dbus.packages = [ pkgs.gcr ];
+  services.dbus.packages = [ pkgs.gcr_4 ];
   services.gnome.gnome-keyring.enable = true;
 
   qt = {

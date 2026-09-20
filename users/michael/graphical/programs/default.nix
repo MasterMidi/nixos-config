@@ -5,7 +5,6 @@
     # ./mpv
     ./nautilus
     ./rofi
-    ./vscodium
     ./waybar
     ./wlogout
     ./firefox.nix

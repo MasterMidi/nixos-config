@@ -30,11 +30,12 @@
         enable = true;
         settings = {
           plugin = [ "@slkiser/opencode-quota@4.8.2" ];
-          model = "openai/gpt-5.6-sol";
+          model = "openai/gpt-6-sol";
+          small_model = "openai/gpt-6-luna";
           default_agent = "learn";
           agent = {
-            explore.model = "openai/gpt-5.6-terra";
-            general.model = "openai/gpt-5.6-terra";
+            explore.model = "openai/gpt-6-luna";
+            general.model = "openai/gpt-6-sol";
           };
         };
         tui.plugin = [ "@slkiser/opencode-quota@4.8.2" ];

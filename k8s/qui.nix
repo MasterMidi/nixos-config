@@ -39,7 +39,7 @@ in
           spec = {
             containers = lib.mkNamedList {
               qui = {
-                image = "ghcr.io/autobrr/qui:v1.25.0";
+                image = "ghcr.io/autobrr/qui:v1.30.0";
                 ports = lib.mkNamedList {
                   http.containerPort = 7476;
                 };

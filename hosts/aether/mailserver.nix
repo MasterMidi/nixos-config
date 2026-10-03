@@ -26,7 +26,8 @@
             tls.implicit = true;
           };
           http = {
-            bind = [ "127.0.0.1:4848" ];
+            # Local Pangolin resources reach the host over the Podman bridge.
+            bind = [ "0.0.0.0:4848" ];
             protocol = "http";
           };
         };
@@ -54,13 +55,16 @@
     credentials.user_admin_password = config.sops.secrets.STALWART_ADMIN_PASSWORD.path;
   };
 
-  # SMTP and mail-client protocols need end-to-end TLS; Traefik handles only HTTP.
+  # Mail protocols terminate at Stalwart, not the Pangolin containers.
   networking.firewall.allowedTCPPorts = [
     25
     465
     587
     993
   ];
+
+  # Local Pangolin's Traefik reaches 4848 via the tunnel Podman bridge only.
+  networking.firewall.interfaces.podman1.allowedTCPPorts = [ 4848 ];
 
   security.acme = {
     acceptTerms = true;
@@ -79,18 +83,5 @@
   systemd.services.stalwart = {
     requires = [ "acme-mail.mgrlab.dk.service" ];
     after = [ "acme-mail.mgrlab.dk.service" ];
-  };
-
-  # The Pangolin wildcard router also matches mail.mgrlab.dk; use a more
-  # specific router for the Stalwart management UI and JMAP endpoint.
-  services.traefik.dynamicConfigOptions.http = {
-    routers.stalwart = {
-      rule = "Host(`mail.mgrlab.dk`)";
-      entryPoints = [ "websecure" ];
-      priority = 1000;
-      service = "stalwart";
-      tls.certResolver = "letsencrypt";
-    };
-    services.stalwart.loadBalancer.servers = [ { url = "http://127.0.0.1:4848"; } ];
   };
 }

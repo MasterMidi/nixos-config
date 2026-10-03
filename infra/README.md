@@ -102,12 +102,18 @@ ordinary DNS records.
 ## Stalwart test domain (`mgrlab.dk`)
 
 `hosts/aether/mailserver.nix` serves SMTP (25), submission (587/465), and
-IMAPS (993) directly on Aether. Traefik proxies `https://mail.mgrlab.dk/admin`
-and JMAP to Stalwart's localhost-only HTTP listener. NixOS ACME obtains a
-separate certificate for `mail.mgrlab.dk` using the existing Cloudflare API
-key; Stalwart needs this certificate for SMTP STARTTLS and IMAPS. DNS currently
-publishes only the verified IPv4 address; do not publish an AAAA record until
-the address with working inbound IPv6 has been checked on Aether.
+IMAPS (993) directly on Aether. In the Pangolin UI create a **Local Site** and
+a public HTTP resource for `mail.mgrlab.dk`, with a target of
+`http://host.containers.internal:4848` (Traefik runs inside the Gerbil Podman
+network). Route the whole hostname, including `/.well-known/`, `/jmap/`, and
+`/admin`; disable Pangolin authentication on this resource so mail clients can
+use Stalwart's own JMAP and OAuth authentication. Stalwart's HTTP listener
+accepts traffic from the Podman bridge, not the public firewall. NixOS ACME
+obtains a separate certificate for `mail.mgrlab.dk` using the existing
+Cloudflare API key; Stalwart needs this certificate for SMTP STARTTLS and
+IMAPS. DNS currently publishes only the verified IPv4 address; do not publish
+an AAAA record until the address with working inbound IPv6 has been checked on
+Aether.
 
 The `mgrlab.dk` MX and SPF records switch from Proton to Aether; the old
 Proton DKIM, verification, and backup MX records are removed. DMARC is set to

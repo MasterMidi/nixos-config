@@ -18,7 +18,6 @@
 
         ./configuration.nix
         ./containers
-        ./pangolin.nix
         ./mailserver.nix
         ./secrets
         ./disko.nix

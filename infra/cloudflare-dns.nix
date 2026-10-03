@@ -31,11 +31,14 @@ let
       type = "A";
       content = "138.199.154.23";
     };
-    mgrlab_autoconfig_cname = {
+    # Keep this name present between ACME DNS-01 challenges. Otherwise a
+    # cached NODATA response can hide the short-lived challenge for 30 minutes.
+    mgrlab_mail_acme_challenge = {
       zone = "mgrlab";
-      name = "autoconfig.mgrlab.dk";
-      type = "CNAME";
-      content = "mail.mgrlab.dk";
+      name = "_acme-challenge.mail.mgrlab.dk";
+      type = "TXT";
+      content = "acme-dns01-placeholder";
+      ttl = 60;
     };
     # Keep the imported resource names so OpenTofu updates these records in place.
     mgrlab_protonmail_mx_primary = {
@@ -190,7 +193,7 @@ let
   # contents would break every plan after switching their DNS values.
   importRecords = lib.removeAttrs records [
     "mgrlab_mail_a"
-    "mgrlab_autoconfig_cname"
+    "mgrlab_mail_acme_challenge"
     "mgrlab_mail_spf"
     "mgrlab_protonmail_mx_primary"
     "mgrlab_protonmail_spf"
@@ -219,7 +222,7 @@ let
     {
       zone_id = zoneId record.zone;
       inherit (record) name type;
-      ttl = 1;
+      ttl = record.ttl or 1;
       proxied = false;
     }
     // lib.optionalAttrs (record ? content) { content = recordContent record; }

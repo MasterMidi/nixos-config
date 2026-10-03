@@ -67,9 +67,11 @@ nix run .#cloudflare-dns
 ```
 
 After the initial apply, the import blocks are inert. State and provider files
-are stored under `infra/.terranix/cloudflare-dns/`, which is git-ignored. Back
-up the state file until a remote backend is configured; losing it means the
-records must be imported again.
+are stored under `infra/.terranix/cloudflare-dns/`. Although this directory is
+in `.gitignore`, some of its files were already tracked, including the local
+state file; keep the updated state after applying changes. Back up the state
+file until a remote backend is configured; losing it means the records must be
+imported again.
 
 For an interactive shell with `tofu`, `plan`, `apply`, `destroy`, and `init`:
 
@@ -115,15 +117,6 @@ IMAPS. DNS currently publishes only the verified IPv4 address; do not publish
 an AAAA record until the address with working inbound IPv6 has been checked on
 Aether.
 
-Thunderbird discovers the public configuration at
-`https://autoconfig.mgrlab.dk/mail/config-v1.1.xml`. The Pangolin container's
-Traefik file provider routes that path directly to Stalwart without Pangolin
-authentication, and Cloudflare points `autoconfig.mgrlab.dk` at the mail host.
-After deploying Aether, check the XML at that URL with
-`?emailaddress=your-mailbox@mgrlab.dk` before retrying Thunderbird: it should
-advertise `mail.mgrlab.dk` with IMAPS on 993 and SMTP submission on 465 (or
-STARTTLS on 587), and the mailbox login as username.
-
 The `mgrlab.dk` MX and SPF records switch from Proton to Aether; the old
 Proton DKIM, verification, and backup MX records are removed. DMARC is set to
 `p=none` during setup. The renamed records are **already imported** into the
@@ -147,6 +140,22 @@ describes its own certificate, but Aether actually presents a separately
 renewed NixOS ACME certificate on port 25. DNSSEC is already enabled; publishing
 stale TLSA hashes would cause DANE-aware senders to reject mail. Set up TLSA
 publication tied to the NixOS certificate's renewal before enabling DANE.
+
+The NixOS ACME client creates its own short-lived TXT record at
+`_acme-challenge.mail.mgrlab.dk`. A separate placeholder TXT record is kept at
+that name with a 60-second TTL: without it, Cloudflare's DNSSEC-signed negative
+response can remain cached for 30 minutes and hide the challenge until the
+certificate order times out. The ACME client checks propagation through
+`1.1.1.1` instead of Aether's local caching stub, and removes only its own
+TXT value.
+After publishing the placeholder, allow old negative caches to expire (up to
+30 minutes), then check `acme-order-renew-mail.mgrlab.dk.service` on Aether and
+confirm that SMTP on port 25 presents a publicly trusted certificate. Stalwart
+serves a temporary self-signed certificate until that ACME order succeeds;
+Thunderbird's certificate warning and the SMTP `UnknownIssuer` error indicate
+that it is still serving the temporary one. A missing TLSA record is expected;
+public validating DNS resolvers return an authenticated empty answer, so don't
+publish the TLSA hashes from Stalwart's zonefile to silence its diagnostic.
 
 ```sh
 nixos-rebuild dry-build --flake .#aether

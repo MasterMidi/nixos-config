@@ -71,6 +71,8 @@
     certs."mail.mgrlab.dk" = {
       email = "home@michael-graversen.dk";
       dnsProvider = "cloudflare";
+      # Avoid the host's caching stub when checking DNS-01 propagation.
+      dnsResolver = "1.1.1.1:53";
       environmentFile = pkgs.writeText "stalwart-acme-cloudflare.env" ''
         CF_API_EMAIL=home@michael-graversen.dk
       '';

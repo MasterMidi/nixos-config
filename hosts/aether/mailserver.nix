@@ -1,10 +1,11 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 {
-  services.stalwart-mail = {
-    enable = false;
-    openFirewall = true; # sits behind reverse proxy instead
+  services.stalwart = {
+    enable = true;
+    stateVersion = "26.05";
     settings = {
       server = {
+        hostname = "mail.mgrlab.dk";
         listener = {
           smtp = {
             bind = [ "[::]:25" ];
@@ -19,62 +20,77 @@
             protocol = "smtp";
             tls.implicit = true;
           };
-          imap = {
-            bind = [ "[::]:143" ];
-            protocol = "imap";
-          };
           imaptls = {
             bind = [ "[::]:993" ];
             protocol = "imap";
-            # tls.implicit = true;
+            tls.implicit = true;
           };
           http = {
-            bind = [ "[::]:4848" ];
-            protocol = "http";
-          };
-          https = {
-            bind = [ "[::]:4949" ];
+            bind = [ "127.0.0.1:4848" ];
             protocol = "http";
           };
         };
-        hostname = "mail.mgrlab.dk";
-        # http = {
-        #   hsts = true;
-        #   permissive-cors = false;
-        #   url = "protocol + '://' + config_get('server.hostname') + ':' + local_port";
-        #   use-x-forwarded = true;
-        # };
+      };
+
+      http = {
+        use-x-forwarded = true;
+        url = "'https://mail.mgrlab.dk'";
       };
 
       certificate.default = {
         default = true;
-        cert = "%{file:/certs/mgrlab.dk/cert.pem}%";
-        private-key = "%{file:/certs/mgrlab.dk/key.pem}%";
+        cert = "%{file:/var/lib/acme/mail.mgrlab.dk/fullchain.pem}%";
+        private-key = "%{file:/var/lib/acme/mail.mgrlab.dk/key.pem}%";
       };
-
-      # session.auth = {
-      #   mechanisms = ["PLAIN" "LOGIN" "OAUTHBEARER"];
-      # };
 
       authentication.fallback-admin = {
         user = "admin";
-        secret = "%{file:${config.sops.secrets.STALWART_ADMIN_PASSWORD.path}}%";
+        secret = "%{file:/run/credentials/stalwart.service/user_admin_password}%";
       };
 
-      tracer = {
-        # journald = {
-        #   type = "log";
-        #   path = "/opt/stalwart-mail/logs";
-        #   prefix = "stalwart-mail.log";
-        #   rotate = "daily";
-        #   level = "info";
-        #   ansi = true;
-        #   enable = true;
-        # };
-      };
+      # Publish IPv6 forward DNS and SPF before using the Hetzner IPv6 source.
+      queue.connection.default.source-ips = [ "138.199.154.23" ];
     };
-    credentials = {
-      user_admin_password = config.sops.secrets.STALWART_ADMIN_PASSWORD.path;
+    credentials.user_admin_password = config.sops.secrets.STALWART_ADMIN_PASSWORD.path;
+  };
+
+  # SMTP and mail-client protocols need end-to-end TLS; Traefik handles only HTTP.
+  networking.firewall.allowedTCPPorts = [
+    25
+    465
+    587
+    993
+  ];
+
+  security.acme = {
+    acceptTerms = true;
+    certs."mail.mgrlab.dk" = {
+      email = "home@michael-graversen.dk";
+      dnsProvider = "cloudflare";
+      environmentFile = pkgs.writeText "stalwart-acme-cloudflare.env" ''
+        CF_API_EMAIL=home@michael-graversen.dk
+      '';
+      credentialFiles.CF_API_KEY_FILE = config.sops.secrets.CLOUDFLARE_GLOBAL_API_KEY.path;
+      group = config.services.stalwart.group;
+      reloadServices = [ "stalwart.service" ];
     };
+  };
+
+  systemd.services.stalwart = {
+    requires = [ "acme-mail.mgrlab.dk.service" ];
+    after = [ "acme-mail.mgrlab.dk.service" ];
+  };
+
+  # The Pangolin wildcard router also matches mail.mgrlab.dk; use a more
+  # specific router for the Stalwart management UI and JMAP endpoint.
+  services.traefik.dynamicConfigOptions.http = {
+    routers.stalwart = {
+      rule = "Host(`mail.mgrlab.dk`)";
+      entryPoints = [ "websecure" ];
+      priority = 1000;
+      service = "stalwart";
+      tls.certResolver = "letsencrypt";
+    };
+    services.stalwart.loadBalancer.servers = [ { url = "http://127.0.0.1:4848"; } ];
   };
 }

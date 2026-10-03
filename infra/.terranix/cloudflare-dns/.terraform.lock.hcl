@@ -2,9 +2,9 @@
 # Manual edits may be lost in future updates.
 
 provider "registry.opentofu.org/cloudflare/cloudflare" {
-  version     = "5.24.0"
-  constraints = "5.24.0"
+  version     = "5.25.0"
+  constraints = "5.25.0"
   hashes = [
-    "h1:mx/77DXFP4dMyBSjwoeDs2SNjbHV9tjg13/D93rbEWs=",
+    "h1:rkkg+/O2+wC3X95/mdrfp3Si3dhSnKErGg/Nm2BqrbI=",
   ]
 }

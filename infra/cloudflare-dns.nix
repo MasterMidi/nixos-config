@@ -25,55 +25,37 @@ let
       type = "A";
       content = "138.199.154.23";
     };
-    mgrlab_protonmail_dkim_1 = {
+    mgrlab_mail_a = {
       zone = "mgrlab";
-      name = "protonmail._domainkey.mgrlab.dk";
-      type = "CNAME";
-      content = "protonmail.domainkey.dtlsqrfwymr5t7o4otvfpyoaqpjebrr6rwuf7ugka7quh7nxzkc7a.domains.proton.ch";
+      name = "mail.mgrlab.dk";
+      type = "A";
+      content = "138.199.154.23";
     };
-    mgrlab_protonmail_dkim_2 = {
-      zone = "mgrlab";
-      name = "protonmail2._domainkey.mgrlab.dk";
-      type = "CNAME";
-      content = "protonmail2.domainkey.dtlsqrfwymr5t7o4otvfpyoaqpjebrr6rwuf7ugka7quh7nxzkc7a.domains.proton.ch";
-    };
-    mgrlab_protonmail_dkim_3 = {
-      zone = "mgrlab";
-      name = "protonmail3._domainkey.mgrlab.dk";
-      type = "CNAME";
-      content = "protonmail3.domainkey.dtlsqrfwymr5t7o4otvfpyoaqpjebrr6rwuf7ugka7quh7nxzkc7a.domains.proton.ch";
-    };
+    # Keep the imported resource names so OpenTofu updates these records in place.
     mgrlab_protonmail_mx_primary = {
       zone = "mgrlab";
       name = "mgrlab.dk";
       type = "MX";
-      content = "mail.protonmail.ch";
+      content = "mail.mgrlab.dk";
       priority = 10;
-    };
-    mgrlab_protonmail_mx_secondary = {
-      zone = "mgrlab";
-      name = "mgrlab.dk";
-      type = "MX";
-      content = "mailsec.protonmail.ch";
-      priority = 20;
     };
     mgrlab_dmarc = {
       zone = "mgrlab";
       name = "_dmarc.mgrlab.dk";
       type = "TXT";
-      content = "v=DMARC1; p=quarantine";
+      content = "v=DMARC1; p=none";
     };
     mgrlab_protonmail_spf = {
       zone = "mgrlab";
       name = "mgrlab.dk";
       type = "TXT";
-      content = "v=spf1 include:_spf.protonmail.ch ~all";
+      content = "v=spf1 ip4:138.199.154.23 -all";
     };
-    mgrlab_protonmail_verification = {
+    mgrlab_mail_spf = {
       zone = "mgrlab";
-      name = "mgrlab.dk";
+      name = "mail.mgrlab.dk";
       type = "TXT";
-      content = "protonmail-verification=a44008d99f35e12c4692de54f5c5dbc0e6a3f66c";
+      content = "v=spf1 ip4:138.199.154.23 -all";
     };
 
     michael_graversen_apex_a = {
@@ -140,6 +122,16 @@ let
     };
   };
 
+  # These records are already in state; looking them up by their previous
+  # contents would break every plan after switching their DNS values.
+  importRecords = lib.removeAttrs records [
+    "mgrlab_mail_a"
+    "mgrlab_mail_spf"
+    "mgrlab_protonmail_mx_primary"
+    "mgrlab_protonmail_spf"
+    "mgrlab_dmarc"
+  ];
+
   zoneId = zone: "\${data.cloudflare_zones.${zone}.result[0].id}";
   recordContent = record: if record.type == "TXT" then ''"${record.content}"'' else record.content;
 
@@ -178,7 +170,7 @@ in
     max_items = 1;
   }) zones;
 
-  data.cloudflare_dns_records = lib.mapAttrs (_: mkRecordLookup) records;
+  data.cloudflare_dns_records = lib.mapAttrs (_: mkRecordLookup) importRecords;
 
   resource.cloudflare_dns_record = lib.mapAttrs (_: mkRecord) records;
 
@@ -187,7 +179,7 @@ in
     status = "active";
   };
 
-  import = lib.mapAttrsToList mkImport records ++ [
+  import = lib.mapAttrsToList mkImport importRecords ++ [
     {
       to = "cloudflare_zone_dnssec.mgrlab";
       id = zoneId "mgrlab";

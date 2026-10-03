@@ -96,5 +96,45 @@ Cloudflare account and should be imported before management:
 - Remote OpenTofu state with locking and encryption
 
 Cloudflare cannot expose Proton Mail account configuration through this DNS
-provider. The Proton verification, MX, SPF, DKIM, and DMARC records are managed
-here as ordinary DNS records.
+provider. The Proton records for `michael-graversen.dk` are managed here as
+ordinary DNS records.
+
+## Stalwart test domain (`mgrlab.dk`)
+
+`hosts/aether/mailserver.nix` serves SMTP (25), submission (587/465), and
+IMAPS (993) directly on Aether. Traefik proxies `https://mail.mgrlab.dk/admin`
+and JMAP to Stalwart's localhost-only HTTP listener. NixOS ACME obtains a
+separate certificate for `mail.mgrlab.dk` using the existing Cloudflare API
+key; Stalwart needs this certificate for SMTP STARTTLS and IMAPS. DNS currently
+publishes only the verified IPv4 address; do not publish an AAAA record until
+the address with working inbound IPv6 has been checked on Aether.
+
+The `mgrlab.dk` MX and SPF records switch from Proton to Aether; the old
+Proton DKIM, verification, and backup MX records are removed. DMARC is set to
+`p=none` during setup. The renamed records are **already imported** into the
+local `infra/.terranix/cloudflare-dns/terraform.tfstate`; restore that state
+from backup if necessary before applying, or explicitly re-import the existing
+Cloudflare records. Otherwise the old Proton records will remain unmanaged.
+Deploy Aether first and check that Stalwart is running. DNS-01 certificate
+issuance works with the current wildcard A record. Sign in at
+`https://mail.mgrlab.dk/admin` as `admin` with `STALWART_ADMIN_PASSWORD` from
+Aether's SOPS secrets, and create the `mgrlab.dk` domain and a mailbox. Add
+the **actual DKIM TXT values** shown for the domain to `infra/cloudflare-dns.nix`
+before changing MX; Stalwart generates these selectors and keys at runtime.
+
+```sh
+nixos-rebuild dry-build --flake .#aether
+dply .#aether
+```
+
+After the domain, mailbox and DKIM entries are ready, review and apply DNS:
+
+```sh
+nix run .#cloudflare-dns.plan
+nix run .#cloudflare-dns
+```
+
+Once a sent message passes DKIM and SPF, change `_dmarc.mgrlab.dk` back to
+`p=quarantine` (or `p=reject`). Check
+that Hetzner permits inbound/outbound port 25, and test a message in each
+direction before relying on the new MX record.

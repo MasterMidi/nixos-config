@@ -134,6 +134,21 @@ let
             certResolver = "letsencrypt";
           };
         };
+
+        # Thunderbird looks up this hostname, not mail.mgrlab.dk. Keep the
+        # config public so clients can retrieve it before authenticating.
+        stalwart-autoconfig-redirect = {
+          rule = "Host(`autoconfig.mgrlab.dk`) && Path(`/mail/config-v1.1.xml`)";
+          service = "stalwart-autoconfig";
+          entryPoints = [ "web" ];
+          middlewares = [ "redirect-to-https" ];
+        };
+        stalwart-autoconfig = {
+          rule = "Host(`autoconfig.mgrlab.dk`) && Path(`/mail/config-v1.1.xml`)";
+          service = "stalwart-autoconfig";
+          entryPoints = [ "websecure" ];
+          tls.certResolver = "letsencrypt";
+        };
       };
 
       services = {
@@ -152,6 +167,10 @@ let
             ];
           };
         };
+
+        stalwart-autoconfig.loadBalancer.servers = [
+          { url = "http://host.containers.internal:4848"; }
+        ];
       };
     };
   };

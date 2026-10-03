@@ -115,6 +115,15 @@ IMAPS. DNS currently publishes only the verified IPv4 address; do not publish
 an AAAA record until the address with working inbound IPv6 has been checked on
 Aether.
 
+Thunderbird discovers the public configuration at
+`https://autoconfig.mgrlab.dk/mail/config-v1.1.xml`. The Pangolin container's
+Traefik file provider routes that path directly to Stalwart without Pangolin
+authentication, and Cloudflare points `autoconfig.mgrlab.dk` at the mail host.
+After deploying Aether, check the XML at that URL with
+`?emailaddress=your-mailbox@mgrlab.dk` before retrying Thunderbird: it should
+advertise `mail.mgrlab.dk` with IMAPS on 993 and SMTP submission on 465 (or
+STARTTLS on 587), and the mailbox login as username.
+
 The `mgrlab.dk` MX and SPF records switch from Proton to Aether; the old
 Proton DKIM, verification, and backup MX records are removed. DMARC is set to
 `p=none` during setup. The renamed records are **already imported** into the

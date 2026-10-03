@@ -31,6 +31,12 @@ let
       type = "A";
       content = "138.199.154.23";
     };
+    mgrlab_autoconfig_cname = {
+      zone = "mgrlab";
+      name = "autoconfig.mgrlab.dk";
+      type = "CNAME";
+      content = "mail.mgrlab.dk";
+    };
     # Keep the imported resource names so OpenTofu updates these records in place.
     mgrlab_protonmail_mx_primary = {
       zone = "mgrlab";
@@ -184,6 +190,7 @@ let
   # contents would break every plan after switching their DNS values.
   importRecords = lib.removeAttrs records [
     "mgrlab_mail_a"
+    "mgrlab_autoconfig_cname"
     "mgrlab_mail_spf"
     "mgrlab_protonmail_mx_primary"
     "mgrlab_protonmail_spf"

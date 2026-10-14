@@ -417,6 +417,26 @@
         "type": "github"
       }
     },
+    "gaze": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1791914564,
+        "narHash": "sha256-8Xy3I2+QnHLy3CZBytc6uW5EOjQ5++nXcaEFUARoTTI=",
+        "owner": "GunduLabs",
+        "repo": "gaze",
+        "rev": "422182a0a13dde70fb5226f100cde7737c78f22f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "GunduLabs",
+        "repo": "gaze",
+        "type": "github"
+      }
+    },
     "git-hooks": {
       "inputs": {
         "flake-compat": [
@@ -920,6 +940,7 @@
         "easykubenix": "easykubenix",
         "firefox-gnome-theme": "firefox-gnome-theme",
         "flake-parts": "flake-parts_2",
+        "gaze": "gaze",
         "home-manager": "home-manager",
         "import-tree": "import-tree",
         "kubenix": "kubenix",

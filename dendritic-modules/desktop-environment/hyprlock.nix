@@ -20,7 +20,7 @@
     { ... }:
     {
       # Allow hyprlock to lock the screen
-      security.pam.services.hyprlock.text = "auth include login";
+      security.pam.services.hyprlock.unixAuth = true;
     };
 
   flake.homeModules.hyprlock-meridian = # based on https://github.com/zDyanTB/Hypraether/blob/master/.config/hypr/hyprlock.conf

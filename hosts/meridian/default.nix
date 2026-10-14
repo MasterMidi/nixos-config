@@ -50,6 +50,7 @@
             self.homeModules.opencode
             self.homeModules.zed
             self.homeModules.devenv
+            self.homeModules.wluma
           ];
         }
       ];

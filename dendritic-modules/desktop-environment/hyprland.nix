@@ -3,8 +3,11 @@
   flake.nixosModules.hyprland =
     { pkgs, ... }:
     {
+      programs.uwsm.enable = true;
+
       programs.hyprland = {
         enable = true;
+        withUWSM = true;
       };
 
       xdg.portal = {

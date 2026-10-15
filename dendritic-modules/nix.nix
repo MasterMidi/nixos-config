@@ -56,17 +56,17 @@
         # pin the registry to avoid downloading and evaling a new nixpkgs version every time using 'nix shell nixpkgs#...'
         registry = lib.mapAttrs (_: f: { flake = f; }) inputs;
 
-        nixPath = [
-          "nixpkgs=${inputs.nixpkgs}"
-          "home-manager=${inputs.home-manager}"
-        ];
-
         # Resource usage and management
         daemonCPUSchedPolicy = "idle";
         daemonIOSchedClass = "idle";
         daemonIOSchedPriority = 7;
 
         settings = {
+          nix-path = [
+            "nixpkgs=${inputs.nixpkgs}"
+            "home-manager=${inputs.home-manager}"
+          ];
+
           experimental-features = [
             "nix-command" # The new `nix ...` commands
             "flakes" # flake support

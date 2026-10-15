@@ -108,6 +108,7 @@
     {
       wayland.windowManager.hyprland = {
         enable = true;
+        configType = "hyprlang";
 
         plugins = with pkgs; [ ];
 

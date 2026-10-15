@@ -118,11 +118,11 @@ in
       # rofi-emoji
       # rofi-nerdy
     ];
-    terminal = config.home.sessionVariables.TERM_PROGRAM;
-    font = "${builtins.head config.fonts.fontconfig.defaultFonts.monospace} 10";
     # theme = "/theme.rasi";
     theme = import ./theme.nix { inherit config; };
-    extraConfig = {
+    settings = {
+      terminal = config.home.sessionVariables.TERM_PROGRAM;
+      font = "${builtins.head config.fonts.fontconfig.defaultFonts.monospace} 10";
       modi = "drun,run,ssh";
       show-icons = true;
       icon-theme = config.gtk.iconTheme.name;

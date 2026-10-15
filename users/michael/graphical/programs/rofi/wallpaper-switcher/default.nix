@@ -109,9 +109,9 @@ in
 
       # Set wallpaper
       [[ -n "$wall_selection" ]] || exit 1
-      ${pkgs.swww}/bin/swww img "$wallDir"/"$wall_selection" --transition-step 50 --transition-fps 200 --transition-type any --outputs "$OUTPUT_DISPLAY"
+      ${pkgs.awww}/bin/awww img "$wallDir"/"$wall_selection" --transition-step 50 --transition-fps 200 --transition-type any --outputs "$OUTPUT_DISPLAY"
       # ${pkgs.lutgen}/bin/lutgen apply -p gruvbox-dark "$wallDir"/"$wall_selection" -o "$HOME/.cache/wallpapers-lut"
-      # ${pkgs.swww}/bin/swww img "$HOME/.cache/wallpapers-lut/$wall_selection" --transition-step 255 --transition-type any
+      # ${pkgs.awww}/bin/awww img "$HOME/.cache/wallpapers-lut/$wall_selection" --transition-step 255 --transition-type any
       ${pkgs.libnotify}/bin/notify-send "Wallpaper set!" -i "$wallDir"/"$wall_selection" -t 2200
       exit 0
     '')

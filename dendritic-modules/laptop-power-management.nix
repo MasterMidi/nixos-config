@@ -22,9 +22,9 @@
 
       # logind configuration for hardware buttons and lid switch
       services.logind.settings.Login = {
-        lidSwitch = "suspend-then-hibernate";
-        powerKey = "hibernate";
-        powerKeyLongPress = "poweroff";
+        HandleLidSwitch = "suspend-then-hibernate";
+        HandlePowerKey = "hibernate";
+        HandlePowerKeyLongPress = "poweroff";
       };
 
       # Configure systemd sleep states

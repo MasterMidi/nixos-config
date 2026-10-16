@@ -29,7 +29,7 @@
       };
 
       nixpkgs.config = {
-        allowUnfree = lib.mkForce true;
+        allowUnfree = true;
       };
 
       nix = {

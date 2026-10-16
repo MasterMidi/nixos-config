@@ -42,11 +42,16 @@
 
       services.k3s = {
         enable = true;
+        nodeIP = "192.168.1.139";
+        gracefulNodeShutdown = {
+          enable = true;
+          shutdownGracePeriod = "1m30s";
+          shutdownGracePeriodCriticalPods = "30s";
+        };
         extraFlags = [
           # "--debug"
           "--kubelet-arg=allowed-unsafe-sysctls=net.ipv4.ip_forward,net.ipv6.conf.all.forwarding,net.ipv4.conf.all.src_valid_mark"
           "--flannel-backend=vxlan"
-          "--node-ip=192.168.1.139"
           "--disable-network-policy" # Needed, else no access to internet (or i just need some network policy changes, but this works for now)
 
           # Authentication

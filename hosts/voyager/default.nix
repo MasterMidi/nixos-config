@@ -106,8 +106,8 @@
       sshUser = "root";
       path = inputs.deploy-rs.lib.aarch64-linux.activate.nixos self.nixosConfigurations.voyager;
       remoteBuild = false;
-      magicRollback = false;
-      autoRollback = false;
+      magicRollback = true;
+      autoRollback = true;
     };
   };
 }

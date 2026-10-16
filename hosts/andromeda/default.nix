@@ -46,8 +46,8 @@
       sshUser = "root";
       path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.andromeda;
       remoteBuild = true;
-      autoRollback = false;
-      magicRollback = false;
+      autoRollback = true;
+      magicRollback = true;
     };
   };
 }

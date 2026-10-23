@@ -29,6 +29,7 @@
 
     home.packages = with pkgs; [
       prusa-slicer
+      jellyfin-desktop
 
       # Tools
       xdg-utils

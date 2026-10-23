@@ -13,6 +13,7 @@
         self.nixosModules.tailscale
         self.nixosModules.netbird-client
         self.nixosModules.zed
+        self.nixosModules.gaze-zenith
 
         ./services
         ./configuration.nix

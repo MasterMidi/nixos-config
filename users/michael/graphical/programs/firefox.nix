@@ -40,7 +40,7 @@
     };
   };
 
-  home.file.".mozilla/native-messaging-hosts".enable = false;
+  home.file."${config.programs.firefox.configPath}/native-messaging-hosts".enable = false;
   home.file."${config.programs.firefox.configPath}/${config.programs.firefox.profiles.default.path}/chrome/firefox-gnome-theme".source =
     inputs.firefox-gnome-theme;
 }

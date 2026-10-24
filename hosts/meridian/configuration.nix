@@ -62,4 +62,7 @@
   virtualisation.docker.storageDriver = "overlay2";
 
   users.users.michael.extraGroups = [ "dialout" ];
+
+  services.hardware.bolt.enable = true;
+
 }

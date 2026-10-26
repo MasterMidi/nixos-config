@@ -52,7 +52,7 @@ let
       zone = "mgrlab";
       name = "_dmarc.mgrlab.dk";
       type = "TXT";
-      content = "v=DMARC1; p=none";
+      content = "v=DMARC1; p=reject; rua=mailto:postmaster@mgrlab.dk";
     };
     mgrlab_protonmail_spf = {
       zone = "mgrlab";
@@ -66,6 +66,7 @@ let
       type = "TXT";
       content = "v=spf1 ip4:138.199.154.23 -all";
     };
+    # Retain v0.15 selectors so previously signed test messages still verify.
     mgrlab_dkim_ed25519 = {
       zone = "mgrlab";
       name = "202610e._domainkey.mgrlab.dk";
@@ -81,6 +82,66 @@ let
         "v=DKIM1; k=rsa; h=sha256; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyStwcxBckWhZ6SPXEhz3ZbHwTG3gOxO3MDN+Zr4EYTvU43CIXuz+aQ/O8PMM61TP3bPJaNESNSpGj6H2wxpCLib7RDtaD7rDmaofrPBrDZRd7pftLiZf1yGO50RosG0HEuHpK7ONsJ1wkEY/trKQpv8Vlh68NHPjLv4HVpZO40JN13bF2NjikwT"
         "oGv2mnSuBhZ48USCWMkdmOoCz8QiGsP2mOIQioU8rcz97v2qkv9cCUlKi2qdHd36svEDQGJFSXDrLPOsHM2Yjg0TmFdThP6gQuq3KbxMtimf6lL3h+NeNUNW7fkXKs2U5bTGdxW20gUm1smb8n/KcfwCAzf6CAwIDAQAB"
       ];
+    };
+    mgrlab_dkim_v16_ed25519 = {
+      zone = "mgrlab";
+      name = "v1-ed25519-20261026._domainkey.mgrlab.dk";
+      type = "TXT";
+      content = "v=DKIM1; k=ed25519; h=sha256; p=pCfKjC6sVm9iYP9zII0PAZbPELrMAa8cDAkBybR50+A=";
+    };
+    mgrlab_dkim_v16_rsa = {
+      zone = "mgrlab";
+      name = "v1-rsa-20261026._domainkey.mgrlab.dk";
+      type = "TXT";
+      content = [
+        "v=DKIM1; k=rsa; h=sha256; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzQde9pikgpBF50hm8kEt1G7OTy68tdjjlTzH8trip9fNNcYdxy0TOozQXYf7X9z62NR0aV3uuP9eWmY/jJfiXeFupXpwhETo3UsIOlkiiqHoy3wL6nLgUaSXa6pmsvIDh4sm/xJC4m0y3/uEeJECtp2kYk8K/QG2PK0w4gfpbOZ/81UnW6NDvjS"
+        "PTMUnTos0YQcv/fAGvMR3ajp0QZVqq16Pp0ha3CKDfWvxgIXetWr3iGw3luMmHW6KrwBvUGIv/r0yGR5TKzcW3pdxt9DtHTVINFIPdZzYi6BA7HRMFb3S0q1iiff3TXZgSnMorSjbo6EQG9BjoEhh5xUZaLMG0QIDAQAB"
+      ];
+    };
+    # These HTTPS services use the existing mail.mgrlab.dk Pangolin resource.
+    mgrlab_caldavs_srv = {
+      zone = "mgrlab";
+      name = "_caldavs._tcp.mgrlab.dk";
+      type = "SRV";
+      priority = 0;
+      data = {
+        priority = 0;
+        weight = 1;
+        port = 443;
+        target = "mail.mgrlab.dk";
+      };
+    };
+    mgrlab_carddavs_srv = {
+      zone = "mgrlab";
+      name = "_carddavs._tcp.mgrlab.dk";
+      type = "SRV";
+      priority = 0;
+      data = {
+        priority = 0;
+        weight = 1;
+        port = 443;
+        target = "mail.mgrlab.dk";
+      };
+    };
+    mgrlab_jmap_srv = {
+      zone = "mgrlab";
+      name = "_jmap._tcp.mgrlab.dk";
+      type = "SRV";
+      priority = 0;
+      data = {
+        priority = 0;
+        weight = 1;
+        port = 443;
+        target = "mail.mgrlab.dk";
+      };
+    };
+    # Already present in Cloudflare and state; preserve it while the remaining
+    # v0.16 discovery aliases await Pangolin routes.
+    mgrlab_autoconfig_cname = {
+      zone = "mgrlab";
+      name = "autoconfig.mgrlab.dk";
+      type = "CNAME";
+      content = "mail.mgrlab.dk";
     };
     mgrlab_imaps_srv = {
       zone = "mgrlab";
@@ -200,6 +261,13 @@ let
     "mgrlab_dmarc"
     "mgrlab_dkim_ed25519"
     "mgrlab_dkim_rsa"
+    # New v0.16 records are created rather than looked up for import.
+    "mgrlab_dkim_v16_ed25519"
+    "mgrlab_dkim_v16_rsa"
+    "mgrlab_caldavs_srv"
+    "mgrlab_carddavs_srv"
+    "mgrlab_jmap_srv"
+    "mgrlab_autoconfig_cname"
     "mgrlab_imaps_srv"
     "mgrlab_submissions_srv"
     "mgrlab_submission_srv"

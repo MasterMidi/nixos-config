@@ -168,6 +168,29 @@ usops
 
 Secrets are managed using [sops-nix](https://github.com/Mic92/sops-nix). The secrets are encrypted and stored in the `secrets/` directory.
 
+### Aether mail server
+
+`hosts/aether/mailserver.nix` runs `pkgs.stalwart_0_16` using a manual
+`stalwart.service`, because the nixpkgs `services.stalwart` module targets v0.15.
+The v0.16 datastore configuration, declarative settings plan, RocksDB database,
+CLI schema cache and unpacked WebUI live under `/var/lib/stalwart-16`, owned by
+`stalwart-16`. `XDG_CACHE_HOME` points to its `cache` subdirectory so the CLI
+can run under the system account without a writable home directory.
+The previous `/var/lib/stalwart` test database and `/var/cache/stalwart` are not
+migrated or reused. The two versions use the same mail ports and run one at a time.
+
+Before each start, the service briefly runs the v0.16 recovery API on port 18080
+(not opened in the firewall) and idempotently applies the settings plan with
+`stalwart-cli apply`. These declared settings are restored on every restart;
+accounts and other settings created in the WebUI remain in the v0.16 database.
+ACME continues to manage the mail certificate, with file-backed certificate
+references loaded by Stalwart after renewal restarts the service. Administration
+is available at `https://mail.mgrlab.dk/admin`, using `admin` and the existing
+`STALWART_ADMIN_PASSWORD` SOPS secret through v0.16's recovery-admin mechanism.
+
+Upstream's [v0.16 upgrade notes](https://github.com/stalwartlabs/stalwart/blob/v0.16.23/UPGRADING/v0_16.md)
+describe the replacement of TOML with JSON datastore configuration and JMAP objects.
+
 ## 🎨 Features
 
 - **Home Manager** integration for user environment

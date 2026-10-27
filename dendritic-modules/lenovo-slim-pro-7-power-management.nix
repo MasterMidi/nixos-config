@@ -18,15 +18,14 @@
         text = ''
           set -euo pipefail
 
-          # 1. Enforce Root Privileges
-          if [ "$EUID" -ne 0 ]; then
-            gum style --foreground 196 "Error: This script must be run as root (sudo)."
+          # Ensure ACPI Call interface is available
+          if [ ! -f /proc/acpi/call ]; then
+            gum style --foreground 196 "Error: /proc/acpi/call not found. Ensure the acpi_call module is loaded."
             exit 1
           fi
 
-          # 2. Ensure ACPI Call interface is available
-          if [ ! -f /proc/acpi/call ]; then
-            gum style --foreground 196 "Error: /proc/acpi/call not found. Ensure the acpi_call module is loaded."
+          if [ ! -w /proc/acpi/call ]; then
+            gum style --foreground 196 "Error: No write access to /proc/acpi/call. Join the acpi group and log in again."
             exit 1
           fi
 
@@ -97,6 +96,12 @@
 
       # Ensure the acpi_call package matching your specific kernel version is built and available
       boot.extraModulePackages = with config.boot.kernelPackages; [ acpi_call ];
+
+      users.groups.acpi = { };
+      users.users.michael.extraGroups = [ "acpi" ];
+
+      # The procfs interface is recreated at boot, so restore group access after loading modules.
+      systemd.tmpfiles.rules = [ "Z /proc/acpi/call 0660 root acpi - -" ];
 
       # Add our packaged script to the system environment
       environment.systemPackages = [

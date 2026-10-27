@@ -97,9 +97,63 @@ Cloudflare account and should be imported before management:
 - Notifications, log pushes, and account memberships
 - Remote OpenTofu state with locking and encryption
 
-Cloudflare cannot expose Proton Mail account configuration through this DNS
-provider. The Proton records for `michael-graversen.dk` are managed here as
-ordinary DNS records.
+## Stalwart mail domain (`michael-graversen.dk`)
+
+The mail records in `infra/cloudflare-dns.nix` use the supplied Stalwart zone
+export dated 2026-10-26. MX points to `mail.mgrlab.dk` with priority 10, SPF is
+`v=spf1 mx -all`, and DMARC uses `p=reject` with reports sent to
+`postmaster@michael-graversen.dk`. Both `v1-ed25519-20261026` and
+`v1-rsa-20261026` DKIM selectors are published; the RSA TXT record retains the
+export's two concatenated strings.
+
+The records also include CalDAV, CardDAV, IMAPS, JMAP, POP3S, and submissions
+SRV discovery, MTA-STS and TLS reporting, UA auto-configuration, `autoconfig`,
+and `autodiscover`. All service targets and discovery CNAMEs use
+`mail.mgrlab.dk`.
+
+The old Proton DKIM, verification, and secondary MX records are removed. The
+existing primary MX, SPF, and DMARC resource names are retained for updates in
+the current OpenTofu state, and new or changed mail records are excluded from
+the initial-import lookups. The website A records remain managed separately.
+
+Review and apply with:
+
+```sh
+nix run .#cloudflare-dns.plan
+nix run .#cloudflare-dns
+```
+
+### Client autoconfiguration
+
+`hosts/aether/containers/pangolin/default.nix` registers `michael-graversen.dk`
+with Pangolin and declares Traefik file-provider routes for
+`autoconfig.michael-graversen.dk`, `autodiscover.michael-graversen.dk`, and
+`ua-auto-config.michael-graversen.dk`. These routes forward directly to
+Stalwart at `http://host.containers.internal:4848`, preserving paths and query
+strings without Pangolin authentication. HTTP redirects to HTTPS. The existing
+Cloudflare DNS-01 resolver obtains a certificate for `michael-graversen.dk`
+and `*.michael-graversen.dk`; HTTPS terminates at Traefik.
+
+The discovery routes are managed in Nix, so no additional Pangolin UI resources
+are needed for these three hostnames. Deploy Aether after reviewing the changes:
+
+```sh
+nixos-rebuild dry-build --flake .#aether
+dply .#aether
+```
+
+Stalwart generates the Thunderbird XML from its advertised services. With the
+domain and mailbox configured in Stalwart, check that the public endpoint
+returns XML without a certificate error or login redirect:
+
+```sh
+curl --fail --show-error \
+  'https://autoconfig.michael-graversen.dk/mail/config-v1.1.xml?emailaddress=you%40michael-graversen.dk'
+```
+
+The XML should advertise IMAP at `mail.mgrlab.dk:993` and SMTP submission at
+`mail.mgrlab.dk:465`, both with implicit TLS and the full email address as the
+username. Thunderbird can then discover those settings during account setup.
 
 ## Stalwart test domain (`mgrlab.dk`)
 

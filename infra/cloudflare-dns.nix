@@ -201,52 +201,151 @@ let
     michael_graversen_dmarc = {
       zone = "michael_graversen";
       name = "_dmarc.michael-graversen.dk";
-      type = "CNAME";
-      content = "dmarc.simply.com";
+      type = "TXT";
+      content = "v=DMARC1; p=reject; rua=mailto:postmaster@michael-graversen.dk";
     };
-    michael_graversen_protonmail_dkim_1 = {
+    michael_graversen_dkim_v16_ed25519 = {
       zone = "michael_graversen";
-      name = "protonmail._domainkey.michael-graversen.dk";
-      type = "CNAME";
-      content = "protonmail.domainkey.dpagdvey2k7rnowvdupchpqwebftokfb4jsk2yw33tz2en2k66p2q.domains.proton.ch";
+      name = "v1-ed25519-20261026._domainkey.michael-graversen.dk";
+      type = "TXT";
+      content = "v=DKIM1; k=ed25519; h=sha256; p=tBurFvNwm/YnBY7Ys+3PLnsNdzkPT3Pgv/F+MeyV0ok=";
     };
-    michael_graversen_protonmail_dkim_2 = {
+    michael_graversen_dkim_v16_rsa = {
       zone = "michael_graversen";
-      name = "protonmail2._domainkey.michael-graversen.dk";
-      type = "CNAME";
-      content = "protonmail2.domainkey.dpagdvey2k7rnowvdupchpqwebftokfb4jsk2yw33tz2en2k66p2q.domains.proton.ch";
+      name = "v1-rsa-20261026._domainkey.michael-graversen.dk";
+      type = "TXT";
+      content = [
+        "v=DKIM1; k=rsa; h=sha256; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtSYjkiVRgmefdGYIuPCySOl+yfa8r0CA8R8TDdMVmk4mIbguTfTXbfg3ZB7d4M6nMWFS3zzUTspr1gutnGHEi28T6ACshIBfMJoIuCxwz2gMTXdhmlcf8TfpzQOO2FxwuAeddjUCXZeelCmEWtpAUzbftTQ4XHOSJMh+s21sgM8OSPSw/KtCusW"
+        "gZoWT4ws9xT0z9Sp8Tg1Ce1fEFsC46Ma5mW8G1jOohKFPxB99nLppwyOYV8dySFwUf2p84QLZryZDg6DoLb4ozk5DTqg5FpEUWLebhqz7jFbcYyH5dXuraol9yfZQfXVRw0zTXSp/ieFYXmJmxifo8u7l/H+0JwIDAQAB"
+      ];
     };
-    michael_graversen_protonmail_dkim_3 = {
-      zone = "michael_graversen";
-      name = "protonmail3._domainkey.michael-graversen.dk";
-      type = "CNAME";
-      content = "protonmail3.domainkey.dpagdvey2k7rnowvdupchpqwebftokfb4jsk2yw33tz2en2k66p2q.domains.proton.ch";
-    };
+    # Keep the imported resource names so OpenTofu updates these records in place.
     michael_graversen_protonmail_mx_primary = {
       zone = "michael_graversen";
       name = "michael-graversen.dk";
       type = "MX";
-      content = "mail.protonmail.ch";
+      content = "mail.mgrlab.dk";
       priority = 10;
-    };
-    michael_graversen_protonmail_mx_secondary = {
-      zone = "michael_graversen";
-      name = "michael-graversen.dk";
-      type = "MX";
-      content = "mailsec.protonmail.ch";
-      priority = 20;
     };
     michael_graversen_protonmail_spf = {
       zone = "michael_graversen";
       name = "michael-graversen.dk";
       type = "TXT";
-      content = "v=spf1 include:_spf.protonmail.ch ~all";
+      content = "v=spf1 mx -all";
     };
-    michael_graversen_protonmail_verification = {
+    michael_graversen_caldavs_srv = {
       zone = "michael_graversen";
-      name = "michael-graversen.dk";
+      name = "_caldavs._tcp.michael-graversen.dk";
+      type = "SRV";
+      priority = 0;
+      data = {
+        priority = 0;
+        weight = 1;
+        port = 443;
+        target = "mail.mgrlab.dk";
+      };
+    };
+    michael_graversen_carddavs_srv = {
+      zone = "michael_graversen";
+      name = "_carddavs._tcp.michael-graversen.dk";
+      type = "SRV";
+      priority = 0;
+      data = {
+        priority = 0;
+        weight = 1;
+        port = 443;
+        target = "mail.mgrlab.dk";
+      };
+    };
+    michael_graversen_imaps_srv = {
+      zone = "michael_graversen";
+      name = "_imaps._tcp.michael-graversen.dk";
+      type = "SRV";
+      priority = 0;
+      data = {
+        priority = 0;
+        weight = 1;
+        port = 993;
+        target = "mail.mgrlab.dk";
+      };
+    };
+    michael_graversen_jmap_srv = {
+      zone = "michael_graversen";
+      name = "_jmap._tcp.michael-graversen.dk";
+      type = "SRV";
+      priority = 0;
+      data = {
+        priority = 0;
+        weight = 1;
+        port = 443;
+        target = "mail.mgrlab.dk";
+      };
+    };
+    michael_graversen_pop3s_srv = {
+      zone = "michael_graversen";
+      name = "_pop3s._tcp.michael-graversen.dk";
+      type = "SRV";
+      priority = 0;
+      data = {
+        priority = 0;
+        weight = 1;
+        port = 995;
+        target = "mail.mgrlab.dk";
+      };
+    };
+    michael_graversen_submissions_srv = {
+      zone = "michael_graversen";
+      name = "_submissions._tcp.michael-graversen.dk";
+      type = "SRV";
+      priority = 0;
+      data = {
+        priority = 0;
+        weight = 1;
+        port = 465;
+        target = "mail.mgrlab.dk";
+      };
+    };
+    michael_graversen_mta_sts_cname = {
+      zone = "michael_graversen";
+      name = "mta-sts.michael-graversen.dk";
+      type = "CNAME";
+      content = "mail.mgrlab.dk";
+    };
+    michael_graversen_mta_sts = {
+      zone = "michael_graversen";
+      name = "_mta-sts.michael-graversen.dk";
       type = "TXT";
-      content = "protonmail-verification=783fa7039b5934348a359a87494de2c0e6a4be9e";
+      content = "v=STSv1; id=12055640984192404345";
+    };
+    michael_graversen_tls_reports = {
+      zone = "michael_graversen";
+      name = "_smtp._tls.michael-graversen.dk";
+      type = "TXT";
+      content = "v=TLSRPTv1; rua=mailto:postmaster@michael-graversen.dk";
+    };
+    michael_graversen_ua_auto_config_cname = {
+      zone = "michael_graversen";
+      name = "ua-auto-config.michael-graversen.dk";
+      type = "CNAME";
+      content = "mail.mgrlab.dk";
+    };
+    michael_graversen_ua_auto_config = {
+      zone = "michael_graversen";
+      name = "_ua-auto-config.michael-graversen.dk";
+      type = "TXT";
+      content = "v=UAAC1; a=sha256; d=CkJioiGlP2VCLh4pXYutLCDlUwJ0Lq29gbcWK908Kvs=";
+    };
+    michael_graversen_autoconfig_cname = {
+      zone = "michael_graversen";
+      name = "autoconfig.michael-graversen.dk";
+      type = "CNAME";
+      content = "mail.mgrlab.dk";
+    };
+    michael_graversen_autodiscover_cname = {
+      zone = "michael_graversen";
+      name = "autodiscover.michael-graversen.dk";
+      type = "CNAME";
+      content = "mail.mgrlab.dk";
     };
   };
 
@@ -272,6 +371,25 @@ let
     "mgrlab_submissions_srv"
     "mgrlab_submission_srv"
     "mgrlab_tls_reports"
+    "michael_graversen_dmarc"
+    "michael_graversen_protonmail_mx_primary"
+    "michael_graversen_protonmail_spf"
+    # New mail records are created rather than looked up for import.
+    "michael_graversen_dkim_v16_ed25519"
+    "michael_graversen_dkim_v16_rsa"
+    "michael_graversen_caldavs_srv"
+    "michael_graversen_carddavs_srv"
+    "michael_graversen_imaps_srv"
+    "michael_graversen_jmap_srv"
+    "michael_graversen_pop3s_srv"
+    "michael_graversen_submissions_srv"
+    "michael_graversen_mta_sts_cname"
+    "michael_graversen_mta_sts"
+    "michael_graversen_tls_reports"
+    "michael_graversen_ua_auto_config_cname"
+    "michael_graversen_ua_auto_config"
+    "michael_graversen_autoconfig_cname"
+    "michael_graversen_autodiscover_cname"
   ];
 
   zoneId = zone: "\${data.cloudflare_zones.${zone}.result[0].id}";

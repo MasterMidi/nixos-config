@@ -5,6 +5,12 @@
   ...
 }:
 let
+  stalwartDiscoveryRule = lib.concatMapStringsSep " || " (hostname: "Host(`${hostname}`)") [
+    "autoconfig.michael-graversen.dk"
+    "autodiscover.michael-graversen.dk"
+    "ua-auto-config.michael-graversen.dk"
+  ];
+
   traefikConfig = (pkgs.formats.yaml { }).generate "traefik_config.yml" {
     api = {
       insecure = true;
@@ -91,6 +97,29 @@ let
       };
 
       routers = {
+        # Discovery must reach Stalwart without a Pangolin login or path rewrite.
+        stalwart-discovery-redirect = {
+          rule = stalwartDiscoveryRule;
+          service = "stalwart-discovery";
+          entryPoints = [ "web" ];
+          middlewares = [ "redirect-to-https" ];
+        };
+
+        stalwart-discovery = {
+          rule = stalwartDiscoveryRule;
+          service = "stalwart-discovery";
+          entryPoints = [ "websecure" ];
+          tls = {
+            certResolver = "letsencrypt";
+            domains = [
+              {
+                main = "michael-graversen.dk";
+                sans = [ "*.michael-graversen.dk" ];
+              }
+            ];
+          };
+        };
+
         # HTTP to HTTPS redirect router
         main-app-router-redirect = {
           rule = "Host(`tunnel.mgrlab.dk`)"; # REPLACE THIS WITH YOUR DOMAIN
@@ -137,6 +166,12 @@ let
       };
 
       services = {
+        stalwart-discovery = {
+          loadBalancer.servers = [
+            { url = "http://host.containers.internal:4848"; }
+          ];
+        };
+
         next-service = {
           loadBalancer = {
             servers = [
@@ -178,6 +213,11 @@ let
     domains = {
       mgrlab = {
         base_domain = "mgrlab.dk";
+        cert_resolver = "letsencrypt";
+        prefer_wildcard_cert = true;
+      };
+      michael-graversen = {
+        base_domain = "michael-graversen.dk";
         cert_resolver = "letsencrypt";
         prefer_wildcard_cert = true;
       };

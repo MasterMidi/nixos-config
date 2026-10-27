@@ -13,6 +13,7 @@
         self.nixosModules.tailscale
         self.nixosModules.netbird-client
         self.nixosModules.zed
+        self.nixosModules.thunderbird
         self.nixosModules.gaze-zenith
 
         ./services
@@ -49,6 +50,7 @@
             self.homeModules.hyprland
             self.homeModules.jujutsu
             self.homeModules.opencode
+            self.homeModules.thunderbird
             self.homeModules.zed
             self.homeModules.devenv
           ];

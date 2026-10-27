@@ -515,6 +515,16 @@ Common patterns:
 
 ### Home Manager Integration
 
+New shared application modules can be exported as `flake.homeModules.<name>` from
+`dendritic-modules/programs/` and selected with `self.homeModules.<name>` in each
+host's `home-manager.users.michael.imports`. The Thunderbird module follows this
+pattern for Meridian and Zenith, using a dedicated `michael` profile and the
+Home Manager email, calendar and contact account modules. Credentials stay in
+Thunderbird's local password store and are entered interactively on first use.
+Its companion `nixosModules.thunderbird` provides the SOPS password secret used
+by the accounts' `passwordCommand` options via `osConfig`; the Thunderbird module
+currently ignores those commands, so they do not populate its password store.
+
 Home Manager configs typically live in:
 - `users/<username>/` - User-specific Home Manager configs
 - Imported in host `default.nix` or `configuration.nix`

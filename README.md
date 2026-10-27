@@ -191,6 +191,36 @@ is available at `https://mail.mgrlab.dk/admin`, using `admin` and the existing
 Upstream's [v0.16 upgrade notes](https://github.com/stalwartlabs/stalwart/blob/v0.16.23/UPGRADING/v0_16.md)
 describe the replacement of TOML with JSON datastore configuration and JMAP objects.
 
+### Thunderbird on Meridian and Zenith
+
+`dendritic-modules/programs/thunderbird.nix` exports `homeModules.thunderbird`,
+imported for Michael on both hosts. It configures `michael@michael-graversen.dk`
+with IMAP over TLS (port 993), SMTP over TLS (port 465), and the Stalwart CalDAV
+calendar and CardDAV address book at `mail.mgrlab.dk`. The mail folder mappings,
+reply placement, calendar color and timezone match the existing Meridian account.
+
+The companion `nixosModules.thunderbird` decrypts `THUNDERBIRD_MICHAEL_PASSWORD`
+from `secrets/thunderbird.sops.yaml`, readable only by Michael. Replace the
+encrypted `REPLACE_WITH_REAL_PASSWORD` placeholder using:
+
+```sh
+sops secrets/thunderbird.sops.yaml
+```
+
+The email, calendar and contact accounts reference this secret through their
+`passwordCommand` options. Home Manager's Thunderbird module currently ignores
+these commands, so Thunderbird still prompts for the password on first use and
+stores it locally.
+
+The default managed profile is `~/.thunderbird/michael`. Mail, calendar events and contacts
+are downloaded from the server. The previous profile directories remain available;
+to open Meridian's original profile, close Thunderbird and run
+`thunderbird --profile ~/.thunderbird/leiuu7s7.default`.
+
+Close Thunderbird before activating the configuration. Home Manager backs up an
+existing `profiles.ini` using the `.backup` suffix; if `profiles.ini.backup`
+already exists, archive that backup before activation.
+
 ## 🎨 Features
 
 - **Home Manager** integration for user environment

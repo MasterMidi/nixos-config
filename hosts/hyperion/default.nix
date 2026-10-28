@@ -25,6 +25,7 @@
         ../../users/michael/common
         {
           home-manager.users.michael.imports = [
+            self.homeModules.git-hyperion
             self.homeModules.k8s-cluster-administration
             self.homeModules.opencode
             self.homeModules.jujutsu

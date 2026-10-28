@@ -3,7 +3,6 @@
   imports = [
     ./bashmount.nix
     ./fzf.nix
-    ./git.nix
     ./lazygit.nix
     ./ripgrep.nix
   ];

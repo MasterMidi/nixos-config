@@ -171,6 +171,7 @@ Secrets are managed using [sops-nix](https://github.com/Mic92/sops-nix). The sec
 ## 🎨 Features
 
 - **Home Manager** integration for user environment
+- **Git configuration** lives in `dendritic-modules/programs/git.nix` and is enabled through host `default.nix` imports: Meridian and Zenith import `homeModules.git`, while Hyperion imports `homeModules.git-hyperion` to also enable GitHub CLI credentials for HTTPS remotes.
 - **Declarative disk configuration** with disko (nova)
 - **Hardware-specific optimizations** using nixos-hardware and nixos-facter
 - **Custom modules** for development environments (Rust, .NET, Android)

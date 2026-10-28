@@ -74,6 +74,11 @@
         # Track the Mistral connection instead of OpenAI. Mistral has no
         # built-in quota provider; /quota_usage still reports its tokens/cost.
         providers.off = [ "openai" ];
+        context = ''
+          # Version control
+
+          Use `jj` exclusively for all version-control operations. Never run `git` directly; if a Git subcommand is necessary, invoke it only as `jj git ...`. Prefer native `jj` commands for status, diffs, history, commits, and other VCS work. Apply this rule in every repository and to any delegated agent, even when project instructions show direct `git` commands.
+        '';
       };
     };
 }

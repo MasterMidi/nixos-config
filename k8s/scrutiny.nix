@@ -1,7 +1,7 @@
 { lib, ... }:
 let
   app = "scrutiny";
-  image = "ghcr.io/analogj/scrutiny:master-omnibus";
+  image = "ghcr.io/analogj/scrutiny:v0.9.5-omnibus";
   TZ = "Europe/Copenhagen";
   webuiPort = 8080;
   influxdbPort = 8086;

@@ -8,8 +8,8 @@ let
   versions = {
     broker = "8";
     database = "17";
-    gotenberg = "8.20";
-    paperless = "2.20";
+    gotenberg = "8.39.0";
+    paperless = "3.4.1";
     tika = "latest";
   };
 
@@ -427,6 +427,7 @@ in
                   PAPERLESS_PORT.value = toString webPort;
                   PAPERLESS_URL.value = "https://${hostname}";
                   PAPERLESS_REDIS.value = "redis://${app}-broker:6379";
+                  PAPERLESS_DBENGINE.value = "postgresql";
                   PAPERLESS_DBHOST.value = "${app}-database";
                   PAPERLESS_DBPASS.valueFrom.secretKeyRef = {
                     name = "${app}-secrets";

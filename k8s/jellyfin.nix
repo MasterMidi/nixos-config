@@ -1,7 +1,7 @@
 { lib, ... }:
 let
   app = "jellyfin";
-  image = "ghcr.io/jellyfin/jellyfin:12";
+  image = "ghcr.io/jellyfin/jellyfin:12.4";
   TZ = "Europe/Copenhagen";
 
   jellyfinLogging = {

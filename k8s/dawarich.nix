@@ -4,8 +4,8 @@ let
   namespace = app;
   appPort = 3000;
 
-  dawarichVersion = "1.11.0";
-  redisVersion = "7.4-alpine";
+  dawarichVersion = "1.20.0";
+  redisVersion = "8-alpine";
   postgisVersion = "17-3.5-alpine";
 
   dawarichImage = "freikin/dawarich:${dawarichVersion}";
@@ -82,16 +82,6 @@ let
     timeoutSeconds = 10;
     failureThreshold = 30;
   };
-  sidekiqProbe = {
-    exec.command = [
-      "sh"
-      "-c"
-      "pgrep -f sidekiq"
-    ];
-    periodSeconds = 10;
-    timeoutSeconds = 10;
-    failureThreshold = 30;
-  };
 in
 {
   kubernetes.resources.none.Namespace.${namespace}.metadata.labels = commonLabels;
@@ -101,6 +91,7 @@ in
       metadata.labels = labelsFor "configuration";
       type = "Opaque";
       stringData = {
+        OIDC_CLIENT_SECRET = "{{ secrets.dawarich_oidc_client_secret }}";
         POSTGRES_PASSWORD = "{{ secrets.dawarich_postgres_password }}";
         SECRET_KEY_BASE = "{{ secrets.dawarich_secret_key_base }}";
       };
@@ -283,6 +274,7 @@ in
         template = {
           metadata.labels = versionedLabelsFor "web" dawarichVersion;
           spec = {
+            terminationGracePeriodSeconds = 60;
             # The web container mounts the RWO database claim for Dawarich's backup tooling.
             affinity.podAffinity.requiredDuringSchedulingIgnoredDuringExecution = [
               {
@@ -306,9 +298,14 @@ in
                 ];
                 env = commonAppEnv // {
                   TIME_ZONE.value = "Europe/London";
-                  WEB_CONCURRENCY.value = "1";
+                  SIDEKIQ_EMBEDDED.value = "true";
+                  WEB_CONCURRENCY.value = "0";
+                  BACKGROUND_PROCESSING_CONCURRENCY.value = "2";
                   OIDC_CLIENT_ID.value = "be2c46bd-eddb-46cb-aac9-1812006d9697";
-                  OIDC_CLIENT_SECRET.value = "z76kOIx9FaSmD7eKyPXJSb8yf1SOvz76";
+                  OIDC_CLIENT_SECRET.valueFrom.secretKeyRef = {
+                    name = "${app}-secrets";
+                    key = "OIDC_CLIENT_SECRET";
+                  };
                   OIDC_ISSUER.value = "https://oidc.mgrlab.dk";
                   OIDC_REDIRECT_URI.value = "https://dawarich.mgrlab.dk/users/auth/openid_connect/callback";
                   OIDC_PROVIDER_NAME.value = "Pocket ID";
@@ -342,47 +339,6 @@ in
               watched.persistentVolumeClaim.claimName = "${app}-watched";
               storage.persistentVolumeClaim.claimName = "${app}-storage";
               database-backups.persistentVolumeClaim.claimName = "${app}-postgres-data";
-            };
-          };
-        };
-      };
-    };
-
-    Deployment."${app}-sidekiq" = {
-      metadata.labels = versionedLabelsFor "worker" dawarichVersion;
-      spec = {
-        replicas = 1;
-        strategy.type = "Recreate";
-        selector.matchLabels = selectorFor "worker";
-        template = {
-          metadata.labels = versionedLabelsFor "worker" dawarichVersion;
-          spec = {
-            containers = lib.mkNamedList {
-              sidekiq = {
-                image = dawarichImage;
-                stdin = true;
-                tty = true;
-                command = [ "sidekiq-entrypoint.sh" ];
-                args = [ "sidekiq" ];
-                env = commonAppEnv // {
-                  BACKGROUND_PROCESSING_CONCURRENCY.value = "3";
-                };
-                startupProbe = sidekiqProbe // {
-                  initialDelaySeconds = 30;
-                };
-                readinessProbe = sidekiqProbe;
-                livenessProbe = sidekiqProbe;
-                volumeMounts = lib.mkNamedList {
-                  public.mountPath = "/var/app/public";
-                  watched.mountPath = "/var/app/tmp/imports/watched";
-                  storage.mountPath = "/var/app/storage";
-                };
-              };
-            };
-            volumes = lib.mkNamedList {
-              public.persistentVolumeClaim.claimName = "${app}-public";
-              watched.persistentVolumeClaim.claimName = "${app}-watched";
-              storage.persistentVolumeClaim.claimName = "${app}-storage";
             };
           };
         };

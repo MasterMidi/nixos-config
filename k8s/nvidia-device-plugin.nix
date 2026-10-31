@@ -47,7 +47,7 @@ in
             ];
             containers = lib.mkNamedList {
               ${daemonSet} = {
-                image = "nvcr.io/nvidia/k8s-device-plugin:v0.19.0";
+                image = "nvcr.io/nvidia/k8s-device-plugin:v0.20.1";
                 args = [
                   "--config-file"
                   "/etc/nvidia-device-plugin/config.yaml"

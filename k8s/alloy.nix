@@ -5,8 +5,8 @@
     chart = pkgs.fetchHelm {
       repo = "https://grafana.github.io/helm-charts";
       chart = "alloy";
-      version = "1.10.1";
-      sha256 = "sha256-RRljllJwqnOPRn9uUkqCH5zUQqshWRgkI7Q+/2UzN7c=";
+      version = "1.15.0";
+      sha256 = "sha256-efDrZJdDGVGHGkuC5KOE74IHz+/GrUJJU8RZwpY8lgE=";
     };
 
     values = {

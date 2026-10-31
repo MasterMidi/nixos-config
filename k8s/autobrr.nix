@@ -1,7 +1,7 @@
 { config, lib, ... }:
 let
   app = "autobrr";
-  image = "ghcr.io/autobrr/autobrr:v1.79";
+  image = "ghcr.io/autobrr/autobrr:v1.89.0";
   port = 7474;
 
   PUID = "1000";

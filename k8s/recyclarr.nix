@@ -1,7 +1,7 @@
 { lib, ... }:
 let
   app = "recyclarr";
-  image = "ghcr.io/recyclarr/recyclarr:8.6.0";
+  image = "ghcr.io/recyclarr/recyclarr:8.8.1";
 in
 {
   kubernetes.resources.media-stack = {

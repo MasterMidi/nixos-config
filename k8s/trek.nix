@@ -33,8 +33,8 @@ in
     chart = pkgs.fetchHelm {
       repo = "https://chart.liketrek.com";
       chart = "trek";
-      version = "4.2.1";
-      sha256 = "sha256-8kIQAqpFAYLQw24fsK/yCLtHYw7esDjQ+F0z2FAqo7Q=";
+      version = "5.1.0";
+      sha256 = "sha256-O08IwieSa38vsxtofdLsrszPMCvDJ2gYK6Q8bsA0W5E=";
     };
 
     overrides = [
@@ -51,6 +51,7 @@ in
 
       env = {
         ALLOW_INTERNAL_NETWORK = "true";
+        TREK_PLACES_ENABLED = "false";
 
         APP_URL = "https://trek.mgrlab.dk";
         OIDC_ISSUER = "https://oidc.mgrlab.dk";

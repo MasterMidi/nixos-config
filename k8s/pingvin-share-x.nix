@@ -1,7 +1,7 @@
 { lib, ... }:
 let
   app = "pingvin-share-x";
-  image = "docker.io/smp46/pingvin-share-x:v1.22.1";
+  image = "docker.io/smp46/pingvin-share-x:v2.1.0";
   port = 3000;
 in
 {

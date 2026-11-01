@@ -21,7 +21,7 @@
       # jellyfin-media-player
     ];
 
-    wayland.windowManager.hyprland.settings =
+    wayland.windowManager.hyprland.settings.monitor =
       let
         # monitor = config.facter.report.hardware.monitor |> builtins.head |> lib.findFirst (x: x.type == "monitor") {};
         monitor_xiomi = {
@@ -35,15 +35,23 @@
           vertical_frequency = 75; # 60 pushing it
         };
       in
-      {
-        monitor = [
-          "DP-2, ${monitor_xiomi.width |> toString}x${monitor_xiomi.height |> toString}@${
+      [
+        {
+          output = "DP-2";
+          mode = "${monitor_xiomi.width |> toString}x${monitor_xiomi.height |> toString}@${
             monitor_xiomi.vertical_frequency |> toString
-          }, 1920x0, 1"
-          "HDMI-A-2, ${monitor_asus.width |> toString}x${monitor_asus.height |> toString}@${
+          }";
+          position = "1920x0";
+          scale = 1;
+        }
+        {
+          output = "HDMI-A-2";
+          mode = "${monitor_asus.width |> toString}x${monitor_asus.height |> toString}@${
             monitor_asus.vertical_frequency |> toString
-          }, 0x275, 1"
-        ];
-      };
+          }";
+          position = "0x275";
+          scale = 1;
+        }
+      ];
   };
 }

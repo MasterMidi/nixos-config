@@ -85,12 +85,20 @@ in
 
     # --- Conditional Hyprland Configuration ---
     # Only apply Hyprland rules if RustRover and its Hyprland compatibility are enabled
-    home-manager.users.michael.wayland.windowManager.hyprland.settings.windowrule =
+    home-manager.users.michael.wayland.windowManager.hyprland.settings.window_rule =
       lib.mkIf (cfg.rustRover.enable && cfg.rustRover.addHyprlandCompat)
         [
           # Fix jetbrains IDE's tooltip hover issues (apply to any jetbrains-.* class)
-          "match:class ^(jetbrains-.*)$, match:title ^(win[0-9]+)$, float 1"
-          "match:class ^(jetbrains-.*)$, match:title ^(win[0-9]+)$, no_focus 1"
+          {
+            match.class = "^jetbrains-.*$";
+            match.title = "^win[0-9]+$";
+            float = true;
+          }
+          {
+            match.class = "^jetbrains-.*$";
+            match.title = "^win[0-9]+$";
+            no_focus = true;
+          }
         ];
 
     # patch global rustrover settings for the std lib location of rust

@@ -525,6 +525,30 @@ Its companion `nixosModules.thunderbird` provides the SOPS password secret used
 by the accounts' `passwordCommand` options via `osConfig`; the Thunderbird module
 currently ignores those commands, so they do not populate its password store.
 
+#### Hyprland (Lua config)
+
+Hyprland (>= 0.55) is configured in Lua via home-manager's
+`wayland.windowManager.hyprland` module with `configType = "lua"`, which
+generates `$XDG_CONFIG_HOME/hypr/hyprland.lua`. Hyprlang is deprecated and will
+be dropped upstream. `configType` must be set explicitly because these hosts
+predate stateVersion 26.05. Shared config lives in
+`dendritic-modules/desktop-environment/hyprland.nix` (`homeModules.hyprland`);
+host-specific monitors/binds are merged in from `users/michael/<host>/`.
+
+When adding settings, each `settings.<name>` attribute renders as an
+`hl.<name>(...)` call. Use the idioms already defined there:
+- `mkBind { keys, dispatcher, flags ? null }` for `hl.bind(...)` entries
+  (dispatcher is a raw Lua expression, e.g. `execCmd "kitty"` or
+  `"hl.dsp.window.close()"`); hyprlang bind flags (`bindm`, `bindel`, ...) are
+  now `flags` attrsets like `{ mouse = true; }` / `{ repeating = true; locked = true; }`
+- `execOnce [ ... ]` for startup commands (replaces `exec-once`; renders an
+  `hl.on("hyprland.start", ...)` hook — list entries from other modules merge
+  into separate hooks)
+- `window_rule` with `match.class`/`match.title` attrsets (not `windowrule`
+  strings), `config` attrset for the old variable categories, and
+  `lib.generators.mkLuaInline` (available in both the NixOS and Home Manager
+  `lib`) for raw Lua values
+
 Home Manager configs typically live in:
 - `users/<username>/` - User-specific Home Manager configs
 - Imported in host `default.nix` or `configuration.nix`
@@ -755,7 +779,7 @@ When you encounter unfamiliar patterns:
 
 ---
 
-**Last Updated**: 2026-09-10
+**Last Updated**: 2026-11-01
 **Maintainer**: Michael  
 **Repository**: https://github.com/MasterMidi/nixos-config
 

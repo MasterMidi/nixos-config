@@ -73,12 +73,20 @@ in
     # --- Conditional Hyprland Configuration ---
     # Only apply Hyprland rules if Rider and its Hyprland compatibility are enabled
     # Note: These rules apply to any jetbrains-.* class, which is suitable for Rider too.
-    home-manager.users.michael.wayland.windowManager.hyprland.settings.windowrule =
+    home-manager.users.michael.wayland.windowManager.hyprland.settings.window_rule =
       lib.mkIf (cfg.rider.enable && cfg.rider.addHyprlandCompat)
         [
           # Fix jetbrains IDE's tooltip hover issues
-          "match:class ^(jetbrains-.*)$, match:title ^(win[0-9]+)$, float 1"
-          "match:class ^(jetbrains-.*)$, match:title ^(win[0-9]+)$, no_focus 1"
+          {
+            match.class = "^jetbrains-.*$";
+            match.title = "^win[0-9]+$";
+            float = true;
+          }
+          {
+            match.class = "^jetbrains-.*$";
+            match.title = "^win[0-9]+$";
+            no_focus = true;
+          }
         ];
   };
 }

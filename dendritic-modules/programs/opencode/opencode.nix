@@ -29,29 +29,30 @@
       programs.opencode = {
         enable = true;
         settings = {
-          plugin = [ "@slkiser/opencode-quota@4.8.2" ];
-          model = "openai/gpt-6-sol";
-          small_model = "openai/gpt-6-luna";
+          plugins = [ "@slkiser/opencode-quota@6.0.0" ];
+          model = "mistral/zai-glm-5-3";
           default_agent = "learn";
-          agent = {
-            explore.model = "openai/gpt-6-luna";
-            general.model = "openai/gpt-6-sol";
+          agents = {
+            title.model = "mistral/zai-glm-5-3-flash";
+            explore.model = "mistral/zai-glm-5-3-flash";
+            general.model = "mistral/zai-glm-5-3";
           };
         };
-        tui.plugin = [ "@slkiser/opencode-quota@4.8.2" ];
+        # OpenCode 2 ignores tui.json and manages terminal plugins in its own
+        # app-owned cli.json, so programs.opencode.tui is not used here.
         agents = ./agents;
       };
-      xdg.configFile."opencode/opencode-quota/quota-toast.json".text = builtins.toJSON {
-        enabledProviders = [ "openai" ];
-        formatStyle = "allWindows";
-        percentDisplayMode = "remaining";
+      xdg.configFile."opencode/opencode-quota/settings.jsonc".text = builtins.toJSON {
+        # opencode-quota 6.x settings (OpenCode 2 plugin API)
+        sidebar.show = true;
+        collapsed.show = false;
+        statusLine.show = true;
+        toast.show = false;
+        words.percent = "remaining";
 
-        tuiSidebarPanel.enabled = true;
-        tuiPromptBar.enabled = true;
-        tuiCompactStatus.enabled = false;
-        enableToast = false;
-
-        maintainerAnnouncements.enabled = false;
+        # Track the Mistral connection instead of OpenAI. Mistral has no
+        # built-in quota provider; /quota_usage still reports its tokens/cost.
+        providers.off = [ "openai" ];
       };
     };
 }

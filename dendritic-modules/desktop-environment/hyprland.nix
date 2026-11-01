@@ -555,7 +555,6 @@
             (execOnce [
               "${pkgs.waybar}/bin/waybar" # start taskbar
               "sleep 1 && ${pkgs.awww}/bin/awww-daemon" # start wallpaper daemon
-              "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1" # start polkit agent
               "${pkgs.networkmanagerapplet}/bin/nm-applet --indicator" # start network manager applet
               "${pkgs.blueman}/bin/blueman-applet" # start bluetooth tray icon
               # "${pkgs.kdePackages.xwaylandvideobridge}/bin/kdePackages.xwaylandvideobridge" # start xwayland video bridge
@@ -563,5 +562,15 @@
           ];
         };
       };
+
+      # Polkit authentication agent recommended by Hyprland, started as a
+      # systemd user service bound to graphical-session.target (activated by UWSM)
+      services.hyprpolkitagent.enable = true;
+
+      # Hyprland (and its ecosystem tooling) expects wl-copy/wl-paste in PATH
+      home.packages = [
+        pkgs.wl-clipboard
+        pkgs.hyprland-guiutils # provides hyprland-welcome, the Getting Started menu
+      ];
     };
 }

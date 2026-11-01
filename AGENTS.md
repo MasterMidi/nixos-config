@@ -534,6 +534,11 @@ be dropped upstream. `configType` must be set explicitly because these hosts
 predate stateVersion 26.05. Shared config lives in
 `dendritic-modules/desktop-environment/hyprland.nix` (`homeModules.hyprland`);
 host-specific monitors/binds are merged in from `users/michael/<host>/`.
+The polkit agent is `hyprpolkitagent`, enabled via Home Manager's
+`services.hyprpolkitagent.enable` (binds to `graphical-session.target`, which
+UWSM activates) — do not autostart it through `execOnce` or install
+`polkit_gnome`. `wl-clipboard` is kept in the module's `home.packages` so
+`wl-copy`/`wl-paste` are in PATH.
 
 When adding settings, each `settings.<name>` attribute renders as an
 `hl.<name>(...)` call. Use the idioms already defined there:

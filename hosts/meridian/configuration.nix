@@ -13,7 +13,6 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     onlyoffice-desktopeditors
-    polkit_gnome
     libsecret
     # (git.override { withLibsecret = true; })
     git-credential-manager

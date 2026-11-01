@@ -27,7 +27,6 @@
     onlyoffice-desktopeditors
     docker-compose
     podman-compose
-    polkit_gnome
     pulseaudio
     tree
     lm_sensors

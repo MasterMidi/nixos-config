@@ -8,6 +8,22 @@
   };
   boot.loader.efi.canTouchEfiVariables = true;
 
+  # Capture a kernel dump on crash to diagnose the ~6h hard-freeze that
+  # corrupts Longhorn volumes (see plans/andromeda-crash-investigation.md).
+  # NOTE: after a crash the machine boots into rescue with the dump available
+  # at /proc/vmcore and stays there until the dump is saved and it is rebooted.
+  boot.crashDump = {
+    enable = true;
+    reservedMemory = "512M";
+  };
+  boot.kernel.sysctl = {
+    # Convert CPU hangs into panics so kdump can capture them
+    "kernel.softlockup_panic" = "1";
+    "kernel.hardlockup_panic" = "1";
+    # If kdump fails to trigger, recover by rebooting instead of hanging
+    "kernel.panic" = "60";
+  };
+
   # Set your time zone.
   time.timeZone = "Europe/Copenhagen";
 

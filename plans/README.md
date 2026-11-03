@@ -10,6 +10,11 @@ ones.
 
 Alternative to plan 4: [NetBird VPN mesh only](./04a-netbird-vpn-mesh.md)
 
+Operational plans (unnumbered, independent):
+
+- [Andromeda crash investigation](./andromeda-crash-investigation.md)
+- [Repairing corrupt Longhorn volumes](./longhorn-volume-repair.md)
+
 The intended ownership boundaries are:
 
 - Terranix provisions resources exposed through external APIs.

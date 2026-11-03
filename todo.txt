@@ -1,0 +1,12 @@
+x 2026-11-03 repair sonarr-config XFS journal corruption from the nov 2 17:37 crash +k8s @longhorn
+x 2026-11-03 repair prowlarr-config XFS journal corruption from the nov 3 12:12 crash, see plans/longhorn-volume-repair.md +k8s @longhorn
+(A) 2026-11-03 check andromeda crash capture: kdump is enabled, the next crash parks the node in rescue with the dump at /proc/vmcore. ssh in, save it, analyse, reboot +andromeda @infra due:2026-11-08
+(B) 2026-11-03 run memtest86+ on andromeda and check SMART/temps as hardware suspects for the ~6h freeze +andromeda @hardware due:2026-11-08
+(B) 2026-11-03 plan proper k8s monitoring/alerting: alloy->loki (grafana cloud) vs kube-prometheus-stack, alerts via ntfy/gotify (FailedMount loops, node reboot storms, longhorn health), auto-heal after 3h of continuous mount failures (snapshot + xfs_repair -L) +k8s @monitoring
+(C) 2026-11-03 try hunk diff viewer w/ jujutsu/jjui @version-control
+2026-11-03 write plan to migrate to dendritic module system completly
+2026-11-03 write plan to setup llama.cpp on zenith for local llm (at least for simple tasks to save money)
+2026-11-03 improve k3s modules in general to support easily adding nodes to cluster
+(A) 2026-11-03 improve k3s node shutdown sequence (ensure pods terminate gracefully) +k8s @infra
+2026-11-03 make gaze with hyprlock wait until i want to login, instead of starting as soon as pc is locked
+(E) 2026-11-04 on wake from hibernate, boot straight into system, no systemd boot menu with generations

@@ -79,6 +79,16 @@ For an interactive shell with `tofu`, `plan`, `apply`, `destroy`, and `init`:
 nix develop .#cloudflare-dns
 ```
 
+The Cloudflare provider version is pinned by nixpkgs
+(`pkgs.terraform-providers.cloudflare_cloudflare`). When a nixpkgs update
+bumps it, `plan` fails with a "locked provider ... does not match the
+configured version constraint" error; run `init -upgrade` (from the
+repository root, via the dev shell) to relock
+`infra/.terranix/cloudflare-dns/.terraform.lock.hcl` to the new version, and
+commit the updated lock file. The provider upgrade itself may show benign
+in-place diffs (for example the `include_shadow_metadata` attribute added in
+5.27.0) on every record.
+
 Do not run `destroy` unless both DNS zones and their mail records should be
 removed.
 
@@ -127,15 +137,22 @@ nix run .#cloudflare-dns
 
 `hosts/aether/containers/pangolin/default.nix` registers `michael-graversen.dk`
 with Pangolin and declares Traefik file-provider routes for
-`autoconfig.michael-graversen.dk`, `autodiscover.michael-graversen.dk`, and
-`ua-auto-config.michael-graversen.dk`. These routes forward directly to
+`autoconfig.michael-graversen.dk`, `autodiscover.michael-graversen.dk`,
+`ua-auto-config.michael-graversen.dk`, and `mail.michael-graversen.dk`. These
+routes forward directly to
 Stalwart at `http://host.containers.internal:4848`, preserving paths and query
-strings without Pangolin authentication. HTTP redirects to HTTPS. The existing
+strings without Pangolin authentication. `mail.michael-graversen.dk` routes the
+whole hostname to Stalwart for JMAP clients (for example Sterna Mail) that
+discover from the email domain by probing `mail.<domain>/.well-known/jmap`,
+because the bare domain hosts the external website on UnoEuro instead of
+Stalwart. HTTP redirects to HTTPS. The existing
 Cloudflare DNS-01 resolver obtains a certificate for `michael-graversen.dk`
 and `*.michael-graversen.dk`; HTTPS terminates at Traefik.
 
 The discovery routes are managed in Nix, so no additional Pangolin UI resources
-are needed for these three hostnames. Deploy Aether after reviewing the changes:
+are needed for these four hostnames. `mail.michael-graversen.dk` is a CNAME to
+`mail.mgrlab.dk` in `infra/cloudflare-dns.nix`; apply the DNS before relying on
+the route. Deploy Aether after reviewing the changes:
 
 ```sh
 nixos-rebuild dry-build --flake .#aether

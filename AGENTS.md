@@ -111,8 +111,10 @@ This is a **production NixOS configuration** managing multiple physical and virt
 ├── secrets/               # SOPS-encrypted secrets (shared)
 ├── infra/                 # Terranix/OpenTofu infrastructure definitions
 ├── k8s/                   # Kubernetes manifests (easykubenix)
+├── plans/                 # Infrastructure and operational plans (see plans/README.md)
 ├── profiles/              # Reusable profile modules
 ├── scripts/               # Utility scripts
+├── todo.txt               # Plain-text todo list (todo.txt format)
 └── users/                 # User-specific configurations
 ```
 

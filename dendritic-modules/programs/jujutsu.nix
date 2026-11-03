@@ -1,4 +1,4 @@
-{ ... }:
+{ self, ... }:
 {
   flake.homeModules.jujutsu =
     { ... }:
@@ -49,6 +49,19 @@
             }
           ];
         };
+      };
+    };
+
+  flake.homeModules.jujutsu-hyperion =
+    { lib, ... }:
+    {
+      imports = [ self.homeModules.jujutsu ];
+
+      # Hyperion is the WSL environment on the work laptop: use the work
+      # GitHub account (mgr-solita) identity instead of the private one.
+      programs.jujutsu.settings.user = {
+        name = lib.mkForce "Michael Andreas Graversen";
+        email = lib.mkForce "mgr@solita.dk";
       };
     };
 }

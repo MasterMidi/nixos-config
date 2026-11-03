@@ -28,7 +28,7 @@
             self.homeModules.git-hyperion
             self.homeModules.k8s-cluster-administration
             self.homeModules.opencode
-            self.homeModules.jujutsu
+            self.homeModules.jujutsu-hyperion
           ];
         }
       ];

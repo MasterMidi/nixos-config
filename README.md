@@ -224,7 +224,7 @@ already exists, archive that backup before activation.
 ## 🎨 Features
 
 - **Home Manager** integration for user environment
-- **Git configuration** lives in `dendritic-modules/programs/git.nix` and is enabled through host `default.nix` imports: Meridian and Zenith import `homeModules.git`, while Hyperion imports `homeModules.git-hyperion` to also enable GitHub CLI credentials for HTTPS remotes.
+- **Git configuration** lives in `dendritic-modules/programs/git.nix` and is enabled through host `default.nix` imports: Meridian and Zenith import `homeModules.git`, while Hyperion (the work-laptop WSL host) imports `homeModules.git-hyperion` to enable GitHub CLI credentials and override the git/jj identity with the work GitHub account (`mgr-solita`).
 - **Declarative disk configuration** with disko (nova)
 - **Hardware-specific optimizations** using nixos-hardware and nixos-facter
 - **Custom modules** for development environments (Rust, .NET, Android)

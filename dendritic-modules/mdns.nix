@@ -6,15 +6,17 @@
       # Add mDNS discovery support to the system with avahi
       services.avahi = {
         enable = true;
-        ipv4 = true;
         nssmdns4 = true;
-        publish = {
-          enable = true;
-          addresses = true;
-          domain = true;
-          hinfo = true;
-          userServices = true;
-          workstation = true;
+        settings = {
+          server.use-ipv4 = true;
+          publish = {
+            disable-publishing = false;
+            disable-user-service-publishing = false;
+            publish-addresses = true;
+            publish-domain = true;
+            publish-hinfo = true;
+            publish-workstation = true;
+          };
         };
       };
 

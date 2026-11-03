@@ -148,9 +148,10 @@ in
     # OTBR needs to publish its addresses via avahi
     services.avahi = {
       enable = true;
-      publish = {
-        enable = true;
-        userServices = true;
+      settings.publish = {
+        disable-publishing = false;
+        disable-user-service-publishing = false;
+        publish-addresses = true;
       };
     };
 

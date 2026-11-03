@@ -347,6 +347,14 @@ let
       type = "CNAME";
       content = "mail.mgrlab.dk";
     };
+    # JMAP clients that discover from the email domain (Sterna Mail) probe
+    # mail.<domain> because the apex is the external website, not Stalwart.
+    michael_graversen_mail_cname = {
+      zone = "michael_graversen";
+      name = "mail.michael-graversen.dk";
+      type = "CNAME";
+      content = "mail.mgrlab.dk";
+    };
   };
 
   # These records are already in state; looking them up by their previous

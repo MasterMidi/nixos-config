@@ -5,10 +5,15 @@
   ...
 }:
 let
+  # Discovery and the JMAP host must reach Stalwart without a Pangolin login
+  # or path rewrite. mail.michael-graversen.dk lets JMAP clients discover
+  # from the email domain (Sterna Mail probes mail.<domain>/.well-known/jmap
+  # because the apex hosts the external website, not Stalwart).
   stalwartDiscoveryRule = lib.concatMapStringsSep " || " (hostname: "Host(`${hostname}`)") [
     "autoconfig.michael-graversen.dk"
     "autodiscover.michael-graversen.dk"
     "ua-auto-config.michael-graversen.dk"
+    "mail.michael-graversen.dk"
   ];
 
   traefikConfig = (pkgs.formats.yaml { }).generate "traefik_config.yml" {

@@ -26,22 +26,43 @@
         ))
       ];
 
-      programs.opencode = {
-        enable = true;
-        settings = {
-          plugins = [ "@slkiser/opencode-quota@6.0.0" ];
-          model = "mistral/zai-glm-5-3";
-          default_agent = "learn";
-          agents = {
-            title.model = "mistral/zai-glm-5-3-flash";
-            explore.model = "mistral/zai-glm-5-3-flash";
-            general.model = "mistral/zai-glm-5-3";
+      programs.opencode =
+        let
+          # opencode 2.2.5 in nixpkgs records a stale node_modules hash that
+          # was computed before the bun 1.4.4 bump, so the fixed-output
+          # derivation fails with a hash mismatch
+          # (https://github.com/NixOS/nixpkgs/issues/582673, fix PR
+          # https://github.com/NixOS/nixpkgs/pull/582675 not merged yet).
+          # Substitute the hash bun 1.4.4 actually produces on x86_64-linux.
+          # The version guard makes this a no-op once nixpkgs moves on.
+          # TODO: remove when the fix reaches nixos-unstable.
+          opencode =
+            if pkgs.opencode.version == "2.2.5" && pkgs.stdenv.hostPlatform.system == "x86_64-linux" then
+              pkgs.opencode.overrideAttrs (old: {
+                node_modules = old.node_modules.overrideAttrs (_: {
+                  outputHash = "sha256-prx9dX7kUvs/E3zopkaPk5LXh3xJAy5sZeum/W8L7cA=";
+                });
+              })
+            else
+              pkgs.opencode;
+        in
+        {
+          package = opencode;
+          enable = true;
+          settings = {
+            plugins = [ "@slkiser/opencode-quota@6.0.0" ];
+            model = "mistral/zai-glm-5-3";
+            default_agent = "learn";
+            agents = {
+              title.model = "mistral/zai-glm-5-3-flash";
+              explore.model = "mistral/zai-glm-5-3-flash";
+              general.model = "mistral/zai-glm-5-3";
+            };
           };
+          # OpenCode 2 ignores tui.json and manages terminal plugins in its own
+          # app-owned cli.json, so programs.opencode.tui is not used here.
+          agents = ./agents;
         };
-        # OpenCode 2 ignores tui.json and manages terminal plugins in its own
-        # app-owned cli.json, so programs.opencode.tui is not used here.
-        agents = ./agents;
-      };
       xdg.configFile."opencode/opencode-quota/settings.jsonc".text = builtins.toJSON {
         # opencode-quota 6.x settings (OpenCode 2 plugin API)
         sidebar.show = true;

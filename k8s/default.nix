@@ -25,7 +25,7 @@
     ./scrutiny.nix
     ./seerr.nix
     ./sonarr.nix
-    ./subgen.nix
+    # ./subgen.nix
     ./trek.nix
   ];
 

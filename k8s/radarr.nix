@@ -1,7 +1,7 @@
 { lib, ... }:
 let
   app = "radarr";
-  image = "ghcr.io/hotio/radarr:nightly-6.4.4.10741";
+  image = "ghcr.io/hotio/radarr:nightly-7.0.2.10873";
   PUID = "1000";
   PGID = "100";
   TZ = "Europe/Copenhagen";

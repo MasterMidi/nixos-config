@@ -19,18 +19,9 @@
     wslConf.network.generateResolvConf = false;
     defaultUser = "michael";
     startMenuLaunchers = true;
-
-    # Enable integration with Docker Desktop (needs to be installed)
-    docker-desktop.enable = true;
   };
 
   services.resolved.enable = true;
-
-  virtualisation.docker = {
-    enable = true;
-    enableOnBoot = true;
-    autoPrune.enable = true;
-  };
 
   system.stateVersion = "25.05";
 }

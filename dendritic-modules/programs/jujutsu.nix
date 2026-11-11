@@ -1,8 +1,12 @@
 { self, ... }:
 {
   flake.homeModules.jujutsu =
-    { ... }:
+    { pkgs, ... }:
     {
+      home.packages = with pkgs; [
+        hunk
+      ];
+
       programs.jujutsu = {
         enable = true;
         settings = {
@@ -11,6 +15,10 @@
             email = "home@michael-graversen.dk";
           };
           template-aliases."format_short_id(id)" = "id.shortest()";
+          ui = {
+            pager = ["hunk" "pager"];
+            diff-formatter = ":git";
+          };
         };
       };
 

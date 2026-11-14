@@ -327,6 +327,30 @@ When adding a new host or user to existing secrets:
 usops  # Updates all SOPS files with current keys from .sops.yaml
 ```
 
+### Backups (restic → Hetzner Storage Box)
+
+Hosts back up to the Hetzner Storage Box with `services.restic.backups.*` (see
+`hosts/aether/backup.nix`). Each backup method gets its **own sub-account** so they
+are isolated from each other: `u560578-sub1` (home `longhorn/`) is Longhorn's and has
+SSH disabled; `u560578-sub2` (home `restic/`) is dedicated to restic and was created via
+the Hetzner API (`POST /storage_boxes/543132/subaccounts` with `ssh_enabled` +
+`reachable_externally`). The pattern:
+
+- Repository: `sftp:<ssh-alias>:restic/<host>` — the sub-account is chrooted, so paths
+  are relative to its home. SSH/SFTP runs on **port 23** (not 22).
+- `programs.ssh.hosts.<alias>` holds HostName/User/Port 23/IdentityFile so restic's sftp
+  backend (which runs `ssh <host> -p <port> -s sftp`) picks it up; `programs.ssh.knownHosts`
+  pins the host key (Hetzner publishes one ED25519 fingerprint for all Storage Boxes:
+  `SHA256:XqONwb1S0zuj5A1CDxpOSuD2hnAArV1A3wKY7Z3sdgM` — verify with `ssh-keyscan -p 23`).
+- The private key, the restic repo password and the sub-account password live in the
+  host's SOPS file (`STORAGEBOX_RESTIC_SSH_KEY` mode 0600, `RESTIC_REPO_PASSWORD`,
+  `STORAGEBOX_RESTIC_SUBACCOUNT_PASSWORD`). The public key is installed on the
+  sub-account with `cat key.pub | ssh -p 23 <sub>@<sub>.your-storagebox.de install-ssh-key`.
+- SQLite databases of running services are staged with `sqlite3 <db> ".backup ..."` in
+  `backupPrepareCommand` and the live files are excluded — file-level copies of a live
+  WAL database can lose recent commits. RocksDB (stalwart) is crash-safe, so a plain
+  file-level backup is fine there.
+
 ### Using the Custom OCI Compose Module
 
 This repository has a custom module for docker-compose-like container definitions:

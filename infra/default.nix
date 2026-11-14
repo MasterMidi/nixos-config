@@ -50,5 +50,44 @@
           '';
         };
       };
+
+      terranix.terranixConfigurations.hcloud-storage-box = {
+        modules = [ ./hcloud-storage-box.nix ];
+        workdir = "infra/.terranix/hcloud-storage-box";
+        terraformWrapper = {
+          package = pkgs.opentofu.withPlugins (plugins: [
+            plugins.hetznercloud_hcloud
+          ]);
+
+          extraRuntimeInputs = [ pkgs.sops ];
+
+          prefixText = ''
+            if [[ -z "''${HCLOUD_TOKEN:-}" ]]; then
+              HCLOUD_TOKEN="$(
+                sops --decrypt \
+                  --extract '["hcloud_api_token"]' \
+                  ${./secrets/secrets.sops.yaml}
+              )"
+              export HCLOUD_TOKEN
+            fi
+            if [[ -z "''${TF_VAR_storage_box_restic_subaccount_password:-}" ]]; then
+              TF_VAR_storage_box_restic_subaccount_password="$(
+                sops --decrypt \
+                  --extract '["hetzner_storage_box_restic_subaccount_password"]' \
+                  ${./secrets/secrets.sops.yaml}
+              )"
+              export TF_VAR_storage_box_restic_subaccount_password
+            fi
+            if [[ -z "''${TF_VAR_storage_box_longhorn_subaccount_password:-}" ]]; then
+              TF_VAR_storage_box_longhorn_subaccount_password="$(
+                sops --decrypt \
+                  --extract '["hetzner_storage_box_longhorn_subaccount_password"]' \
+                  ${./secrets/secrets.sops.yaml}
+              )"
+              export TF_VAR_storage_box_longhorn_subaccount_password
+            fi
+          '';
+        };
+      };
     };
 }

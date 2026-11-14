@@ -33,6 +33,47 @@ The API token is read from `hcloud_api_token` in
 state is stored under `infra/.terranix/hcloud-aether/` and must be backed up
 until a remote backend is configured.
 
+## Storage Box sub-accounts
+
+The `hcloud-storage-box` configuration manages the Storage Box sub-accounts, one
+per backup method, so they are isolated and protected (`prevent_destroy`)
+against accidental deletion:
+
+- The Storage Box itself (`backups`, id 543132) is only a data source, not
+  managed.
+- `hcloud_storage_box_subaccount.longhorn` is `u560578-sub1` (home `longhorn/`,
+  CIFS/WebDAV on, SSH off) used by the Longhorn backup target in
+  `k8s/longhorn.nix`.
+- `hcloud_storage_box_subaccount.restic` is `u560578-sub2` (home `restic/`,
+  SSH on port 23 + external reachability, Samba/WebDAV off) used by restic on
+  aether (`hosts/aether/backup.nix`).
+
+Both were created once via the API and adopted with `import` blocks
+(`543132/307774`, `543132/377533`), so applying is import-only plus syncing the
+descriptions. Each password comes from `infra/secrets/secrets.sops.yaml`
+(`hetzner_storage_box_{longhorn,restic}_subaccount_password`; the Longhorn one
+is the same value as `hetzner_storage_box_543132_sub1_password` in
+`k8s/secrets.yaml`), passed as `TF_VAR_*` by the wrapper — no plaintext in
+`config.tf.json`. The API never returns passwords, so the resources use
+`lifecycle.ignore_changes = [ "password" ]`; the values are only used if a
+sub-account ever has to be (re-)created.
+
+```sh
+nix run .#hcloud-storage-box.plan
+nix run .#hcloud-storage-box
+```
+
+The sub-account's `authorized_keys` cannot be managed via the Hetzner API. The
+restic key (public key noted in `hcloud-storage-box.nix` and
+`hosts/aether/backup.nix`) was installed once with:
+
+```sh
+cat key.pub | ssh -p 23 u560578-sub2@u560578-sub2.your-storagebox.de install-ssh-key
+```
+
+State is stored under `infra/.terranix/hcloud-storage-box/`; keep the tracked
+state file backed up until a remote backend is configured.
+
 ## Cloudflare DNS
 
 This Terranix configuration manages the existing DNS records for

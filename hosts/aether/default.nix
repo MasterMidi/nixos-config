@@ -19,6 +19,7 @@
         ./configuration.nix
         ./containers
         ./mailserver.nix
+        ./backup.nix
         ./secrets
         ./disko.nix
 

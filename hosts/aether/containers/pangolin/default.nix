@@ -36,7 +36,12 @@ let
       plugins = {
         badger = {
           moduleName = "github.com/fosrl/badger";
-          version = "v1.2.1";
+          # v1.8.0+ needed for Pangolin >= 1.25 (permanent redirects). Pangolin's
+          # auto-migration only rewrites the traefik config at the standard
+          # config/traefik/traefik_config.yml path, which we don't use (the file
+          # is mounted from the nix store only into the traefik container), so
+          # the plugin version must be bumped manually and traefik restarted.
+          version = "v1.8.0";
         };
       };
     };
@@ -236,7 +241,10 @@ let
     gerbil = {
       start_port = 51820;
       base_endpoint = "tunnel.mgrlab.dk";
-      use_subdomain = false;
+      # use_subdomain was removed from the config schema in newer Pangolin
+      # (silently ignored); subdomain routing is now unconditional.
+      # block_size / site_block_size / subnet_group are kept at their current
+      # values on purpose so existing site/client IP allocations don't shift.
       block_size = 24;
       site_block_size = 30;
       subnet_group = "100.89.137.0/20";
@@ -254,7 +262,7 @@ let
       disable_signup_without_invite = true;
       disable_user_create_org = true;
       allow_raw_resources = true;
-      allow_base_domain_resources = true;
+      # allow_base_domain_resources no longer exists in the config schema and is ignored.
     };
   };
 in
@@ -264,7 +272,7 @@ in
     networks.default = { };
     containers = {
       pangolin = {
-        image = "fosrl/pangolin:1.15.4";
+        image = "ghcr.io/fosrl/pangolin:1.26.0";
         networking = {
           networks = [ "default" ];
           aliases = [ "pangolin" ];
@@ -286,7 +294,7 @@ in
         # };
       };
       gerbil = {
-        image = "fosrl/gerbil:1.3.0";
+        image = "ghcr.io/fosrl/gerbil:1.6.0";
         networking = {
           networks = [ "default" ];
           aliases = [ "gerbil" ];
@@ -306,15 +314,32 @@ in
               internal = 51820;
               protocol = "udp";
             };
+            # Gerbil >= 1.4 relay / NAT hole-punch UDP port (pangolin
+            # gerbil.clients_start_port, default 21820). Without this, clients
+            # on restricted networks can't relay through the server.
+            wireguardRelay = {
+              host = 21820;
+              internal = 21820;
+              protocol = "udp";
+            };
+            # QUIC/http3 for the traefik entrypoints (traefik shares gerbil's netns)
+            traefikHttpsQuic = {
+              host = 443;
+              internal = 443;
+              protocol = "udp";
+            };
 
           };
         };
         dependsOn = [ "pangolin" ];
         commands = [
-          "--reachableAt=http://gerbil:3003"
+          # Gerbil >= 1.5: --remoteConfig takes the API base URL; gerbil appends
+          # /gerbil/get-config and /gerbil/receive-bandwidth itself (old deep
+          # URLs are still normalized, but use the canonical form).
+          # --reportBandwidthTo is deprecated and ignored in gerbil >= 1.5.
+          "--reachableAt=http://gerbil:3004"
           "--generateAndSaveKeyTo=/var/config/key"
-          "--remoteConfig=http://pangolin:3001/api/v1/gerbil/get-config"
-          "--reportBandwidthTo=http://pangolin:3001/api/v1/gerbil/receive-bandwidth"
+          "--remoteConfig=http://pangolin:3001/api/v1/"
         ];
         volumes = [
           "/containers/pangolin/config/:/var/config"
@@ -325,7 +350,9 @@ in
         ];
       };
       traefik = {
-        image = "traefik:v3.4.0";
+        # Pangolin >= 1.25 requires traefik >= 3.6 for all load balancing
+        # options to work; v3.7.19 is the latest stable v3 line (v3.8 is RC).
+        image = "docker.io/traefik:v3.7.19";
         networking = {
           networks = [ "container:gerbil" ];
         };

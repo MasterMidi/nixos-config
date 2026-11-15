@@ -12,6 +12,7 @@
         self.nixosModules.hyprland
         self.nixosModules.tailscale
         self.nixosModules.netbird-client
+        self.nixosModules.pangolin-client
         self.nixosModules.zed
         self.nixosModules.thunderbird
         self.nixosModules.gaze-zenith
